@@ -137,15 +137,31 @@ const Header = () => {
     setMenuOpen(false);
     setServicesOpen(false);
 
+    const scrollToElement = () => {
+      if (id === '#contacto') {
+        // Scroll to bottom of page for contacto section
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      } else {
+        const element = document.querySelector(id);
+        if (element) {
+          // Calculate position with offset for the fixed header
+          const headerOffset = 80; // Approximate header height
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    };
+
     if (location.pathname !== '/') {
       navigate('/');
-      setTimeout(() => {
-        const element = document.querySelector(id);
-        if (element) element.scrollIntoView({ behavior: 'smooth' });
-      }, 500);
+      setTimeout(scrollToElement, 500);
     } else {
-      const element = document.querySelector(id);
-      if (element) element.scrollIntoView({ behavior: 'smooth' });
+      scrollToElement();
     }
   };
 
