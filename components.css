@@ -1,0 +1,778 @@
+/* ========================================
+   COMPONENTS STYLES
+   Componentes modulares: servicios, modales, cotizador
+   ======================================== */
+
+/* Fallback animation para elementos que deben aparecer */
+@keyframes fadeInFallback {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Service Cards con estilo Lusion */
+.service-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.service-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    border-radius: 4px;
+}
+
+.service-name {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.service-price-range {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-sm) 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.price-from {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+}
+
+.price-amount {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.service-details-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--spacing-sm) 0;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all var(--transition);
+    margin-top: var(--spacing-md);
+}
+
+.service-details-btn:hover {
+    border-bottom-color: var(--color-text);
+    gap: 0.5rem;
+}
+
+.service-details-btn svg {
+    transition: transform var(--transition);
+}
+
+.service-details-btn:hover svg {
+    transform: translateX(5px);
+}
+
+/* Servicio reflejado abajo (estilo Lusion) - OCULTO */
+.service-footer-mirror {
+    display: none !important; /* Ocultar para evitar duplicados visibles */
+}
+
+.service-icon-mirror {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    border-radius: 4px;
+}
+
+.service-name-mirror {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.services-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+    opacity: 0;
+}
+
+/* Pricing Section */
+.pricing {
+    padding: var(--spacing-3xl) 0;
+    min-height: 100vh;
+}
+
+.pricing-title {
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--spacing-md);
+    overflow: hidden;
+}
+
+.pricing-title .word {
+    display: inline-block;
+    margin-right: 0.3em;
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.pricing-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+    opacity: 0;
+}
+
+.pricing-comparator {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 8px;
+    opacity: 0;
+}
+
+.pricing-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toggle-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+.toggle-btn {
+    width: 50px;
+    height: 28px;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    position: relative;
+    transition: background var(--transition);
+}
+
+.toggle-btn.active {
+    background: var(--color-text);
+}
+
+.toggle-switch {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    transition: transform var(--transition);
+}
+
+.toggle-btn.active .toggle-switch {
+    transform: translateX(22px);
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-3xl);
+}
+
+.pricing-card {
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-xl);
+    position: relative;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all var(--transition);
+    /* Fallback: mostrar después de 1 segundo si no hay animación */
+    animation: fadeInFallback 0.1s 1.2s forwards;
+}
+
+.pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-text);
+}
+
+.pricing-card.featured {
+    border-color: var(--color-text);
+    transform: scale(1.05);
+}
+
+.pricing-card.featured:hover {
+    transform: scale(1.05) translateY(-4px);
+}
+
+.popular-badge {
+    position: absolute;
+    top: -12px;
+    right: var(--spacing-lg);
+    background: var(--color-text);
+    color: var(--color-bg);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    border-radius: 20px;
+}
+
+.pricing-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.pricing-name {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--spacing-md);
+}
+
+.pricing-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+}
+
+.currency {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.amount {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.period {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin-left: 0.5rem;
+}
+
+.pricing-features {
+    list-style: none;
+    margin-bottom: var(--spacing-xl);
+}
+
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+}
+
+.feature-item.disabled {
+    opacity: 0.4;
+}
+
+.check-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.pricing-btn {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--color-text);
+    color: var(--color-bg);
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.pricing-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.pricing-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.pricing-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.pricing-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Quote Builder */
+.quote-builder {
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+    padding: var(--spacing-2xl);
+    margin-top: var(--spacing-3xl);
+    opacity: 0;
+    transform: translateY(40px);
+}
+
+.quote-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.quote-header h3 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--spacing-sm);
+}
+
+.quote-header p {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+}
+
+.quote-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+}
+
+.quote-step {
+    opacity: 0.3;
+    pointer-events: none;
+    transition: all var(--transition);
+}
+
+.quote-step.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.step-number {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    opacity: 0.2;
+    margin-bottom: var(--spacing-md);
+}
+
+.step-content h4 {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+}
+
+.quote-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.quote-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-lg);
+    background: white;
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.quote-option:hover {
+    border-color: var(--color-text);
+    transform: translateY(-2px);
+}
+
+.quote-option.selected {
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+}
+
+.option-price {
+    font-size: 0.875rem;
+    font-weight: 600;
+    opacity: 0.7;
+}
+
+.quote-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    background: white;
+    border: 2px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.quote-checkbox:hover {
+    border-color: var(--color-text);
+}
+
+.quote-checkbox input[type="checkbox"] {
+    margin-right: var(--spacing-sm);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.quote-checkbox input[type="checkbox"]:checked + span {
+    font-weight: 600;
+}
+
+.quote-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-xl);
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-radius: 8px;
+    margin-top: var(--spacing-xl);
+}
+
+.quote-total {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-sm);
+}
+
+.total-label {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.total-amount {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.quote-btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--color-bg);
+    color: var(--color-text);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.quote-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+}
+
+/* Service Modal */
+.service-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition);
+}
+
+.service-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+}
+
+.modal-content {
+    position: relative;
+    max-width: 900px;
+    width: 90%;
+    max-height: 90vh;
+    background: var(--color-bg);
+    border-radius: 12px;
+    padding: var(--spacing-2xl);
+    overflow-y: auto;
+    transform: scale(0.9) translateY(50px);
+    transition: all var(--transition);
+}
+
+.service-modal.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding-top: var(--spacing-md);
+}
+
+.modal-service-title {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--spacing-md);
+}
+
+.modal-service-description {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+}
+
+.modal-service-details {
+    margin-bottom: var(--spacing-xl);
+}
+
+.modal-service-details h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+}
+
+.modal-service-details ul {
+    list-style: none;
+    padding: 0;
+}
+
+.modal-service-details li {
+    padding: var(--spacing-sm) 0;
+    padding-left: var(--spacing-lg);
+    position: relative;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.modal-service-details li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--color-text);
+}
+
+.modal-service-price {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-lg) 0;
+    border-top: 2px solid var(--color-border);
+    border-bottom: 2px solid var(--color-border);
+}
+
+/* Services Process Section (integrado) */
+.services-process {
+    margin-top: var(--spacing-3xl);
+    padding-top: var(--spacing-3xl);
+    border-top: 1px solid var(--color-border);
+    opacity: 0;
+}
+
+.process-intro {
+    margin-bottom: var(--spacing-3xl);
+    text-align: center;
+}
+
+.process-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.4;
+}
+
+.process-title {
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--spacing-md);
+    overflow: hidden;
+}
+
+.process-title .word {
+    display: inline-block;
+    margin-right: 0.3em;
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.process-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-md);
+}
+
+.process-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.process-step {
+    opacity: 0;
+    transform: translateY(40px);
+    /* Fallback: mostrar después de 1 segundo si no hay animación */
+    animation: fadeInFallback 0.1s 1.4s forwards;
+}
+
+.step-number {
+    font-size: 3rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--spacing-sm);
+    opacity: 0.2;
+}
+
+.step-content h3 {
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--spacing-xs);
+}
+
+.step-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Process Steps con detalles */
+.step-details {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--spacing-sm);
+}
+
+.step-details li {
+    padding: var(--spacing-xs) 0;
+    padding-left: var(--spacing-md);
+    position: relative;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+}
+
+.step-details li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .quote-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .quote-summary {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: stretch;
+    }
+    
+    .quote-total {
+        justify-content: center;
+    }
+    
+    .pricing-card.featured {
+        transform: scale(1);
+    }
+}
+

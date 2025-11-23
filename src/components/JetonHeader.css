@@ -1,0 +1,252 @@
+/* Jeton Navbar Styles - Exact Copy */
+
+:root {
+    --grid-columns: 16;
+    --grid-gap: clamp(4px, -1.967px + 100vw * 0.0153, 24px);
+    --grid-half-gap: calc(var(--grid-gap)*0.5);
+    --grid-margin: clamp(16px, 2.896px + 100vw * 0.0336, 60px);
+    --grid-padding: calc(var(--grid-margin) - var(--grid-gap)*0.5);
+    --grid-width: calc(var(--100vw) - var(--grid-margin)*2);
+    --32-16: clamp(16px, 16px + 100vw * 0.01, 32px);
+    /* Estimated fallback */
+    --8: 8px;
+    --10: 10px;
+    --16: 16px;
+    --24: 24px;
+    --48: 48px;
+    --80: 80px;
+}
+
+._menu {
+    bottom: 0;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    padding-bottom: var(--32-16);
+    position: fixed;
+    width: 100%;
+    z-index: 99;
+    --height: 48px;
+    --h-height: calc(var(--height)*0.5);
+    pointer-events: none;
+    left: 0;
+    /* Ensure it's centered/placed correctly */
+}
+
+._menu .menu-bar {
+    align-items: center;
+    background-color: #0046b8;
+    /* Azul de la paleta de colores */
+    border-radius: 9999px;
+    /* Implied by pill shape */
+    display: flex;
+    height: var(--height);
+    padding: 0 2px;
+    pointer-events: all;
+    position: relative;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+    /* Added for better visibility */
+}
+
+._menu .menu-bar:before {
+    background-color: hsla(0, 0%, 100%, .1);
+    border-radius: inherit;
+    content: "";
+    inset: 0;
+    opacity: 0;
+    position: absolute;
+    transition: opacity .4s
+}
+
+._menu-button {
+    --color: #fff;
+    align-items: center;
+    border-radius: 6em;
+    display: flex;
+    height: var(--44);
+    /* 44px implied */
+    height: 44px;
+    padding: 0 var(--16);
+    position: relative;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+._menu-button:after {
+    content: "";
+    inset: -8px 0;
+    position: absolute
+}
+
+._menu-button>.background {
+    background-color: #fff;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity .3s cubic-bezier(.215, .61, .355, 1);
+    position: absolute;
+    inset: 0;
+}
+
+._menu-button> :not(.background) {
+    position: relative;
+    z-index: 1;
+}
+
+._menu-button:hover>.background {
+    opacity: .1;
+    transform: scale(1);
+}
+
+._menu-button.-active.-exact>.background,
+._menu-button[data-active=true]>.background {
+    opacity: .1;
+    transform: scale(1);
+}
+
+/* Drawer Logic */
+
+[aria-expanded=true]+._menu-drawer {
+    pointer-events: all;
+}
+
+[aria-expanded=true]+._menu-drawer .slot {
+    transform: translateY(0) rotate(0deg) scale(1);
+}
+
+[aria-expanded=true]+._menu-drawer .slot:after {
+    opacity: 0;
+}
+
+._menu-drawer {
+    bottom: 0;
+    left: -1px;
+    overflow: hidden;
+    padding: 0;
+    pointer-events: none;
+    position: absolute;
+    width: calc(100% + 2px);
+    z-index: -1;
+    border-radius: calc(var(--h-height));
+}
+
+._menu-drawer .slot {
+    background-color: #0046b8;
+    /* Match menu-bar */
+    display: flex;
+    padding: var(--8);
+    padding-bottom: calc(var(--height) + var(--8));
+    transform: translateY(110%) rotate(1deg);
+    transition: transform .6s cubic-bezier(.23, 1, .32, 1);
+    transition-property: transform, box-shadow;
+    border-radius: calc(var(--h-height));
+    align-items: flex-start;
+    /* Changed from center to flex-start for vertical list */
+    justify-content: space-between;
+    /* Space between for menu and preview */
+    gap: 16px;
+}
+
+._menu-drawer .slot:after {
+    background: linear-gradient(180deg, transparent, #003d9e);
+    border-radius: inherit;
+    content: "";
+    inset: 0;
+    opacity: 1;
+    pointer-events: none;
+    position: absolute;
+    transition: opacity .1s cubic-bezier(.215, .61, .355, 1)
+}
+
+._menu-drawer .slot ul {
+    flex-shrink: 0;
+    /* Updated padding as requested */
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    margin: 0;
+    min-width: 120px;
+    /* Ensure full width */
+    font-size: 16px;
+    /* Font size for dropdown items */
+    position: relative;
+    z-index: 1;
+}
+
+._menu-drawer .slot ul li {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+._menu-drawer .slot ul li a {
+    display: block;
+    padding: 8px 12px;
+    color: white;
+    opacity: 0.5;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+._menu-drawer .slot ul li:hover a {
+    opacity: 1;
+    transform: translateX(4px);
+}
+
+/* Preview Image */
+.menu-preview {
+    position: relative;
+    width: 180px;
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.menu-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+._menu-drawer .slot ul li:hover~.menu-preview,
+._menu-drawer .slot ul li:hover+.menu-preview,
+.menu-preview.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Media Queries */
+@media only screen and (min-width: 2000px) {
+    ._menu {
+        --height: 2.4vw;
+        padding-bottom: 1.5vw;
+        /* Approximation */
+    }
+
+    ._menu .menu-bar {
+        padding: 0 .1vw;
+    }
+}
+
+/* Custom Overrides for Blue Theme */
+.jeton-black-theme .menu-bar,
+.jeton-black-theme ._menu-drawer .slot {
+    background: #0046b8;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.jeton-black-theme ._menu-drawer .slot:after {
+    background: linear-gradient(180deg, transparent, #003d9e);
+}

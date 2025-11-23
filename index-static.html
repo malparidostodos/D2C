@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Car Detailing - Premium Auto Care</title>
+    <!-- React version available at /index-react.html -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <!-- Floating CTA Button -->
+    <a href="#contacto" class="floating-cta" aria-label="Reserva Ahora">
+        <span class="floating-cta-text">Reserva</span>
+        <span class="floating-cta-text">Ahora</span>
+    </a>
+
+    <!-- Navigation estilo Lusion -->
+    <nav class="navbar" data-nav>
+        <div class="nav-container">
+            <a href="#inicio" class="logo">ELITE DETAILING</a>
+            <div class="nav-right">
+                <button class="nav-icon-btn" aria-label="Info" data-info-toggle>
+                    <span class="icon-line"></span>
+                </button>
+                <a href="#contacto" class="nav-cta-btn">
+                    <span>LET'S TALK</span>
+                    <span class="cta-dot">·</span>
+                </a>
+                <button class="menu-toggle" aria-label="Menu" data-menu-toggle>
+                    <span class="menu-text menu">MENU <span class="menu-dots">··</span></span>
+                    <span class="menu-text close">CLOSE <span class="menu-dots">··</span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu estilo Lusion -->
+    <div class="mobile-menu" data-mobile-menu>
+        <div class="mobile-menu-content">
+            <!-- Navigation Card -->
+            <div class="mobile-nav-card">
+                <nav class="mobile-nav">
+                    <a href="#inicio" class="mobile-nav-link">
+                        <span>HOME</span>
+                        <span class="nav-dot">·</span>
+                    </a>
+                    <a href="#servicios" class="mobile-nav-link">SERVICIOS</a>
+                    <a href="#precios" class="mobile-nav-link">PRECIOS</a>
+                    <a href="#galeria" class="mobile-nav-link">GALERÍA</a>
+                    <a href="#contacto" class="mobile-nav-link">CONTACTO</a>
+      </nav>
+            </div>
+            
+            <!-- Newsletter Card -->
+            <div class="mobile-newsletter-card">
+                <h3 class="newsletter-title">Subscribe to our newsletter</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email" class="newsletter-input" required>
+                    <button type="submit" class="newsletter-submit" aria-label="Subscribe">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+            
+            <!-- LABS Card -->
+            <div class="mobile-labs-card">
+                <div class="labs-content">
+                    <svg class="labs-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                        <path d="M6 16L18 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="labs-text">LABS</span>
+                    <svg class="labs-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M5 15L15 5M15 5H5M15 5V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero" data-hero>
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <video autoplay muted loop playsinline class="hero-video">
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-sports-car-driving-on-a-winding-road-4289-large.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge" data-hero-badge>
+                <span>Beyond</span>
+                <span>Visions</span>
+          </div>
+            <h1 class="hero-title" data-hero-title>
+                <span class="title-line" data-title-line>
+                    <span class="word">Transformamos</span>
+                    <span class="word">tu</span>
+                    <span class="word">vehículo</span>
+                </span>
+                <span class="title-line" data-title-line>
+                    <span class="word">con</span>
+                    <span class="word">detailing</span>
+                    <span class="word typewriter-text" id="typewriter-text"></span>
+                </span>
+                <span class="title-line" data-title-line>
+                    <span class="word">de</span>
+                    <span class="word">nivel</span>
+                    <span class="word">premium</span>
+                </span>
+            </h1>
+            <div class="hero-scroll-indicator" data-scroll-indicator>
+                <span>scroll to explore</span>
+                <svg class="scroll-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M7 13L12 18L17 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 6L12 11L17 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+          </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section (estilo brainwave) -->
+    <section id="beneficios" class="benefits-section" data-benefits>
+        <div class="container">
+            <div class="section-label" data-section-label>
+                <span>Beneficios</span>
+            </div>
+            <h2 class="benefits-title" data-benefits-title>
+                <span class="word">Por qué elegir</span>
+                <span class="word curve-underline">Elite Detailing</span>
+                    </h2>
+            
+            <div class="benefits-grid" data-benefits-grid>
+                <!-- Benefit Card 1 -->
+                <div class="benefit-card" data-benefit-card data-benefit-bg="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=400&fit=crop">
+                    <div class="benefit-content">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="benefit-card-title">Calidad Premium</h3>
+                        <p class="benefit-card-text">Productos de primera línea y técnicas profesionales que garantizan resultados excepcionales en cada detalle.</p>
+                        <div class="benefit-link">
+                            <span>Explorar más</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefit Card 2 -->
+                <div class="benefit-card" data-benefit-card data-benefit-bg="https://images.unsplash.com/photo-1494905998402-395d579af36f?w=400&h=400&fit=crop">
+                    <div class="benefit-content">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="benefit-card-title">Garantía Total</h3>
+                        <p class="benefit-card-text">Confianza absoluta en nuestro trabajo. Garantizamos la satisfacción completa o devolvemos tu dinero.</p>
+                        <div class="benefit-link">
+                            <span>Explorar más</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefit Card 3 -->
+                <div class="benefit-card" data-benefit-card data-benefit-bg="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=400&h=400&fit=crop">
+                    <div class="benefit-content">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="benefit-card-title">Profesionales Certificados</h3>
+                        <p class="benefit-card-text">Equipo altamente capacitado con certificaciones internacionales en técnicas de detailing avanzadas.</p>
+                        <div class="benefit-link">
+                            <span>Explorar más</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefit Card 4 -->
+                <div class="benefit-card" data-benefit-card data-benefit-bg="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=400&fit=crop">
+                    <div class="benefit-content">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="benefit-card-title">Resultados Rápidos</h3>
+                        <p class="benefit-card-text">Procesos optimizados que entregan resultados excepcionales en tiempos récord sin comprometer la calidad.</p>
+                        <div class="benefit-link">
+                            <span>Explorar más</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefit Card 5 -->
+                <div class="benefit-card" data-benefit-card data-benefit-bg="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&h=400&fit=crop">
+                    <div class="benefit-content">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="benefit-card-title">Tecnología Avanzada</h3>
+                        <p class="benefit-card-text">Equipamiento de última generación y productos nano-tecnológicos para protección duradera.</p>
+                        <div class="benefit-link">
+                            <span>Explorar más</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Benefit Card 6 -->
+                <div class="benefit-card" data-benefit-card data-benefit-bg="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=400&fit=crop">
+                    <div class="benefit-content">
+                        <div class="benefit-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="benefit-card-title">Atención Personalizada</h3>
+                        <p class="benefit-card-text">Cada vehículo recibe un tratamiento único adaptado a sus necesidades específicas y características.</p>
+                        <div class="benefit-link">
+                            <span>Explorar más</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collaboration Section (estilo brainwave) -->
+    <section id="colaboracion" class="collaboration-section" data-collaboration>
+        <div class="container">
+            <div class="collaboration-content">
+                <div class="collaboration-text">
+                    <h2 class="collaboration-title" data-collaboration-title>
+                        <span class="word">Trabajamos con las mejores</span>
+                        <span class="word curve-underline">marcas</span>
+                    </h2>
+                    <ul class="collaboration-features">
+                        <li class="collab-feature">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div>
+                                <h6>Productos Premium</h6>
+                                <p>Trabajamos exclusivamente con las mejores marcas internacionales de productos para detailing.</p>
+                            </div>
+                        </li>
+                        <li class="collab-feature">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div>
+                                <h6>Equipamiento Profesional</h6>
+                            </div>
+                        </li>
+                        <li class="collab-feature">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div>
+                                <h6>Certificaciones Internacionales</h6>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="#contacto" class="collab-button">
+                        <span>Reserva tu cita</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="collaboration-visual">
+                    <div class="collab-circle">
+                        <div class="collab-inner-circle">
+                            <div class="collab-center">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <!-- Service Icons alrededor del círculo -->
+                        <div class="collab-app-icon" style="--rotation: 0deg;">
+                            <div class="collab-app-box">
+                                <span>L</span>
+                            </div>
+                        </div>
+                        <div class="collab-app-icon" style="--rotation: 45deg;">
+                            <div class="collab-app-box">
+                                <span>P</span>
+                            </div>
+                        </div>
+                        <div class="collab-app-icon" style="--rotation: 90deg;">
+                            <div class="collab-app-box">
+                                <span>C</span>
+                            </div>
+                        </div>
+                        <div class="collab-app-icon" style="--rotation: 135deg;">
+                            <div class="collab-app-box">
+                                <span>I</span>
+                            </div>
+                        </div>
+                        <div class="collab-app-icon" style="--rotation: 180deg;">
+                            <div class="collab-app-box">
+                                <span>W</span>
+                            </div>
+                        </div>
+                        <div class="collab-app-icon" style="--rotation: 225deg;">
+                            <div class="collab-app-box">
+                                <span>G</span>
+                            </div>
+                        </div>
+                        <div class="collab-app-icon" style="--rotation: 270deg;">
+                            <div class="collab-app-box">
+                                <span>R</span>
+                            </div>
+                        </div>
+                        <div class="collab-app-icon" style="--rotation: 315deg;">
+                            <div class="collab-app-box">
+                                <span>M</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section con detalles expandibles -->
+    <section id="servicios" class="services" data-services>
+        <div class="container">
+            <div class="section-label" data-section-label>
+                <span>Featured</span>
+                <span>Services</span>
+            </div>
+            <h2 class="services-title" data-services-title>
+                <span class="word">Nuestros</span>
+                <span class="word curve-underline">Servicios</span>
+            </h2>
+            <p class="services-subtitle" data-services-subtitle>Selecciona un servicio para ver detalles completos y precios</p>
+            
+            <div class="services-grid" data-services-grid>
+                <!-- Service Card 1 -->
+                <div class="service-card" data-service-card data-service="lavado">
+                    <div class="service-header">
+                        <div class="service-icon">L</div>
+                        <h3 class="service-name">LAVADO</h3>
+                    </div>
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&h=600&fit=crop" alt="Lavado Premium" loading="lazy">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-tags">
+                            <span>Lavado</span>
+                            <span>Premium</span>
+                            <span>Exterior</span>
+                        </div>
+                        <p class="service-description">Lavado profesional de dos fases con productos premium</p>
+                        <div class="service-price-range">
+                            <span class="price-from">Desde</span>
+                            <span class="price-amount">$149</span>
+                        </div>
+                        <button class="service-details-btn" data-service-details="lavado">
+                            <span>Ver detalles</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Servicio reflejado abajo -->
+                    <div class="service-footer-mirror">
+                        <div class="service-icon-mirror">L</div>
+                        <h3 class="service-name-mirror">LAVADO</h3>
+                    </div>
+                </div>
+
+                <!-- Service Card 2 -->
+                <div class="service-card" data-service-card data-service="pulido">
+                    <div class="service-header">
+                        <div class="service-icon">P</div>
+                        <h3 class="service-name">PULIDO</h3>
+                    </div>
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1494905998402-395d579af36f?w=800&h=600&fit=crop" alt="Pulido Profesional" loading="lazy">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-tags">
+                            <span>Pulido</span>
+                            <span>Restauración</span>
+                            <span>Corrección</span>
+                        </div>
+                        <p class="service-description">Corrección de pintura con máquinas de última generación</p>
+                        <div class="service-price-range">
+                            <span class="price-from">Desde</span>
+                            <span class="price-amount">$349</span>
+                        </div>
+                        <button class="service-details-btn" data-service-details="pulido">
+                            <span>Ver detalles</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="service-footer-mirror">
+                        <div class="service-icon-mirror">P</div>
+                        <h3 class="service-name-mirror">PULIDO</h3>
+                    </div>
+                </div>
+
+                <!-- Service Card 3 -->
+                <div class="service-card" data-service-card data-service="coating">
+                    <div class="service-header">
+                        <div class="service-icon">C</div>
+                        <h3 class="service-name">COATING</h3>
+                    </div>
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&h=600&fit=crop" alt="Coating Cerámico" loading="lazy">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-tags">
+                            <span>Coating</span>
+                            <span>Cerámico</span>
+                            <span>Protección</span>
+                        </div>
+                        <p class="service-description">Protección duradera de hasta 5 años con nano-cerámica</p>
+                        <div class="service-price-range">
+                            <span class="price-from">Desde</span>
+                            <span class="price-amount">$899</span>
+                        </div>
+                        <button class="service-details-btn" data-service-details="coating">
+                            <span>Ver detalles</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="service-footer-mirror">
+                        <div class="service-icon-mirror">C</div>
+                        <h3 class="service-name-mirror">COATING</h3>
+                    </div>
+                </div>
+
+                <!-- Service Card 4 -->
+                <div class="service-card" data-service-card data-service="interior">
+                    <div class="service-header">
+                        <div class="service-icon">I</div>
+                        <h3 class="service-name">INTERIOR</h3>
+                    </div>
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&h=600&fit=crop" alt="Interior Detailing" loading="lazy">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-tags">
+                            <span>Interior</span>
+                            <span>Detailing</span>
+                            <span>Limpieza</span>
+                        </div>
+                        <p class="service-description">Limpieza profunda de tapicería, alfombras y paneles</p>
+                        <div class="service-price-range">
+                            <span class="price-from">Desde</span>
+                            <span class="price-amount">$199</span>
+                        </div>
+                        <button class="service-details-btn" data-service-details="interior">
+                            <span>Ver detalles</span>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="service-footer-mirror">
+                        <div class="service-icon-mirror">I</div>
+                        <h3 class="service-name-mirror">INTERIOR</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Process Section (integrado) -->
+            <div class="services-process" data-services-process>
+                <div class="process-intro">
+                    <p class="process-label">Proceso</p>
+                    <h2 class="process-title" data-process-title>
+                        <span class="word">Cómo</span>
+                        <span class="word">trabajamos</span>
+                    </h2>
+                    <p class="process-subtitle">Nuestro método profesional garantiza resultados excepcionales en cada detalle</p>
+                </div>
+                
+                <div class="process-steps">
+                    <div class="process-step" data-process-step>
+                        <div class="step-number">01</div>
+                        <div class="step-content">
+                            <h3>Consulta inicial</h3>
+                            <p>Evaluamos tu vehículo y discutimos tus necesidades específicas para crear un plan personalizado.</p>
+                            <ul class="step-details">
+                                <li>Inspección detallada del estado</li>
+                                <li>Recomendaciones personalizadas</li>
+                                <li>Presupuesto transparente</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step" data-process-step>
+                        <div class="step-number">02</div>
+                        <div class="step-content">
+                            <h3>Preparación</h3>
+                            <p>Preparamos tu vehículo con los mejores productos y técnicas profesionales.</p>
+                            <ul class="step-details">
+                                <li>Lavado preliminar profundo</li>
+                                <li>Descontaminación de pintura</li>
+                                <li>Aislamiento de áreas sensibles</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step" data-process-step>
+                        <div class="step-number">03</div>
+                        <div class="step-content">
+                            <h3>Tratamiento especializado</h3>
+                            <p>Aplicamos técnicas avanzadas según el servicio seleccionado.</p>
+                            <ul class="step-details">
+                                <li>Pulido y corrección de pintura</li>
+                                <li>Aplicación de coating cerámico</li>
+                                <li>Detalle interior completo</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step" data-process-step>
+                        <div class="step-number">04</div>
+                        <div class="step-content">
+                            <h3>Control de calidad</h3>
+                            <p>Verificamos cada detalle para asegurar la perfección en cada servicio.</p>
+                            <ul class="step-details">
+                                <li>Inspección bajo luces especiales</li>
+                                <li>Corrección de imperfecciones</li>
+                                <li>Aprobación final del cliente</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="services-footer" data-services-footer>
+                <a href="#precios" class="services-link">
+                    <span>Ver precios y paquetes</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section con comparador -->
+    <section id="precios" class="pricing" data-pricing>
+      <div class="container">
+            <h2 class="pricing-title" data-pricing-title>
+                <span class="word">Nuestros</span>
+                <span class="word curve-underline">Paquetes</span>
+            </h2>
+            <p class="pricing-subtitle" data-pricing-subtitle>Elige el paquete perfecto para tu vehículo. Compara características y precios.</p>
+            
+            <div class="pricing-comparator" data-pricing-comparator>
+                <div class="pricing-toggle">
+                    <span class="toggle-label">Comparar paquetes</span>
+                    <button class="toggle-btn" data-comparator-toggle>
+                        <span class="toggle-switch"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="pricing-grid" data-pricing-grid>
+                <!-- Package 1 -->
+                <div class="pricing-card" data-pricing-card>
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Básico</h3>
+                        <div class="pricing-price">
+                            <span class="currency">$</span>
+                            <span class="amount">149</span>
+                            <span class="period">/servicio</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Lavado exterior premium</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Aspirado interior completo</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Limpieza de llantas y aros</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Secado sin marcas</span>
+                        </div>
+                        <div class="feature-item disabled">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Descontaminación de pintura</span>
+                        </div>
+                        <div class="feature-item disabled">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Pulido profesional</span>
+                        </div>
+                    </div>
+                    <button class="pricing-btn" data-pricing-select="basico">Seleccionar</button>
+                </div>
+
+                <!-- Package 2 - Featured -->
+                <div class="pricing-card featured" data-pricing-card>
+                    <div class="popular-badge">Popular</div>
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Premium</h3>
+                        <div class="pricing-price">
+                            <span class="currency">$</span>
+                            <span class="amount">349</span>
+                            <span class="period">/servicio</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Todo del plan Básico</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Descontaminación de pintura</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Pulido de una etapa</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Limpieza profunda interior</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Cera líquida premium</span>
+                        </div>
+                        <div class="feature-item disabled">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Coating cerámico</span>
+                        </div>
+                    </div>
+                    <button class="pricing-btn" data-pricing-select="premium">Seleccionar</button>
+                </div>
+
+                <!-- Package 3 -->
+                <div class="pricing-card" data-pricing-card>
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Elite</h3>
+                        <div class="pricing-price">
+                            <span class="currency">$</span>
+                            <span class="amount">899</span>
+                            <span class="period">/servicio</span>
+                        </div>
+                    </div>
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Todo del plan Premium</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Pulido multicapa</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Coating cerámico 2 años</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Protección de vidrios</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Tratamiento de llantas</span>
+                        </div>
+                        <div class="feature-item">
+                            <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M16.667 5L7.5 14.167 3.333 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Garantía escrita</span>
+                        </div>
+                    </div>
+                    <button class="pricing-btn" data-pricing-select="elite">Seleccionar</button>
+          </div>
+            </div>
+
+            <!-- Cotizador interactivo -->
+            <div class="quote-builder" data-quote-builder>
+                <div class="quote-header">
+                    <h3>Cotizador Interactivo</h3>
+                    <p>Personaliza tu servicio y obtén un precio exacto</p>
+                </div>
+                <div class="quote-steps">
+                    <div class="quote-step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Tamaño del vehículo</h4>
+                            <div class="quote-options">
+                                <button class="quote-option" data-vehicle="small">
+                                    <span>Compacto</span>
+                                    <span class="option-price">+$0</span>
+                                </button>
+                                <button class="quote-option" data-vehicle="medium">
+                                    <span>Sedán</span>
+                                    <span class="option-price">+$50</span>
+                                </button>
+                                <button class="quote-option" data-vehicle="large">
+                                    <span>SUV</span>
+                                    <span class="option-price">+$100</span>
+                                </button>
+                                <button class="quote-option" data-vehicle="xlarge">
+                                    <span>Camioneta</span>
+                                    <span class="option-price">+$150</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quote-step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Servicios adicionales</h4>
+                            <div class="quote-options">
+                                <label class="quote-checkbox">
+                                    <input type="checkbox" data-addon="engine" value="80">
+                                    <span>Limpieza de motor</span>
+                                    <span class="option-price">+$80</span>
+                                </label>
+                                <label class="quote-checkbox">
+                                    <input type="checkbox" data-addon="headlights" value="60">
+                                    <span>Restauración de faros</span>
+                                    <span class="option-price">+$60</span>
+                                </label>
+                                <label class="quote-checkbox">
+                                    <input type="checkbox" data-addon="wax" value="100">
+                                    <span>Cera premium adicional</span>
+                                    <span class="option-price">+$100</span>
+                                </label>
+                                <label class="quote-checkbox">
+                                    <input type="checkbox" data-addon="trim" value="50">
+                                    <span>Tratamiento de molduras</span>
+                                    <span class="option-price">+$50</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="quote-summary">
+                    <div class="quote-total">
+                        <span class="total-label">Total estimado:</span>
+                        <span class="total-amount" data-quote-total>$149</span>
+                    </div>
+                    <button class="quote-btn" data-quote-submit>Solicitar Cotización</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Roadmap Section (estilo brainwave) -->
+    <section id="roadmap" class="roadmap-section" data-roadmap>
+        <div class="container">
+            <div class="section-label" data-section-label>
+                <span>Roadmap</span>
+            </div>
+            <h2 class="roadmap-title" data-roadmap-title>
+                <span class="word">Nuestro</span>
+                <span class="word curve-underline">Proceso</span>
+            </h2>
+            
+            <div class="roadmap-grid" data-roadmap-grid>
+                <!-- Roadmap Item 1 -->
+                <div class="roadmap-card colorful" data-roadmap-card>
+                    <div class="roadmap-status done">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Completado</span>
+                    </div>
+                    <div class="roadmap-date">2024</div>
+                    <div class="roadmap-image">
+                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&h=600&fit=crop" alt="Lavado Premium" loading="lazy">
+                    </div>
+                    <h4 class="roadmap-card-title">Lavado Premium</h4>
+                    <p class="roadmap-card-text">Implementación de nuestro servicio de lavado premium con productos de primera línea y técnicas profesionales.</p>
+                </div>
+
+                <!-- Roadmap Item 2 -->
+                <div class="roadmap-card" data-roadmap-card>
+                    <div class="roadmap-status progress">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="spinning">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                                <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416;0 31.416" repeatCount="indefinite"/>
+                                <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416;-31.416" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                        <span>En progreso</span>
+                    </div>
+                    <div class="roadmap-date">2025</div>
+                    <div class="roadmap-image">
+                        <img src="https://images.unsplash.com/photo-1494905998402-395d579af36f?w=800&h=600&fit=crop" alt="Coating Cerámico" loading="lazy">
+                    </div>
+                    <h4 class="roadmap-card-title">Coating Cerámico Avanzado</h4>
+                    <p class="roadmap-card-text">Expansión de nuestro servicio de coating cerámico con nuevas tecnologías de protección de 5 años.</p>
+                </div>
+
+                <!-- Roadmap Item 3 -->
+                <div class="roadmap-card" data-roadmap-card>
+                    <div class="roadmap-status done">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Completado</span>
+                    </div>
+                    <div class="roadmap-date">2024</div>
+                    <div class="roadmap-image">
+                        <img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&h=600&fit=crop" alt="Pulido Profesional" loading="lazy">
+                    </div>
+                    <h4 class="roadmap-card-title">Pulido Profesional</h4>
+                    <p class="roadmap-card-text">Sistema de pulido multicapa para corrección de pintura y restauración de brillo original.</p>
+                </div>
+
+                <!-- Roadmap Item 4 -->
+                <div class="roadmap-card" data-roadmap-card>
+                    <div class="roadmap-status progress">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="spinning">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                                <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416;0 31.416" repeatCount="indefinite"/>
+                                <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416;-31.416" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                        <span>En progreso</span>
+                    </div>
+                    <div class="roadmap-date">2025</div>
+                    <div class="roadmap-image">
+                        <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&h=600&fit=crop" alt="Interior Detailing" loading="lazy">
+                    </div>
+                    <h4 class="roadmap-card-title">Interior Detailing Premium</h4>
+                    <p class="roadmap-card-text">Nuevo servicio de detailing interior con técnicas de limpieza profunda y protección de tapicería.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="galeria" class="gallery" data-gallery>
+        <div class="container">
+            <div class="gallery-header">
+                <h2 class="gallery-title" data-gallery-title>
+                    <span class="word">Resultados</span>
+                    <span class="word">que</span>
+                    <span class="word">hablan</span>
+                </h2>
+                <h2 class="gallery-title" data-gallery-title>
+                    <span class="word">por</span>
+                    <span class="word">sí</span>
+                    <span class="word">solos</span>
+                </h2>
+            </div>
+            <div class="gallery-grid" data-gallery-grid>
+                <div class="gallery-item" data-gallery-item>
+                    <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=1200&h=1600&fit=crop" alt="Before After 1" loading="lazy">
+                </div>
+                <div class="gallery-item" data-gallery-item>
+                    <img src="https://images.unsplash.com/photo-1494905998402-395d579af36f?w=1200&h=1600&fit=crop" alt="Before After 2" loading="lazy">
+            </div>
+                <div class="gallery-item" data-gallery-item>
+                    <img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=1200&h=1600&fit=crop" alt="Before After 3" loading="lazy">
+            </div>
+                <div class="gallery-item" data-gallery-item>
+                    <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1200&h=1600&fit=crop" alt="Before After 4" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" data-cta-section>
+      <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title" data-cta-title>
+                    <span class="word">Entra</span>
+                    <span class="word">a</span>
+                    <span class="word">un</span>
+                    <span class="word">nuevo</span>
+                    <span class="word">mundo</span>
+                </h2>
+                <h2 class="cta-title" data-cta-title>
+                    <span class="word">y</span>
+                    <span class="word">deja</span>
+                    <span class="word">volar</span>
+                    <span class="word">tu</span>
+                    <span class="word">imaginación</span>
+                </h2>
+                <p class="cta-subtitle" data-cta-subtitle>¿Tu gran idea está lista para volar?</p>
+                <a href="#contacto" class="cta-button" data-cta-button>
+                    <span>Trabajemos juntos</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contacto" class="contact" data-contact>
+      <div class="container">
+            <div class="contact-header">
+                <h2 class="contact-title" data-contact-title>
+                    <span class="word">Contáctanos</span>
+                </h2>
+                <p class="contact-subtitle" data-contact-subtitle>Reserva tu cita hoy mismo</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-label">Ubicación</div>
+                        <div class="contact-value">Av. Premium 123, Ciudad</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-label">Teléfono</div>
+                        <div class="contact-value">+1 (555) 123-4567</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-label">Email</div>
+                        <div class="contact-value">contacto@elitedetailing.com</div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-label">Horarios</div>
+                        <div class="contact-value">Lun - Vie: 9:00 AM - 6:00 PM<br>Sáb: 10:00 AM - 4:00 PM</div>
+                    </div>
+                </div>
+                <form class="contact-form" data-contact-form>
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" required>
+                        <label for="name">Nombre</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" required>
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="phone" name="phone" required>
+                        <label for="phone">Teléfono</label>
+                    </div>
+                    <div class="form-group">
+                        <select id="service" name="service" required>
+                            <option value="">Selecciona un servicio</option>
+                            <option value="basico">Básico - $149</option>
+                            <option value="premium">Premium - $349</option>
+                            <option value="elite">Elite - $899</option>
+                            <option value="custom">Cotización personalizada</option>
+                        </select>
+                        <label for="service">Servicio de interés</label>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                        <label for="message">Mensaje</label>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <span>Enviar Mensaje</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M18 2L9 11M18 2L12 18L9 11M18 2L2 8L9 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" data-footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-top">
+                    <div class="footer-logo">ELITE DETAILING</div>
+                    <div class="footer-links">
+                        <a href="#inicio">Inicio</a>
+                        <a href="#beneficios">Beneficios</a>
+                        <a href="#servicios">Servicios</a>
+                        <a href="#precios">Precios</a>
+                        <a href="#roadmap">Proceso</a>
+                        <a href="#galeria">Galería</a>
+                        <a href="#contacto">Contacto</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; <span class="footer-year">2025</span> Elite Car Detailing. Todos los derechos reservados.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Instagram" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" stroke-width="2"/>
+                                <path d="M16 11.37C16.1234 12.2022 15.9813 13.0522 15.5938 13.799C15.2063 14.5458 14.5932 15.1514 13.8416 15.5297C13.0901 15.9079 12.2385 16.0396 11.4078 15.9059C10.5771 15.7723 9.80976 15.3801 9.21484 14.7852C8.61993 14.1902 8.22768 13.4229 8.09402 12.5922C7.96035 11.7615 8.09202 10.9099 8.47028 10.1584C8.84854 9.40685 9.45414 8.79374 10.2009 8.40624C10.9477 8.01874 11.7977 7.87659 12.63 8C13.4789 8.12588 14.2649 8.52146 14.8717 9.1283C15.4785 9.73514 15.8741 10.5211 16 11.37Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M17.5 6.5H17.51" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Facebook" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Twitter" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M23 3C22.0424 3.67548 20.9821 4.19211 19.86 4.53C19.2577 3.83751 18.4573 3.34669 17.567 3.12393C16.6767 2.90116 15.7395 2.95718 14.8821 3.28446C14.0247 3.61174 13.2884 4.1944 12.773 4.95372C12.2575 5.71303 11.9877 6.61232 12 7.53V8.53C10.2426 8.57557 8.50127 8.18581 6.93101 7.39545C5.36074 6.60508 4.01032 5.43864 3 4C3 4 -1 13 8 17C5.94053 18.398 3.48716 19.099 1 19C10 24 21 19 21 7.5C20.9991 7.22145 20.9723 6.94359 20.92 6.67C21.9406 5.66349 22.6608 4.39271 23 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Keep Scrolling Indicator -->
+    <div class="keep-scrolling" data-keep-scrolling>
+        <span>Keep Scrolling</span>
+        <span>to Learn More</span>
+    </div>
+
+    <!-- Service Details Modal -->
+    <div class="service-modal" data-service-modal>
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-content">
+            <button class="modal-close" data-modal-close>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div class="modal-body" data-modal-body></div>
+        </div>
+    </div>
+
+    <!-- Custom Scrollbar -->
+    <div class="scrollbar-custom" id="customScrollbar">
+        <div class="scrollbar-thumb" id="scrollbarThumb"></div>
+    </div>
+
+    <!-- Generating Component -->
+    <div class="generating-component" id="generatingComponent" style="display: none;">
+        <div class="generating-spinner"></div>
+        <span class="generating-text">Procesando...</span>
+    </div>
+
+    <!-- Notification Component -->
+    <div class="notification-component" id="notificationComponent" style="display: none;">
+        <div class="notification-content">
+            <div class="notification-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="notification-text">
+                <h6 class="notification-title" id="notificationTitle">Notificación</h6>
+                <p class="notification-message" id="notificationMessage">Mensaje de notificación</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Circles -->
+    <div class="background-circles" id="backgroundCircles">
+        <div class="circle-ring ring-1"></div>
+        <div class="circle-ring ring-2"></div>
+        <div class="circle-ring ring-3"></div>
+        <div class="circle-ring ring-4"></div>
+    </div>
+
+    <!-- SVG Clip Paths para efectos -->
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <clipPath id="benefits" clipPathUnits="objectBoundingBox">
+                <path d="M0,0.1 C0,0.05 0.05,0 0.1,0 L0.9,0 C0.95,0 1,0.05 1,0.1 L1,0.9 C1,0.95 0.95,1 0.9,1 L0.1,1 C0.05,1 0,0.95 0,0.9 Z"/>
+            </clipPath>
+        </defs>
+    </svg>
+
+    <script src="data.js"></script>
+    <script src="components.js"></script>
+    <script src="parallax.js"></script>
+    <script src="script.js"></script>
+    
+    <!-- Custom Scrollbar Script -->
+    <script>
+        const scrollContainer = document.documentElement || document.body;
+        const customScrollbar = document.getElementById('customScrollbar');
+        const scrollbarThumb = document.getElementById('scrollbarThumb');
+        let scrollTimeout;
+
+        function updateScrollbar() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            
+            if (scrollHeight <= 0) {
+                customScrollbar.classList.remove('visible');
+                return;
+            }
+            
+            const scrollPercent = scrollTop / scrollHeight;
+            const scrollbarTrack = 180; // Altura fija del track (aumentada)
+            const viewportRatio = window.innerHeight / document.documentElement.scrollHeight;
+            const thumbHeight = Math.max(30, viewportRatio * scrollbarTrack); // Mínimo 30px (aumentado)
+            const thumbPosition = scrollPercent * (scrollbarTrack - thumbHeight);
+
+            scrollbarThumb.style.height = thumbHeight + 'px';
+            scrollbarThumb.style.top = thumbPosition + 'px';
+
+            customScrollbar.classList.add('visible');
+
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                customScrollbar.classList.remove('visible');
+            }, 1500);
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', updateScrollbar, { passive: true });
+        window.addEventListener('resize', updateScrollbar);
+        
+        // Inicializar
+        updateScrollbar();
+        
+        // Mostrar scrollbar al cargar si hay contenido
+        setTimeout(() => {
+            if (document.documentElement.scrollHeight > window.innerHeight) {
+                updateScrollbar();
+            }
+        }, 100);
+    </script>
+</body>
+</html>
