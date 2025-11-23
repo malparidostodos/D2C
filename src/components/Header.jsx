@@ -151,9 +151,6 @@ const Header = () => {
 
   const isServiceActive = ['#servicios', '#roadmap', '#membresias'].includes(activeSection);
 
-  // Use black theme class if desired, or default orange
-  const themeClass = 'jeton-black-theme';
-
   return (
     <>
       {/* Shadow hint */}
@@ -164,18 +161,19 @@ const Header = () => {
 
       {/* Main Menu Structure */}
       <div
-        className={`_menu ${themeClass}`}
+        className={`_menu`}
         style={{ transform: hidden ? 'translateY(250%)' : 'translateY(0)', transition: 'transform 0.35s ease-in-out' }}
       >
         <div
           className="menu-bar"
           onMouseEnter={() => { setHoverLock(true); setHidden(false); }}
-          onMouseLeave={() => { setHoverLock(false); setHoveredService(null); }}
+          onMouseLeave={() => { setHoverLock(false); setHoveredService(null); setServicesOpen(false); }}
         >
           {/* INICIO */}
           <button
             className={`_menu-button ${activeSection === '#inicio' ? '-active -exact' : ''}`}
             onClick={(e) => handleNavClick(e, '#inicio', '/inicio')}
+            onMouseEnter={() => setServicesOpen(false)}
           >
             <div className="background"></div>
             <Home size={20} strokeWidth={2} />
@@ -185,14 +183,15 @@ const Header = () => {
           <button
             className={`_menu-button ${isServiceActive ? '-active -exact' : ''}`}
             aria-expanded={servicesOpen}
-            onClick={() => setServicesOpen(!servicesOpen)}
+            onMouseEnter={() => setServicesOpen(true)}
           >
             <div className="background"></div>
             <span>Personal</span>
             <ChevronDown
+              className={`chevron-icon ${servicesOpen ? 'open' : ''}`}
               size={14}
               strokeWidth={2.5}
-              style={{ marginLeft: 4, transform: servicesOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
+              style={{ marginLeft: 4 }}
             />
           </button>
 
@@ -200,16 +199,17 @@ const Header = () => {
           <div className="_menu-drawer">
             <div className="slot">
               <ul>
-                {servicesDropdown.map((item, index) => (
+                {servicesDropdown.map((item) => (
                   <li
                     key={item.name}
                     onMouseEnter={() => setHoveredService(item.id)}
                   >
                     <a
                       href={item.path}
+                      className="link"
                       onClick={(e) => handleNavClick(e, item.id, item.path)}
                     >
-                      {item.name}
+                      <div className="label">{item.name}</div>
                     </a>
                   </li>
                 ))}
@@ -240,6 +240,7 @@ const Header = () => {
           <button
             className={`_menu-button ${activeSection === '#contacto' ? '-active -exact' : ''}`}
             onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
+            onMouseEnter={() => setServicesOpen(false)}
           >
             <div className="background"></div>
             <span>Contacto</span>
@@ -250,6 +251,7 @@ const Header = () => {
             className="_menu-button hidden md:flex"
             style={{ marginLeft: 8, backgroundColor: 'white', color: 'black', borderRadius: '9999px', paddingLeft: 20, paddingRight: 20 }}
             onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
+            onMouseEnter={() => setServicesOpen(false)}
           >
             <span style={{ fontWeight: 700, marginRight: 4 }}>Hablemos</span>
             <span style={{ fontWeight: 900 }}>·</span>

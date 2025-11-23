@@ -184,7 +184,7 @@
 
 ._menu-drawer .slot ul li a {
     display: block;
-    padding: 8px 12px;
+    padding: 0px 12px;
     color: white;
     opacity: 0.5;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -249,4 +249,8 @@
 
 .jeton-black-theme ._menu-drawer .slot:after {
     background: linear-gradient(180deg, transparent, #003d9e);
+}
+
+._menu-drawer .slot ul li:first-child {
+    padding-top: 8px;
 }

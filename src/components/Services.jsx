@@ -92,7 +92,14 @@ const Services = () => {
   return (
     <section ref={targetRef} id="servicios" className="relative h-[500vh] bg-background">
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-        <div className="absolute top-12 left-12 z-10 max-w-md">
+        <motion.div
+          style={{
+            opacity: useTransform(scrollYProgress, [0, 0.2], [1, 0]),
+            y: useTransform(scrollYProgress, [0, 0.2], [0, -50]),
+            scale: useTransform(scrollYProgress, [0, 0.2], [1, 0.9])
+          }}
+          className="absolute top-12 left-12 z-10 max-w-md"
+        >
           <FadeIn>
             <span className="text-accent font-medium tracking-widest uppercase text-sm">Nuestros Servicios</span>
           </FadeIn>
@@ -105,7 +112,7 @@ const Services = () => {
               Desliza para explorar nuestra gama completa de servicios diseñados para perfeccionar tu vehículo.
             </p>
           </FadeIn>
-        </div>
+        </motion.div>
 
         <motion.div style={{ x }} className="flex gap-8 pl-[5vw] md:pl-[40vw]">
           {services.map((service) => (
