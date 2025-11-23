@@ -1,16 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Car Detailing - Premium Auto Care</title>
+    <title>DIRTY2CLEAN - Premium Auto Care</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="./assets/index-BDxP7naV.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-CwubxV49.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+  <script type="module" crossorigin src="./assets/index-2mq2CSnu.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-nclPZtHw.css">
 </head>
+
 <body>
-    <div id="root"></div>
+    <div id="root"></div>
+
+    <!-- SVG Filters for Liquid Glass Effect -->
+    <svg style="position: absolute; width: 0; height: 0; pointer-events: none;">
+        <!-- Displacement filter for liquid glass distortion -->
+        <filter id="displacementFilter">
+            <feImage href="/liquid-glass-map.png" preserveAspectRatio="none" result="map" />
+            <feDisplacementMap in="SourceGraphic" in2="map" scale="200" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+        <!-- Alias for badges-container compatibility -->
+        <filter id="lg-dist">
+            <feImage href="/liquid-glass-map.png" preserveAspectRatio="none" result="map" />
+            <feDisplacementMap in="SourceGraphic" in2="map" scale="200" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
 </body>
+
 </html>

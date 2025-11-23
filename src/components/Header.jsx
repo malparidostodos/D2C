@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ArrowRight, Home, ChevronDown } from 'lucide-react';
+import { useSmoothScroll } from './SmoothScroll';
 import './JetonHeader.css'; // Import the strict CSS
 
 const Header = () => {
@@ -15,13 +16,15 @@ const Header = () => {
   const scrollTimeout = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const { lenis } = useSmoothScroll();
 
   // -------------------------------------------------
   // Mouse‑move & scroll visibility handling
   // -------------------------------------------------
   useEffect(() => {
     const handleMouseMove = (e) => {
-      const isAtTop = window.scrollY < 50;
+      const currentScrollY = lenis ? lenis.scroll : window.scrollY;
+      const isAtTop = currentScrollY < 50;
       if (isAtTop) {
         setHidden(false);
         return;
@@ -46,8 +49,9 @@ const Header = () => {
       }
     };
 
-    const handleScrollVisibility = () => {
-      const currentScrollY = window.scrollY;
+    const handleScrollVisibility = (e) => {
+      // Support both lenis event object and native window fallback
+      const currentScrollY = e && typeof e.scroll === 'number' ? e.scroll : window.scrollY;
       const isAtTop = currentScrollY < 50;
 
       if (isAtTop) {
@@ -78,21 +82,31 @@ const Header = () => {
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('scroll', handleScrollVisibility, { passive: true });
+
+    if (lenis) {
+      lenis.on('scroll', handleScrollVisibility);
+    } else {
+      window.addEventListener('scroll', handleScrollVisibility, { passive: true });
+    }
+
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('scroll', handleScrollVisibility);
+      if (lenis) {
+        lenis.off('scroll', handleScrollVisibility);
+      } else {
+        window.removeEventListener('scroll', handleScrollVisibility);
+      }
       if (scrollTimeout.current) {
         clearTimeout(scrollTimeout.current);
       }
     };
-  }, [hoverLock, menuOpen]);
+  }, [hoverLock, menuOpen, lenis]);
 
   // -------------------------------------------------
   // Scroll‑spy
   // -------------------------------------------------
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = (e) => {
       const sections = [
         '#inicio',
         '#beneficios',
@@ -102,7 +116,9 @@ const Header = () => {
         '#membresias',
         '#contacto',
       ];
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
+
+      const currentScrollY = e && typeof e.scroll === 'number' ? e.scroll : window.scrollY;
+      const scrollPosition = currentScrollY + window.innerHeight / 3;
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = document.querySelector(sections[i]);
@@ -116,10 +132,23 @@ const Header = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    if (lenis) {
+      lenis.on('scroll', handleScroll);
+      // Initial check
+      handleScroll({ scroll: lenis.scroll });
+    } else {
+      window.addEventListener('scroll', handleScroll);
+      handleScroll();
+    }
+
+    return () => {
+      if (lenis) {
+        lenis.off('scroll', handleScroll);
+      } else {
+        window.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [lenis]);
 
   const navLinks = [
     { name: 'INICIO', path: '/inicio', id: '#inicio' },
@@ -140,19 +169,28 @@ const Header = () => {
     const scrollToElement = () => {
       if (id === '#contacto') {
         // Scroll to bottom of page for contacto section
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        if (lenis) {
+          lenis.scrollTo(document.body.scrollHeight);
+        } else {
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
       } else {
         const element = document.querySelector(id);
         if (element) {
-          // Calculate position with offset for the fixed header
-          const headerOffset = 80; // Approximate header height
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          if (lenis) {
+            const headerOffset = 80;
+            lenis.scrollTo(element, { offset: -headerOffset });
+          } else {
+            // Calculate position with offset for the fixed header
+            const headerOffset = 80; // Approximate header height
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+          }
         }
       }
     };

@@ -9,11 +9,13 @@ import Pricing from './components/Pricing'
 import Roadmap from './components/Roadmap'
 import Contact from './components/Contact'
 import CustomScrollbar from './components/CustomScrollbar'
+import SmoothScroll, { useSmoothScroll } from './components/SmoothScroll'
+import Background3D from './components/Background3D'
 
 // Componente Home con todas las secciones
 const Home = () => {
   return (
-    <div className="min-h-screen bg-background text-primary relative">
+    <div className="min-h-screen bg-transparent text-primary relative">
       <Header />
       <CustomScrollbar />
       <main>
@@ -33,15 +35,18 @@ const Home = () => {
 const ScrollToSection = ({ sectionId }) => {
   const navigate = useNavigate()
   const location = useLocation()
+  const { lenis } = useSmoothScroll()
 
   useEffect(() => {
     const scrollToTarget = () => {
+      if (!lenis) return
+
       if (sectionId === '#contacto') {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+        lenis.scrollTo(document.body.scrollHeight)
       } else {
         const section = document.querySelector(sectionId)
         if (section) {
-          section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          lenis.scrollTo(section)
         }
       }
 
@@ -53,8 +58,12 @@ const ScrollToSection = ({ sectionId }) => {
       }, 1000)
     }
 
-    setTimeout(scrollToTarget, 100)
-  }, [sectionId, navigate, location.pathname])
+    // Wait for lenis to be ready
+    if (lenis) {
+      // Small delay to ensure DOM is ready
+      setTimeout(scrollToTarget, 100)
+    }
+  }, [sectionId, navigate, location.pathname, lenis])
 
   return <Home />
 }
@@ -72,19 +81,22 @@ const RedirectToHome = () => {
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/inicio" element={<ScrollToSection sectionId="#inicio" />} />
-        <Route path="/beneficios" element={<ScrollToSection sectionId="#beneficios" />} />
-        <Route path="/servicios" element={<ScrollToSection sectionId="#servicios" />} />
-        <Route path="/roadmap" element={<ScrollToSection sectionId="#roadmap" />} />
-        <Route path="/membresias" element={<ScrollToSection sectionId="#membresias" />} />
-        <Route path="/contacto" element={<ScrollToSection sectionId="#contacto" />} />
-        {/* Ruta catch-all para redirigir a home */}
-        <Route path="*" element={<RedirectToHome />} />
-      </Routes>
-    </BrowserRouter>
+    <SmoothScroll>
+      <BrowserRouter>
+        <Background3D />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/inicio" element={<ScrollToSection sectionId="#inicio" />} />
+          <Route path="/beneficios" element={<ScrollToSection sectionId="#beneficios" />} />
+          <Route path="/servicios" element={<ScrollToSection sectionId="#servicios" />} />
+          <Route path="/roadmap" element={<ScrollToSection sectionId="#roadmap" />} />
+          <Route path="/membresias" element={<ScrollToSection sectionId="#membresias" />} />
+          <Route path="/contacto" element={<ScrollToSection sectionId="#contacto" />} />
+          {/* Ruta catch-all para redirigir a home */}
+          <Route path="*" element={<RedirectToHome />} />
+        </Routes>
+      </BrowserRouter>
+    </SmoothScroll>
   )
 }
 

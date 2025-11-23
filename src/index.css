@@ -62,7 +62,8 @@ body {
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
+  /* Disabled for Lenis */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
