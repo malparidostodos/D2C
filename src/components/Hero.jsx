@@ -52,7 +52,7 @@ const Hero = () => {
             textShadow: '0 0 40px rgba(255, 255, 255, 0.1)'
           }}
         >
-          DIRTY <br /> 2 CLEAN
+          Ta' <br /> To' Clean
         </motion.h1>
 
         <motion.p

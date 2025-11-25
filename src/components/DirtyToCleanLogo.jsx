@@ -90,9 +90,9 @@ const DirtyToCleanLogo = ({ auto = false, className = "" }) => {
             onMouseEnter={() => !auto && setIsHovered(true)}
             onMouseLeave={() => !auto && setIsHovered(false)}
         >
-            <span>DIRTY</span>
+            <span>Ta'</span>
             <DirtyToCleanTwo active={active} className="mx-1" />
-            <span>CLEAN</span>
+            <span>Clean</span>
         </div>
     )
 }

@@ -21,6 +21,7 @@ const Header = () => {
   const lastScrollY = useRef(0);
   const scrollingUp = useRef(false);
   const scrollTimeout = useRef(null);
+  const langRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { lenis } = useSmoothScroll();
@@ -158,6 +159,25 @@ const Header = () => {
     };
   }, [lenis]);
 
+  // -------------------------------------------------
+  // Click outside handler for language dropdown
+  // -------------------------------------------------
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (langRef.current && !langRef.current.contains(event.target)) {
+        setLangOpen(false);
+      }
+    };
+
+    if (langOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [langOpen]);
+
   const handleNavClick = (e, id, path) => {
     e.preventDefault();
     setMenuOpen(false);
@@ -175,18 +195,9 @@ const Header = () => {
         const element = document.querySelector(id);
         if (element) {
           if (lenis) {
-            const headerOffset = 80;
-            lenis.scrollTo(element, { offset: -headerOffset });
+            lenis.scrollTo(element);
           } else {
-            // Calculate position with offset for the fixed header
-            const headerOffset = 80; // Approximate header height
-            const elementPosition = element.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth'
-            });
+            element.scrollIntoView({ behavior: 'smooth' });
           }
         }
       }
@@ -226,13 +237,13 @@ const Header = () => {
         <div className="nav-container">
           {/* Logo */}
           <a href="/" className="text-xl font-display font-bold text-white tracking-tighter">
-            DIRTY<span className="text-accent">2</span>CLEAN
+            Ta' <span className="text-accent">To'</span> Clean
           </a>
 
           <div className="lang-cta-wrapper">
             {/* Language Selector (Updated Structure) */}
             {/* Language Selector (Interactive) */}
-            <div className="_dropdown _language-select hidden md:flex" aria-expanded={langOpen} role="button">
+            <div ref={langRef} className="_dropdown _language-select hidden md:flex" aria-expanded={langOpen} role="button">
               <button
                 className="_dropdown-button w-full flex items-center justify-center gap-2"
                 onClick={() => setLangOpen(!langOpen)}
@@ -282,7 +293,7 @@ const Header = () => {
             <div className="ctas hidden md:flex">
               <a href="/login" className="_button" data-variant="ghost">
                 <span className="staggered-wrapper">
-                  {"Log in".split("").map((char, i) => (
+                  {"Iniciar sesión".split("").map((char, i) => (
                     <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
                       {char === " " ? "\u00A0" : char}
                     </span>
@@ -318,15 +329,21 @@ const Header = () => {
           <button
             className={`_menu-button ${isServiceActive ? '-active -exact' : ''}`}
             aria-expanded={servicesOpen}
-            onMouseEnter={() => setServicesOpen(true)}
+            data-services-open={servicesOpen ? 'true' : 'false'}
+            onMouseEnter={() => { console.log('Hover on button, servicesOpen:', servicesOpen); setServicesOpen(true); }}
           >
             <div className="background"></div>
             <span>Personal</span>
             <ChevronDown
-              className={`chevron-icon ${servicesOpen ? 'open' : ''}`}
+              className="chevron-icon"
               size={14}
               strokeWidth={2.5}
-              style={{ marginLeft: 4 }}
+              style={{
+                marginLeft: 4,
+                transform: servicesOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.3s ease',
+                display: 'inline-block'
+              }}
             />
           </button>
 

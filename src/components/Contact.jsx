@@ -120,11 +120,11 @@ const Contact = () => {
                 </div>
                 <div className="contact-business">
                   <div className="contact-label select-none">Negocios</div>
-                  <a href="mailto:business@dirty2clean.com" className="contact-link email-link">business@dirty2clean.com</a>
+                  <a href="mailto:business@tatotoclean.com" className="contact-link email-link">business@tatotoclean.com</a>
                 </div>
                 <div className="contact-enquires">
                   <div className="contact-label select-none">Consultas generales</div>
-                  <a href="mailto:contacto@dirty2clean.com" className="contact-link email-link">contacto@dirty2clean.com</a>
+                  <a href="mailto:contacto@tatotoclean.com" className="contact-link email-link">contacto@tatotoclean.com</a>
                 </div>
               </div>
             </div>
@@ -170,8 +170,8 @@ const Contact = () => {
 
         {/* Footer */}
         <div className="footer-bottom">
-          <div className="footer-bottom-copyright select-none">©2025 DIRTY2CLEAN</div>
-          <a href="https://labs.dirty2clean.com" target="_blank" className="footer-bottom-labs select-none">R&D: labs.dirty2clean.com</a>
+          <div className="footer-bottom-copyright select-none">©2025 Ta' To' Clean</div>
+          <a href="https://labs.tatotoclean.com" target="_blank" className="footer-bottom-labs select-none">R&D: labs.tatotoclean.com</a>
           <div className="footer-bottom-tagline select-none">Hecho por Johan & Cursor con <span className="text-red-500">❤️</span></div>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
