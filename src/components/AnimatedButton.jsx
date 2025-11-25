@@ -7,18 +7,20 @@ const AnimatedButton = ({
     onClick,
     className = '',
     variant = 'primary',
-    type = 'button'
+    type = 'button',
+    disabled = false
 }) => {
     const baseClasses = "inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold uppercase tracking-wider text-sm transition-all duration-300 text-arrow-wrapper select-none group relative"
 
     const variants = {
-        primary: "bg-[#2b2e3a] text-white hover:bg-[#0046b8]",
-        white: "bg-white text-black hover:bg-gray-200",
+        primary: "bg-white text-black hover:bg-[#0046b8] hover:text-white",
+        white: "bg-white text-black hover:bg-[#0046b8] hover:text-white",
         outline: "bg-transparent border border-white/20 text-white hover:bg-white/10 hover:border-white/40",
         accent: "bg-accent text-white hover:bg-accent/90"
     }
 
-    const combinedClasses = `${baseClasses} ${variants[variant] || variants.primary} ${className}`
+    const disabledClasses = disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+    const combinedClasses = `${baseClasses} ${variants[variant] || variants.primary} ${disabledClasses} ${className}`
 
     const content = (
         <>
@@ -33,7 +35,7 @@ const AnimatedButton = ({
         </>
     )
 
-    if (href) {
+    if (href && !disabled) {
         if (href.startsWith('#')) {
             return (
                 <a href={href} onClick={onClick} className={combinedClasses}>
@@ -49,7 +51,7 @@ const AnimatedButton = ({
     }
 
     return (
-        <button type={type} onClick={onClick} className={combinedClasses}>
+        <button type={type} onClick={onClick} disabled={disabled} className={combinedClasses}>
             {content}
         </button>
     )
