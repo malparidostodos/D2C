@@ -1,5 +1,7 @@
 import React, { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
+import AnimatedButton from './AnimatedButton'
 
 const Hero = () => {
   const containerRef = useRef(null)
@@ -73,20 +75,27 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col sm:flex-row gap-4 items-center"
         >
-          <button className="group relative px-8 py-3.5 bg-white text-black rounded-full font-medium text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center gap-2">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-            </svg>
-            RESERVAR CITA
-          </button>
+          <AnimatedButton
+            href="/contacto"
+            variant="white"
+            onClick={(e) => {
+              const section = document.querySelector('#contacto');
+              if (section) section.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            Reserva tu Cita
+          </AnimatedButton>
 
-          <button className="group px-8 py-3.5 text-white/80 font-medium text-base flex items-center gap-2 transition-all duration-300 hover:text-white border border-white/10 rounded-full hover:border-white/20 hover:bg-white/5">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-              <polygon points="10,8 16,12 10,16" fill="currentColor" />
-            </svg>
-            VER DEMO
-          </button>
+          <AnimatedButton
+            href="/precios"
+            variant="outline"
+            onClick={(e) => {
+              const section = document.querySelector('#precios');
+              if (section) section.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            Ver Servicios
+          </AnimatedButton>
         </motion.div>
 
         {/* Trust indicators */}
@@ -127,7 +136,7 @@ const Hero = () => {
         <span className="text-xs uppercase tracking-widest text-white/40">Scroll</span>
         <div className="w-[1px] h-12 bg-gradient-to-b from-white/0 via-white/40 to-white/0" />
       </motion.div>
-    </section>
+    </section >
   )
 }
 

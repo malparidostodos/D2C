@@ -4,14 +4,13 @@ import Header from './components/Header'
 import Hero from './components/Hero'
 import Benefits from './components/Benefits'
 import Collaboration from './components/Collaboration'
-import Services from './components/Services'
+
 import FlavorSection from './components/FlavorSection'
 import Pricing from './components/Pricing'
 import Roadmap from './components/Roadmap'
 import Contact from './components/Contact'
 import CustomScrollbar from './components/CustomScrollbar'
 import SmoothScroll, { useSmoothScroll } from './components/SmoothScroll'
-import Background3D from './components/Background3D'
 
 // Componente Home con todas las secciones
 const Home = () => {
@@ -23,7 +22,7 @@ const Home = () => {
         <Hero />
         <Benefits />
         <Collaboration />
-        <Services />
+
         <FlavorSection />
         <Roadmap />
         <Pricing />
@@ -85,12 +84,11 @@ const App = () => {
   return (
     <SmoothScroll>
       <BrowserRouter>
-        <Background3D />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/inicio" element={<ScrollToSection sectionId="#inicio" />} />
           <Route path="/beneficios" element={<ScrollToSection sectionId="#beneficios" />} />
-          <Route path="/servicios" element={<ScrollToSection sectionId="#servicios" />} />
+          <Route path="/precios" element={<ScrollToSection sectionId="#precios" />} />
           <Route path="/roadmap" element={<ScrollToSection sectionId="#roadmap" />} />
           <Route path="/membresias" element={<ScrollToSection sectionId="#membresias" />} />
           <Route path="/contacto" element={<ScrollToSection sectionId="#contacto" />} />

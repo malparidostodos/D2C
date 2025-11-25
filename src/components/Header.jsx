@@ -75,6 +75,7 @@ const Header = () => {
         }, 300);
       } else if (!hoverLock && !menuOpen) {
         setHidden(true);
+
         scrollingUp.current = false;
       }
 
@@ -111,7 +112,7 @@ const Header = () => {
         '#inicio',
         '#beneficios',
         '#colaboracion',
-        '#servicios',
+        '#precios',
         '#roadmap',
         '#membresias',
         '#contacto',
@@ -192,16 +193,15 @@ const Header = () => {
     }
   };
 
-  const isServiceActive = ['#servicios', '#roadmap', '#membresias'].includes(activeSection);
+  const isServiceActive = ['#precios', '#roadmap', '#membresias'].includes(activeSection);
 
-  // Dummy data for navLinks and servicesDropdown, replace with actual data if available
   const navLinks = [
     { name: 'INICIO', id: '#inicio', path: '/inicio' },
     { name: 'CONTACTO', id: '#contacto', path: '/contacto' },
   ];
 
   const servicesDropdown = [
-    { name: 'Precios', path: '/servicios', id: '#servicios' },
+    { name: 'Precios', path: '/precios', id: '#precios' },
     { name: 'Proceso', id: '#roadmap', path: '/roadmap' },
     { name: 'Membresías', id: '#membresias', path: '/membresias' },
   ];
@@ -214,7 +214,36 @@ const Header = () => {
         style={{ zIndex: 40 }}
       />
 
-      {/* Main Menu Structure */}
+      {/* Top Navbar (Jeton Style) */}
+      <div className="_navbar">
+        <div className="nav-container">
+          {/* Logo */}
+          <Link to="/" className="_wordmark text-black">
+            Jeton
+          </Link>
+
+          <div className="lang-cta-wrapper">
+            {/* Language Selector (Static for now) */}
+            <div className="_language-select hidden md:flex">
+              <span className="globe-icon">🌐</span>
+              <span>EN</span>
+              <ChevronDown size={12} />
+            </div>
+
+            {/* CTAs */}
+            <div className="ctas hidden md:flex">
+              <a href="/login" className="_button" data-variant="ghost">
+                Log in
+              </a>
+              <a href="/signup" className="_button" data-variant="primary">
+                Sign up
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Menu Structure (Bottom Pill) */}
       <div
         className={`_menu`}
         style={{ transform: hidden ? 'translateY(250%)' : 'translateY(0)', transition: 'transform 0.35s ease-in-out' }}
@@ -272,7 +301,7 @@ const Header = () => {
 
               {/* Preview Image */}
               <div className={`menu-preview ${hoveredService ? 'active' : ''}`}>
-                {hoveredService === '#servicios' && (
+                {hoveredService === '#precios' && (
                   <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-lg">
                     Precios
                   </div>

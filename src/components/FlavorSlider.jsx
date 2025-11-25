@@ -3,6 +3,7 @@ import { flavorlists } from "../constants";
 import gsap from "gsap";
 import { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
+import AnimatedButton from "./AnimatedButton";
 
 const FlavorSlider = () => {
     const sliderRef = useRef();
@@ -102,10 +103,17 @@ const FlavorSlider = () => {
                                         <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Desde</p>
                                         <p className="text-3xl font-bold text-white">{flavor.price}</p>
                                     </div>
-                                    <button className="bg-white text-black px-6 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-gray-200 transition-colors text-sm">
+                                    <AnimatedButton
+                                        href="/contacto"
+                                        variant="white"
+                                        className="!px-6 !py-3 !text-sm"
+                                        onClick={(e) => {
+                                            const section = document.querySelector('#contacto');
+                                            if (section) section.scrollIntoView({ behavior: 'smooth' });
+                                        }}
+                                    >
                                         Reservar
-                                        <span className="text-lg">→</span>
-                                    </button>
+                                    </AnimatedButton>
                                 </div>
                             </div>
                         </div>

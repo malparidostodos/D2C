@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Check, ArrowRight } from 'lucide-react'
+import AnimatedButton from './AnimatedButton'
 
 const Pricing = () => {
     const plans = [
@@ -99,15 +100,17 @@ const Pricing = () => {
                                 ))}
                             </div>
 
-                            <button
-                                className={`w-full py-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-[1.02] ${plan.highlight
-                                    ? 'bg-accent text-white hover:bg-accent/90'
-                                    : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'
-                                    }`}
+                            <AnimatedButton
+                                className="w-full justify-center"
+                                variant={plan.highlight ? 'accent' : 'outline'}
+                                href="/contacto"
+                                onClick={(e) => {
+                                    const section = document.querySelector('#contacto');
+                                    if (section) section.scrollIntoView({ behavior: 'smooth' });
+                                }}
                             >
-                                <span>Elegir Plan</span>
-                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                            </button>
+                                Elegir Plan
+                            </AnimatedButton>
                         </motion.div>
                     ))}
                 </div>

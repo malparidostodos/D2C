@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import AnimatedButton from './AnimatedButton'
 
 const Collaboration = () => {
   const navigate = useNavigate()
@@ -72,14 +73,12 @@ const Collaboration = () => {
               </li>
             </ul>
 
-            <a href="/contacto" className="inline-flex items-center px-8 py-4 bg-[#2b2e3a] text-white rounded-full font-semibold uppercase tracking-wider text-sm hover:bg-[#0046b8] transition text-arrow-wrapper select-none" onClick={(e) => scrollToSection(e, '#contacto', '/contacto')}>
-              <span className="text-arrow-icon-wrapper">
-                <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-                  <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-              <span className="text-arrow-text select-none">Reserva tu cita</span>
-            </a>
+            <AnimatedButton
+              href="/contacto"
+              onClick={(e) => scrollToSection(e, '#contacto', '/contacto')}
+            >
+              Reserva tu cita
+            </AnimatedButton>
           </div>
 
           <div className="relative text-white">
