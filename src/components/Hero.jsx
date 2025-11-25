@@ -16,11 +16,6 @@ const Hero = () => {
   return (
     <section ref={containerRef} id="inicio" className="relative h-screen w-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: '#050505' }}>
       {/* Logo - Top Left */}
-      <div className="absolute top-6 left-6 z-30">
-        <a href="/" className="text-xl font-display font-bold text-white tracking-tighter">
-          DIRTY<span className="text-accent">2</span>CLEAN
-        </a>
-      </div>
 
       {/* Background Parallax */}
       <motion.div

@@ -483,7 +483,7 @@
     /* Exact */
     padding: 0 24px;
     /* Exact */
-    border-radius: 12px;
+    border-radius: 16px;
     /* Exact */
     font-weight: 400;
     /* Exact */
@@ -495,9 +495,44 @@
 }
 
 ._navbar ._button[data-variant="ghost"] {
-    background: transparent;
+    background: var(--color-blue);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: #ffffff;
-    /* Log in is white */
+    transition: background 0.3s ease, transform 0.2s ease;
+    overflow: hidden;
+    /* Ensure text sliding out is hidden */
+}
+
+._navbar ._button[data-variant="ghost"]:hover {
+    background: var(--color-blue);
+    opacity: 0.9;
+}
+
+._navbar ._button[data-variant="ghost"] .staggered-wrapper {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+._navbar ._button[data-variant="ghost"] .staggered-char {
+    position: relative;
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.5, 0, 0.15, 1);
+    transition-delay: calc(var(--index) * 0.03s);
+}
+
+._navbar ._button[data-variant="ghost"] .staggered-char::after {
+    content: attr(data-char);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    color: #ffffff;
+    /* Slightly darker (transparent) white */
+}
+
+._navbar ._button[data-variant="ghost"]:hover .staggered-char {
+    transform: translateY(-100%);
 }
 
 ._navbar ._button[data-variant="primary"] {
@@ -515,16 +550,34 @@
 
 /* Language Selector (Simplified) */
 ._language-select {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 4px;
-    font-size: 14px;
-    font-weight: 500;
+    justify-content: center;
+}
+
+._language-select ._dropdown-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 400;
     color: #ffffff;
-    /* Assuming white for contrast */
     cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.2s;
+    opacity: 1;
+    transition: all 0.2s ease;
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    height: 48px;
+    padding: 0 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+._language-select ._dropdown-button:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 ._language-select:hover {
