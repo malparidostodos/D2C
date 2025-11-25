@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp } from 'lucide-react'
+import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle } from 'lucide-react'
 import AnimatedButton from './AnimatedButton'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const CustomCalendar = ({ selectedDate, onSelect }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
@@ -71,10 +71,10 @@ const CustomCalendar = ({ selectedDate, onSelect }) => {
                     onClick={() => !disabled && onSelect(new Date(currentDate.getFullYear(), currentDate.getMonth(), i).toISOString().split('T')[0])}
                     disabled={disabled}
                     className={`h-10 w-10 rounded-full flex items-center justify-center text-sm transition-colors ${isSelected(i)
-                        ? 'bg-white text-black font-bold'
-                        : disabled
-                            ? 'text-white/20 cursor-not-allowed'
-                            : 'text-white hover:bg-white/10'
+                            ? 'bg-white text-black font-bold'
+                            : disabled
+                                ? 'text-white/20 cursor-not-allowed'
+                                : 'text-white hover:bg-white/10'
                         } ${isToday(i) && !isSelected(i) ? 'border border-white/30' : ''}`}
                 >
                     {i}
@@ -113,9 +113,11 @@ const CustomCalendar = ({ selectedDate, onSelect }) => {
 
 const BookingPage = () => {
     const location = useLocation()
+    const navigate = useNavigate()
     const [step, setStep] = useState(1)
     const [maxStep, setMaxStep] = useState(1) // Track furthest step reached
     const [direction, setDirection] = useState(0)
+    const [isConfirmed, setIsConfirmed] = useState(false)
 
     const [formData, setFormData] = useState({
         vehicleType: null,
@@ -284,6 +286,10 @@ const BookingPage = () => {
         return new Intl.DateTimeFormat('es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(date)
     }
 
+    const handleConfirm = () => {
+        setIsConfirmed(true)
+    }
+
     const variants = {
         enter: (direction) => ({
             x: direction > 0 ? 1000 : -1000,
@@ -301,7 +307,113 @@ const BookingPage = () => {
         })
     }
 
-    const renderStep = () => {
+    if (isConfirmed) {
+        return (
+            <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 flex items-center justify-center">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="max-w-xl w-full bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 text-center"
+                >
+                    <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <CheckCircle size={48} className="text-green-500" />
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
+                        ¡Reserva Confirmada!
+                    </h2>
+                    <p className="text-white/60 mb-8 text-lg">
+                        Hemos enviado los detalles de tu reserva a <span className="text-white font-medium">{formData.clientInfo.email}</span>.
+                    </p>
+
+                    <div className="bg-white/5 rounded-2xl p-6 mb-8 text-left space-y-4">
+                        <div className="flex justify-between">
+                            <span className="text-white/40">Fecha</span>
+                            <span className="text-white font-medium capitalize">{formatDateLong(formData.date)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-white/40">Hora</span>
+                            <span className="text-white font-medium">{formData.time}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-white/40">Servicio</span>
+                            <span className="text-white font-medium">{formData.service?.name}</span>
+                        </div>
+                    </div>
+
+                    <AnimatedButton onClick={() => navigate('/')} variant="white">
+                        Volver al Inicio
+                    </AnimatedButton>
+                </motion.div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
+            <div className="max-w-6xl mx-auto">
+                {/* Progress Bar */}
+                <div className="mb-12">
+                    <div className="flex justify-between mb-4 px-2">
+                        {['Vehículo', 'Servicio', 'Datos', 'Fecha', 'Confirmar'].map((label, i) => (
+                            <button
+                                key={i}
+                                onClick={() => jumpToStep(i + 1)}
+                                disabled={step <= i + 1 && maxStep <= i}
+                                className={`text-xs md:text-sm font-medium transition-colors ${step > i + 1 || maxStep > i ? 'text-white cursor-pointer hover:text-accent' : step === i + 1 ? 'text-white' : 'text-white/20'
+                                    }`}
+                            >
+                                {label}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div
+                            className="h-full bg-white"
+                            initial={{ width: '0%' }}
+                            animate={{ width: `${(step / 5) * 100}%` }}
+                            transition={{ duration: 0.5, ease: "easeInOut" }}
+                        />
+                    </div>
+                </div>
+
+                {/* Content */}
+                <div className="relative min-h-[500px]">
+                    <AnimatePresence mode="wait" custom={direction}>
+                        <motion.div
+                            key={step}
+                            custom={direction}
+                            variants={variants}
+                            initial="enter"
+                            animate="center"
+                            exit="exit"
+                            transition={{
+                                x: { type: "spring", stiffness: 300, damping: 30 },
+                                opacity: { duration: 0.2 }
+                            }}
+                            className="w-full"
+                        >
+                            {renderStep()}
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+
+                {/* Navigation Buttons (Back) */}
+                {step > 1 && (
+                    <div className="fixed bottom-8 left-8 z-50">
+                        <button
+                            onClick={prevStep}
+                            className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black hover:bg-[#0046b8] hover:text-white transition-colors backdrop-blur-sm font-medium"
+                        >
+                            <ChevronLeft size={20} />
+                            Volver
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    )
+
+    function renderStep() {
         switch (step) {
             case 1:
                 return (
@@ -317,8 +429,8 @@ const BookingPage = () => {
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleVehicleSelect(type)}
                                     className={`relative overflow-hidden p-8 rounded-3xl border-2 flex flex-col items-center gap-6 transition-all duration-300 group ${formData.vehicleType?.id === type.id
-                                        ? 'bg-white text-black border-white shadow-[0_0_30px_rgba(255,255,255,0.3)]'
-                                        : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white'
+                                            ? 'bg-white text-black border-white shadow-[0_0_30px_rgba(255,255,255,0.3)]'
+                                            : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white'
                                         }`}
                                 >
                                     <div className={`p-4 rounded-full transition-colors ${formData.vehicleType?.id === type.id ? 'bg-black/10' : 'bg-white/10 group-hover:bg-white/20'
@@ -355,8 +467,8 @@ const BookingPage = () => {
                                     key={service.id}
                                     whileHover={{ scale: 1.02 }}
                                     className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${formData.service?.id === service.id
-                                        ? 'bg-white/10 border-white shadow-[0_0_20px_rgba(255,255,255,0.1)]'
-                                        : 'bg-white/5 border-white/10 hover:border-white/30'
+                                            ? 'bg-white/10 border-white shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+                                            : 'bg-white/5 border-white/10 hover:border-white/30'
                                         }`}
                                     onClick={() => handleServiceSelect(service)}
                                 >
@@ -476,8 +588,8 @@ const BookingPage = () => {
                                             key={time}
                                             onClick={() => handleTimeSelect(time)}
                                             className={`p-3 rounded-xl text-sm font-medium transition-all ${formData.time === time
-                                                ? 'bg-white text-black scale-105 shadow-lg'
-                                                : 'bg-white/5 text-white hover:bg-white/10 border border-white/5'
+                                                    ? 'bg-white text-black scale-105 shadow-lg'
+                                                    : 'bg-white/5 text-white hover:bg-white/10 border border-white/5'
                                                 }`}
                                         >
                                             {time}
@@ -611,7 +723,7 @@ const BookingPage = () => {
 
                         <div className="flex justify-end pt-4">
                             <AnimatedButton
-                                onClick={() => alert('¡Reserva Confirmada! Te hemos enviado un correo con los detalles.')}
+                                onClick={handleConfirm}
                                 variant="white"
                             >
                                 Confirmar Reserva
@@ -623,71 +735,6 @@ const BookingPage = () => {
                 return null
         }
     }
-
-    return (
-        <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
-            <div className="max-w-6xl mx-auto">
-                {/* Progress Bar */}
-                <div className="mb-12">
-                    <div className="flex justify-between mb-4 px-2">
-                        {['Vehículo', 'Servicio', 'Datos', 'Fecha', 'Confirmar'].map((label, i) => (
-                            <button
-                                key={i}
-                                onClick={() => jumpToStep(i + 1)}
-                                disabled={step <= i + 1 && maxStep <= i}
-                                className={`text-xs md:text-sm font-medium transition-colors ${step > i + 1 || maxStep > i ? 'text-white cursor-pointer hover:text-accent' : step === i + 1 ? 'text-white' : 'text-white/20'
-                                    }`}
-                            >
-                                {label}
-                            </button>
-                        ))}
-                    </div>
-                    <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                        <motion.div
-                            className="h-full bg-white"
-                            initial={{ width: '0%' }}
-                            animate={{ width: `${(step / 5) * 100}%` }}
-                            transition={{ duration: 0.5, ease: "easeInOut" }}
-                        />
-                    </div>
-                </div>
-
-                {/* Content */}
-                <div className="relative min-h-[500px]">
-                    <AnimatePresence mode="wait" custom={direction}>
-                        <motion.div
-                            key={step}
-                            custom={direction}
-                            variants={variants}
-                            initial="enter"
-                            animate="center"
-                            exit="exit"
-                            transition={{
-                                x: { type: "spring", stiffness: 300, damping: 30 },
-                                opacity: { duration: 0.2 }
-                            }}
-                            className="w-full"
-                        >
-                            {renderStep()}
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
-
-                {/* Navigation Buttons (Back) */}
-                {step > 1 && (
-                    <div className="fixed bottom-8 left-8 z-50">
-                        <button
-                            onClick={prevStep}
-                            className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black hover:bg-[#0046b8] hover:text-white transition-colors backdrop-blur-sm font-medium"
-                        >
-                            <ChevronLeft size={20} />
-                            Volver
-                        </button>
-                    </div>
-                )}
-            </div>
-        </div>
-    )
 }
 
 export default BookingPage
