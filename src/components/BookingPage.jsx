@@ -71,10 +71,10 @@ const CustomCalendar = ({ selectedDate, onSelect }) => {
                     onClick={() => !disabled && onSelect(new Date(currentDate.getFullYear(), currentDate.getMonth(), i).toISOString().split('T')[0])}
                     disabled={disabled}
                     className={`h-10 w-10 rounded-full flex items-center justify-center text-sm transition-colors ${isSelected(i)
-                            ? 'bg-white text-black font-bold'
-                            : disabled
-                                ? 'text-white/20 cursor-not-allowed'
-                                : 'text-white hover:bg-white/10'
+                        ? 'bg-white text-black font-bold'
+                        : disabled
+                            ? 'text-white/20 cursor-not-allowed'
+                            : 'text-white hover:bg-white/10'
                         } ${isToday(i) && !isSelected(i) ? 'border border-white/30' : ''}`}
                 >
                     {i}
@@ -429,8 +429,8 @@ const BookingPage = () => {
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleVehicleSelect(type)}
                                     className={`relative overflow-hidden p-8 rounded-3xl border-2 flex flex-col items-center gap-6 transition-all duration-300 group ${formData.vehicleType?.id === type.id
-                                            ? 'bg-white text-black border-white shadow-[0_0_30px_rgba(255,255,255,0.3)]'
-                                            : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white'
+                                        ? 'bg-white text-black border-white shadow-[0_0_30px_rgba(255,255,255,0.3)]'
+                                        : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white'
                                         }`}
                                 >
                                     <div className={`p-4 rounded-full transition-colors ${formData.vehicleType?.id === type.id ? 'bg-black/10' : 'bg-white/10 group-hover:bg-white/20'
@@ -467,8 +467,8 @@ const BookingPage = () => {
                                     key={service.id}
                                     whileHover={{ scale: 1.02 }}
                                     className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${formData.service?.id === service.id
-                                            ? 'bg-white/10 border-white shadow-[0_0_20px_rgba(255,255,255,0.1)]'
-                                            : 'bg-white/5 border-white/10 hover:border-white/30'
+                                        ? 'bg-white/10 border-white shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+                                        : 'bg-white/5 border-white/10 hover:border-white/30'
                                         }`}
                                     onClick={() => handleServiceSelect(service)}
                                 >
@@ -490,7 +490,18 @@ const BookingPage = () => {
                             ))}
                         </div>
 
-                    </div>
+                        {
+                            formData.service && (
+                                <div className="flex justify-end pt-4">
+                                    <AnimatedButton
+                                        onClick={nextStep}
+                                    >
+                                        Siguiente
+                                    </AnimatedButton>
+                                </div>
+                            )
+                        }
+                    </div >
                 )
             case 3:
                 return (
@@ -588,8 +599,8 @@ const BookingPage = () => {
                                             key={time}
                                             onClick={() => handleTimeSelect(time)}
                                             className={`p-3 rounded-xl text-sm font-medium transition-all ${formData.time === time
-                                                    ? 'bg-white text-black scale-105 shadow-lg'
-                                                    : 'bg-white/5 text-white hover:bg-white/10 border border-white/5'
+                                                ? 'bg-white text-black scale-105 shadow-lg'
+                                                : 'bg-white/5 text-white hover:bg-white/10 border border-white/5'
                                                 }`}
                                         >
                                             {time}

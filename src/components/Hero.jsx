@@ -77,12 +77,8 @@ const Hero = () => {
             className="flex flex-col sm:flex-row gap-4 items-center"
           >
             <AnimatedButton
-              href="/contacto"
+              href="/reserva"
               variant="white"
-              onClick={(e) => {
-                const section = document.querySelector('#contacto');
-                if (section) section.scrollIntoView({ behavior: 'smooth' });
-              }}
             >
               Reserva tu Cita
             </AnimatedButton>

@@ -104,12 +104,19 @@ const FlavorSlider = () => {
                                         <p className="text-3xl font-bold text-white">{flavor.price}</p>
                                     </div>
                                     <AnimatedButton
-                                        href="/contacto"
+                                        href="/reserva"
                                         variant="white"
                                         className="!px-6 !py-3 !text-sm"
-                                        onClick={(e) => {
-                                            const section = document.querySelector('#contacto');
-                                            if (section) section.scrollIntoView({ behavior: 'smooth' });
+                                        state={{
+                                            selectedService: (() => {
+                                                const serviceMap = {
+                                                    'Lavado Premium': { id: 'premium', name: 'Lavado Premium', price: 120000, description: 'Detallado profundo con cera', features: ['Todo lo del Básico', 'Descontaminación', 'Cera de Carnauba', 'Hidratación de Plásticos'] },
+                                                    'Coating Cerámico': { id: 'ceramic', name: 'Ceramic Coating', price: 800000, description: 'Protección cerámica de larga duración', features: ['Corrección de Pintura', 'Recubrimiento 9H', 'Garantía 2 años'] },
+                                                    'Corrección Pintura': { id: 'ceramic', name: 'Ceramic Coating', price: 800000, description: 'Protección cerámica de larga duración', features: ['Corrección de Pintura', 'Recubrimiento 9H', 'Garantía 2 años'] },
+                                                    'Detailing Interior': { id: 'interior', name: 'Detailing Interior', price: 250000, description: 'Restauración completa del interior', features: ['Limpieza de Tapicería', 'Vapor', 'Desinfección', 'Hidratación de Cuero'] }
+                                                }
+                                                return serviceMap[flavor.name] || { id: 'basic', name: 'Lavado Básico', price: 50000, description: 'Limpieza exterior e interior básica', features: ['Lavado Exterior', 'Aspirado', 'Limpieza de Tablero'] }
+                                            })()
                                         }}
                                     >
                                         Reservar

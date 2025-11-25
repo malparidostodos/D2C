@@ -8,7 +8,8 @@ const AnimatedButton = ({
     className = '',
     variant = 'primary',
     type = 'button',
-    disabled = false
+    disabled = false,
+    state = null
 }) => {
     const baseClasses = "inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold uppercase tracking-wider text-sm transition-all duration-300 text-arrow-wrapper select-none group relative"
 
@@ -44,7 +45,7 @@ const AnimatedButton = ({
             )
         }
         return (
-            <Link to={href} onClick={onClick} className={combinedClasses}>
+            <Link to={href} state={state} onClick={onClick} className={combinedClasses}>
                 {content}
             </Link>
         )
