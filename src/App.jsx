@@ -5,6 +5,7 @@ import Hero from './components/Hero'
 import Benefits from './components/Benefits'
 import Collaboration from './components/Collaboration'
 import Services from './components/Services'
+import FlavorSection from './components/FlavorSection'
 import Pricing from './components/Pricing'
 import Roadmap from './components/Roadmap'
 import Contact from './components/Contact'
@@ -23,6 +24,7 @@ const Home = () => {
         <Benefits />
         <Collaboration />
         <Services />
+        <FlavorSection />
         <Roadmap />
         <Pricing />
         <Contact />

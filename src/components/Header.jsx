@@ -150,17 +150,6 @@ const Header = () => {
     };
   }, [lenis]);
 
-  const navLinks = [
-    { name: 'INICIO', path: '/inicio', id: '#inicio' },
-    { name: 'CONTACTO', path: '/contacto', id: '#contacto' },
-  ];
-
-  const servicesDropdown = [
-    { name: 'Precios', path: '/servicios', id: '#servicios' },
-    { name: 'Proceso', path: '/roadmap', id: '#roadmap' },
-    { name: 'Membresías', path: '/membresias', id: '#membresias' },
-  ];
-
   const handleNavClick = (e, id, path) => {
     e.preventDefault();
     setMenuOpen(false);
@@ -204,6 +193,18 @@ const Header = () => {
   };
 
   const isServiceActive = ['#servicios', '#roadmap', '#membresias'].includes(activeSection);
+
+  // Dummy data for navLinks and servicesDropdown, replace with actual data if available
+  const navLinks = [
+    { name: 'INICIO', id: '#inicio', path: '/inicio' },
+    { name: 'CONTACTO', id: '#contacto', path: '/contacto' },
+  ];
+
+  const servicesDropdown = [
+    { name: 'Precios', path: '/servicios', id: '#servicios' },
+    { name: 'Proceso', id: '#roadmap', path: '/roadmap' },
+    { name: 'Membresías', id: '#membresias', path: '/membresias' },
+  ];
 
   return (
     <>
