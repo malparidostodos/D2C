@@ -11,6 +11,7 @@ import Roadmap from './components/Roadmap'
 import Contact from './components/Contact'
 import CustomScrollbar from './components/CustomScrollbar'
 import SmoothScroll, { useSmoothScroll } from './components/SmoothScroll'
+import BookingPage from './components/BookingPage'
 
 // Componente Home con todas las secciones
 const Home = () => {
@@ -92,7 +93,7 @@ const App = () => {
           <Route path="/roadmap" element={<ScrollToSection sectionId="#roadmap" />} />
           <Route path="/membresias" element={<ScrollToSection sectionId="#membresias" />} />
           <Route path="/contacto" element={<ScrollToSection sectionId="#contacto" />} />
-          {/* Ruta catch-all para redirigir a home */}
+          <Route path="/reserva" element={<BookingPage />} />
           <Route path="*" element={<RedirectToHome />} />
         </Routes>
       </BrowserRouter>
