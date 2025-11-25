@@ -11,6 +11,13 @@ const Header = () => {
   const [activeSection, setActiveSection] = useState('#inicio');
   const [hoverLock, setHoverLock] = useState(false);
   const [hoveredService, setHoveredService] = useState(null);
+  const [langOpen, setLangOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState('ES');
+
+  const languages = [
+    { code: 'ES', label: 'Español' },
+    { code: 'EN', label: 'English' },
+  ];
   const lastScrollY = useRef(0);
   const scrollingUp = useRef(false);
   const scrollTimeout = useRef(null);
@@ -224,8 +231,16 @@ const Header = () => {
 
           <div className="lang-cta-wrapper">
             {/* Language Selector (Updated Structure) */}
-            <div className="_dropdown _language-select hidden md:flex" aria-expanded="false" role="button">
-              <button className="_dropdown-button w-full flex items-center justify-center gap-2" data-button="" data-tone="orange" data-variant="outline" data-expanded="false">
+            {/* Language Selector (Interactive) */}
+            <div className="_dropdown _language-select hidden md:flex" aria-expanded={langOpen} role="button">
+              <button
+                className="_dropdown-button w-full flex items-center justify-center gap-2"
+                onClick={() => setLangOpen(!langOpen)}
+                data-button=""
+                data-tone="orange"
+                data-variant="outline"
+                data-expanded={langOpen}
+              >
                 <div data-button-background=""></div>
                 <span className="_icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
@@ -235,17 +250,32 @@ const Header = () => {
                     <path d="M12 2C14.5013 4.73836 15.9228 8.29204 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29204 9.49872 4.73836 12 2V2Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
                   </svg>
                 </span>
-                <span className="">EN</span>
-                <span className="_icon chevron">
+                <span className="">{currentLang}</span>
+                <span className={`_icon chevron ${langOpen ? 'rotate-180' : ''}`} style={{ transition: 'transform 0.2s' }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" clipRule="evenodd" d="M12 13.9393L6.53033 8.46967L5.46967 9.53033L10.409 14.4697C11.2877 15.3483 12.7123 15.3484 13.591 14.4697L18.5303 9.53033L17.4697 8.46967L12 13.9393Z" data-mode="fill" fill="currentColor"></path>
                   </svg>
                 </span>
               </button>
-              <div className="overlay-container absolute mt-10 hidden">
-                <div className="overlay" data-lenis-prevent=""></div>
-                <div className="overlay-fade absolute inset-0"></div>
-              </div>
+
+              {langOpen && (
+                <div className="_language-dropdown-menu">
+                  {languages.map((lang) => (
+                    <div
+                      key={lang.code}
+                      className={`_lang-item ${currentLang === lang.code ? 'active' : ''}`}
+                      onClick={() => { setCurrentLang(lang.code); setLangOpen(false); }}
+                    >
+                      <span>{lang.label}</span>
+                      {currentLang === lang.code && (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* CTAs */}
