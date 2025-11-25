@@ -14,20 +14,15 @@ const Hero = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
   return (
-    <section ref={containerRef} id="inicio" className="relative h-screen w-full overflow-hidden flex items-center justify-center" style={{ backgroundColor: '#050505' }}>
+    <section ref={containerRef} id="inicio" className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-white">
       {/* Logo - Top Left */}
 
-      {/* Background Parallax */}
+      {/* Background Gradient */}
       <motion.div
         style={{ y, opacity }}
         className="absolute inset-0 z-0"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/80 to-[#050505] z-10" />
-        <img
-          src="https://images.pexels.com/photos/3354648/pexels-photo-3354648.jpeg?auto=compress&cs=tinysrgb&w=1920"
-          alt="Luxury Car Detailing"
-          className="w-full h-full object-cover opacity-50"
-        />
+        <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-blue-50 z-10" />
       </motion.div>
 
       {/* Content */}
@@ -41,7 +36,7 @@ const Hero = () => {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="mb-6"
           >
-            <span className="inline-block py-1 px-3 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm text-xs font-medium tracking-widest uppercase text-white/80">
+            <span className="inline-block py-1 px-3 rounded-full border border-gray-200 bg-gray-100/50 backdrop-blur-sm text-xs font-medium tracking-widest uppercase text-gray-600">
               Calidad Garantizada
             </span>
           </motion.div>
@@ -50,9 +45,9 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white tracking-tight leading-[1.1]"
+            className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-gray-900 tracking-tight leading-[1.1]"
             style={{
-              textShadow: '0 0 40px rgba(255, 255, 255, 0.1)'
+              textShadow: '0 0 40px rgba(0, 0, 0, 0.1)'
             }}
           >
             Cuidado <br /> Automotriz <br /> Premium
@@ -65,7 +60,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-xl text-xl md:text-2xl text-white font-medium mb-8 leading-tight"
+            className="max-w-xl text-xl md:text-2xl text-gray-700 font-medium mb-8 leading-tight"
           >
             Transformamos vehículos en obras de arte. Experimenta el cuidado automotriz llevado al nivel de la perfección.
           </motion.p>
@@ -78,14 +73,14 @@ const Hero = () => {
           >
             <AnimatedButton
               href="/reserva"
-              variant="white"
+              variant="black"
             >
               Reserva tu Cita
             </AnimatedButton>
 
             <AnimatedButton
               href="/precios"
-              variant="outline"
+              variant="outline-dark"
               onClick={(e) => {
                 const section = document.querySelector('#precios');
                 if (section) section.scrollIntoView({ behavior: 'smooth' });
@@ -104,8 +99,8 @@ const Hero = () => {
         transition={{ delay: 1, duration: 1 }}
         className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20"
       >
-        <span className="text-xs uppercase tracking-widest text-white/40">Scroll</span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-white/0 via-white/40 to-white/0" />
+        <span className="text-xs uppercase tracking-widest text-gray-400">Scroll</span>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-gray-200/0 via-gray-400 to-gray-200/0" />
       </motion.div>
     </section >
   )

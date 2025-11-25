@@ -236,7 +236,7 @@ const Header = () => {
       <div className="_navbar">
         <div className="nav-container">
           {/* Logo */}
-          <a href="/" className="text-xl font-display font-bold text-white tracking-tighter">
+          <a href="/" className="text-xl font-display font-bold text-gray-900 tracking-tighter">
             Ta' <span className="text-accent">To'</span> Clean
           </a>
 
@@ -411,7 +411,7 @@ const Header = () => {
 
           {/* Mobile Toggle */}
           <button
-            className="md:hidden text-white ml-2"
+            className="md:hidden text-black ml-2"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? <X /> : <Menu />}
