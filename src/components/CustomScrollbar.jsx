@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useSmoothScroll } from './SmoothScroll'
 
 const CustomScrollbar = () => {
+  const thumbRef = React.useRef(null)
   const [thumbHeight, setThumbHeight] = useState(30)
-  const [thumbTop, setThumbTop] = useState(0)
   const [visible, setVisible] = useState(false)
   const { lenis } = useSmoothScroll()
 
@@ -27,7 +27,12 @@ const CustomScrollbar = () => {
       const newThumbPosition = scrollPercent * (scrollbarTrack - newThumbHeight)
 
       setThumbHeight(newThumbHeight)
-      setThumbTop(newThumbPosition)
+
+      if (thumbRef.current) {
+        thumbRef.current.style.transform = `translateY(${newThumbPosition}px)`
+        // We use transform instead of top for better performance
+      }
+
       setVisible(true)
 
       clearTimeout(scrollTimeout)
@@ -60,11 +65,12 @@ const CustomScrollbar = () => {
   return (
     <div className={`scrollbar-custom ${visible ? 'visible' : ''}`} id="customScrollbar">
       <div
+        ref={thumbRef}
         className="scrollbar-thumb"
         id="scrollbarThumb"
         style={{
           height: `${thumbHeight}px`,
-          top: `${thumbTop}px`
+          // top is removed, we use transform in JS
         }}
       ></div>
     </div>

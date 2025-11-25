@@ -12,10 +12,10 @@
   --color-bg: #f0f1fa;
   --color-text: #000000;
   --color-black: #000000;
-  --color-text-secondary: #000000;
+  --color-text-secondary: #cbcbd2;
   --color-border: rgba(0, 0, 0, 0.1);
   --color-button-primary: #e4e6ef;
-  --color-button-secondary: #ffffff;
+  --color-button-secondary: #2b2e3a;
   --color-hover-card: #ffffff;
   --color-hover-action: #0046b8;
   --color-blue: #0046b8;
@@ -90,22 +90,24 @@ html::-webkit-scrollbar {
   transform: translateY(-50%);
   width: 6px;
   height: 180px;
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.075);
   border-radius: 10px;
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 9999;
   overflow: hidden;
+  mix-blend-mode: difference;
 }
 
 .scrollbar-thumb {
   position: absolute;
   width: 100%;
-  background: var(--color-text);
+  background: #ffffff;
   border-radius: 10px;
   left: 0;
-  transition: height 0.1s ease, top 0.1s ease;
+  top: 0;
+  transition: height 0.1s ease;
 }
 
 .scrollbar-custom.visible {
