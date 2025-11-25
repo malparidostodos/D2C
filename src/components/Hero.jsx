@@ -60,12 +60,12 @@ const Hero = () => {
         </div>
 
         {/* Right Side: Description & Buttons */}
-        <div className="w-full lg:w-1/2 flex flex-col items-start lg:items-end text-left lg:text-right mb-2 lg:mb-0">
+        <div className="w-full lg:w-1/2 flex flex-col items-start text-left mb-2 lg:mb-0 pl-0 lg:pl-10">
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-xl text-base md:text-lg text-gray-400 mb-8 font-light leading-relaxed"
+            className="max-w-xl text-xl md:text-2xl text-white font-medium mb-8 leading-tight"
           >
             Transformamos vehículos en obras de arte. Experimenta el cuidado automotriz llevado al nivel de la perfección.
           </motion.p>
@@ -97,33 +97,6 @@ const Hero = () => {
             >
               Ver Servicios
             </AnimatedButton>
-          </motion.div>
-
-          {/* Trust indicators - Moved to right side below buttons */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 1 }}
-            className="flex items-center gap-6 mt-8 text-sm text-white/40 justify-start lg:justify-end w-full"
-          >
-            <div className="flex items-center gap-2">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-              <span>Garantía Total</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
-              <span>Servicio Rápido</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-              </svg>
-              <span>4.8/5 Rating</span>
-            </div>
           </motion.div>
         </div>
       </div>
