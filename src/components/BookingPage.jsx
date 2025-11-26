@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle } from 'lucide-react'
 import AnimatedButton from './AnimatedButton'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 const CustomCalendar = ({ selectedDate, onSelect }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
@@ -349,7 +349,10 @@ const BookingPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
+        <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 relative">
+            <Link to="/" className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
+                Ta' <span className="text-accent">To'</span> Clean
+            </Link>
             <div className="max-w-6xl mx-auto">
                 {/* Progress Bar */}
                 <div className="mb-12">

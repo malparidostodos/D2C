@@ -19,7 +19,8 @@ const AnimatedButton = ({
         black: "bg-black text-white hover:bg-[#0046b8] hover:text-white",
         outline: "bg-transparent border border-white/20 text-white hover:bg-white/10 hover:border-white/40",
         "outline-dark": "bg-transparent border border-gray-900/20 text-gray-900 hover:bg-gray-900/5 hover:border-gray-900/40",
-        accent: "bg-accent text-white hover:bg-accent/90"
+        accent: "bg-accent text-white hover:bg-accent/90",
+        blur: "bg-white/10 backdrop-blur-md border border-white/50 text-white hover:bg-white/30"
     }
 
     const disabledClasses = disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : ""

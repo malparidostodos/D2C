@@ -236,7 +236,7 @@ const Header = () => {
       <div className="_navbar">
         <div className="nav-container">
           {/* Logo */}
-          <a href="/" className="text-xl font-display font-bold text-gray-900 tracking-tighter">
+          <a href="/" className="text-xl font-display font-bold text-black tracking-tighter">
             Ta' <span className="text-accent">To'</span> Clean
           </a>
 
@@ -245,7 +245,7 @@ const Header = () => {
             {/* Language Selector (Interactive) */}
             <div ref={langRef} className="_dropdown _language-select hidden md:flex" aria-expanded={langOpen} role="button">
               <button
-                className="_dropdown-button w-full flex items-center justify-center gap-2"
+                className="_dropdown-button w-full flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/50 !text-white hover:!bg-white/30 transition-all duration-300 rounded-full px-4 py-2"
                 onClick={() => setLangOpen(!langOpen)}
                 data-button=""
                 data-tone="orange"
@@ -261,7 +261,7 @@ const Header = () => {
                     <path d="M12 2C14.5013 4.73836 15.9228 8.29204 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29204 9.49872 4.73836 12 2V2Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
                   </svg>
                 </span>
-                <span className="">{currentLang}</span>
+                <span>{currentLang}</span>
                 <span className={`_icon chevron ${langOpen ? 'rotate-180' : ''}`} style={{ transition: 'transform 0.2s' }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" clipRule="evenodd" d="M12 13.9393L6.53033 8.46967L5.46967 9.53033L10.409 14.4697C11.2877 15.3483 12.7123 15.3484 13.591 14.4697L18.5303 9.53033L17.4697 8.46967L12 13.9393Z" data-mode="fill" fill="currentColor"></path>

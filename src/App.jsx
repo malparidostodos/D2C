@@ -16,7 +16,16 @@ import BookingPage from './components/BookingPage'
 // Componente Home con todas las secciones
 const Home = () => {
   return (
-    <div className="min-h-screen bg-transparent text-primary relative">
+    <div
+      className="min-h-screen text-primary relative"
+      style={{
+        backgroundImage: "url('/images/BACKGROUND.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <Header />
       <CustomScrollbar />
       <main>
