@@ -13,6 +13,8 @@ import CustomScrollbar from './components/CustomScrollbar'
 import SmoothScroll, { useSmoothScroll } from './components/SmoothScroll'
 import BookingPage from './components/BookingPage'
 
+import LoginPage from './components/LoginPage'
+
 // Componente Home con todas las secciones
 const Home = () => {
   return (
@@ -103,6 +105,7 @@ const App = () => {
           <Route path="/membresias" element={<ScrollToSection sectionId="#membresias" />} />
           <Route path="/contacto" element={<ScrollToSection sectionId="#contacto" />} />
           <Route path="/reserva" element={<BookingPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="*" element={<RedirectToHome />} />
         </Routes>
       </BrowserRouter>
