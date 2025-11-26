@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Mail, Lock, User } from 'lucide-react'
+import { ArrowLeft, Mail, Lock, User, AlertCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const SignUpPage = () => {
@@ -9,10 +9,100 @@ const SignUpPage = () => {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
+    const [errors, setErrors] = useState({})
+    const [touched, setTouched] = useState({})
+
+    const validateForm = (values = {}) => {
+        const newErrors = {}
+        const currentName = values.name !== undefined ? values.name : name
+        const currentEmail = values.email !== undefined ? values.email : email
+        const currentPassword = values.password !== undefined ? values.password : password
+        const currentConfirmPassword = values.confirmPassword !== undefined ? values.confirmPassword : confirmPassword
+
+        if (!currentName.trim()) {
+            newErrors.name = 'Completa este campo'
+        }
+
+        if (!currentEmail) {
+            newErrors.email = 'Completa este campo'
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currentEmail)) {
+            newErrors.email = 'Ingresa un correo válido'
+        }
+
+        if (!currentPassword) {
+            newErrors.password = 'Completa este campo'
+        }
+
+        if (!currentConfirmPassword) {
+            newErrors.confirmPassword = 'Completa este campo'
+        } else if (currentPassword !== currentConfirmPassword) {
+            newErrors.confirmPassword = 'Las contraseñas no coinciden'
+        }
+
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log('Sign up attempt:', { name, email, password, confirmPassword })
+
+        setTouched({
+            name: true,
+            email: true,
+            password: true,
+            confirmPassword: true
+        })
+
+        if (validateForm()) {
+            console.log('Sign up attempt:', { name, email, password })
+        }
     }
+
+    const handleBlur = (field) => {
+        setTouched(prev => ({ ...prev, [field]: true }))
+        validateForm()
+    }
+
+    // Helper to render input fields
+    const renderInput = (label, value, setValue, fieldName, type = "text", Icon, placeholder) => (
+        <div className="space-y-2">
+            <label className="text-sm font-medium text-white/80 ml-1">{label}</label>
+            <div className="relative group">
+                <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${touched[fieldName] && errors[fieldName] ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
+                    <Icon size={20} />
+                </div>
+                <input
+                    type={type}
+                    value={value}
+                    onChange={(e) => {
+                        const newValue = e.target.value
+                        setValue(newValue)
+                        if (touched[fieldName]) validateForm({ [fieldName]: newValue })
+                    }}
+                    onBlur={() => handleBlur(fieldName)}
+                    className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-10 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${touched[fieldName] && errors[fieldName]
+                        ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
+                        : 'border-white/10 focus:border-white/30 focus:bg-white/10'
+                        }`}
+                    placeholder={placeholder}
+                />
+                {touched[fieldName] && errors[fieldName] && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 pointer-events-none">
+                        <AlertCircle size={18} />
+                    </div>
+                )}
+            </div>
+            {touched[fieldName] && errors[fieldName] && (
+                <motion.p
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-red-400 text-xs ml-1 flex items-center gap-1"
+                >
+                    {errors[fieldName]}
+                </motion.p>
+            )}
+        </div>
+    )
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
@@ -45,74 +135,11 @@ const SignUpPage = () => {
                             <p className="text-white/60">Únete a nosotros para una experiencia premium</p>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-5">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-white/80 ml-1">Nombre Completo</label>
-                                <div className="relative group">
-                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
-                                        <User size={20} />
-                                    </div>
-                                    <input
-                                        type="text"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
-                                        placeholder="Juan Pérez"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-white/80 ml-1">Email</label>
-                                <div className="relative group">
-                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
-                                        <Mail size={20} />
-                                    </div>
-                                    <input
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
-                                        placeholder="ejemplo@correo.com"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-white/80 ml-1">Contraseña</label>
-                                <div className="relative group">
-                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
-                                        <Lock size={20} />
-                                    </div>
-                                    <input
-                                        type="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
-                                        placeholder="••••••••"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-white/80 ml-1">Confirmar Contraseña</label>
-                                <div className="relative group">
-                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
-                                        <Lock size={20} />
-                                    </div>
-                                    <input
-                                        type="password"
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
-                                        placeholder="••••••••"
-                                        required
-                                    />
-                                </div>
-                            </div>
+                        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                            {renderInput("Nombre Completo", name, setName, "name", "text", User, "Juan Pérez")}
+                            {renderInput("Email", email, setEmail, "email", "email", Mail, "ejemplo@correo.com")}
+                            {renderInput("Contraseña", password, setPassword, "password", "password", Lock, "••••••••")}
+                            {renderInput("Confirmar Contraseña", confirmPassword, setConfirmPassword, "confirmPassword", "password", Lock, "••••••••")}
 
                             <div className="pt-4">
                                 <button
