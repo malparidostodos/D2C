@@ -15,6 +15,10 @@ import BookingPage from './components/BookingPage'
 
 import LoginPage from './components/LoginPage'
 
+import SignUpPage from './components/SignUpPage'
+
+import ForgotPasswordPage from './components/ForgotPasswordPage'
+
 // Componente Home con todas las secciones
 const Home = () => {
   return (
@@ -106,6 +110,8 @@ const App = () => {
           <Route path="/contacto" element={<ScrollToSection sectionId="#contacto" />} />
           <Route path="/reserva" element={<BookingPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="*" element={<RedirectToHome />} />
         </Routes>
       </BrowserRouter>
