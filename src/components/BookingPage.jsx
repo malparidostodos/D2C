@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle } from 'lucide-react'
 import AnimatedButton from './AnimatedButton'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 
 const CustomCalendar = ({ selectedDate, onSelect }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
@@ -286,7 +287,31 @@ const BookingPage = () => {
         return new Intl.DateTimeFormat('es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(date)
     }
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
+        const { data: { user } } = await supabase.auth.getUser()
+
+        const { data, error } = await supabase
+            .from('bookings')
+            .insert([{
+                user_id: user?.id || null,
+                vehicle_plate: formData.clientInfo.plate,
+                vehicle_type: formData.vehicleType.id,
+                service_id: formData.service.id,
+                client_name: formData.clientInfo.name,
+                client_email: formData.clientInfo.email,
+                client_phone: formData.clientInfo.phone || null,
+                booking_date: formData.date,
+                booking_time: formData.time,
+                total_price: formData.service.price * formData.vehicleType.priceMultiplier
+            }])
+            .select()
+
+        if (error) {
+            console.error('Error creating booking:', error)
+            alert('Error al crear la reserva. Por favor intenta de nuevo.')
+            return
+        }
+
         setIsConfirmed(true)
     }
 

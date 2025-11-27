@@ -13,6 +13,7 @@
     "@plasmicapp/cli": "^0.1.348",
     "@plasmicapp/loader-react": "^1.0.404",
     "@plasmicapp/react-web": "^0.2.408",
+    "@supabase/supabase-js": "^2.86.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.24",
     "gsap": "^3.12.2",

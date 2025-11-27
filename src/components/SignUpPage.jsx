@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail, Lock, User, AlertCircle } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 
 import './JetonHeader.css'
 
 const SignUpPage = () => {
+    const navigate = useNavigate()
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -45,7 +47,7 @@ const SignUpPage = () => {
         return Object.keys(newErrors).length === 0
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         setTouched({
@@ -56,7 +58,20 @@ const SignUpPage = () => {
         })
 
         if (validateForm()) {
-            console.log('Sign up attempt:', { name, email, password })
+            const { error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: { full_name: name }
+                }
+            })
+
+            if (error) {
+                setErrors({ ...errors, email: error.message })
+            } else {
+                alert('Cuenta creada! Revisa tu email para confirmar.')
+                navigate('/login')
+            }
         }
     }
 

@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail, Lock, AlertCircle, Check } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import AnimatedButton from './AnimatedButton'
+import { supabase } from '../lib/supabase'
 
 import './JetonHeader.css'
 
 const LoginPage = () => {
+    const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rememberMe, setRememberMe] = useState(false)
@@ -33,7 +35,7 @@ const LoginPage = () => {
         return Object.keys(newErrors).length === 0
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         // Mark all as touched
@@ -43,7 +45,16 @@ const LoginPage = () => {
         })
 
         if (validateForm()) {
-            console.log('Login attempt:', { email, password, rememberMe })
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            })
+
+            if (error) {
+                setErrors({ ...errors, password: 'Email o contraseña incorrectos' })
+            } else {
+                navigate('/dashboard')
+            }
         }
     }
 
