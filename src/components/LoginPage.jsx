@@ -47,9 +47,11 @@ const LoginPage = () => {
         }
     }
 
-    const handleBlur = (field) => {
-        setTouched(prev => ({ ...prev, [field]: true }))
-        validateForm()
+    const handleBlur = (field, value) => {
+        if (value && value.trim()) {
+            setTouched(prev => ({ ...prev, [field]: true }))
+            validateForm()
+        }
     }
 
     return (
@@ -76,7 +78,7 @@ const LoginPage = () => {
                 <div className="backdrop-blur-xl bg-black/40 border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
                     {/* Decorative gradient blob */}
                     <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none" />
-                    <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-purple-500/20 rounded-full blur-[80px] pointer-events-none" />
+                    <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none" />
 
                     <div className="relative z-10">
                         <div className="text-center mb-10">
@@ -99,7 +101,7 @@ const LoginPage = () => {
                                             setEmail(newValue)
                                             if (touched.email) validateForm({ email: newValue })
                                         }}
-                                        onBlur={() => handleBlur('email')}
+                                        onBlur={(e) => handleBlur('email', e.target.value)}
                                         className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-10 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${touched.email && errors.email
                                             ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
                                             : 'border-white/10 focus:border-white/30 focus:bg-white/10'
@@ -137,7 +139,7 @@ const LoginPage = () => {
                                             setPassword(newValue)
                                             if (touched.password) validateForm({ password: newValue })
                                         }}
-                                        onBlur={() => handleBlur('password')}
+                                        onBlur={(e) => handleBlur('password', e.target.value)}
                                         className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-10 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${touched.password && errors.password
                                             ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
                                             : 'border-white/10 focus:border-white/30 focus:bg-white/10'
@@ -204,3 +206,5 @@ const LoginPage = () => {
         </div>
     )
 }
+
+export default LoginPage

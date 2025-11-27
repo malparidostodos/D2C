@@ -3680,7 +3680,7 @@ button:hover .scroll-top-text-line span svg {
 /* Flavor Section Component Styles */
 @layer components {
   .flavor-section {
-    @apply min-h-dvh bg-milk;
+    @apply min-h-dvh bg-white;
   }
 
   .flavor-section .flavor-text-scroll {
