@@ -260,7 +260,7 @@ const UserDashboard = () => {
                 >
                     <div className="flex justify-between items-center mb-6">
                         <h2 className="text-2xl font-bold text-white">Historial de Servicios</h2>
-                        <Link to="/reserva" className="md:hidden">
+                        <Link to="/reserva">
                             <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors font-medium text-sm">
                                 <Plus size={16} />
                                 Nueva Reserva
