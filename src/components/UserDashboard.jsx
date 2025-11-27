@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { Link, useNavigate } from 'react-router-dom'
 import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X } from 'lucide-react'
 import AnimatedButton from './AnimatedButton'
+import Tooltip from './Tooltip'
 
 const UserDashboard = () => {
     const navigate = useNavigate()
@@ -12,6 +13,8 @@ const UserDashboard = () => {
     const [bookings, setBookings] = useState([])
     const [loading, setLoading] = useState(true)
     const [showAddVehicle, setShowAddVehicle] = useState(false)
+    const [showCancelModal, setShowCancelModal] = useState(false)
+    const [bookingToCancel, setBookingToCancel] = useState(null)
 
     useEffect(() => {
         checkUser()
@@ -91,6 +94,28 @@ const UserDashboard = () => {
         } else {
             loadUserData() // Recargar datos
         }
+    }
+
+    const handleCancelBooking = (bookingId) => {
+        setBookingToCancel(bookingId)
+        setShowCancelModal(true)
+    }
+
+    const confirmCancelBooking = async () => {
+        if (!bookingToCancel) return
+
+        const { error } = await supabase
+            .from('bookings')
+            .update({ status: 'cancelled' })
+            .eq('id', bookingToCancel)
+
+        if (error) {
+            alert('Error al cancelar la reserva: ' + error.message)
+        } else {
+            loadUserData()
+        }
+        setShowCancelModal(false)
+        setBookingToCancel(null)
     }
 
     const getVehicleIcon = (type) => {
@@ -192,13 +217,14 @@ const UserDashboard = () => {
                                         className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors relative group"
                                     >
                                         {/* Botón de eliminar */}
-                                        <button
-                                            onClick={() => handleDeleteVehicle(vehicle.id, vehicle.plate)}
-                                            className="absolute top-4 right-4 p-2 bg-red-500/10 hover:bg-red-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all"
-                                            title="Eliminar vehículo"
-                                        >
-                                            <Trash2 size={16} className="text-red-500" />
-                                        </button>
+                                        <Tooltip content="Eliminar vehículo" position="left">
+                                            <button
+                                                onClick={() => handleDeleteVehicle(vehicle.id, vehicle.plate)}
+                                                className="absolute top-4 right-4 p-2 bg-red-500/10 hover:bg-red-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all"
+                                            >
+                                                <Trash2 size={16} className="text-red-500" />
+                                            </button>
+                                        </Tooltip>
 
                                         <div className="flex items-start justify-between mb-4">
                                             <div className="p-3 bg-white/10 rounded-full">
@@ -280,6 +306,16 @@ const UserDashboard = () => {
                                             <p className="text-2xl font-bold text-white">
                                                 ${booking.total_price?.toLocaleString()}
                                             </p>
+
+                                            {(booking.status === 'pending' || booking.status === 'confirmed') && (
+                                                <button
+                                                    onClick={() => handleCancelBooking(booking.id)}
+                                                    className="mt-2 text-sm text-red-500 hover:text-red-400 transition-colors flex items-center gap-1 ml-auto"
+                                                >
+                                                    <X size={14} />
+                                                    Cancelar
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -298,6 +334,56 @@ const UserDashboard = () => {
                     loadUserData()
                 }}
             />
+
+            {/* Modal Confirmación Cancelar */}
+            <ConfirmationModal
+                isOpen={showCancelModal}
+                onClose={() => {
+                    setShowCancelModal(false)
+                    setBookingToCancel(null)
+                }}
+                onConfirm={confirmCancelBooking}
+                title="¿Cancelar Reserva?"
+                message="¿Estás seguro de que quieres cancelar esta reserva? Esta acción no se puede deshacer."
+            />
+        </div>
+    )
+}
+
+// Modal de Confirmación Genérico
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message }) => {
+    if (!isOpen) return null
+
+    return (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="bg-[#111] border border-white/10 rounded-3xl p-8 max-w-md w-full text-center"
+            >
+                <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <X size={32} className="text-red-500" />
+                </div>
+
+                <h2 className="text-2xl font-bold text-white mb-4">{title}</h2>
+                <p className="text-white/60 mb-8">{message}</p>
+
+                <div className="flex gap-3">
+                    <button
+                        onClick={onClose}
+                        className="flex-1 px-4 py-3 rounded-xl bg-white/5 text-white hover:bg-white/10 transition-colors font-medium"
+                    >
+                        No, mantener
+                    </button>
+                    <button
+                        onClick={onConfirm}
+                        className="flex-1 px-4 py-3 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors font-bold"
+                    >
+                        Sí, cancelar
+                    </button>
+                </div>
+            </motion.div>
         </div>
     )
 }
