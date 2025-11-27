@@ -80,19 +80,9 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20"
-      >
-        <span className="text-xs uppercase tracking-widest text-white">Scroll</span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-gray-200/0 via-gray-400 to-gray-200/0" />
-      </motion.div>
+
     </section >
   )
 }
 
 export default Hero
-
