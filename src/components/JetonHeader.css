@@ -527,8 +527,8 @@
     position: absolute;
     top: 100%;
     left: 0;
-    color: #ffffff;
-    /* Slightly darker (transparent) white */
+    color: inherit;
+    /* Inherit color from parent */
 }
 
 ._navbar ._button[data-variant="ghost"]:hover .staggered-char {
@@ -538,8 +538,8 @@
 ._navbar ._button[data-variant="primary"] {
     background: transparent;
     /* Sign up is transparent on homepage */
-    color: #f73b20;
-    /* Sign up is orange */
+    color: #ffffff;
+    /* Sign up is white */
 }
 
 /* Language Dropdown Menu */

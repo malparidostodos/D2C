@@ -63,8 +63,7 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: url('/images/BACKGROUND.jpg') no-repeat center center fixed;
-  background-size: cover;
+  background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
   overflow-x: hidden;

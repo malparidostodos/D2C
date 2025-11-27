@@ -1,28 +1,37 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+
+import './JetonHeader.css'
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('')
+    const [submitted, setSubmitted] = useState(false)
+    const navigate = useNavigate()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log('Forgot password attempt:', { email })
+        if (email) {
+            console.log('Password reset requested for:', email)
+            setSubmitted(true)
+            setTimeout(() => navigate('/'), 3000)
+        }
     }
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
-            {/* Back to Home Link */}
-            <Link
-                to="/"
-                className="absolute top-8 left-8 z-30 flex items-center gap-2 text-white/70 hover:text-white transition-colors duration-300 group"
-            >
-                <div className="p-2 rounded-full bg-white/5 border border-white/10 group-hover:bg-white/10 transition-all duration-300">
-                    <ArrowLeft size={20} />
+            {/* Navbar Structure for Logo */}
+            <div className="_navbar">
+                <div className="nav-container">
+                    <Link
+                        to="/"
+                        className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
+                    >
+                        Ta' <span className="text-accent">To'</span> Clean
+                    </Link>
                 </div>
-                <span className="font-medium tracking-wide">Volver al Inicio</span>
-            </Link>
+            </div>
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

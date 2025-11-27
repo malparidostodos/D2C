@@ -22,16 +22,7 @@ import ForgotPasswordPage from './components/ForgotPasswordPage'
 // Componente Home con todas las secciones
 const Home = () => {
   return (
-    <div
-      className="min-h-screen text-primary relative"
-      style={{
-        backgroundImage: "url('/images/BACKGROUND.jpg')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
+    <div className="min-h-screen text-primary relative">
       <Header />
       <CustomScrollbar />
       <main>
@@ -99,22 +90,33 @@ const RedirectToHome = () => {
 const App = () => {
   return (
     <SmoothScroll>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/inicio" element={<ScrollToSection sectionId="#inicio" />} />
-          <Route path="/beneficios" element={<ScrollToSection sectionId="#beneficios" />} />
-          <Route path="/precios" element={<ScrollToSection sectionId="#precios" />} />
-          <Route path="/roadmap" element={<ScrollToSection sectionId="#roadmap" />} />
-          <Route path="/membresias" element={<ScrollToSection sectionId="#membresias" />} />
-          <Route path="/contacto" element={<ScrollToSection sectionId="#contacto" />} />
-          <Route path="/reserva" element={<BookingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="*" element={<RedirectToHome />} />
-        </Routes>
-      </BrowserRouter>
+      <div
+        style={{
+          backgroundImage: "url('/images/BG2.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          backgroundRepeat: 'no-repeat',
+          minHeight: '100vh'
+        }}
+      >
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/inicio" element={<ScrollToSection sectionId="#inicio" />} />
+            <Route path="/beneficios" element={<ScrollToSection sectionId="#beneficios" />} />
+            <Route path="/precios" element={<ScrollToSection sectionId="#precios" />} />
+            <Route path="/roadmap" element={<ScrollToSection sectionId="#roadmap" />} />
+            <Route path="/membresias" element={<ScrollToSection sectionId="#membresias" />} />
+            <Route path="/contacto" element={<ScrollToSection sectionId="#contacto" />} />
+            <Route path="/reserva" element={<BookingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="*" element={<RedirectToHome />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
     </SmoothScroll>
   )
 }

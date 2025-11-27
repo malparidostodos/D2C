@@ -236,7 +236,7 @@ const Header = () => {
       <div className="_navbar">
         <div className="nav-container">
           {/* Logo */}
-          <a href="/" className="text-xl font-display font-bold text-black tracking-tighter">
+          <a href="/" className="text-3xl font-display font-bold text-black tracking-tighter">
             Ta' <span className="text-accent">To'</span> Clean
           </a>
 
@@ -294,6 +294,19 @@ const Header = () => {
               <a href="/login" className="_button" data-variant="ghost">
                 <span className="staggered-wrapper">
                   {"Iniciar sesión".split("").map((char, i) => (
+                    <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
+                      {char === " " ? "\u00A0" : char}
+                    </span>
+                  ))}
+                </span>
+              </a>
+              <a
+                href="/signup"
+                className="_button !bg-white !text-[#0046b8] transition-all duration-300"
+                data-variant="ghost"
+              >
+                <span className="staggered-wrapper">
+                  {"Registrarse".split("").map((char, i) => (
                     <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
                       {char === " " ? "\u00A0" : char}
                     </span>
