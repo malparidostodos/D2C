@@ -3679,8 +3679,15 @@ button:hover .scroll-top-text-line span svg {
 
 /* Flavor Section Component Styles */
 @layer components {
+  .flavor-section-wrapper {
+    @apply min-h-dvh bg-milk;
+    position: relative;
+    overflow: hidden;
+  }
+
   .flavor-section {
-    @apply min-h-dvh bg-white;
+    @apply min-h-dvh;
+    width: 100%;
   }
 
   .flavor-section .flavor-text-scroll {

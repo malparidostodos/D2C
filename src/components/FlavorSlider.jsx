@@ -26,7 +26,7 @@ const FlavorSlider = () => {
                 },
             });
 
-            tl.to(".flavor-scroll-container", {
+            tl.to(".flavor-section", {
                 x: `-${scrollAmount + 1500}px`,
                 ease: "power1.inOut",
             });
@@ -100,7 +100,7 @@ const FlavorSlider = () => {
                                 {/* Footer */}
                                 <div className="flex items-end justify-between border-t border-white/10 pt-6 mt-4">
                                     <div>
-                                        <p className="text-white/80 text-xs uppercase tracking-wider mb-1">Desde</p>
+                                        <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Desde</p>
                                         <p className="text-3xl font-bold text-white">{flavor.price}</p>
                                     </div>
                                     <AnimatedButton
