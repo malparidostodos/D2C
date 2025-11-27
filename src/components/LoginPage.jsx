@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Mail, Lock, AlertCircle, Check } from 'lucide-react'
+import { ArrowLeft, Mail, Lock, AlertCircle, Check, Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import AnimatedButton from './AnimatedButton'
 import { supabase } from '../lib/supabase'
@@ -11,6 +11,7 @@ const LoginPage = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const [rememberMe, setRememberMe] = useState(false)
 
     const [errors, setErrors] = useState({})
@@ -158,7 +159,7 @@ const LoginPage = () => {
                                         <Lock size={20} />
                                     </div>
                                     <input
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         value={password}
                                         onChange={(e) => {
                                             const newValue = e.target.value
@@ -166,14 +167,23 @@ const LoginPage = () => {
                                             if (touched.password) validateForm({ password: newValue })
                                         }}
                                         onBlur={(e) => handleBlur('password', e.target.value)}
-                                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-10 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${touched.password && errors.password
+                                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-12 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${touched.password && errors.password
                                             ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
                                             : 'border-white/10 focus:border-white/30 focus:bg-white/10'
                                             }`}
                                         placeholder="••••••••"
                                     />
+
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors focus:outline-none z-10"
+                                    >
+                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    </button>
+
                                     {touched.password && errors.password && (
-                                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 pointer-events-none">
+                                        <div className="absolute right-12 top-1/2 -translate-y-1/2 text-red-400 pointer-events-none pr-2">
                                             <AlertCircle size={18} />
                                         </div>
                                     )}

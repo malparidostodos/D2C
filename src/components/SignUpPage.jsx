@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Mail, Lock, User, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Mail, Lock, User, AlertCircle, Eye, EyeOff, CheckCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import Modal from './ui/Modal'
 
 import './JetonHeader.css'
 
@@ -12,6 +13,9 @@ const SignUpPage = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [showSuccessModal, setShowSuccessModal] = useState(false)
 
     const [errors, setErrors] = useState({})
     const [touched, setTouched] = useState({})
@@ -69,8 +73,12 @@ const SignUpPage = () => {
             if (error) {
                 setErrors({ ...errors, email: error.message })
             } else {
-                alert('Cuenta creada! Revisa tu email para confirmar.')
-                navigate('/login')
+                // 📧 Enviar correo de bienvenida
+                await supabase.functions.invoke('send-welcome-email', {
+                    body: { email, name, password }
+                })
+
+                setShowSuccessModal(true)
             }
         }
     }
@@ -83,7 +91,7 @@ const SignUpPage = () => {
     }
 
     // Helper to render input fields
-    const renderInput = (label, value, setValue, fieldName, type = "text", Icon, placeholder) => (
+    const renderInput = (label, value, setValue, fieldName, type = "text", Icon, placeholder, isPassword = false, showPass = false, setShowPass = null) => (
         <div className="space-y-2">
             <label className="text-sm font-medium text-white/80 ml-1">{label}</label>
             <div className="relative group">
@@ -91,7 +99,7 @@ const SignUpPage = () => {
                     <Icon size={20} />
                 </div>
                 <input
-                    type={type}
+                    type={isPassword ? (showPass ? "text" : "password") : type}
                     value={value}
                     onChange={(e) => {
                         const newValue = e.target.value
@@ -99,14 +107,25 @@ const SignUpPage = () => {
                         if (touched[fieldName]) validateForm({ [fieldName]: newValue })
                     }}
                     onBlur={(e) => handleBlur(fieldName, e.target.value)}
-                    className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-10 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${touched[fieldName] && errors[fieldName]
+                    className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 ${isPassword ? 'pr-12' : 'pr-10'} text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${touched[fieldName] && errors[fieldName]
                         ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
                         : 'border-white/10 focus:border-white/30 focus:bg-white/10'
                         }`}
                     placeholder={placeholder}
                 />
+
+                {isPassword && (
+                    <button
+                        type="button"
+                        onClick={() => setShowPass(!showPass)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors focus:outline-none z-10"
+                    >
+                        {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                )}
+
                 {touched[fieldName] && errors[fieldName] && (
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 pointer-events-none">
+                    <div className={`absolute ${isPassword ? 'right-12 pr-2' : 'right-3'} top-1/2 -translate-y-1/2 text-red-400 pointer-events-none`}>
                         <AlertCircle size={18} />
                     </div>
                 )}
@@ -158,8 +177,8 @@ const SignUpPage = () => {
                         <form onSubmit={handleSubmit} className="space-y-5" noValidate>
                             {renderInput("Nombre Completo", name, setName, "name", "text", User, "Juan Pérez")}
                             {renderInput("Email", email, setEmail, "email", "email", Mail, "ejemplo@correo.com")}
-                            {renderInput("Contraseña", password, setPassword, "password", "password", Lock, "••••••••")}
-                            {renderInput("Confirmar Contraseña", confirmPassword, setConfirmPassword, "confirmPassword", "password", Lock, "••••••••")}
+                            {renderInput("Contraseña", password, setPassword, "password", "password", Lock, "••••••••", true, showPassword, setShowPassword)}
+                            {renderInput("Confirmar Contraseña", confirmPassword, setConfirmPassword, "confirmPassword", "password", Lock, "••••••••", true, showConfirmPassword, setShowConfirmPassword)}
 
                             <div className="pt-4">
                                 <button
@@ -182,6 +201,31 @@ const SignUpPage = () => {
                     </div>
                 </div>
             </motion.div>
+
+            {/* Success Modal */}
+            <Modal
+                isOpen={showSuccessModal}
+                onClose={() => {
+                    setShowSuccessModal(false)
+                    navigate('/login')
+                }}
+                title="¡Bienvenido!"
+            >
+                <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 mb-2">
+                        <CheckCircle size={32} />
+                    </div>
+                    <p className="text-white/80">
+                        Tu cuenta ha sido creada exitosamente. Hemos enviado un correo de confirmación con tus credenciales.
+                    </p>
+                    <button
+                        onClick={() => navigate('/login')}
+                        className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-100 transition-colors mt-4"
+                    >
+                        Ir a Iniciar Sesión
+                    </button>
+                </div>
+            </Modal>
         </div>
     )
 }
