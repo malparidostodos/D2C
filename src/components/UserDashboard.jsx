@@ -349,6 +349,23 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
 
         const { data: { user } } = await supabase.auth.getUser()
 
+        // 🔒 VALIDACIÓN DE SEGURIDAD: Verificar si la placa ya tiene reservas
+        const { data: existingBookings } = await supabase
+            .from('bookings')
+            .select('client_email')
+            .eq('vehicle_plate', plate)
+            .limit(1)
+
+        // Si la placa tiene reservas previas, verificar que el email coincida
+        if (existingBookings && existingBookings.length > 0) {
+            const bookingEmail = existingBookings[0].client_email
+            if (bookingEmail !== user.email) {
+                setLoading(false)
+                setError(`Esta placa ya está registrada por otro usuario (${bookingEmail.slice(0, 3)}***@${bookingEmail.split('@')[1]})`)
+                return
+            }
+        }
+
         const { data, error: insertError } = await supabase
             .from('user_vehicles')
             .insert([{
