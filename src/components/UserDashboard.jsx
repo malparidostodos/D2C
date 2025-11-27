@@ -258,7 +258,15 @@ const UserDashboard = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
                 >
-                    <h2 className="text-2xl font-bold text-white mb-6">Historial de Servicios</h2>
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-2xl font-bold text-white">Historial de Servicios</h2>
+                        <Link to="/reserva" className="md:hidden">
+                            <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors font-medium text-sm">
+                                <Plus size={16} />
+                                Nueva Reserva
+                            </button>
+                        </Link>
+                    </div>
 
                     {bookings.length === 0 ? (
                         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
