@@ -1,0 +1,208 @@
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
+
+import './JetonHeader.css'
+
+const ResetPasswordPage = () => {
+    const navigate = useNavigate()
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(false)
+
+    useEffect(() => {
+        // Check if we have a session (which happens after clicking the email link)
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (!session) {
+                // If no session, redirect to login (or show error)
+                // However, the email link should log them in automatically.
+                // If it doesn't, they might have an expired link.
+                // For now, we'll let them stay but maybe show a warning if no session?
+                // Actually, updatePassword requires an active session.
+                console.log("No active session found. Link might be invalid or expired.")
+            }
+        })
+    }, [])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setError(null)
+
+        if (password !== confirmPassword) {
+            setError("Las contraseñas no coinciden")
+            return
+        }
+
+        if (password.length < 6) {
+            setError("La contraseña debe tener al menos 6 caracteres")
+            return
+        }
+
+        setLoading(true)
+
+        try {
+            const { error } = await supabase.auth.updateUser({
+                password: password
+            })
+
+            if (error) throw error
+
+            setSuccess(true)
+            // Navegar después de mostrar el mensaje
+            setTimeout(() => {
+                navigate('/login')
+            }, 2000)
+        } catch (error) {
+            console.error('Error updating password:', error)
+            setError(error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return (
+        <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
+            {/* Navbar Structure for Logo */}
+            <div className="_navbar">
+                <div className="nav-container">
+                    <Link
+                        to="/"
+                        className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
+                    >
+                        Ta' <span className="text-accent">To'</span> Clean
+                    </Link>
+                </div>
+            </div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full max-w-md relative z-20"
+            >
+                {/* Glass Card */}
+                <div className="backdrop-blur-xl bg-black/40 border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
+                    {/* Decorative gradient blob */}
+                    <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none" />
+                    <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none" />
+
+                    <div className="relative z-10">
+                        {!success ? (
+                            <>
+                                <div className="text-center mb-10">
+                                    <h1 className="text-3xl font-display font-bold text-white mb-2">Nueva contraseña</h1>
+                                    <p className="text-white/60">Ingresa tu nueva contraseña</p>
+                                </div>
+
+                                <form onSubmit={handleSubmit} className="space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-white/80 ml-1">Contraseña</label>
+                                        <div className="relative group">
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
+                                                <Lock size={20} />
+                                            </div>
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-12 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
+                                                placeholder="••••••••"
+                                                required
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors focus:outline-none z-10"
+                                            >
+                                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-white/80 ml-1">Confirmar Contraseña</label>
+                                        <div className="relative group">
+                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
+                                                <Lock size={20} />
+                                            </div>
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                value={confirmPassword}
+                                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-12 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
+                                                placeholder="••••••••"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {error && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-start gap-3"
+                                        >
+                                            <AlertCircle className="text-red-400 shrink-0 mt-0.5" size={18} />
+                                            <p className="text-red-200 text-sm">{error}</p>
+                                        </motion.div>
+                                    )}
+
+                                    <div className="pt-4">
+                                        <button
+                                            type="submit"
+                                            disabled={loading}
+                                            className="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {loading ? 'Actualizando...' : 'Actualizar contraseña'}
+                                        </button>
+                                    </div>
+                                </form>
+                            </>
+                        ) : (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                                className="text-center py-8"
+                            >
+                                <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ delay: 0.2, duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                                    className="mx-auto w-16 h-16 mb-6 rounded-full bg-green-500/20 flex items-center justify-center"
+                                >
+                                    <svg className="w-8 h-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </motion.div>
+                                <motion.h2
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3, duration: 0.4 }}
+                                    className="text-2xl font-display font-bold text-white mb-2"
+                                >
+                                    ¡Contraseña actualizada!
+                                </motion.h2>
+                                <motion.p
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4, duration: 0.4 }}
+                                    className="text-white/60"
+                                >
+                                    Redirigiendo al inicio de sesión...
+                                </motion.p>
+                            </motion.div>
+                        )}
+                    </div>
+                </div>
+            </motion.div>
+        </div>
+    )
+}
+
+export default ResetPasswordPage

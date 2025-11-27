@@ -3,37 +3,37 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 const handler = async (request: Request): Promise<Response> => {
-  // CORS headers
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-    "Content-Type": "application/json",
-  };
+    // CORS headers
+    const headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+        "Content-Type": "application/json",
+    };
 
-  if (request.method === "OPTIONS") {
-    return new Response("ok", { headers });
-  }
-
-  try {
-    const { email, name, password } = await request.json();
-    console.log("Attempting to send email to:", email);
-
-    if (!RESEND_API_KEY) {
-      console.error("RESEND_API_KEY is missing");
-      throw new Error("Missing RESEND_API_KEY environment variable");
+    if (request.method === "OPTIONS") {
+        return new Response("ok", { headers });
     }
 
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-      },
-      body: JSON.stringify({
-        from: "Ta' To' Clean <onboarding@resend.dev>",
-        to: [email],
-        subject: "Bienvenido a la Experiencia Elite",
-        html: `
+    try {
+        const { email, name, password } = await request.json();
+        console.log("Attempting to send email to:", email);
+
+        if (!RESEND_API_KEY) {
+            console.error("RESEND_API_KEY is missing");
+            throw new Error("Missing RESEND_API_KEY environment variable");
+        }
+
+        const res = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${RESEND_API_KEY}`,
+            },
+            body: JSON.stringify({
+                from: "Ta' To' Clean <onboarding@resend.dev>",
+                to: [email],
+                subject: "Bienvenido a la Experiencia Elite",
+                html: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -125,28 +125,28 @@ const handler = async (request: Request): Promise<Response> => {
 </body>
 </html>
         `,
-      }),
-    });
+            }),
+        });
 
-    const data = await res.json();
-    console.log("Resend API response:", data);
+        const data = await res.json();
+        console.log("Resend API response:", data);
 
-    if (!res.ok) {
-      console.error("Resend API Error:", data);
-      return new Response(JSON.stringify(data), { status: res.status, headers });
+        if (!res.ok) {
+            console.error("Resend API Error:", data);
+            return new Response(JSON.stringify(data), { status: res.status, headers });
+        }
+
+        return new Response(JSON.stringify(data), {
+            status: 200,
+            headers,
+        });
+    } catch (error: any) {
+        console.error("Edge Function Error:", error);
+        return new Response(JSON.stringify({ error: error.message }), {
+            status: 500,
+            headers,
+        });
     }
-
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers,
-    });
-  } catch (error: any) {
-    console.error("Edge Function Error:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers,
-    });
-  }
 };
 
 serve(handler);

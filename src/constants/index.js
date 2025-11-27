@@ -10,7 +10,7 @@ const flavorlists = [
         ],
         price: "$50.000",
         color: "black",
-        rotation: "md:rotate-[-8deg] rotate-0",
+        rotation: "md:rotate-[-2deg] rotate-0",
     },
     {
         name: "Coating Cerámico",
@@ -23,7 +23,7 @@ const flavorlists = [
         ],
         price: "$150.000",
         color: "blue",
-        rotation: "md:rotate-[8deg] rotate-0",
+        rotation: "md:rotate-[2deg] rotate-0",
     },
     {
         name: "Corrección Pintura",
@@ -36,7 +36,7 @@ const flavorlists = [
         ],
         price: "$200.000",
         color: "red",
-        rotation: "md:rotate-[-8deg] rotate-0",
+        rotation: "md:rotate-[-2deg] rotate-0",
     },
     {
         name: "Detailing Interior",
@@ -49,7 +49,7 @@ const flavorlists = [
         ],
         price: "$80.000",
         color: "orange",
-        rotation: "md:rotate-[8deg] rotate-0",
+        rotation: "md:rotate-[2deg] rotate-0",
     },
     {
         name: "Lavado de Motor",
@@ -62,7 +62,7 @@ const flavorlists = [
         ],
         price: "$40.000",
         color: "white",
-        rotation: "md:rotate-[-8deg] rotate-0",
+        rotation: "md:rotate-[-2deg] rotate-0",
     },
     {
         name: "Restauración Faros",
@@ -75,7 +75,7 @@ const flavorlists = [
         ],
         price: "$60.000",
         color: "brown",
-        rotation: "md:rotate-[8deg] rotate-0",
+        rotation: "md:rotate-[2deg] rotate-0",
     },
 ];
 

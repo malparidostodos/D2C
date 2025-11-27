@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 
 import './JetonHeader.css'
 
@@ -10,12 +11,22 @@ const ForgotPasswordPage = () => {
     const [submitted, setSubmitted] = useState(false)
     const navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         if (email) {
-            console.log('Password reset requested for:', email)
-            setSubmitted(true)
-            setTimeout(() => navigate('/'), 3000)
+            try {
+                // Invocar la Edge Function para enviar el correo personalizado
+                const { error } = await supabase.functions.invoke('send-password-reset-email', {
+                    body: { email }
+                })
+
+                if (error) throw error
+
+                setSubmitted(true)
+            } catch (error) {
+                console.error('Error sending reset password email:', error)
+                alert('Hubo un error al enviar el correo. Por favor intenta de nuevo.')
+            }
         }
     }
 
@@ -48,7 +59,47 @@ const ForgotPasswordPage = () => {
                     <div className="relative z-10">
                         <div className="text-center mb-8">
                             <h1 className="text-3xl font-display font-bold text-white mb-2">Recuperar Contraseña</h1>
-                            <p className="text-white/60">Ingresa tu email para recibir un enlace de recuperación</p>
+                            {!submitted ? (
+                                <p className="text-white/60">
+                                    Ingresa tu email para recibir un enlace de recuperación
+                                </p>
+                            ) : (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                                    className="mt-6 bg-green-500/10 border border-green-500/30 rounded-2xl p-6 backdrop-blur-sm"
+                                >
+                                    <motion.div
+                                        initial={{ scale: 0 }}
+                                        animate={{ scale: 1 }}
+                                        transition={{ delay: 0.2, duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                                        className="flex items-center justify-center gap-3 mb-2"
+                                    >
+                                        <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                                            <svg className="w-6 h-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                    </motion.div>
+                                    <motion.p
+                                        initial={{ opacity: 0, y: 5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.3, duration: 0.4 }}
+                                        className="text-lg font-semibold text-green-100 mb-1"
+                                    >
+                                        ¡Correo enviado!
+                                    </motion.p>
+                                    <motion.p
+                                        initial={{ opacity: 0, y: 5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.4, duration: 0.4 }}
+                                        className="text-green-200/90"
+                                    >
+                                        Revisa tu bandeja de entrada para reestablecer tu contraseña.
+                                    </motion.p>
+                                </motion.div>
+                            )}
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">

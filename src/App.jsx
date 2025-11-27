@@ -18,6 +18,7 @@ import LoginPage from './components/LoginPage'
 import SignUpPage from './components/SignUpPage'
 
 import ForgotPasswordPage from './components/ForgotPasswordPage'
+import ResetPasswordPage from './components/ResetPasswordPage'
 import UserDashboard from './components/UserDashboard'
 
 // Componente Home con todas las secciones
@@ -115,6 +116,7 @@ const App = () => {
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="*" element={<RedirectToHome />} />
           </Routes>
         </BrowserRouter>
