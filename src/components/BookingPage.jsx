@@ -5,7 +5,7 @@ import AnimatedButton from './AnimatedButton'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
-const CustomCalendar = ({ selectedDate, onSelect }) => {
+const CustomCalendar = ({ selectedDate, onSelect, availability = {} }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
     const [view, setView] = useState('days') // days, months, years
 
@@ -53,6 +53,13 @@ const CustomCalendar = ({ selectedDate, onSelect }) => {
         return checkDate < today
     }
 
+    const isFullyBooked = (day) => {
+        const dateStr = new Date(currentDate.getFullYear(), currentDate.getMonth(), day).toISOString().split('T')[0]
+        const bookedSlots = availability[dateStr] || []
+        const totalSlots = 9 // Total time slots available
+        return bookedSlots.length >= totalSlots
+    }
+
     const renderDays = () => {
         const daysInMonth = getDaysInMonth(currentDate)
         const firstDay = getFirstDayOfMonth(currentDate)
@@ -65,7 +72,8 @@ const CustomCalendar = ({ selectedDate, onSelect }) => {
 
         // Days
         for (let i = 1; i <= daysInMonth; i++) {
-            const disabled = isPast(i)
+            const disabled = isPast(i) || isFullyBooked(i)
+            const fullyBooked = isFullyBooked(i)
             days.push(
                 <button
                     key={i}
@@ -74,7 +82,7 @@ const CustomCalendar = ({ selectedDate, onSelect }) => {
                     className={`h-10 w-10 rounded-full flex items-center justify-center text-sm transition-colors ${isSelected(i)
                         ? 'bg-white text-black font-bold'
                         : disabled
-                            ? 'text-white/20 cursor-not-allowed'
+                            ? fullyBooked && !isPast(i) ? 'text-red-500/40 cursor-not-allowed line-through' : 'text-white/20 cursor-not-allowed'
                             : 'text-white hover:bg-white/10'
                         } ${isToday(i) && !isSelected(i) ? 'border border-white/30' : ''}`}
                 >
@@ -119,6 +127,7 @@ const BookingPage = () => {
     const [maxStep, setMaxStep] = useState(1) // Track furthest step reached
     const [direction, setDirection] = useState(0)
     const [isConfirmed, setIsConfirmed] = useState(false)
+    const [availability, setAvailability] = useState({}) // { '2024-01-15': ['08:00', '09:00'] }
 
     const [formData, setFormData] = useState({
         vehicleType: null,
@@ -143,6 +152,43 @@ const BookingPage = () => {
             setFormData(prev => ({ ...prev, service: location.state.selectedService }))
         }
     }, [location.state])
+
+    useEffect(() => {
+        if (step === 4) {
+            fetchMonthAvailability()
+        }
+    }, [step])
+
+    const fetchMonthAvailability = async () => {
+        const currentDate = formData.date ? new Date(formData.date + 'T00:00:00') : new Date()
+        const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
+        const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)
+
+        const { data, error } = await supabase
+            .from('bookings')
+            .select('booking_date, booking_time')
+            .gte('booking_date', firstDay.toISOString().split('T')[0])
+            .lte('booking_date', lastDay.toISOString().split('T')[0])
+            .not('status', 'eq', 'cancelled')
+
+        if (error) {
+            console.error('Error fetching availability:', error)
+            return
+        }
+
+        const availabilityMap = {}
+        data?.forEach(booking => {
+            const dateStr = booking.booking_date
+            if (!availabilityMap[dateStr]) {
+                availabilityMap[dateStr] = []
+            }
+            // Normalizar el formato de tiempo (quitar segundos si existen)
+            const timeStr = booking.booking_time.substring(0, 5) // "08:00:00" -> "08:00"
+            availabilityMap[dateStr].push(timeStr)
+        })
+
+        setAvailability(availabilityMap)
+    }
 
     const vehicleTypes = [
         { id: 'car', name: 'Automóvil', icon: Car, priceMultiplier: 1, description: 'Sedán, Hatchback, Coupé' },
@@ -274,11 +320,17 @@ const BookingPage = () => {
     }
 
     const handleDateSelect = (date) => {
-        setFormData({ ...formData, date })
+        setFormData({ ...formData, date, time: '' }) // Reset time when date changes
     }
 
     const handleTimeSelect = (time) => {
         setFormData({ ...formData, time })
+    }
+
+    const isTimeSlotTaken = (time) => {
+        if (!formData.date) return false
+        const bookedSlots = availability[formData.date] || []
+        return bookedSlots.includes(time)
     }
 
     const formatDateLong = (dateString) => {
@@ -617,23 +669,31 @@ const BookingPage = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                             <div>
                                 <label className="block text-white/60 text-sm mb-4">Selecciona Fecha</label>
-                                <CustomCalendar selectedDate={formData.date} onSelect={handleDateSelect} />
+                                <CustomCalendar selectedDate={formData.date} onSelect={handleDateSelect} availability={availability} />
                             </div>
                             <div>
                                 <label className="block text-white/60 text-sm mb-4">Selecciona Hora</label>
                                 <div className="grid grid-cols-3 gap-3">
-                                    {timeSlots.map((time) => (
-                                        <button
-                                            key={time}
-                                            onClick={() => handleTimeSelect(time)}
-                                            className={`p-3 rounded-xl text-sm font-medium transition-all ${formData.time === time
-                                                ? 'bg-white text-black scale-105 shadow-lg'
-                                                : 'bg-white/5 text-white hover:bg-white/10 border border-white/5'
-                                                }`}
-                                        >
-                                            {time}
-                                        </button>
-                                    ))}
+                                    {timeSlots.map((time) => {
+                                        const isTaken = isTimeSlotTaken(time)
+                                        return (
+                                            <button
+                                                key={time}
+                                                onClick={() => !isTaken && handleTimeSelect(time)}
+                                                disabled={isTaken || !formData.date}
+                                                className={`p-3 rounded-xl text-sm font-medium transition-all ${formData.time === time
+                                                    ? 'bg-white text-black scale-105 shadow-lg'
+                                                    : isTaken
+                                                        ? 'bg-red-500/10 text-red-500/40 cursor-not-allowed line-through border border-red-500/20'
+                                                        : !formData.date
+                                                            ? 'bg-white/5 text-white/20 cursor-not-allowed border border-white/5'
+                                                            : 'bg-white/5 text-white hover:bg-white/10 border border-white/5'
+                                                    }`}
+                                            >
+                                                {time}
+                                            </button>
+                                        )
+                                    })}
                                 </div>
                                 {formData.date && formData.time && (
                                     <div className="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
