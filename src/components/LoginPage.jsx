@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail, Lock, AlertCircle, Check } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -15,6 +15,15 @@ const LoginPage = () => {
 
     const [errors, setErrors] = useState({})
     const [touched, setTouched] = useState({})
+
+    // Cargar email guardado al montar el componente
+    useEffect(() => {
+        const savedEmail = localStorage.getItem('rememberedEmail')
+        if (savedEmail) {
+            setEmail(savedEmail)
+            setRememberMe(true)
+        }
+    }, [])
 
     const validateForm = (values = {}) => {
         const newErrors = {}
@@ -53,6 +62,12 @@ const LoginPage = () => {
             if (error) {
                 setErrors({ ...errors, password: 'Email o contraseña incorrectos' })
             } else {
+                // Guardar o eliminar email según checkbox "Recordarme"
+                if (rememberMe) {
+                    localStorage.setItem('rememberedEmail', email)
+                } else {
+                    localStorage.removeItem('rememberedEmail')
+                }
                 navigate('/dashboard')
             }
         }

@@ -4,6 +4,7 @@ import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, C
 import AnimatedButton from './AnimatedButton'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import VehiclePlateSelector from './VehiclePlateSelector'
 
 const CustomCalendar = ({ selectedDate, onSelect, availability = {} }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
@@ -152,6 +153,26 @@ const BookingPage = () => {
             setFormData(prev => ({ ...prev, service: location.state.selectedService }))
         }
     }, [location.state])
+
+    // Cargar datos del usuario si está autenticado
+    useEffect(() => {
+        loadUserData()
+    }, [])
+
+    const loadUserData = async () => {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+            // Precargar email y nombre
+            setFormData(prev => ({
+                ...prev,
+                clientInfo: {
+                    ...prev.clientInfo,
+                    email: user.email,
+                    name: user.user_metadata?.full_name || prev.clientInfo.name
+                }
+            }))
+        }
+    }
 
     useEffect(() => {
         if (step === 4) {
@@ -601,40 +622,6 @@ const BookingPage = () => {
                                     placeholder="Juan Pérez"
                                 />
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-white/60 text-sm mb-2">
-                                        Placa del Vehículo
-                                        <span className="text-xs ml-2 text-white/40">
-                                            ({formData.vehicleType?.id === 'motorcycle' ? 'AAA-00 o AAA-00A' : 'AAA-000'})
-                                        </span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="plate"
-                                        value={formData.clientInfo.plate}
-                                        onChange={handleClientInfoChange}
-                                        onBlur={() => handleBlur('plate')}
-                                        className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors uppercase ${touched.plate && formData.clientInfo.plate && !isPlateValid() ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'
-                                            }`}
-                                        placeholder={formData.vehicleType?.id === 'motorcycle' ? 'ABC-12D' : 'ABC-123'}
-                                    />
-                                    {touched.plate && formData.clientInfo.plate && !isPlateValid() && (
-                                        <p className="text-red-500 text-xs mt-1">Formato de placa inválido para este vehículo</p>
-                                    )}
-                                </div>
-                                <div>
-                                    <label className="block text-white/60 text-sm mb-2">Teléfono</label>
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        value={formData.clientInfo.phone}
-                                        onChange={handleClientInfoChange}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
-                                        placeholder="300 123 4567"
-                                    />
-                                </div>
-                            </div>
                             <div>
                                 <label className="block text-white/60 text-sm mb-2">Correo Electrónico</label>
                                 <input
@@ -648,6 +635,26 @@ const BookingPage = () => {
                                     placeholder="juan@ejemplo.com"
                                 />
                             </div>
+                            <div>
+                                <label className="block text-white/60 text-sm mb-2">Teléfono (opcional)</label>
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.clientInfo.phone}
+                                    onChange={handleClientInfoChange}
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
+                                    placeholder="300 123 4567"
+                                />
+                            </div>
+                            <VehiclePlateSelector
+                                formData={formData}
+                                setFormData={setFormData}
+                                touched={touched}
+                                handleBlur={handleBlur}
+                                validatePlate={validatePlate}
+                                formatPlate={formatPlate}
+                                handleClientInfoChange={handleClientInfoChange}
+                            />
                         </div>
                         <div className="flex justify-end pt-4">
                             <AnimatedButton
