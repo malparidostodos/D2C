@@ -2,46 +2,39 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Check, ArrowRight } from 'lucide-react'
 import AnimatedButton from './AnimatedButton'
+import { useTranslation } from 'react-i18next'
 
 const Pricing = () => {
+    const { t, i18n } = useTranslation()
+
+    const getLocalizedPath = (path) => {
+        const prefix = i18n.language === 'en' ? '/en' : ''
+        return `${prefix}${path}`
+    }
+
     const plans = [
         {
-            name: 'Básico',
-            description: 'Mantenimiento esencial para tu vehículo',
+            name: t('pricing.plans.basic.name'),
+            description: t('pricing.plans.basic.description'),
             price: '50.000',
             period: '/mes',
-            features: [
-                '2 Lavados Express al mes',
-                'Limpieza de llantas',
-                'Aspirado básico',
-                'Cera rápida'
-            ],
+            features: t('pricing.plans.basic.features', { returnObjects: true }),
             highlight: false
         },
         {
-            name: 'Premium',
-            description: 'El equilibrio perfecto entre cuidado y protección',
+            name: t('pricing.plans.premium.name'),
+            description: t('pricing.plans.premium.description'),
             price: '300.000',
             period: '/mes',
-            features: [
-                '3 Lavados Premium al mes',
-                'Descontaminación de pintura',
-                'Hidratación de plásticos',
-                'Encerado manual'
-            ],
+            features: t('pricing.plans.premium.features', { returnObjects: true }),
             highlight: true
         },
         {
-            name: 'Élite',
-            description: 'La máxima experiencia de detailing',
+            name: t('pricing.plans.elite.name'),
+            description: t('pricing.plans.elite.description'),
             price: '1.000.000',
             period: '/mes',
-            features: [
-                '4 Lavados Full Detailing al mes',
-                'Corrección de pintura semestral',
-                'Recubrimiento cerámico anual',
-                'Servicio de recogida y entrega'
-            ],
+            features: t('pricing.plans.elite.features', { returnObjects: true }),
             highlight: false
         }
     ]
@@ -50,12 +43,12 @@ const Pricing = () => {
         <section id="membresias" className="py-32 bg-background relative overflow-hidden">
             <div className="container relative z-10">
                 <div className="text-center mb-20">
-                    <span className="text-accent font-medium tracking-widest uppercase text-sm">Planes Exclusivos</span>
+                    <span className="text-accent font-medium tracking-widest uppercase text-sm">{t('pricing.exclusive_plans')}</span>
                     <h2 className="text-5xl md:text-6xl font-display font-bold text-white mt-4 mb-6">
-                        Membresías
+                        {t('pricing.memberships')}
                     </h2>
                     <p className="text-white/60 max-w-2xl mx-auto text-lg font-light">
-                        Eleva el cuidado de tu vehículo con nuestros planes de suscripción.
+                        {t('pricing.subtitle')}
                     </p>
                 </div>
 
@@ -74,7 +67,7 @@ const Pricing = () => {
                         >
                             {plan.highlight && (
                                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-accent text-white text-xs font-bold uppercase tracking-widest rounded-full">
-                                    Más Popular
+                                    {t('pricing.most_popular')}
                                 </div>
                             )}
 
@@ -103,13 +96,13 @@ const Pricing = () => {
                             <AnimatedButton
                                 className="w-full justify-center"
                                 variant={plan.highlight ? 'accent' : 'outline'}
-                                href="/contacto"
+                                href={getLocalizedPath("/contacto")}
                                 onClick={(e) => {
                                     const section = document.querySelector('#contacto');
                                     if (section) section.scrollIntoView({ behavior: 'smooth' });
                                 }}
                             >
-                                Elegir Plan
+                                {t('pricing.choose_plan')}
                             </AnimatedButton>
                         </motion.div>
                     ))}

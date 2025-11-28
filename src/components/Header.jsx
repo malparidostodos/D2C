@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ArrowRight, Home, ChevronDown } from 'lucide-react';
+import { Menu, X, ArrowRight, Home, ChevronDown, ArrowUpRight } from 'lucide-react';
 import { useSmoothScroll } from './SmoothScroll';
+import { useTranslation } from 'react-i18next';
 import './JetonHeader.css'; // Import the strict CSS
 
 const Header = () => {
@@ -12,7 +13,9 @@ const Header = () => {
   const [hoverLock, setHoverLock] = useState(false);
   const [hoveredService, setHoveredService] = useState(null);
   const [langOpen, setLangOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState('ES');
+
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language === 'en' ? 'EN' : 'ES';
 
   const languages = [
     { code: 'ES', label: 'Español' },
@@ -178,10 +181,19 @@ const Header = () => {
     };
   }, [langOpen]);
 
+  // Helper to get localized path
+  const getLocalizedPath = (path) => {
+    const prefix = i18n.language === 'en' ? '/en' : '';
+    // Avoid double slashes or double prefixes if path already has it (though path passed here is usually relative root)
+    return `${prefix}${path}`;
+  };
+
   const handleNavClick = (e, id, path) => {
     e.preventDefault();
     setMenuOpen(false);
     setServicesOpen(false);
+
+    const localizedPath = getLocalizedPath(path);
 
     const scrollToElement = () => {
       if (id === '#contacto') {
@@ -203,25 +215,52 @@ const Header = () => {
       }
     };
 
-    if (location.pathname !== '/') {
-      navigate('/');
+    // Check if we are on the same localized root path
+    const currentPath = location.pathname;
+    const isHome = currentPath === '/' || currentPath === '/en' || currentPath === '/en/';
+
+    if (!isHome) {
+      // Navigate to home (localized) then scroll
+      const homePath = i18n.language === 'en' ? '/en' : '/';
+      navigate(homePath);
       setTimeout(scrollToElement, 500);
     } else {
       scrollToElement();
     }
   };
 
+  const handleLanguageChange = (langCode) => {
+    const targetLang = langCode.toLowerCase();
+    const currentPath = location.pathname;
+
+    let newPath = currentPath;
+
+    if (targetLang === 'en') {
+      if (!currentPath.startsWith('/en')) {
+        newPath = `/en${currentPath === '/' ? '' : currentPath}`;
+      }
+    } else {
+      // Switch to ES (remove /en)
+      if (currentPath.startsWith('/en')) {
+        newPath = currentPath.replace(/^\/en/, '') || '/';
+      }
+    }
+
+    navigate(newPath);
+    setLangOpen(false);
+  };
+
   const isServiceActive = ['#precios', '#roadmap', '#membresias'].includes(activeSection);
 
   const navLinks = [
-    { name: 'INICIO', id: '#inicio', path: '/inicio' },
-    { name: 'CONTACTO', id: '#contacto', path: '/contacto' },
+    { name: t('header.home'), id: '#inicio', path: '/inicio' },
+    { name: t('header.contact'), id: '#contacto', path: '/contacto' },
   ];
 
   const servicesDropdown = [
-    { name: 'Precios', path: '/precios', id: '#precios' },
-    { name: 'Proceso', id: '#roadmap', path: '/roadmap' },
-    { name: 'Membresías', id: '#membresias', path: '/membresias' },
+    { name: t('header.pricing'), path: '/precios', id: '#precios' },
+    { name: t('header.process'), id: '#roadmap', path: '/roadmap' },
+    { name: t('header.memberships'), id: '#membresias', path: '/membresias' },
   ];
 
   return (
@@ -236,7 +275,7 @@ const Header = () => {
       <div className="_navbar">
         <div className="nav-container">
           {/* Logo */}
-          <a href="/" className="text-3xl font-display font-bold text-black tracking-tighter">
+          <a href={getLocalizedPath('/')} className="text-3xl font-display font-bold text-black tracking-tighter">
             Ta' <span className="text-accent">To'</span> Clean
           </a>
 
@@ -275,7 +314,7 @@ const Header = () => {
                     <div
                       key={lang.code}
                       className={`_lang-item ${currentLang === lang.code ? 'active' : ''}`}
-                      onClick={() => { setCurrentLang(lang.code); setLangOpen(false); }}
+                      onClick={() => handleLanguageChange(lang.code)}
                     >
                       <span>{lang.label}</span>
                       {currentLang === lang.code && (
@@ -291,9 +330,9 @@ const Header = () => {
 
             {/* CTAs */}
             <div className="ctas hidden md:flex">
-              <a href="/login" className="_button" data-variant="ghost">
+              <a href={getLocalizedPath("/login")} className="_button" data-variant="ghost">
                 <span className="staggered-wrapper">
-                  {"Iniciar sesión".split("").map((char, i) => (
+                  {t('header.login').split("").map((char, i) => (
                     <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
                       {char === " " ? "\u00A0" : char}
                     </span>
@@ -301,12 +340,12 @@ const Header = () => {
                 </span>
               </a>
               <a
-                href="/signup"
+                href={getLocalizedPath("/signup")}
                 className="_button !bg-white !text-[#0046b8] transition-all duration-300"
                 data-variant="ghost"
               >
                 <span className="staggered-wrapper">
-                  {"Registrarse".split("").map((char, i) => (
+                  {t('header.signup').split("").map((char, i) => (
                     <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
                       {char === " " ? "\u00A0" : char}
                     </span>
@@ -343,10 +382,10 @@ const Header = () => {
             className={`_menu-button ${isServiceActive ? '-active -exact' : ''}`}
             aria-expanded={servicesOpen}
             data-services-open={servicesOpen ? 'true' : 'false'}
-            onMouseEnter={() => { console.log('Hover on button, servicesOpen:', servicesOpen); setServicesOpen(true); }}
+            onMouseEnter={() => { setServicesOpen(true); }}
           >
             <div className="background"></div>
-            <span>Personal</span>
+            <span>{t('header.personal')}</span>
             <ChevronDown
               className="chevron-icon"
               size={14}
@@ -370,7 +409,7 @@ const Header = () => {
                     onMouseEnter={() => setHoveredService(item.id)}
                   >
                     <a
-                      href={item.path}
+                      href={getLocalizedPath(item.path)}
                       className="link"
                       onClick={(e) => handleNavClick(e, item.id, item.path)}
                     >
@@ -384,42 +423,43 @@ const Header = () => {
               <div className={`menu-preview ${hoveredService ? 'active' : ''}`}>
                 {hoveredService === '#precios' && (
                   <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-lg">
-                    Precios
+                    {t('header.pricing')}
                   </div>
                 )}
                 {hoveredService === '#roadmap' && (
                   <div className="w-full h-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-                    Proceso
+                    {t('header.process')}
                   </div>
                 )}
                 {hoveredService === '#membresias' && (
                   <div className="w-full h-full bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center text-white font-bold text-lg">
-                    Membresías
+                    {t('header.memberships')}
                   </div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* CONTACTO */}
+          {/* HABLEMOS CTA */}
           <button
-            className={`_menu-button ${activeSection === '#contacto' ? '-active -exact' : ''}`}
+            className={`_menu-button group hidden md:flex ${activeSection === '#contacto' ? '-active -exact' : ''}`}
             onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
             onMouseEnter={() => setServicesOpen(false)}
           >
             <div className="background"></div>
-            <span>Contacto</span>
+            <span>{t('header.lets_talk')}</span>
+            <ArrowUpRight className="ml-1 w-3 h-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:scale-110" />
           </button>
 
-          {/* HABLEMOS CTA */}
+          {/* CONTACTO */}
           <button
-            className="_menu-button hidden md:flex"
-            style={{ marginLeft: 8, backgroundColor: 'white', color: 'black', borderRadius: '9999px', paddingLeft: 20, paddingRight: 20 }}
+            className={`_menu-button group ${activeSection === '#contacto' ? '-active -exact' : ''}`}
             onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
             onMouseEnter={() => setServicesOpen(false)}
           >
-            <span style={{ fontWeight: 700, marginRight: 4 }}>Hablemos</span>
-            <span style={{ fontWeight: 900 }}>·</span>
+            <div className="background"></div>
+            <span>{t('header.contact')}</span>
+            <ArrowUpRight className="ml-1 w-3 h-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:scale-110" />
           </button>
 
           {/* Mobile Toggle */}
@@ -442,7 +482,7 @@ const Header = () => {
           {navLinks.map((link) => (
             <a
               key={link.name}
-              href={link.path}
+              href={getLocalizedPath(link.path)}
               onClick={(e) => handleNavClick(e, link.id, link.path)}
               className="text-3xl font-display font-bold text-white hover:text-accent transition-colors"
             >
@@ -452,7 +492,7 @@ const Header = () => {
           {servicesDropdown.map((item) => (
             <a
               key={item.name}
-              href={item.path}
+              href={getLocalizedPath(item.path)}
               onClick={(e) => handleNavClick(e, item.id, item.path)}
               className="text-2xl font-display font-bold text-white/70 hover:text-accent transition-colors"
             >
@@ -460,11 +500,11 @@ const Header = () => {
             </a>
           ))}
           <a
-            href="/contacto"
+            href={getLocalizedPath("/contacto")}
             onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
             className="text-3xl font-display font-bold text-accent"
           >
-            HABLEMOS
+            {t('header.lets_talk').toUpperCase()}
           </a>
         </div>
       )}

@@ -2,10 +2,16 @@ import React, { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import AnimatedButton from './AnimatedButton'
+import { useTranslation } from 'react-i18next'
 
 const Hero = () => {
   const containerRef = useRef(null)
+  const { t, i18n } = useTranslation()
 
+  const getLocalizedPath = (path) => {
+    const prefix = i18n.language === 'en' ? '/en' : ''
+    return `${prefix}${path}`
+  }
 
   return (
     <section ref={containerRef} id="inicio" className="relative h-screen w-full overflow-hidden flex items-center justify-center">
@@ -25,7 +31,7 @@ const Hero = () => {
             className="mb-6"
           >
             <span className="inline-block py-1 px-3 rounded-full border border-gray-200 bg-gray-100/50 backdrop-blur-sm text-xs font-medium tracking-widest uppercase text-black">
-              Calidad Garantizada
+              {t('hero.quality_guaranteed')}
             </span>
           </motion.div>
 
@@ -38,7 +44,7 @@ const Hero = () => {
               textShadow: '0 0 40px rgba(0, 0, 0, 0.1)'
             }}
           >
-            Cuidado <br /> Automotriz <br /> Premium
+            {t('hero.title_part1')} <br /> {t('hero.title_part2')} <br /> {t('hero.title_part3')}
           </motion.h1>
         </div>
 
@@ -50,7 +56,7 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="max-w-xl text-xl md:text-2xl text-white font-medium mb-8 leading-tight"
           >
-            Transformamos vehículos en obras de arte. Experimenta el cuidado automotriz llevado al nivel de la perfección.
+            {t('hero.subtitle')}
           </motion.p>
 
           <motion.div
@@ -60,21 +66,21 @@ const Hero = () => {
             className="flex flex-col text-black sm:flex-row gap-4 items-center -mt-6"
           >
             <AnimatedButton
-              href="/reserva"
+              href={getLocalizedPath("/reserva")}
               variant="blur"
             >
-              Reserva tu Cita
+              {t('hero.cta_booking')}
             </AnimatedButton>
 
             <AnimatedButton
-              href="/precios"
+              href={getLocalizedPath("/precios")}
               variant="blur"
               onClick={(e) => {
                 const section = document.querySelector('#precios');
                 if (section) section.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              Ver Servicios
+              {t('hero.cta_services')}
             </AnimatedButton>
           </motion.div>
         </div>

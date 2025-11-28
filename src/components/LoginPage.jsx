@@ -4,11 +4,13 @@ import { ArrowLeft, Mail, Lock, AlertCircle, Check, Eye, EyeOff } from 'lucide-r
 import { Link, useNavigate } from 'react-router-dom'
 import AnimatedButton from './AnimatedButton'
 import { supabase } from '../lib/supabase'
+import { useTranslation } from 'react-i18next'
 
 import './JetonHeader.css'
 
 const LoginPage = () => {
     const navigate = useNavigate()
+    const { t, i18n } = useTranslation()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
@@ -16,6 +18,11 @@ const LoginPage = () => {
 
     const [errors, setErrors] = useState({})
     const [touched, setTouched] = useState({})
+
+    const getLocalizedPath = (path) => {
+        const prefix = i18n.language === 'en' ? '/en' : ''
+        return `${prefix}${path}`
+    }
 
     // Cargar email guardado al montar el componente
     useEffect(() => {
@@ -32,13 +39,13 @@ const LoginPage = () => {
         const currentPassword = values.password !== undefined ? values.password : password
 
         if (!currentEmail) {
-            newErrors.email = 'Completa este campo'
+            newErrors.email = t('auth.errors.required')
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currentEmail)) {
-            newErrors.email = 'Ingresa un correo válido'
+            newErrors.email = t('auth.errors.invalid_email')
         }
 
         if (!currentPassword) {
-            newErrors.password = 'Completa este campo'
+            newErrors.password = t('auth.errors.required')
         }
 
         setErrors(newErrors)
@@ -61,7 +68,7 @@ const LoginPage = () => {
             })
 
             if (error) {
-                setErrors({ ...errors, password: 'Email o contraseña incorrectos' })
+                setErrors({ ...errors, password: t('auth.errors.login_failed') })
             } else {
                 // Guardar o eliminar email según checkbox "Recordarme"
                 if (rememberMe) {
@@ -69,7 +76,7 @@ const LoginPage = () => {
                 } else {
                     localStorage.removeItem('rememberedEmail')
                 }
-                navigate('/dashboard')
+                navigate(getLocalizedPath('/dashboard'))
             }
         }
     }
@@ -87,7 +94,7 @@ const LoginPage = () => {
             <div className="_navbar">
                 <div className="nav-container">
                     <Link
-                        to="/"
+                        to={getLocalizedPath('/')}
                         className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
@@ -109,13 +116,13 @@ const LoginPage = () => {
 
                     <div className="relative z-10">
                         <div className="text-center mb-10">
-                            <h1 className="text-3xl font-display font-bold text-white mb-2">Bienvenido</h1>
-                            <p className="text-white/60">Ingresa a tu cuenta para gestionar tus servicios</p>
+                            <h1 className="text-3xl font-display font-bold text-white mb-2">{t('auth.welcome')}</h1>
+                            <p className="text-white/60">{t('auth.login_subtitle')}</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-white/80 ml-1">Correo</label>
+                                <label className="text-sm font-medium text-white/80 ml-1">{t('auth.email')}</label>
                                 <div className="relative group">
                                     <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${touched.email && errors.email ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
                                         <Mail size={20} />
@@ -153,7 +160,7 @@ const LoginPage = () => {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-white/80 ml-1">Contraseña</label>
+                                <label className="text-sm font-medium text-white/80 ml-1">{t('auth.password')}</label>
                                 <div className="relative group">
                                     <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${touched.password && errors.password ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
                                         <Lock size={20} />
@@ -213,9 +220,9 @@ const LoginPage = () => {
                                         checked={rememberMe}
                                         onChange={(e) => setRememberMe(e.target.checked)}
                                     />
-                                    <span className="text-white/60 group-hover:text-white/80 transition-colors">Recordarme</span>
+                                    <span className="text-white/60 group-hover:text-white/80 transition-colors">{t('auth.remember_me')}</span>
                                 </label>
-                                <Link to="/forgot-password" className="text-white/60 hover:text-white transition-colors">¿Olvidaste tu contraseña?</Link>
+                                <Link to={getLocalizedPath('/forgot-password')} className="text-white/60 hover:text-white transition-colors">{t('auth.forgot_password')}</Link>
                             </div>
 
                             <div className="pt-4">
@@ -223,16 +230,16 @@ const LoginPage = () => {
                                     type="submit"
                                     className="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
                                 >
-                                    Iniciar sesión
+                                    {t('auth.login_button')}
                                 </button>
                             </div>
                         </form>
 
                         <div className="mt-8 text-center">
                             <p className="text-white/60 text-sm">
-                                ¿No tienes una cuenta?{' '}
-                                <Link to="/signup" className="text-white font-medium hover:underline">
-                                    Regístrate aquí
+                                {t('auth.no_account')}{' '}
+                                <Link to={getLocalizedPath('/signup')} className="text-white font-medium hover:underline">
+                                    {t('auth.register_here')}
                                 </Link>
                             </p>
                         </div>

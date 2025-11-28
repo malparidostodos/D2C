@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const Contact = () => {
+  const { t } = useTranslation()
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -8,11 +10,11 @@ const Contact = () => {
 
   const validateEmail = (emailValue) => {
     if (!emailValue) {
-      return 'Por favor, ingresa tu correo electrónico'
+      return t('contact_section.newsletter.error_empty')
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(emailValue)) {
-      return 'Por favor, ingresa un correo electrónico válido'
+      return t('contact_section.newsletter.error_invalid')
     }
     return ''
   }
@@ -37,7 +39,7 @@ const Contact = () => {
 
     // Simular envío
     setTimeout(() => {
-      alert('¡Gracias por suscribirte!')
+      alert(t('contact_section.newsletter.success'))
       setEmail('')
       setIsSubmitting(false)
     }, 500)
@@ -85,9 +87,9 @@ const Contact = () => {
             <div className="contact-info-grid">
               {/* Dirección */}
               <div className="contact-address">
-                <div className="contact-text">Carrera 15#57-11</div>
-                <div className="contact-text">Dosquebradas, Risaralda</div>
-                <div className="contact-text">Colombia</div>
+                <div className="contact-text">{t('contact_section.address.line1')}</div>
+                <div className="contact-text">{t('contact_section.address.line2')}</div>
+                <div className="contact-text">{t('contact_section.address.country')}</div>
               </div>
 
               {/* Redes sociales y Business */}
@@ -119,11 +121,11 @@ const Contact = () => {
                   </a>
                 </div>
                 <div className="contact-business">
-                  <div className="contact-label select-none">Negocios</div>
+                  <div className="contact-label select-none">{t('contact_section.business')}</div>
                   <a href="mailto:business@tatotoclean.com" className="contact-link email-link">business@tatotoclean.com</a>
                 </div>
                 <div className="contact-enquires">
-                  <div className="contact-label select-none">Consultas generales</div>
+                  <div className="contact-label select-none">{t('contact_section.general_enquiries')}</div>
                   <a href="mailto:contacto@tatotoclean.com" className="contact-link email-link">contacto@tatotoclean.com</a>
                 </div>
               </div>
@@ -133,8 +135,12 @@ const Contact = () => {
           {/* Newsletter */}
           <div className="contact-newsletter">
             <h3 className="contact-newsletter-title select-none">
-              Obtén ofertas y<br />
-              servicios exclusivos
+              {t('contact_section.newsletter.title').split('\n').map((line, i) => (
+                <React.Fragment key={i}>
+                  {line}
+                  {i === 0 && <br />}
+                </React.Fragment>
+              ))}
             </h3>
             <form ref={formRef} onSubmit={handleSubmit} className="contact-newsletter-form" noValidate>
               <div className="contact-newsletter-input-wrapper">
@@ -144,13 +150,13 @@ const Contact = () => {
                   value={email}
                   onChange={handleEmailChange}
                   className={`contact-newsletter-input ${error ? 'error' : ''}`}
-                  placeholder="Tu correo"
+                  placeholder={t('contact_section.newsletter.placeholder')}
                   disabled={isSubmitting}
                 />
                 <button
                   type="submit"
                   className="contact-newsletter-button"
-                  aria-label="Send newsletter form button"
+                  aria-label={t('contact_section.newsletter.aria_label')}
                   disabled={isSubmitting}
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -170,13 +176,13 @@ const Contact = () => {
 
         {/* Footer */}
         <div className="footer-bottom">
-          <div className="footer-bottom-copyright select-none">©2025 Ta' To' Clean</div>
-          <a href="https://labs.tatotoclean.com" target="_blank" className="footer-bottom-labs select-none">R&D: labs.tatotoclean.com</a>
-          <div className="footer-bottom-tagline select-none">Hecho por Johan & Cursor con <span className="text-red-500">❤️</span></div>
+          <div className="footer-bottom-copyright select-none">{t('contact_section.footer.copyright')}</div>
+          <a href="https://labs.tatotoclean.com" target="_blank" className="footer-bottom-labs select-none">{t('contact_section.footer.labs')}</a>
+          <div className="footer-bottom-tagline select-none">{t('contact_section.footer.made_by')} <span className="text-red-500">❤️</span></div>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="footer-bottom-up"
-            aria-label="Scroll to top"
+            aria-label={t('contact_section.footer.aria_label_scroll')}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" style={{ display: 'inline-block', position: 'relative', transform: 'translate3d(0, 0, 0)' }}>
               <path fill="#fff" fillRule="evenodd" d="M12 22a1 1 0 0 1-1-1V5.857l-6.223 6.224a1 1 0 0 1-1.415-1.415l7.9-7.9a1 1 0 0 1 1.414 0v.001l7.9 7.9a1 1 0 0 1-1.414 1.414L13 5.919V21a1 1 0 0 1-1 1Z" clipRule="evenodd" />

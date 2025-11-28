@@ -3,13 +3,20 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Mail } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useTranslation } from 'react-i18next'
 
 import './JetonHeader.css'
 
 const ForgotPasswordPage = () => {
+    const { t, i18n } = useTranslation()
     const [email, setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
     const navigate = useNavigate()
+
+    const getLocalizedPath = (path) => {
+        const currentLang = i18n.language
+        return currentLang === 'en' ? `/en${path}` : path
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -25,7 +32,7 @@ const ForgotPasswordPage = () => {
                 setSubmitted(true)
             } catch (error) {
                 console.error('Error sending reset password email:', error)
-                alert('Hubo un error al enviar el correo. Por favor intenta de nuevo.')
+                alert(t('auth.error_sending_email'))
             }
         }
     }
@@ -36,7 +43,7 @@ const ForgotPasswordPage = () => {
             <div className="_navbar">
                 <div className="nav-container">
                     <Link
-                        to="/"
+                        to={getLocalizedPath('/')}
                         className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
@@ -58,10 +65,10 @@ const ForgotPasswordPage = () => {
 
                     <div className="relative z-10">
                         <div className="text-center mb-8">
-                            <h1 className="text-3xl font-display font-bold text-white mb-2">Recuperar Contraseña</h1>
+                            <h1 className="text-3xl font-display font-bold text-white mb-2">{t('auth.forgot_password_title')}</h1>
                             {!submitted ? (
                                 <p className="text-white/60">
-                                    Ingresa tu email para recibir un enlace de recuperación
+                                    {t('auth.forgot_password_subtitle')}
                                 </p>
                             ) : (
                                 <motion.div
@@ -88,7 +95,7 @@ const ForgotPasswordPage = () => {
                                         transition={{ delay: 0.3, duration: 0.4 }}
                                         className="text-lg font-semibold text-green-100 mb-1"
                                     >
-                                        ¡Correo enviado!
+                                        {t('auth.email_sent_title')}
                                     </motion.p>
                                     <motion.p
                                         initial={{ opacity: 0, y: 5 }}
@@ -96,7 +103,7 @@ const ForgotPasswordPage = () => {
                                         transition={{ delay: 0.4, duration: 0.4 }}
                                         className="text-green-200/90"
                                     >
-                                        Revisa tu bandeja de entrada para reestablecer tu contraseña.
+                                        {t('auth.email_sent_message')}
                                     </motion.p>
                                 </motion.div>
                             )}
@@ -104,7 +111,7 @@ const ForgotPasswordPage = () => {
 
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-white/80 ml-1">Email</label>
+                                <label className="text-sm font-medium text-white/80 ml-1">{t('auth.email')}</label>
                                 <div className="relative group">
                                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
                                         <Mail size={20} />
@@ -125,16 +132,16 @@ const ForgotPasswordPage = () => {
                                     type="submit"
                                     className="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
                                 >
-                                    Enviar Enlace
+                                    {t('auth.send_link_button')}
                                 </button>
                             </div>
                         </form>
 
                         <div className="mt-8 text-center">
                             <p className="text-white/60 text-sm">
-                                ¿Recordaste tu contraseña?{' '}
-                                <Link to="/login" className="text-white font-medium hover:underline">
-                                    Inicia sesión aquí
+                                {t('auth.remembered_password')}{' '}
+                                <Link to={getLocalizedPath('/login')} className="text-white font-medium hover:underline">
+                                    {t('auth.login_here')}
                                 </Link>
                             </p>
                         </div>

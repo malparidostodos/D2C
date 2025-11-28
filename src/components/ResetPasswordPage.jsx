@@ -3,10 +3,12 @@ import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useTranslation } from 'react-i18next'
 
 import './JetonHeader.css'
 
 const ResetPasswordPage = () => {
+    const { t, i18n } = useTranslation()
     const navigate = useNavigate()
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -14,6 +16,11 @@ const ResetPasswordPage = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(false)
+
+    const getLocalizedPath = (path) => {
+        const currentLang = i18n.language
+        return currentLang === 'en' ? `/en${path}` : path
+    }
 
     useEffect(() => {
         // Check if we have a session (which happens after clicking the email link)
@@ -34,12 +41,12 @@ const ResetPasswordPage = () => {
         setError(null)
 
         if (password !== confirmPassword) {
-            setError("Las contraseñas no coinciden")
+            setError(t('auth.errors.password_mismatch'))
             return
         }
 
         if (password.length < 6) {
-            setError("La contraseña debe tener al menos 6 caracteres")
+            setError(t('auth.errors.password_length'))
             return
         }
 
@@ -55,7 +62,7 @@ const ResetPasswordPage = () => {
             setSuccess(true)
             // Navegar después de mostrar el mensaje
             setTimeout(() => {
-                navigate('/login')
+                navigate(getLocalizedPath('/login'))
             }, 2000)
         } catch (error) {
             console.error('Error updating password:', error)
@@ -71,7 +78,7 @@ const ResetPasswordPage = () => {
             <div className="_navbar">
                 <div className="nav-container">
                     <Link
-                        to="/"
+                        to={getLocalizedPath('/')}
                         className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
@@ -95,13 +102,13 @@ const ResetPasswordPage = () => {
                         {!success ? (
                             <>
                                 <div className="text-center mb-10">
-                                    <h1 className="text-3xl font-display font-bold text-white mb-2">Nueva contraseña</h1>
-                                    <p className="text-white/60">Ingresa tu nueva contraseña</p>
+                                    <h1 className="text-3xl font-display font-bold text-white mb-2">{t('auth.new_password_title')}</h1>
+                                    <p className="text-white/60">{t('auth.new_password_subtitle')}</p>
                                 </div>
 
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-white/80 ml-1">Contraseña</label>
+                                        <label className="text-sm font-medium text-white/80 ml-1">{t('auth.password')}</label>
                                         <div className="relative group">
                                             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
                                                 <Lock size={20} />
@@ -125,7 +132,7 @@ const ResetPasswordPage = () => {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-white/80 ml-1">Confirmar Contraseña</label>
+                                        <label className="text-sm font-medium text-white/80 ml-1">{t('auth.confirm_password')}</label>
                                         <div className="relative group">
                                             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
                                                 <Lock size={20} />
@@ -158,7 +165,7 @@ const ResetPasswordPage = () => {
                                             disabled={loading}
                                             className="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
-                                            {loading ? 'Actualizando...' : 'Actualizar contraseña'}
+                                            {loading ? t('auth.updating') : t('auth.update_password_button')}
                                         </button>
                                     </div>
                                 </form>
@@ -186,7 +193,7 @@ const ResetPasswordPage = () => {
                                     transition={{ delay: 0.3, duration: 0.4 }}
                                     className="text-2xl font-display font-bold text-white mb-2"
                                 >
-                                    ¡Contraseña actualizada!
+                                    {t('auth.password_updated_title')}
                                 </motion.h2>
                                 <motion.p
                                     initial={{ opacity: 0, y: 10 }}
@@ -194,7 +201,7 @@ const ResetPasswordPage = () => {
                                     transition={{ delay: 0.4, duration: 0.4 }}
                                     className="text-white/60"
                                 >
-                                    Redirigiendo al inicio de sesión...
+                                    {t('auth.redirecting_login')}
                                 </motion.p>
                             </motion.div>
                         )}

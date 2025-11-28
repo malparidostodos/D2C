@@ -1,44 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { CheckCircle2, Circle } from 'lucide-react'
-
-const processSteps = [
-  {
-    id: '0',
-    title: 'Evaluación Inicial',
-    description: 'Inspección detallada del vehículo para identificar imperfecciones y determinar el mejor tratamiento.',
-    date: 'Paso 1',
-    status: 'done',
-  },
-  {
-    id: '1',
-    title: 'Descontaminación',
-    description: 'Limpieza profunda química y mecánica para eliminar contaminantes adheridos a la pintura.',
-    date: 'Paso 2',
-    status: 'done',
-  },
-  {
-    id: '2',
-    title: 'Corrección de Pintura',
-    description: 'Proceso de pulido en múltiples etapas para eliminar rayas, marcas de agua y restaurar el brillo.',
-    date: 'Paso 3',
-    status: 'current',
-  },
-  {
-    id: '3',
-    title: 'Protección Cerámica',
-    description: 'Aplicación de recubrimiento cerámico para proteger la pintura y facilitar la limpieza futura.',
-    date: 'Paso 4',
-    status: 'upcoming',
-  },
-  {
-    id: '4',
-    title: 'Curado y Entrega',
-    description: 'Tiempo de curado bajo lámparas IR y revisión final antes de la entrega al cliente.',
-    date: 'Paso 5',
-    status: 'upcoming',
-  },
-]
+import { useTranslation } from 'react-i18next'
 
 const ProcessCard = ({ step, index, totalSteps, scrollProgress }) => {
   const isEven = index % 2 === 0
@@ -105,6 +68,7 @@ const ProcessCard = ({ step, index, totalSteps, scrollProgress }) => {
 }
 
 const Roadmap = () => {
+  const { t } = useTranslation()
   const containerRef = useRef(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -122,13 +86,51 @@ const Roadmap = () => {
     return () => unsubscribe()
   }, [scrollYProgress])
 
+  const processSteps = [
+    {
+      id: '0',
+      title: t('roadmap.steps.initial_evaluation.title'),
+      description: t('roadmap.steps.initial_evaluation.description'),
+      date: t('roadmap.steps.initial_evaluation.step_label'),
+      status: 'done',
+    },
+    {
+      id: '1',
+      title: t('roadmap.steps.decontamination.title'),
+      description: t('roadmap.steps.decontamination.description'),
+      date: t('roadmap.steps.decontamination.step_label'),
+      status: 'done',
+    },
+    {
+      id: '2',
+      title: t('roadmap.steps.paint_correction.title'),
+      description: t('roadmap.steps.paint_correction.description'),
+      date: t('roadmap.steps.paint_correction.step_label'),
+      status: 'current',
+    },
+    {
+      id: '3',
+      title: t('roadmap.steps.ceramic_protection.title'),
+      description: t('roadmap.steps.ceramic_protection.description'),
+      date: t('roadmap.steps.ceramic_protection.step_label'),
+      status: 'upcoming',
+    },
+    {
+      id: '4',
+      title: t('roadmap.steps.curing_delivery.title'),
+      description: t('roadmap.steps.curing_delivery.description'),
+      date: t('roadmap.steps.curing_delivery.step_label'),
+      status: 'upcoming',
+    },
+  ]
+
   return (
     <section ref={containerRef} id="roadmap" className="py-32 bg-background relative overflow-hidden">
       <div className="container relative z-10">
         <div className="text-center mb-20">
-          <span className="text-accent font-medium tracking-widest uppercase text-sm">Nuestro Método</span>
+          <span className="text-accent font-medium tracking-widest uppercase text-sm">{t('roadmap.our_method')}</span>
           <h2 className="text-5xl md:text-6xl font-display font-bold text-white mt-4 mb-6">
-            Proceso de Transformación
+            {t('roadmap.transformation_process')}
           </h2>
         </div>
 

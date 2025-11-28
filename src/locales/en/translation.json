@@ -1,0 +1,436 @@
+{
+    "header": {
+        "home": "Home",
+        "contact": "Contact",
+        "pricing": "Pricing",
+        "process": "Process",
+        "memberships": "Memberships",
+        "personal": "Services",
+        "lets_talk": "Let's Talk",
+        "login": "Log In",
+        "signup": "Sign Up"
+    },
+    "hero": {
+        "quality_guaranteed": "Quality Guaranteed",
+        "title_part1": "Premium",
+        "title_part2": "Automotive",
+        "title_part3": "Care",
+        "subtitle": "We transform your vehicle with meticulous attention to detail and world-class products.",
+        "cta_booking": "Book Appointment",
+        "cta_services": "View Services"
+    },
+    "booking": {
+        "vehicle_types": {
+            "car": {
+                "name": "Car",
+                "description": "Sedan, Hatchback, Coupe"
+            },
+            "suv": {
+                "name": "SUV / Truck",
+                "description": "SUV, 4x4, Pick-up"
+            },
+            "motorcycle": {
+                "name": "Motorcycle",
+                "description": "All types of bikes"
+            }
+        },
+        "services": {
+            "basic": {
+                "name": "Basic Wash",
+                "description": "Basic exterior and interior cleaning",
+                "features": [
+                    "Exterior Wash",
+                    "Vacuuming",
+                    "Dashboard Cleaning"
+                ]
+            },
+            "premium": {
+                "name": "Premium Wash",
+                "description": "Deep detailing with wax",
+                "features": [
+                    "All from Basic",
+                    "Decontamination",
+                    "Carnauba Wax",
+                    "Plastic Hydration"
+                ]
+            },
+            "ceramic": {
+                "name": "Ceramic Coating",
+                "description": "Long-lasting ceramic protection",
+                "features": [
+                    "Paint Correction",
+                    "9H Coating",
+                    "2 Year Warranty"
+                ]
+            },
+            "interior": {
+                "name": "Interior Detailing",
+                "description": "Complete interior restoration",
+                "features": [
+                    "Upholstery Cleaning",
+                    "Steam",
+                    "Disinfection",
+                    "Leather Hydration"
+                ]
+            }
+        },
+        "steps": {
+            "vehicle": "Vehicle",
+            "service": "Service",
+            "details": "Details",
+            "date": "Date",
+            "confirm": "Confirm"
+        },
+        "select_vehicle": "Select your Vehicle",
+        "select_service": "Select a Service",
+        "your_details": "Your Details",
+        "full_name": "Full Name",
+        "email": "Email Address",
+        "phone": "Phone",
+        "next": "Next",
+        "back": "Back",
+        "date_time": "Date and Time",
+        "select_date": "Select a Date",
+        "select_time": "Select a Time",
+        "selection": "Your Selection",
+        "view_summary": "View Summary",
+        "confirm_booking": "Confirm Booking",
+        "vehicle": "Vehicle",
+        "plate": "Plate",
+        "service": "Service",
+        "change": "Change",
+        "confirmed_title": "Booking Confirmed!",
+        "confirmed_message": "We have sent your booking details to",
+        "back_home": "Back to Home",
+        "time_label": "Time",
+        "create_error": "Error creating booking. Please try again."
+    },
+    "auth": {
+        "mail": "example@mail.com",
+        "welcome": "Welcome",
+        "login_subtitle": "Log in to your account to manage your services",
+        "email": "Email",
+        "password": "Password",
+        "confirm_password": "Confirm Password",
+        "remember_me": "Remember me",
+        "forgot_password": "Forgot your password?",
+        "login_button": "Log In",
+        "no_account": "Don't have an account?",
+        "register_here": "Sign up",
+        "create_account": "Create Account",
+        "signup_subtitle": "Join us for a premium experience",
+        "full_name": "Full Name",
+        "register_button": "Sign Up",
+        "already_have_account": "Already have an account?",
+        "login_here": "Log in",
+        "welcome_modal_title": "Welcome!",
+        "welcome_modal_message": "Your account has been successfully created. We have sent a confirmation email with your credentials.",
+        "go_to_login": "Go to Login",
+        "errors": {
+            "required": "Complete this field",
+            "invalid_email": "Enter a valid email",
+            "password_mismatch": "Passwords do not match",
+            "login_failed": "Incorrect email or password",
+            "password_length": "Password must be at least 6 characters"
+        },
+        "forgot_password_title": "Recover Password",
+        "forgot_password_subtitle": "Enter your email to receive a recovery link",
+        "email_sent_title": "Email sent!",
+        "email_sent_message": "Check your inbox to reset your password.",
+        "send_link_button": "Send Link",
+        "remembered_password": "Remembered your password?",
+        "error_sending_email": "There was an error sending the email. Please try again.",
+        "new_password_title": "New Password",
+        "new_password_subtitle": "Enter your new password",
+        "update_password_button": "Update Password",
+        "updating": "Updating...",
+        "password_updated_title": "Password Updated!",
+        "redirecting_login": "Redirecting to login...",
+        "redirecting_login_message": "Redirecting to login..."
+    },
+    "dashboard": {
+        "title": "My Account",
+        "welcome": "Welcome",
+        "logout": "Log Out",
+        "my_vehicles": "My Vehicles",
+        "add_vehicle": "Add Vehicle",
+        "no_vehicles": "You have no registered vehicles",
+        "add_vehicle_hint": "Add a vehicle to view booking history",
+        "delete_vehicle_confirm": "Are you sure you want to delete vehicle {{plate}}?",
+        "delete_error": "Error deleting vehicle",
+        "service_history": "Service History",
+        "new_booking": "New Booking",
+        "no_bookings": "You have no bookings",
+        "make_booking": "Make a Booking",
+        "cancel_booking": "Cancel",
+        "cancel_confirm_title": "Cancel Booking?",
+        "cancel_confirm_message": "Are you sure you want to cancel this booking? This action cannot be undone.",
+        "keep_booking": "No, keep it",
+        "confirm_cancel": "Yes, cancel",
+        "cancel_error": "Error cancelling booking",
+        "primary": "Primary",
+        "remove": "Remove vehicle",
+        "vehicle_types": {
+            "car": "Car",
+            "suv": "SUV / Truck",
+            "motorcycle": "Motorcycle"
+        },
+        "status": {
+            "pending": "Pending",
+            "confirmed": "Confirmed",
+            "in_progress": "In Progress",
+            "completed": "Completed",
+            "cancelled": "Cancelled"
+        },
+        "add_vehicle_modal": {
+            "title": "Add Vehicle",
+            "type_label": "Vehicle Type",
+            "plate_label": "Plate",
+            "nickname_label": "Nickname (optional)",
+            "nickname_placeholder": "My car",
+            "brand_label": "Brand (optional)",
+            "model_label": "Model (optional)",
+            "plate_error": "Invalid plate format",
+            "plate_exists_error": "This plate is already registered",
+            "plate_taken_error": "This plate is already registered by another user",
+            "adding": "Adding...",
+            "add_button": "Add Vehicle"
+        }
+    },
+    "benefits": {
+        "why_choose_us": "Why choose us?",
+        "title": "Excellence in every detail",
+        "subtitle": "We are not a conventional car wash. We are a detailing studio dedicated to perfection and automotive preservation.",
+        "items": {
+            "premium_quality": {
+                "title": "Premium Quality",
+                "description": "Top-of-the-line products and professional techniques that guarantee exceptional results."
+            },
+            "lasting_protection": {
+                "title": "Lasting Protection",
+                "description": "Advanced ceramic treatments that protect your investment for years, not weeks."
+            },
+            "advanced_technology": {
+                "title": "Advanced Technology",
+                "description": "State-of-the-art equipment for a finish without swirls or holograms."
+            },
+            "attention_to_detail": {
+                "title": "Attention to Detail",
+                "description": "We obsess over every corner of your vehicle, where others don't look."
+            }
+        }
+    },
+    "collaboration": {
+        "title_part1": "We work with the best",
+        "title_part2": "brands",
+        "items": {
+            "premium_products": {
+                "title": "Premium Products",
+                "description": "We work exclusively with the best international detailing product brands."
+            },
+            "professional_equipment": {
+                "title": "Professional Equipment"
+            },
+            "international_certifications": {
+                "title": "International Certifications"
+            }
+        },
+        "cta": "Book your appointment"
+    },
+    "contact_section": {
+        "address": {
+            "line1": "Carrera 15#57-11",
+            "line2": "Dosquebradas, Risaralda",
+            "country": "Colombia"
+        },
+        "business": "Business",
+        "general_enquiries": "General Enquiries",
+        "newsletter": {
+            "title": "Get exclusive offers and\nservices",
+            "placeholder": "Your email",
+            "error_empty": "Please enter your email",
+            "error_invalid": "Please enter a valid email",
+            "success": "Thanks for subscribing!",
+            "aria_label": "Send newsletter form button"
+        },
+        "footer": {
+            "copyright": "©2025 Ta' To' Clean",
+            "labs": "R&D: labs.tatotoclean.com",
+            "made_by": "Made by Johan & Cursor with",
+            "aria_label_scroll": "Scroll to top"
+        }
+    },
+    "flavor_slider": {
+        "recommended": "Recommended",
+        "from": "From",
+        "book": "Book",
+        "services": {
+            "premium_wash": {
+                "name": "Premium Wash",
+                "description": "Deep detailing with wax",
+                "features": [
+                    "All from Basic",
+                    "Decontamination",
+                    "Carnauba Wax",
+                    "Plastic Hydration"
+                ]
+            },
+            "ceramic_coating": {
+                "name": "Ceramic Coating",
+                "description": "Long-lasting ceramic protection",
+                "features": [
+                    "Paint Correction",
+                    "9H Coating",
+                    "2 Year Warranty"
+                ]
+            },
+            "paint_correction": {
+                "name": "Paint Correction",
+                "description": "Gloss restoration and defect removal",
+                "features": [
+                    "Multi-stage polishing",
+                    "Swirl removal",
+                    "Mirror finish"
+                ]
+            },
+            "interior_detailing": {
+                "name": "Interior Detailing",
+                "description": "Complete interior restoration",
+                "features": [
+                    "Upholstery Cleaning",
+                    "Steam",
+                    "Disinfection",
+                    "Leather Hydration"
+                ]
+            },
+            "basic_wash": {
+                "name": "Basic Wash",
+                "description": "Basic exterior and interior cleaning",
+                "features": [
+                    "Exterior Wash",
+                    "Vacuuming",
+                    "Dashboard Cleaning"
+                ]
+            }
+        }
+    },
+    "flavor_title": {
+        "we_offer": "We offer 6",
+        "services": "services",
+        "premium_detailing": "premium detailing"
+    },
+    "roadmap": {
+        "our_method": "Our Method",
+        "transformation_process": "Transformation Process",
+        "steps": {
+            "initial_evaluation": {
+                "title": "Initial Evaluation",
+                "description": "Detailed vehicle inspection to identify imperfections and determine the best treatment.",
+                "step_label": "Step 1"
+            },
+            "decontamination": {
+                "title": "Decontamination",
+                "description": "Deep chemical and mechanical cleaning to remove contaminants adhered to the paint.",
+                "step_label": "Step 2"
+            },
+            "paint_correction": {
+                "title": "Paint Correction",
+                "description": "Multi-stage polishing process to remove scratches, water marks, and restore shine.",
+                "step_label": "Step 3"
+            },
+            "ceramic_protection": {
+                "title": "Ceramic Protection",
+                "description": "Application of ceramic coating to protect the paint and facilitate future cleaning.",
+                "step_label": "Step 4"
+            },
+            "curing_delivery": {
+                "title": "Curing and Delivery",
+                "description": "Curing time under IR lamps and final review before delivery to the customer.",
+                "step_label": "Step 5"
+            }
+        }
+    },
+    "vehicle_plate_selector": {
+        "label": "Vehicle Plate",
+        "use_saved": "Use saved vehicle",
+        "invalid_format": "Invalid plate format for this vehicle",
+        "add_hint": "💡 Add your vehicles in the dashboard to select them quickly",
+        "select_vehicle": "Select your Vehicle",
+        "nickname_label": "Nickname (optional)",
+        "brand_label": "Brand (optional)",
+        "model_label": "Model (optional)",
+        "plate_error": "Invalid plate format",
+        "plate_exists_error": "This plate is already registered",
+        "plate_taken_error": "This plate is already registered by another user",
+        "adding": "Adding...",
+        "add_button": "Add Vehicle"
+    },
+    "common": {
+        "loading": "Loading...",
+        "months": [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+        ],
+        "days_short": [
+            "M",
+            "T",
+            "W",
+            "T",
+            "F",
+            "S",
+            "S"
+        ]
+    },
+    "pricing": {
+        "exclusive_plans": "Exclusive Plans",
+        "memberships": "Memberships",
+        "subtitle": "Choose the perfect plan for your vehicle",
+        "most_popular": "Most Popular",
+        "choose_plan": "Choose Plan",
+        "plans": {
+            "basic": {
+                "name": "Basic",
+                "description": "Essential maintenance for your vehicle",
+                "features": [
+                    "Detailed exterior wash",
+                    "Tire and rim cleaning",
+                    "Basic interior vacuum",
+                    "Glass cleaning",
+                    "Premium air freshener"
+                ]
+            },
+            "premium": {
+                "name": "Premium",
+                "description": "The perfect balance between care and protection",
+                "features": [
+                    "Everything in Basic",
+                    "Paint decontamination",
+                    "Synthetic wax application",
+                    "Exterior plastic hydration",
+                    "Deep upholstery cleaning"
+                ]
+            },
+            "elite": {
+                "name": "Elite",
+                "description": "The ultimate expression of detailing",
+                "features": [
+                    "Everything in Premium",
+                    "Paint correction (1 step)",
+                    "Ceramic sealant (6 months)",
+                    "Engine detailing",
+                    "Fabric waterproofing"
+                ]
+            }
+        }
+    }
+}

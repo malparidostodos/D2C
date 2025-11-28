@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import { Link, useNavigate } from 'react-router-dom'
-import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X } from 'lucide-react'
+import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle } from 'lucide-react'
 import AnimatedButton from './AnimatedButton'
 import Tooltip from './Tooltip'
+import { useTranslation } from 'react-i18next'
 
 const UserDashboard = () => {
+    const { t, i18n } = useTranslation()
     const navigate = useNavigate()
     const [user, setUser] = useState(null)
     const [vehicles, setVehicles] = useState([])
@@ -16,6 +18,11 @@ const UserDashboard = () => {
     const [showCancelModal, setShowCancelModal] = useState(false)
     const [bookingToCancel, setBookingToCancel] = useState(null)
 
+    const getLocalizedPath = (path) => {
+        const currentLang = i18n.language
+        return currentLang === 'en' ? `/en${path}` : path
+    }
+
     useEffect(() => {
         checkUser()
     }, [])
@@ -23,7 +30,7 @@ const UserDashboard = () => {
     const checkUser = async () => {
         const { data: { session } } = await supabase.auth.getSession()
         if (!session) {
-            navigate('/login')
+            navigate(getLocalizedPath('/login'))
             return
         }
         setUser(session.user)
@@ -76,11 +83,11 @@ const UserDashboard = () => {
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
-        navigate('/')
+        navigate(getLocalizedPath('/'))
     }
 
     const handleDeleteVehicle = async (vehicleId, plate) => {
-        if (!confirm(`¿Seguro que quieres eliminar el vehículo ${plate}?`)) {
+        if (!confirm(t('dashboard.delete_vehicle_confirm', { plate }))) {
             return
         }
 
@@ -90,7 +97,7 @@ const UserDashboard = () => {
             .eq('id', vehicleId)
 
         if (error) {
-            alert('Error al eliminar vehículo: ' + error.message)
+            alert(t('dashboard.delete_error') + ': ' + error.message)
         } else {
             loadUserData() // Recargar datos
         }
@@ -110,7 +117,7 @@ const UserDashboard = () => {
             .eq('id', bookingToCancel)
 
         if (error) {
-            alert('Error al cancelar la reserva: ' + error.message)
+            alert(t('dashboard.cancel_error') + ': ' + error.message)
         } else {
             loadUserData()
         }
@@ -118,12 +125,12 @@ const UserDashboard = () => {
         setBookingToCancel(null)
     }
 
-    const getVehicleIcon = (type) => {
+    const getVehicleImage = (type) => {
         switch (type) {
-            case 'car': return Car
-            case 'suv': return Truck
-            case 'motorcycle': return Bike
-            default: return Car
+            case 'car': return '/images/vehiculos/sedan.png'
+            case 'suv': return '/images/vehiculos/suv.png'
+            case 'motorcycle': return '/images/vehiculos/bike.png'
+            default: return '/images/vehiculos/sedan.png'
         }
     }
 
@@ -139,27 +146,20 @@ const UserDashboard = () => {
     }
 
     const getStatusText = (status) => {
-        const statusMap = {
-            pending: 'Pendiente',
-            confirmed: 'Confirmada',
-            in_progress: 'En Proceso',
-            completed: 'Completada',
-            cancelled: 'Cancelada'
-        }
-        return statusMap[status] || status
+        return t(`dashboard.status.${status}`)
     }
 
     if (loading) {
         return (
             <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-                <div className="text-white text-xl">Cargando...</div>
+                <div className="text-white text-xl">{t('common.loading')}</div>
             </div>
         )
     }
 
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
-            <Link to="/" className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
+            <Link to={getLocalizedPath('/')} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
                 Ta' <span className="text-accent">To'</span> Clean
             </Link>
 
@@ -168,7 +168,7 @@ const UserDashboard = () => {
                 className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50"
             >
                 <LogOut size={18} />
-                <span className="hidden md:inline">Cerrar Sesión</span>
+                <span className="hidden md:inline">{t('dashboard.logout')}</span>
             </button>
 
             <div className="max-w-6xl mx-auto">
@@ -179,9 +179,9 @@ const UserDashboard = () => {
                     className="mb-12"
                 >
                     <h1 className="text-4xl md:text-5xl font-display font-bold text-white mb-2">
-                        Mi Cuenta
+                        {t('dashboard.title')}
                     </h1>
-                    <p className="text-white/60">Bienvenido, {user?.email}</p>
+                    <p className="text-white/60">{t('dashboard.welcome')}, {user?.email}</p>
                 </motion.div>
 
                 {/* Vehículos */}
@@ -192,32 +192,31 @@ const UserDashboard = () => {
                     className="mb-12"
                 >
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-white">Mis Vehículos</h2>
+                        <h2 className="text-2xl font-bold text-white">{t('dashboard.my_vehicles')}</h2>
                         <button
                             onClick={() => setShowAddVehicle(true)}
                             className="flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors font-medium"
                         >
                             <Plus size={18} />
-                            Agregar Vehículo
+                            {t('dashboard.add_vehicle')}
                         </button>
                     </div>
 
                     {vehicles.length === 0 ? (
                         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
-                            <p className="text-white/60 mb-4">No tienes vehículos registrados</p>
-                            <p className="text-white/40 text-sm">Agrega un vehículo para ver el historial de reservas</p>
+                            <p className="text-white/60 mb-4">{t('dashboard.no_vehicles')}</p>
+                            <p className="text-white/40 text-sm">{t('dashboard.add_vehicle_hint')}</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {vehicles.map((vehicle) => {
-                                const Icon = getVehicleIcon(vehicle.vehicle_type)
                                 return (
                                     <div
                                         key={vehicle.id}
                                         className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors relative group"
                                     >
                                         {/* Botón de eliminar */}
-                                        <Tooltip content="Eliminar vehículo" position="left">
+                                        <Tooltip content={t('dashboard.remove')} position="left">
                                             <button
                                                 onClick={() => handleDeleteVehicle(vehicle.id, vehicle.plate)}
                                                 className="absolute top-4 right-4 p-2 bg-red-500/10 hover:bg-red-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all"
@@ -227,12 +226,12 @@ const UserDashboard = () => {
                                         </Tooltip>
 
                                         <div className="flex items-start justify-between mb-4">
-                                            <div className="p-3 bg-white/10 rounded-full">
-                                                <Icon size={24} className="text-white" />
+                                            <div className="p-2">
+                                                <img src={getVehicleImage(vehicle.vehicle_type)} alt={vehicle.vehicle_type} className="w-16 h-10 object-contain" />
                                             </div>
                                             {vehicle.is_primary && (
                                                 <span className="text-xs bg-blue-500/20 text-blue-500 px-2 py-1 rounded-full">
-                                                    Principal
+                                                    {t('dashboard.primary')}
                                                 </span>
                                             )}
                                         </div>
@@ -259,82 +258,84 @@ const UserDashboard = () => {
                     transition={{ delay: 0.2 }}
                 >
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-white">Historial de Servicios</h2>
-                        <Link to="/reserva">
+                        <h2 className="text-2xl font-bold text-white">{t('dashboard.service_history')}</h2>
+                        <Link to={getLocalizedPath('/reserva')}>
                             <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors font-medium text-sm">
                                 <Plus size={16} />
-                                Nueva Reserva
+                                {t('dashboard.new_booking')}
                             </button>
                         </Link>
                     </div>
 
-                    {bookings.length === 0 ? (
-                        <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
-                            <p className="text-white/60 mb-4">No tienes reservas</p>
-                            <AnimatedButton href="/reserva" variant="white">
-                                Hacer una Reserva
-                            </AnimatedButton>
-                        </div>
-                    ) : (
-                        <div className="space-y-4">
-                            {bookings.map((booking) => (
-                                <div
-                                    key={booking.id}
-                                    className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-colors"
-                                >
-                                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                                        <div className="flex-1">
-                                            <div className="flex items-center gap-3 mb-2">
-                                                <h3 className="text-xl font-bold text-white">
-                                                    {booking.service?.name || 'Servicio'}
-                                                </h3>
-                                                <span className={`text-xs px-3 py-1 rounded-full border ${getStatusColor(booking.status)}`}>
-                                                    {getStatusText(booking.status)}
-                                                </span>
+                    {
+                        bookings.length === 0 ? (
+                            <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
+                                <p className="text-white/60 mb-4">{t('dashboard.no_bookings')}</p>
+                                <AnimatedButton href={getLocalizedPath('/reserva')} variant="white">
+                                    {t('dashboard.make_booking')}
+                                </AnimatedButton>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                {bookings.map((booking) => (
+                                    <div
+                                        key={booking.id}
+                                        className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-colors"
+                                    >
+                                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <h3 className="text-xl font-bold text-white">
+                                                        {booking.service?.name || 'Servicio'}
+                                                    </h3>
+                                                    <span className={`text-xs px-3 py-1 rounded-full border ${getStatusColor(booking.status)}`}>
+                                                        {getStatusText(booking.status)}
+                                                    </span>
+                                                </div>
+                                                <p className="text-white/60 text-sm mb-3">
+                                                    {booking.service?.description}
+                                                </p>
+                                                <div className="flex flex-wrap gap-4 text-sm text-white/40">
+                                                    <div className="flex items-center gap-2">
+                                                        <Car size={16} />
+                                                        <span>{booking.vehicle_plate}</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <Calendar size={16} />
+                                                        <span>{new Date(booking.booking_date).toLocaleDateString('es-CO', { dateStyle: 'medium' })}</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <Clock size={16} />
+                                                        <span>{booking.booking_time}</span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <p className="text-white/60 text-sm mb-3">
-                                                {booking.service?.description}
-                                            </p>
-                                            <div className="flex flex-wrap gap-4 text-sm text-white/40">
-                                                <div className="flex items-center gap-2">
-                                                    <Car size={16} />
-                                                    <span>{booking.vehicle_plate}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <Calendar size={16} />
-                                                    <span>{new Date(booking.booking_date).toLocaleDateString('es-CO', { dateStyle: 'medium' })}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <Clock size={16} />
-                                                    <span>{booking.booking_time}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-2xl font-bold text-white">
-                                                ${booking.total_price?.toLocaleString()}
-                                            </p>
+                                            <div className="text-right">
+                                                <p className="text-2xl font-bold text-white">
+                                                    ${booking.total_price?.toLocaleString()}
+                                                </p>
 
-                                            {(booking.status === 'pending' || booking.status === 'confirmed') && (
-                                                <button
-                                                    onClick={() => handleCancelBooking(booking.id)}
-                                                    className="mt-2 text-sm text-red-500 hover:text-red-400 transition-colors flex items-center gap-1 ml-auto"
-                                                >
-                                                    <X size={14} />
-                                                    Cancelar
-                                                </button>
-                                            )}
+                                                {(booking.status === 'pending' || booking.status === 'confirmed') && (
+                                                    <button
+                                                        onClick={() => handleCancelBooking(booking.id)}
+                                                        className="mt-2 text-sm text-red-500 hover:text-red-400 transition-colors flex items-center gap-1 ml-auto"
+                                                    >
+                                                        <X size={14} />
+                                                        {t('dashboard.cancel_booking')}
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </motion.section>
-            </div>
+                                ))}
+                            </div>
+                        )
+                    }
+                </motion.section >
+            </div >
 
             {/* Modal Agregar Vehículo */}
-            <AddVehicleModal
+            < AddVehicleModal
                 isOpen={showAddVehicle}
                 onClose={() => setShowAddVehicle(false)}
                 onSuccess={() => {
@@ -351,15 +352,17 @@ const UserDashboard = () => {
                     setBookingToCancel(null)
                 }}
                 onConfirm={confirmCancelBooking}
-                title="¿Cancelar Reserva?"
-                message="¿Estás seguro de que quieres cancelar esta reserva? Esta acción no se puede deshacer."
+                title={t('dashboard.cancel_confirm_title')}
+                message={t('dashboard.cancel_confirm_message')}
+                cancelText={t('dashboard.keep_booking')}
+                confirmText={t('dashboard.confirm_cancel')}
             />
-        </div>
+        </div >
     )
 }
 
 // Modal de Confirmación Genérico
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message }) => {
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, cancelText, confirmText }) => {
     if (!isOpen) return null
 
     return (
@@ -382,13 +385,13 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message }) => {
                         onClick={onClose}
                         className="flex-1 px-4 py-3 rounded-xl bg-white/5 text-white hover:bg-white/10 transition-colors font-medium"
                     >
-                        No, mantener
+                        {cancelText}
                     </button>
                     <button
                         onClick={onConfirm}
                         className="flex-1 px-4 py-3 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors font-bold"
                     >
-                        Sí, cancelar
+                        {confirmText}
                     </button>
                 </div>
             </motion.div>
@@ -398,6 +401,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message }) => {
 
 // Modal para agregar vehículo
 const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
+    const { t } = useTranslation()
     const [plate, setPlate] = useState('')
     const [vehicleType, setVehicleType] = useState('car')
     const [brand, setBrand] = useState('')
@@ -407,9 +411,9 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
     const [error, setError] = useState('')
 
     const vehicleTypes = [
-        { id: 'car', name: 'Automóvil', icon: Car },
-        { id: 'suv', name: 'SUV / Camioneta', icon: Truck },
-        { id: 'motorcycle', name: 'Motocicleta', icon: Bike },
+        { id: 'car', name: t('dashboard.vehicle_types.car'), image: '/images/vehiculos/sedan.png' },
+        { id: 'suv', name: t('dashboard.vehicle_types.suv'), image: '/images/vehiculos/suv.png' },
+        { id: 'motorcycle', name: t('dashboard.vehicle_types.motorcycle'), image: '/images/vehiculos/bike.png' },
     ]
 
     const validatePlate = (plate, typeId) => {
@@ -434,7 +438,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
         e.preventDefault()
 
         if (!validatePlate(plate, vehicleType)) {
-            setError('Formato de placa inválido')
+            setError(t('dashboard.add_vehicle_modal.plate_error'))
             return
         }
 
@@ -455,7 +459,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
             const bookingEmail = existingBookings[0].client_email
             if (bookingEmail !== user.email) {
                 setLoading(false)
-                setError(`Esta placa ya está registrada por otro usuario (${bookingEmail.slice(0, 3)}***@${bookingEmail.split('@')[1]})`)
+                setError(t('dashboard.add_vehicle_modal.plate_taken_error'))
                 return
             }
         }
@@ -476,7 +480,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
 
         if (insertError) {
             if (insertError.code === '23505') {
-                setError('Esta placa ya está registrada')
+                setError(t('dashboard.add_vehicle_modal.plate_exists_error'))
             } else {
                 setError(insertError.message)
             }
@@ -496,7 +500,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                 className="bg-[#111] border border-white/10 rounded-3xl p-8 max-w-md w-full"
             >
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold text-white">Agregar Vehículo</h2>
+                    <h2 className="text-2xl font-bold text-white">{t('dashboard.add_vehicle_modal.title')}</h2>
                     <button
                         onClick={onClose}
                         className="p-2 hover:bg-white/10 rounded-full transition-colors"
@@ -508,10 +512,9 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Tipo de vehículo */}
                     <div>
-                        <label className="block text-white/60 text-sm mb-2">Tipo de Vehículo</label>
+                        <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.type_label')}</label>
                         <div className="grid grid-cols-3 gap-2">
                             {vehicleTypes.map((type) => {
-                                const Icon = type.icon
                                 return (
                                     <button
                                         key={type.id}
@@ -525,7 +528,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                                             : 'bg-white/5 text-white border-white/10 hover:bg-white/10'
                                             }`}
                                     >
-                                        <Icon size={20} />
+                                        <img src={type.image} alt={type.name} className="w-12 h-8 object-contain" />
                                         <span className="text-xs">{type.name.split(' ')[0]}</span>
                                     </button>
                                 )
@@ -536,7 +539,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                     {/* Placa */}
                     <div>
                         <label className="block text-white/60 text-sm mb-2">
-                            Placa
+                            {t('dashboard.add_vehicle_modal.plate_label')}
                             <span className="text-xs ml-2">
                                 ({vehicleType === 'motorcycle' ? 'AAA-00 o AAA-00A' : 'AAA-000'})
                             </span>
@@ -554,20 +557,20 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
 
                     {/* Nickname */}
                     <div>
-                        <label className="block text-white/60 text-sm mb-2">Apodo (opcional)</label>
+                        <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.nickname_label')}</label>
                         <input
                             type="text"
                             value={nickname}
                             onChange={(e) => setNickname(e.target.value)}
                             className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-white/50 transition-colors"
-                            placeholder="Mi auto"
+                            placeholder={t('dashboard.add_vehicle_modal.nickname_placeholder')}
                         />
                     </div>
 
                     {/* Marca y Modelo */}
                     <div className="grid grid-cols-2 gap-3">
                         <div>
-                            <label className="block text-white/60 text-sm mb-2">Marca (opcional)</label>
+                            <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.brand_label')}</label>
                             <input
                                 type="text"
                                 value={brand}
@@ -577,7 +580,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                             />
                         </div>
                         <div>
-                            <label className="block text-white/60 text-sm mb-2">Modelo (opcional)</label>
+                            <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.model_label')}</label>
                             <input
                                 type="text"
                                 value={model}
@@ -597,7 +600,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                         disabled={loading || !validatePlate(plate, vehicleType)}
                         className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? 'Agregando...' : 'Agregar Vehículo'}
+                        {loading ? t('dashboard.add_vehicle_modal.adding') : t('dashboard.add_vehicle_modal.add_button')}
                     </button>
                 </form>
             </motion.div>

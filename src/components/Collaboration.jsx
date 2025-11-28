@@ -1,9 +1,11 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import AnimatedButton from './AnimatedButton'
+import { useTranslation } from 'react-i18next'
 
 const Collaboration = () => {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const scrollToSection = (e, sectionId, route) => {
     e.preventDefault()
@@ -30,9 +32,9 @@ const Collaboration = () => {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-8 select-none text-white">
-              Trabajamos con las mejores{' '}
+              {t('collaboration.title_part1')}{' '}
               <span className="relative inline-block">
-                marcas
+                {t('collaboration.title_part2')}
                 <svg className="absolute -bottom-2 left-0 w-full h-3" viewBox="0 0 200 20" preserveAspectRatio="none">
                   <path d="M0,10 Q50,0 100,10 T200,10" stroke="currentColor" strokeWidth="2" fill="none" className="text-white/30" />
                 </svg>
@@ -47,8 +49,8 @@ const Collaboration = () => {
                   </svg>
                 </div>
                 <div>
-                  <h6 className="font-semibold mb-1 select-none text-white">Productos Premium</h6>
-                  <p className="text-white/70 text-sm select-none">Trabajamos exclusivamente con las mejores marcas internacionales de productos para detailing.</p>
+                  <h6 className="font-semibold mb-1 select-none text-white">{t('collaboration.items.premium_products.title')}</h6>
+                  <p className="text-white/70 text-sm select-none">{t('collaboration.items.premium_products.description')}</p>
                 </div>
               </li>
               <li className="flex items-start gap-4">
@@ -58,7 +60,7 @@ const Collaboration = () => {
                   </svg>
                 </div>
                 <div>
-                  <h6 className="font-semibold mb-1 select-none text-white">Equipamiento Profesional</h6>
+                  <h6 className="font-semibold mb-1 select-none text-white">{t('collaboration.items.professional_equipment.title')}</h6>
                 </div>
               </li>
               <li className="flex items-start gap-4">
@@ -68,7 +70,7 @@ const Collaboration = () => {
                   </svg>
                 </div>
                 <div>
-                  <h6 className="font-semibold mb-1 select-none text-white">Certificaciones Internacionales</h6>
+                  <h6 className="font-semibold mb-1 select-none text-white">{t('collaboration.items.international_certifications.title')}</h6>
                 </div>
               </li>
             </ul>
@@ -77,7 +79,7 @@ const Collaboration = () => {
               href="/contacto"
               onClick={(e) => scrollToSection(e, '#contacto', '/contacto')}
             >
-              Reserva tu cita
+              {t('collaboration.cta')}
             </AnimatedButton>
           </div>
 

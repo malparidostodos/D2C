@@ -4,11 +4,13 @@ import { ArrowLeft, Mail, Lock, User, AlertCircle, Eye, EyeOff, CheckCircle } fr
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import Modal from './ui/Modal'
+import { useTranslation } from 'react-i18next'
 
 import './JetonHeader.css'
 
 const SignUpPage = () => {
     const navigate = useNavigate()
+    const { t, i18n } = useTranslation()
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -20,6 +22,11 @@ const SignUpPage = () => {
     const [errors, setErrors] = useState({})
     const [touched, setTouched] = useState({})
 
+    const getLocalizedPath = (path) => {
+        const prefix = i18n.language === 'en' ? '/en' : ''
+        return `${prefix}${path}`
+    }
+
     const validateForm = (values = {}) => {
         const newErrors = {}
         const currentName = values.name !== undefined ? values.name : name
@@ -28,23 +35,23 @@ const SignUpPage = () => {
         const currentConfirmPassword = values.confirmPassword !== undefined ? values.confirmPassword : confirmPassword
 
         if (!currentName.trim()) {
-            newErrors.name = 'Completa este campo'
+            newErrors.name = t('auth.errors.required')
         }
 
         if (!currentEmail) {
-            newErrors.email = 'Completa este campo'
+            newErrors.email = t('auth.errors.required')
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currentEmail)) {
-            newErrors.email = 'Ingresa un correo válido'
+            newErrors.email = t('auth.errors.invalid_email')
         }
 
         if (!currentPassword) {
-            newErrors.password = 'Completa este campo'
+            newErrors.password = t('auth.errors.required')
         }
 
         if (!currentConfirmPassword) {
-            newErrors.confirmPassword = 'Completa este campo'
+            newErrors.confirmPassword = t('auth.errors.required')
         } else if (currentPassword !== currentConfirmPassword) {
-            newErrors.confirmPassword = 'Las contraseñas no coinciden'
+            newErrors.confirmPassword = t('auth.errors.password_mismatch')
         }
 
         setErrors(newErrors)
@@ -148,7 +155,7 @@ const SignUpPage = () => {
             <div className="_navbar">
                 <div className="nav-container">
                     <Link
-                        to="/"
+                        to={getLocalizedPath('/')}
                         className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
@@ -170,31 +177,31 @@ const SignUpPage = () => {
 
                     <div className="relative z-10">
                         <div className="text-center mb-8">
-                            <h1 className="text-3xl font-display font-bold text-white mb-2">Crear Cuenta</h1>
-                            <p className="text-white/60">Únete a nosotros para una experiencia premium</p>
+                            <h1 className="text-3xl font-display font-bold text-white mb-2">{t('auth.create_account')}</h1>
+                            <p className="text-white/60">{t('auth.signup_subtitle')}</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-                            {renderInput("Nombre Completo", name, setName, "name", "text", User, "Juan Pérez")}
-                            {renderInput("Email", email, setEmail, "email", "email", Mail, "ejemplo@correo.com")}
-                            {renderInput("Contraseña", password, setPassword, "password", "password", Lock, "••••••••", true, showPassword, setShowPassword)}
-                            {renderInput("Confirmar Contraseña", confirmPassword, setConfirmPassword, "confirmPassword", "password", Lock, "••••••••", true, showConfirmPassword, setShowConfirmPassword)}
+                            {renderInput(t('auth.full_name'), name, setName, "name", "text", User, "Juan Pérez")}
+                            {renderInput(t('auth.email'), email, setEmail, "email", "email", Mail, t('auth.mail'))}
+                            {renderInput(t('auth.password'), password, setPassword, "password", "password", Lock, "••••••••", true, showPassword, setShowPassword)}
+                            {renderInput(t('auth.confirm_password'), confirmPassword, setConfirmPassword, "confirmPassword", "password", Lock, "••••••••", true, showConfirmPassword, setShowConfirmPassword)}
 
                             <div className="pt-4">
                                 <button
                                     type="submit"
                                     className="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
                                 >
-                                    Registrarse
+                                    {t('auth.register_button')}
                                 </button>
                             </div>
                         </form>
 
                         <div className="mt-8 text-center">
                             <p className="text-white/60 text-sm">
-                                ¿Ya tienes una cuenta?{' '}
-                                <Link to="/login" className="text-white font-medium hover:underline">
-                                    Inicia sesión aquí
+                                {t('auth.already_have_account')}{' '}
+                                <Link to={getLocalizedPath('/login')} className="text-white font-medium hover:underline">
+                                    {t('auth.login_here')}
                                 </Link>
                             </p>
                         </div>
@@ -207,22 +214,22 @@ const SignUpPage = () => {
                 isOpen={showSuccessModal}
                 onClose={() => {
                     setShowSuccessModal(false)
-                    navigate('/login')
+                    navigate(getLocalizedPath('/login'))
                 }}
-                title="¡Bienvenido!"
+                title={t('auth.welcome_modal_title')}
             >
                 <div className="flex flex-col items-center text-center space-y-4">
                     <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 mb-2">
                         <CheckCircle size={32} />
                     </div>
                     <p className="text-white/80">
-                        Tu cuenta ha sido creada exitosamente. Hemos enviado un correo de confirmación con tus credenciales.
+                        {t('auth.welcome_modal_message')}
                     </p>
                     <button
-                        onClick={() => navigate('/login')}
+                        onClick={() => navigate(getLocalizedPath('/login'))}
                         className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-100 transition-colors mt-4"
                     >
-                        Ir a Iniciar Sesión
+                        {t('auth.go_to_login')}
                     </button>
                 </div>
             </Modal>

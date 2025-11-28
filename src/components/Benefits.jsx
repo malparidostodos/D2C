@@ -1,41 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Shield, Star, Zap, Clock, Award, Sparkles } from 'lucide-react'
-
-const benefits = [
-  {
-    id: '0',
-    title: 'Calidad Premium',
-    description: 'Productos de primera línea y técnicas profesionales que garantizan resultados excepcionales.',
-    icon: Star,
-    className: 'md:col-span-2',
-    image: 'https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800'
-  },
-  {
-    id: '1',
-    title: 'Protección Duradera',
-    description: 'Tratamientos cerámicos avanzados que protegen tu inversión por años, no semanas.',
-    icon: Shield,
-    className: 'md:col-span-1',
-    image: 'https://images.pexels.com/photos/6872596/pexels-photo-6872596.jpeg?auto=compress&cs=tinysrgb&w=800'
-  },
-  {
-    id: '2',
-    title: 'Tecnología Avanzada',
-    description: 'Equipamiento de última generación para un acabado sin swirls ni hologramas.',
-    icon: Zap,
-    className: 'md:col-span-1',
-    image: 'https://images.pexels.com/photos/4489734/pexels-photo-4489734.jpeg?auto=compress&cs=tinysrgb&w=800'
-  },
-  {
-    id: '3',
-    title: 'Atención al Detalle',
-    description: 'Nos obsesionamos con cada rincón de tu vehículo, donde otros no miran.',
-    icon: Sparkles,
-    className: 'md:col-span-2',
-    image: 'https://images.pexels.com/photos/627678/pexels-photo-627678.jpeg?auto=compress&cs=tinysrgb&w=800'
-  },
-]
+import { useTranslation } from 'react-i18next'
 
 const BenefitCard = ({ benefit }) => {
   return (
@@ -69,6 +35,43 @@ const BenefitCard = ({ benefit }) => {
 }
 
 const Benefits = () => {
+  const { t } = useTranslation()
+
+  const benefits = [
+    {
+      id: '0',
+      title: t('benefits.items.premium_quality.title'),
+      description: t('benefits.items.premium_quality.description'),
+      icon: Star,
+      className: 'md:col-span-2',
+      image: 'https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800'
+    },
+    {
+      id: '1',
+      title: t('benefits.items.lasting_protection.title'),
+      description: t('benefits.items.lasting_protection.description'),
+      icon: Shield,
+      className: 'md:col-span-1',
+      image: 'https://images.pexels.com/photos/6872596/pexels-photo-6872596.jpeg?auto=compress&cs=tinysrgb&w=800'
+    },
+    {
+      id: '2',
+      title: t('benefits.items.advanced_technology.title'),
+      description: t('benefits.items.advanced_technology.description'),
+      icon: Zap,
+      className: 'md:col-span-1',
+      image: 'https://images.pexels.com/photos/4489734/pexels-photo-4489734.jpeg?auto=compress&cs=tinysrgb&w=800'
+    },
+    {
+      id: '3',
+      title: t('benefits.items.attention_to_detail.title'),
+      description: t('benefits.items.attention_to_detail.description'),
+      icon: Sparkles,
+      className: 'md:col-span-2',
+      image: 'https://images.pexels.com/photos/627678/pexels-photo-627678.jpeg?auto=compress&cs=tinysrgb&w=800'
+    },
+  ]
+
   return (
     <section id="beneficios" className="py-32 bg-background relative">
       <div className="container">
@@ -79,12 +82,12 @@ const Benefits = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <span className="text-accent font-medium tracking-widest uppercase text-sm">¿Por qué elegirnos?</span>
+            <span className="text-accent font-medium tracking-widest uppercase text-sm">{t('benefits.why_choose_us')}</span>
             <h2 className="text-5xl md:text-6xl font-display font-bold text-white mt-4 mb-6 justify-center">
-              Excelencia en cada detalle
+              {t('benefits.title')}
             </h2>
             <p className="text-white/60 text-lg leading-relaxed">
-              No somos un lavadero de autos convencional. Somos un estudio de detailing dedicado a la perfección y la preservación automotriz.
+              {t('benefits.subtitle')}
             </p>
           </motion.div>
         </div>

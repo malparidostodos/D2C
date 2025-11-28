@@ -5,15 +5,18 @@ import AnimatedButton from './AnimatedButton'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import VehiclePlateSelector from './VehiclePlateSelector'
+import { useTranslation } from 'react-i18next'
 
 const CustomCalendar = ({ selectedDate, onSelect, availability = {} }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
     const [view, setView] = useState('days') // days, months, years
+    const { t, i18n } = useTranslation()
 
-    const months = [
+    const monthsData = t('common.months', { returnObjects: true });
+    const currentMonths = Array.isArray(monthsData) ? monthsData : [
         'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ]
+    ];
 
     const getDaysInMonth = (date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
@@ -94,6 +97,9 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {} }) => {
         return days
     }
 
+    const daysShortData = t('common.days_short', { returnObjects: true });
+    const daysShort = Array.isArray(daysShortData) ? daysShortData : ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+
     return (
         <div className="bg-[#111] p-6 rounded-3xl border border-white/10 w-full max-w-sm mx-auto">
             <div className="flex items-center justify-between mb-6">
@@ -101,14 +107,14 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {} }) => {
                     <ChevronLeft size={20} />
                 </button>
                 <span className="text-white font-bold capitalize">
-                    {months[currentDate.getMonth()]} {currentDate.getFullYear()}
+                    {currentMonths[currentDate.getMonth()]} {currentDate.getFullYear()}
                 </span>
                 <button onClick={handleNext} className="p-2 hover:bg-white/10 rounded-full text-white transition-colors">
                     <ChevronRight size={20} />
                 </button>
             </div>
             <div className="grid grid-cols-7 gap-1 mb-2">
-                {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(day => (
+                {daysShort.map(day => (
                     <div key={day} className="h-10 w-10 flex items-center justify-center text-white/40 text-xs font-medium">
                         {day}
                     </div>
@@ -129,6 +135,12 @@ const BookingPage = () => {
     const [direction, setDirection] = useState(0)
     const [isConfirmed, setIsConfirmed] = useState(false)
     const [availability, setAvailability] = useState({}) // { '2024-01-15': ['08:00', '09:00'] }
+    const { t, i18n } = useTranslation()
+
+    const getLocalizedPath = (path) => {
+        const prefix = i18n.language === 'en' ? '/en' : ''
+        return `${prefix}${path}`
+    }
 
     const [formData, setFormData] = useState({
         vehicleType: null,
@@ -212,39 +224,39 @@ const BookingPage = () => {
     }
 
     const vehicleTypes = [
-        { id: 'car', name: 'Automóvil', icon: Car, priceMultiplier: 1, description: 'Sedán, Hatchback, Coupé' },
-        { id: 'suv', name: 'SUV / Camioneta', icon: Truck, priceMultiplier: 1.2, description: 'SUV, 4x4, Pick-up' },
-        { id: 'motorcycle', name: 'Motocicleta', icon: Bike, priceMultiplier: 0.8, description: 'Todo tipo de motos' },
+        { id: 'car', name: t('booking.vehicle_types.car.name'), image: '/images/vehiculos/sedan.png', priceMultiplier: 1, description: t('booking.vehicle_types.car.description') },
+        { id: 'suv', name: t('booking.vehicle_types.suv.name'), image: '/images/vehiculos/suv.png', priceMultiplier: 1.2, description: t('booking.vehicle_types.suv.description') },
+        { id: 'motorcycle', name: t('booking.vehicle_types.motorcycle.name'), image: '/images/vehiculos/bike.png', priceMultiplier: 0.8, description: t('booking.vehicle_types.motorcycle.description') },
     ]
 
     const services = [
         {
             id: 'basic',
-            name: 'Lavado Básico',
+            name: t('booking.services.basic.name'),
             price: 50000,
-            description: 'Limpieza exterior e interior básica',
-            features: ['Lavado Exterior', 'Aspirado', 'Limpieza de Tablero']
+            description: t('booking.services.basic.description'),
+            features: t('booking.services.basic.features', { returnObjects: true })
         },
         {
             id: 'premium',
-            name: 'Lavado Premium',
+            name: t('booking.services.premium.name'),
             price: 120000,
-            description: 'Detallado profundo con cera',
-            features: ['Todo lo del Básico', 'Descontaminación', 'Cera de Carnauba', 'Hidratación de Plásticos']
+            description: t('booking.services.premium.description'),
+            features: t('booking.services.premium.features', { returnObjects: true })
         },
         {
             id: 'ceramic',
-            name: 'Ceramic Coating',
+            name: t('booking.services.ceramic.name'),
             price: 800000,
-            description: 'Protección cerámica de larga duración',
-            features: ['Corrección de Pintura', 'Recubrimiento 9H', 'Garantía 2 años']
+            description: t('booking.services.ceramic.description'),
+            features: t('booking.services.ceramic.features', { returnObjects: true })
         },
         {
             id: 'interior',
-            name: 'Detailing Interior',
+            name: t('booking.services.interior.name'),
             price: 250000,
-            description: 'Restauración completa del interior',
-            features: ['Limpieza de Tapicería', 'Vapor', 'Desinfección', 'Hidratación de Cuero']
+            description: t('booking.services.interior.description'),
+            features: t('booking.services.interior.features', { returnObjects: true })
         }
     ]
 
@@ -357,7 +369,7 @@ const BookingPage = () => {
     const formatDateLong = (dateString) => {
         if (!dateString) return ''
         const date = new Date(dateString + 'T00:00:00')
-        return new Intl.DateTimeFormat('es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(date)
+        return new Intl.DateTimeFormat(i18n.language === 'en' ? 'en-US' : 'es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(date)
     }
 
     const handleConfirm = async () => {
@@ -381,7 +393,7 @@ const BookingPage = () => {
 
         if (error) {
             console.error('Error creating booking:', error)
-            alert('Error al crear la reserva. Por favor intenta de nuevo.')
+            alert(t('booking.create_error'))
             return
         }
 
@@ -417,29 +429,29 @@ const BookingPage = () => {
                         <CheckCircle size={48} className="text-green-500" />
                     </div>
                     <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
-                        ¡Reserva Confirmada!
+                        {t('booking.confirmed_title')}
                     </h2>
                     <p className="text-white/60 mb-8 text-lg">
-                        Hemos enviado los detalles de tu reserva a <span className="text-white font-medium">{formData.clientInfo.email}</span>.
+                        {t('booking.confirmed_message')} <span className="text-white font-medium">{formData.clientInfo.email}</span>.
                     </p>
 
                     <div className="bg-white/5 rounded-2xl p-6 mb-8 text-left space-y-4">
                         <div className="flex justify-between">
-                            <span className="text-white/40">Fecha</span>
+                            <span className="text-white/40">{t('booking.steps.date')}</span>
                             <span className="text-white font-medium capitalize">{formatDateLong(formData.date)}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-white/40">Hora</span>
+                            <span className="text-white/40">{t('booking.time_label')}</span>
                             <span className="text-white font-medium">{formData.time}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-white/40">Servicio</span>
+                            <span className="text-white/40">{t('booking.service')}</span>
                             <span className="text-white font-medium">{formData.service?.name}</span>
                         </div>
                     </div>
 
-                    <AnimatedButton onClick={() => navigate('/')} variant="white">
-                        Volver al Inicio
+                    <AnimatedButton onClick={() => navigate(getLocalizedPath('/'))} variant="white">
+                        {t('booking.back_home')}
                     </AnimatedButton>
                 </motion.div>
             </div>
@@ -448,14 +460,20 @@ const BookingPage = () => {
 
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 relative">
-            <Link to="/" className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
+            <Link to={getLocalizedPath('/')} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
                 Ta' <span className="text-accent">To'</span> Clean
             </Link>
             <div className="max-w-6xl mx-auto">
                 {/* Progress Bar */}
                 <div className="mb-12">
                     <div className="flex justify-between mb-4 px-2">
-                        {['Vehículo', 'Servicio', 'Datos', 'Fecha', 'Confirmar'].map((label, i) => (
+                        {[
+                            t('booking.steps.vehicle'),
+                            t('booking.steps.service'),
+                            t('booking.steps.details'),
+                            t('booking.steps.date'),
+                            t('booking.steps.confirm')
+                        ].map((label, i) => (
                             <button
                                 key={i}
                                 onClick={() => jumpToStep(i + 1)}
@@ -506,7 +524,7 @@ const BookingPage = () => {
                             className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black hover:bg-[#0046b8] hover:text-white transition-colors backdrop-blur-sm font-medium"
                         >
                             <ChevronLeft size={20} />
-                            Volver
+                            {t('booking.back')}
                         </button>
                     </div>
                 )}
@@ -520,7 +538,7 @@ const BookingPage = () => {
                 return (
                     <div className="space-y-8">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
-                            Selecciona tu Vehículo
+                            {t('booking.select_vehicle')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {vehicleTypes.map((type) => (
@@ -534,9 +552,8 @@ const BookingPage = () => {
                                         : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white'
                                         }`}
                                 >
-                                    <div className={`p-4 rounded-full transition-colors ${formData.vehicleType?.id === type.id ? 'bg-black/10' : 'bg-white/10 group-hover:bg-white/20'
-                                        }`}>
-                                        <type.icon size={48} strokeWidth={1.5} />
+                                    <div className="p-4">
+                                        <img src={type.image} alt={type.name} className="w-40 h-28 object-contain" />
                                     </div>
                                     <div className="text-center">
                                         <span className="text-xl font-bold block mb-2">{type.name}</span>
@@ -560,7 +577,7 @@ const BookingPage = () => {
                 return (
                     <div className="space-y-8">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
-                            Elige el Servicio
+                            {t('booking.select_service')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {services.map((service) => (
@@ -597,7 +614,7 @@ const BookingPage = () => {
                                     <AnimatedButton
                                         onClick={nextStep}
                                     >
-                                        Siguiente
+                                        {t('booking.next')}
                                     </AnimatedButton>
                                 </div>
                             )
@@ -608,11 +625,11 @@ const BookingPage = () => {
                 return (
                     <div className="space-y-8 max-w-2xl mx-auto">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
-                            Tus Datos
+                            {t('booking.your_details')}
                         </h2>
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-white/60 text-sm mb-2">Nombre Completo</label>
+                                <label className="block text-white/60 text-sm mb-2">{t('booking.full_name')}</label>
                                 <input
                                     type="text"
                                     name="name"
@@ -623,7 +640,7 @@ const BookingPage = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-white/60 text-sm mb-2">Correo Electrónico</label>
+                                <label className="block text-white/60 text-sm mb-2">{t('booking.email')}</label>
                                 <input
                                     type="email"
                                     name="email"
@@ -636,7 +653,7 @@ const BookingPage = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-white/60 text-sm mb-2">Teléfono (opcional)</label>
+                                <label className="block text-white/60 text-sm mb-2">{t('booking.phone')}</label>
                                 <input
                                     type="tel"
                                     name="phone"
@@ -662,7 +679,7 @@ const BookingPage = () => {
                                 disabled={!formData.clientInfo.name || !isPlateValid() || !isEmailValid(formData.clientInfo.email)}
                                 className={(!formData.clientInfo.name || !isPlateValid() || !isEmailValid(formData.clientInfo.email)) ? 'opacity-50 cursor-not-allowed' : ''}
                             >
-                                Siguiente
+                                {t('booking.next')}
                             </AnimatedButton>
                         </div>
                     </div>
@@ -671,15 +688,15 @@ const BookingPage = () => {
                 return (
                     <div className="space-y-8 max-w-4xl mx-auto">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
-                            Fecha y Hora
+                            {t('booking.date_time')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                             <div>
-                                <label className="block text-white/60 text-sm mb-4">Selecciona Fecha</label>
+                                <label className="block text-white/60 text-sm mb-4">{t('booking.select_date')}</label>
                                 <CustomCalendar selectedDate={formData.date} onSelect={handleDateSelect} availability={availability} />
                             </div>
                             <div>
-                                <label className="block text-white/60 text-sm mb-4">Selecciona Hora</label>
+                                <label className="block text-white/60 text-sm mb-4">{t('booking.select_time')}</label>
                                 <div className="grid grid-cols-3 gap-3">
                                     {timeSlots.map((time) => {
                                         const isTaken = isTimeSlotTaken(time)
@@ -704,7 +721,7 @@ const BookingPage = () => {
                                 </div>
                                 {formData.date && formData.time && (
                                     <div className="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
-                                        <p className="text-white/60 text-sm mb-1">Selección:</p>
+                                        <p className="text-white/60 text-sm mb-1">{t('booking.selection')}</p>
                                         <p className="text-white font-bold text-lg capitalize">
                                             {formatDateLong(formData.date)} - {formData.time}
                                         </p>
@@ -718,7 +735,7 @@ const BookingPage = () => {
                                 disabled={!formData.date || !formData.time}
                                 className={(!formData.date || !formData.time) ? 'opacity-50 cursor-not-allowed' : ''}
                             >
-                                Ver Resumen
+                                {t('booking.view_summary')}
                             </AnimatedButton>
                         </div>
                     </div>
@@ -727,19 +744,19 @@ const BookingPage = () => {
                 return (
                     <div className="space-y-8 max-w-2xl mx-auto">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
-                            Confirmar Reserva
+                            {t('booking.confirm_booking')}
                         </h2>
 
                         <div className="bg-white/5 rounded-3xl p-8 border border-white/10 space-y-6">
                             <div className="flex items-center justify-between pb-6 border-b border-white/10">
                                 <div className="flex items-center gap-4">
-                                    <div className="p-3 bg-white/10 rounded-full">
-                                        <formData.vehicleType.icon size={24} className="text-white" />
+                                    <div className="p-3">
+                                        <img src={formData.vehicleType.image} alt={formData.vehicleType.name} className="w-20 h-14 object-contain" />
                                     </div>
                                     <div>
-                                        <p className="text-white/40 text-sm">Vehículo</p>
+                                        <p className="text-white/40 text-sm">{t('booking.vehicle')}</p>
                                         <p className="text-white font-bold text-lg">{formData.vehicleType.name}</p>
-                                        <p className="text-white/60 text-sm">Placa: {formData.clientInfo.plate}</p>
+                                        <p className="text-white/60 text-sm">{t('booking.plate')}: {formData.clientInfo.plate}</p>
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
@@ -748,14 +765,14 @@ const BookingPage = () => {
                                         className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-white/10"
                                     >
                                         <Edit2 size={12} />
-                                        Vehículo
+                                        {t('booking.vehicle')}
                                     </button>
                                     <button
                                         onClick={() => jumpToStep(3)}
                                         className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-white/10"
                                     >
                                         <Edit2 size={12} />
-                                        Placa
+                                        {t('booking.plate')}
                                     </button>
                                 </div>
                             </div>
@@ -766,7 +783,7 @@ const BookingPage = () => {
                                         <Check size={24} className="text-white" />
                                     </div>
                                     <div>
-                                        <p className="text-white/40 text-sm">Servicio</p>
+                                        <p className="text-white/40 text-sm">{t('booking.service')}</p>
                                         <p className="text-white font-bold text-lg">{formData.service.name}</p>
                                         <p className="text-white/60 text-sm">{formData.service.description}</p>
                                     </div>
@@ -776,7 +793,7 @@ const BookingPage = () => {
                                     className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10"
                                 >
                                     <Edit2 size={14} />
-                                    Cambiar
+                                    {t('booking.change')}
                                 </button>
                             </div>
 
@@ -786,7 +803,7 @@ const BookingPage = () => {
                                         <CalendarIcon size={24} className="text-white" />
                                     </div>
                                     <div>
-                                        <p className="text-white/40 text-sm">Fecha y Hora</p>
+                                        <p className="text-white/40 text-sm">{t('booking.date_time')}</p>
                                         <p className="text-white font-bold text-lg capitalize">{formatDateLong(formData.date)} - {formData.time}</p>
                                     </div>
                                 </div>
@@ -795,44 +812,24 @@ const BookingPage = () => {
                                     className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10"
                                 >
                                     <Edit2 size={14} />
-                                    Cambiar
+                                    {t('booking.change')}
                                 </button>
                             </div>
 
-                            <div className="flex items-center justify-between pb-6 border-b border-white/10">
-                                <div className="flex items-center gap-4">
-                                    <div className="p-3 bg-white/10 rounded-full">
-                                        <User size={24} className="text-white" />
-                                    </div>
-                                    <div>
-                                        <p className="text-white/40 text-sm">Cliente</p>
-                                        <p className="text-white font-bold text-lg">{formData.clientInfo.name}</p>
-                                        <p className="text-white/60 text-sm">{formData.clientInfo.email}</p>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => jumpToStep(3)}
-                                    className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10"
-                                >
-                                    <Edit2 size={14} />
-                                    Cambiar
-                                </button>
-                            </div>
-
-                            <div className="flex justify-between items-center pt-4">
-                                <span className="text-white/60">Total Estimado</span>
-                                <span className="text-3xl font-bold text-white">
-                                    ${(formData.service.price * (formData.vehicleType?.priceMultiplier || 1)).toLocaleString()}
-                                </span>
+                            <div className="flex items-center justify-between pt-2">
+                                <p className="text-white/60">{t('booking.total')}</p>
+                                <p className="text-3xl font-bold text-white">
+                                    ${(formData.service.price * formData.vehicleType.priceMultiplier).toLocaleString()}
+                                </p>
                             </div>
                         </div>
 
                         <div className="flex justify-end pt-4">
                             <AnimatedButton
                                 onClick={handleConfirm}
-                                variant="white"
+                                variant="accent"
                             >
-                                Confirmar Reserva
+                                {t('booking.confirm')}
                             </AnimatedButton>
                         </div>
                     </div>
