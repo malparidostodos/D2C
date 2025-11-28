@@ -104,7 +104,12 @@
         "back_home": "Back to Home",
         "time_label": "Time",
         "create_error": "Error creating booking. Please try again.",
-        "email_link_notice": "This email will be used to link this booking to your account when you register"
+        "email_link_notice": "This email will be used to link this booking to your account when you register",
+        "account_created_title": "Account Created!",
+        "account_created_message": "We have automatically created an account for you. Now you can manage your bookings.",
+        "credentials_email": "Email",
+        "credentials_password": "Password",
+        "credentials_save_reminder": "💡 Save these credentials. We recommend changing your password after logging in."
     },
     "auth": {
         "mail": "example@mail.com",

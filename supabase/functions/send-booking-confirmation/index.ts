@@ -23,7 +23,9 @@ const handler = async (request: Request): Promise<Response> => {
       serviceName,
       vehicleType,
       vehiclePlate,
-      totalPrice
+      totalPrice,
+      newUserEmail,
+      newUserPassword
     } = await request.json();
 
     console.log("Sending booking confirmation email to:", clientEmail);
@@ -143,6 +145,35 @@ const handler = async (request: Request): Promise<Response> => {
                   </tr>
                 </table>
               </div>
+
+              ${newUserEmail && newUserPassword ? `
+              <!-- Account Credentials Section -->
+              <div style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border: 2px solid #60a5fa; border-radius: 12px; padding: 24px; margin: 30px 0;">
+                <p style="margin: 0 0 12px; font-size: 14px; text-transform: uppercase; color: #bfdbfe; letter-spacing: 1px; font-weight: bold;">🎉 Cuenta Creada</p>
+                <p style="margin: 0 0 20px; line-height: 1.6; color: #ffffff; font-size: 14px;">
+                  Hemos creado automáticamente una cuenta para ti. Ahora puedes acceder a tu dashboard para gestionar tus reservas y vehículos.
+                </p>
+                
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #1e3a8a; border-radius: 8px; padding: 16px;">
+                  <tr>
+                    <td style="padding-bottom: 12px;">
+                      <span style="color: #93c5fd; font-size: 12px; display: block; margin-bottom: 4px;">📧 Email:</span>
+                      <span style="color: #ffffff; font-size: 16px; font-weight: bold; font-family: 'Courier New', monospace;">${newUserEmail}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding-top: 12px; border-top: 1px solid #3b82f6;">
+                      <span style="color: #93c5fd; font-size: 12px; display: block; margin-bottom: 4px;">🔑 Contraseña:</span>
+                      <span style="color: #ffffff; font-size: 16px; font-weight: bold; font-family: 'Courier New', monospace;">${newUserPassword}</span>
+                    </td>
+                  </tr>
+                </table>
+                
+                <p style="margin: 16px 0 0; line-height: 1.4; color: #dbeafe; font-size: 12px;">
+                  ⚠️ Por tu seguridad, te recomendamos cambiar tu contraseña después de iniciar sesión.
+                </p>
+              </div>
+              ` : ''}
 
               <p style="margin: 30px 0 0; line-height: 1.6; color: #cccccc; text-align: center; font-size: 14px;">
                 Nos vemos pronto. Estamos listos para darte el mejor servicio de detailing premium.

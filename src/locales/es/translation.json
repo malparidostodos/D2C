@@ -104,7 +104,12 @@
         "back_home": "Volver al Inicio",
         "time_label": "Hora",
         "create_error": "Error al crear la reserva. Por favor intenta de nuevo.",
-        "email_link_notice": "Este correo se usará para vincular esta reserva a tu cuenta al registrarte"
+        "email_link_notice": "Este correo se usará para vincular esta reserva a tu cuenta al registrarte",
+        "account_created_title": "¡Cuenta Creada!",
+        "account_created_message": "Hemos creado automáticamente una cuenta para ti. Ahora puedes gestionar tus reservas.",
+        "credentials_email": "Correo",
+        "credentials_password": "Contraseña",
+        "credentials_save_reminder": "💡 Guarda estas credenciales. Te recomendamos cambiar tu contraseña después de iniciar sesión."
     },
     "auth": {
         "mail": "ejemplo@correo.com",

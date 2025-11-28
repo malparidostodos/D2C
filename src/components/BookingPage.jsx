@@ -520,7 +520,62 @@ const BookingPage = () => {
     }
 
     const handleConfirm = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
+        let { data: { user } } = await supabase.auth.getUser()
+        let newUserCredentials = null
+        let newlyCreatedUser = null
+
+        // Si no hay usuario autenticado, crear cuenta automáticamente
+        if (!user) {
+            try {
+                const email = formData.clientInfo.email
+                const password = formData.clientInfo.plate.replace(/-/g, '') // Usar placa sin guiones como contraseña
+
+                // Crear cuenta
+                const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            full_name: formData.clientInfo.name || '',
+                            phone: formData.clientInfo.phone || ''
+                        }
+                    }
+                })
+
+                if (signUpError) {
+                    console.error('Error creating user account:', signUpError)
+                    // Continuar con la reserva aunque falle la creación de cuenta
+                } else {
+                    console.log('User account created successfully:', signUpData.user?.id)
+                    // Guardar credenciales para mostrar en la confirmación
+                    newUserCredentials = { email, password }
+                    newlyCreatedUser = signUpData.user
+
+                    // Iniciar sesión automáticamente con las credenciales creadas
+                    // para obtener un token válido para invocar el edge function
+                    try {
+                        const { error: signInError } = await supabase.auth.signInWithPassword({
+                            email,
+                            password
+                        })
+
+                        if (signInError) {
+                            console.error('Error signing in after account creation:', signInError)
+                        } else {
+                            console.log('User signed in successfully after account creation')
+                        }
+                    } catch (signInErr) {
+                        console.error('Exception during auto sign-in:', signInErr)
+                    }
+
+                    // Actualizar usuario para la reserva
+                    user = signUpData.user
+                }
+            } catch (createError) {
+                console.error('Error creating user:', createError)
+                // Continuar con la reserva
+            }
+        }
 
         const { data, error } = await supabase
             .from('bookings')
@@ -546,10 +601,22 @@ const BookingPage = () => {
 
         // Enviar correo de confirmación
         try {
-            const { data: { session } } = await supabase.auth.getSession()
+            console.log('Attempting to send booking confirmation email')
+            console.log('New user credentials:', newUserCredentials ? 'Credentials exist' : 'No credentials')
 
-            const emailResponse = await supabase.functions.invoke('send-booking-confirmation', {
-                body: {
+            // Usar fetch directo para evitar problemas de autenticación de usuario
+            const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+            const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+            const functionUrl = `${SUPABASE_URL}/functions/v1/send-booking-confirmation`
+
+            const emailResponse = await fetch(functionUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                },
+                body: JSON.stringify({
                     clientName: formData.clientInfo.name,
                     clientEmail: formData.clientInfo.email,
                     bookingDate: formatDateLong(formData.date),
@@ -557,22 +624,33 @@ const BookingPage = () => {
                     serviceName: formData.service.name,
                     vehicleType: formData.vehicleType.name,
                     vehiclePlate: formData.clientInfo.plate,
-                    totalPrice: formData.service.price * formData.vehicleType.priceMultiplier
-                },
-                headers: session?.access_token ? {
-                    Authorization: `Bearer ${session.access_token}`
-                } : {}
+                    totalPrice: formData.service.price * formData.vehicleType.priceMultiplier,
+                    // Incluir credenciales si se creó una nueva cuenta
+                    newUserEmail: newUserCredentials?.email,
+                    newUserPassword: newUserCredentials?.password
+                })
             })
 
-            if (emailResponse.error) {
-                console.error('Error sending confirmation email:', emailResponse.error)
-                // No bloqueamos la reserva si falla el correo
+            const result = await emailResponse.json()
+            console.log('Email response status:', emailResponse.status)
+            console.log('Email response:', result)
+
+            if (!emailResponse.ok) {
+                console.error('Error sending confirmation email:', result)
             } else {
                 console.log('Confirmation email sent successfully')
             }
         } catch (emailError) {
             console.error('Error invoking email function:', emailError)
             // No bloqueamos la reserva si falla el correo
+        }
+
+        // Guardar credenciales en el estado para mostrar en la confirmación
+        if (newUserCredentials) {
+            setFormData(prev => ({
+                ...prev,
+                newUserCredentials
+            }))
         }
 
         setIsConfirmed(true)
@@ -627,6 +705,32 @@ const BookingPage = () => {
                             <span className="text-white font-medium">{formData.service?.name}</span>
                         </div>
                     </div>
+
+                    {/* Mostrar credenciales si se creó una nueva cuenta */}
+                    {formData.newUserCredentials && (
+                        <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6 mb-8 text-left">
+                            <h3 className="text-xl font-bold text-blue-400 mb-3 flex items-center gap-2">
+                                <User size={20} />
+                                {t('booking.account_created_title')}
+                            </h3>
+                            <p className="text-white/80 text-sm mb-4">
+                                {t('booking.account_created_message')}
+                            </p>
+                            <div className="bg-white/5 rounded-xl p-4 space-y-3">
+                                <div>
+                                    <span className="text-white/40 text-sm block mb-1">{t('booking.credentials_email')}</span>
+                                    <span className="text-white font-mono font-bold text-lg">{formData.newUserCredentials.email}</span>
+                                </div>
+                                <div>
+                                    <span className="text-white/40 text-sm block mb-1">{t('booking.credentials_password')}</span>
+                                    <span className="text-white font-mono font-bold text-lg">{formData.newUserCredentials.password}</span>
+                                </div>
+                            </div>
+                            <p className="text-white/60 text-xs mt-4">
+                                {t('booking.credentials_save_reminder')}
+                            </p>
+                        </div>
+                    )}
 
                     <AnimatedButton onClick={() => navigate(getLocalizedPath('/'))} variant="white">
                         {t('booking.back_home')}
