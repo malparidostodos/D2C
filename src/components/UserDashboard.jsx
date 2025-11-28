@@ -25,16 +25,43 @@ const UserDashboard = () => {
         return currentLang === 'en' ? `/en${path}` : path
     }
 
+    const [isAdmin, setIsAdmin] = useState(false)
+
     useEffect(() => {
         checkUser()
+        checkAdminStatus()
 
         // Polling para actualizar estado en tiempo real (cada 1 minuto)
+        // Mantenemos esto para actualizaciones basadas en tiempo (ej: pasar de pendiente a completado por hora)
         const interval = setInterval(() => {
             loadUserData()
         }, 60000)
 
-        return () => clearInterval(interval)
+        // Suscripción a cambios en tiempo real (Supabase Realtime)
+        const channels = supabase.channel('custom-all-channel')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'bookings' },
+                (payload) => {
+                    console.log('Realtime update received:', payload)
+                    loadUserData()
+                }
+            )
+            .subscribe()
+
+        return () => {
+            clearInterval(interval)
+            supabase.removeChannel(channels)
+        }
     }, [])
+
+    const checkAdminStatus = async () => {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+            const { data } = await supabase.rpc('is_admin')
+            setIsAdmin(!!data)
+        }
+    }
 
     const checkUser = async () => {
         const { data: { session } } = await supabase.auth.getSession()
@@ -205,6 +232,15 @@ const UserDashboard = () => {
             </Link>
 
             <div className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-3 z-50">
+                {isAdmin && (
+                    <Link
+                        to="/admin"
+                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-accent text-white font-bold hover:bg-accent/90 transition-colors"
+                    >
+                        <Settings size={18} />
+                        <span className="hidden md:inline">Admin Panel</span>
+                    </Link>
+                )}
                 <Link
                     to={getLocalizedPath('/profile')}
                     className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
