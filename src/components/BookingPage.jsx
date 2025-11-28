@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle } from 'lucide-react'
+import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle, Plus } from 'lucide-react'
 import AnimatedButton from './AnimatedButton'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
@@ -137,6 +137,12 @@ const BookingPage = () => {
     const [availability, setAvailability] = useState({}) // { '2024-01-15': ['08:00', '09:00'] }
     const { t, i18n } = useTranslation()
 
+    // Estado para usuarios autenticados
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [userVehicles, setUserVehicles] = useState([])
+    const [loadingVehicles, setLoadingVehicles] = useState(true)
+    const [useExistingVehicle, setUseExistingVehicle] = useState(false) // Si selecciona vehículo existente
+
     const getLocalizedPath = (path) => {
         const prefix = i18n.language === 'en' ? '/en' : ''
         return `${prefix}${path}`
@@ -174,6 +180,8 @@ const BookingPage = () => {
     const loadUserData = async () => {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
+            setIsAuthenticated(true)
+
             // Precargar email y nombre
             setFormData(prev => ({
                 ...prev,
@@ -183,7 +191,20 @@ const BookingPage = () => {
                     name: user.user_metadata?.full_name || prev.clientInfo.name
                 }
             }))
+
+            // Cargar vehículos del usuario
+            const { data: vehiclesData } = await supabase
+                .from('user_vehicles')
+                .select('*')
+                .order('is_primary', { ascending: false })
+
+            setUserVehicles(vehiclesData || [])
+
+            // Siempre empezar en paso 0 para usuarios autenticados
+            setStep(0)
+            setMaxStep(0)
         }
+        setLoadingVehicles(false)
     }
 
     useEffect(() => {
@@ -266,14 +287,39 @@ const BookingPage = () => {
 
     const nextStep = () => {
         setDirection(1)
-        const next = Math.min(step + 1, 5)
+        let next = step + 1
+
+        // Si usa vehículo existente, saltar de paso 2 a paso 4 (omitir detalles)
+        if (useExistingVehicle && step === 2) {
+            next = 4
+        }
+
+        next = Math.min(next, 5)
         setStep(next)
         setMaxStep(prev => Math.max(prev, next))
     }
 
     const prevStep = () => {
         setDirection(-1)
-        setStep(prev => Math.max(prev - 1, 1))
+        let prev = step - 1
+
+        // Si usa vehículo existente, saltar los pasos deshabilitados (1 y 3)
+        if (useExistingVehicle) {
+            // Desde paso 4 (Fecha) → ir a paso 2 (Servicio), saltando paso 3 (Detalles)
+            if (step === 4) {
+                prev = 2
+            }
+            // Desde paso 2 (Servicio) → ir a paso 0 (Selector de vehículos), saltando paso 1 (Tipo)
+            else if (step === 2) {
+                prev = 0
+            }
+        }
+        // Si está en paso 1 y es usuario autenticado (añadiendo vehículo nuevo), volver a paso 0
+        else if (step === 1 && isAuthenticated) {
+            prev = 0
+        }
+
+        setStep(Math.max(prev, 0))
     }
 
     const jumpToStep = (targetStep) => {
@@ -297,6 +343,40 @@ const BookingPage = () => {
             setMaxStep(2)
         }
         nextStep()
+    }
+
+    // Seleccionar vehículo existente del usuario
+    const handleExistingVehicleSelect = (vehicle) => {
+        setUseExistingVehicle(true)
+
+        // Mapear tipo de vehículo
+        const vehicleTypeMap = {
+            'car': vehicleTypes[0],
+            'suv': vehicleTypes[1],
+            'motorcycle': vehicleTypes[2]
+        }
+
+        setFormData({
+            ...formData,
+            vehicleType: vehicleTypeMap[vehicle.vehicle_type],
+            clientInfo: {
+                ...formData.clientInfo,
+                plate: vehicle.plate
+            }
+        })
+
+        // Ir directamente a paso 2 (servicios)
+        setDirection(1)
+        setStep(2)
+        setMaxStep(2)
+    }
+
+    // Añadir vehículo nuevo desde paso 0
+    const handleAddNewVehicle = () => {
+        setUseExistingVehicle(false)
+        setDirection(1)
+        setStep(1)
+        setMaxStep(1)
     }
 
     const handleServiceSelect = (service) => {
@@ -397,6 +477,37 @@ const BookingPage = () => {
             return
         }
 
+        // Enviar correo de confirmación
+        try {
+            const { data: { session } } = await supabase.auth.getSession()
+
+            const emailResponse = await supabase.functions.invoke('send-booking-confirmation', {
+                body: {
+                    clientName: formData.clientInfo.name,
+                    clientEmail: formData.clientInfo.email,
+                    bookingDate: formatDateLong(formData.date),
+                    bookingTime: formData.time,
+                    serviceName: formData.service.name,
+                    vehicleType: formData.vehicleType.name,
+                    vehiclePlate: formData.clientInfo.plate,
+                    totalPrice: formData.service.price * formData.vehicleType.priceMultiplier
+                },
+                headers: session?.access_token ? {
+                    Authorization: `Bearer ${session.access_token}`
+                } : {}
+            })
+
+            if (emailResponse.error) {
+                console.error('Error sending confirmation email:', emailResponse.error)
+                // No bloqueamos la reserva si falla el correo
+            } else {
+                console.log('Confirmation email sent successfully')
+            }
+        } catch (emailError) {
+            console.error('Error invoking email function:', emailError)
+            // No bloqueamos la reserva si falla el correo
+        }
+
         setIsConfirmed(true)
     }
 
@@ -464,36 +575,53 @@ const BookingPage = () => {
                 Ta' <span className="text-accent">To'</span> Clean
             </Link>
             <div className="max-w-6xl mx-auto">
-                {/* Progress Bar */}
-                <div className="mb-12">
-                    <div className="flex justify-between mb-4 px-2">
-                        {[
-                            t('booking.steps.vehicle'),
-                            t('booking.steps.service'),
-                            t('booking.steps.details'),
-                            t('booking.steps.date'),
-                            t('booking.steps.confirm')
-                        ].map((label, i) => (
-                            <button
-                                key={i}
-                                onClick={() => jumpToStep(i + 1)}
-                                disabled={step <= i + 1 && maxStep <= i}
-                                className={`text-xs md:text-sm font-medium transition-colors ${step > i + 1 || maxStep > i ? 'text-white cursor-pointer hover:text-accent' : step === i + 1 ? 'text-white' : 'text-white/20'
-                                    }`}
-                            >
-                                {label}
-                            </button>
-                        ))}
+                {/* Progress Bar - Solo mostrar si no es paso 0 */}
+                {step > 0 && (
+                    <div className="mb-12">
+                        <div className="flex justify-between mb-4 px-2">
+                            {[
+                                t('booking.steps.vehicle'),
+                                t('booking.steps.service'),
+                                t('booking.steps.details'),
+                                t('booking.steps.date'),
+                                t('booking.steps.confirm')
+                            ].map((label, i) => {
+                                const actualStep = i + 1
+                                // Ajustar si usa vehículo existente (omite paso 1 y 3)
+                                const isActiveOrPast = useExistingVehicle
+                                    ? (actualStep === 3 || actualStep === 1 ? false : step > actualStep || (step === actualStep))
+                                    : step > actualStep || step === actualStep
+                                const isClickable = useExistingVehicle
+                                    ? (actualStep === 3 || actualStep === 1 ? false : maxStep >= actualStep && actualStep < step)
+                                    : maxStep >= actualStep && actualStep < step
+
+                                return (
+                                    <button
+                                        key={i}
+                                        onClick={() => isClickable && jumpToStep(actualStep)}
+                                        disabled={!isClickable}
+                                        className={`text-xs md:text-sm font-medium transition-colors ${isClickable
+                                            ? 'text-white cursor-pointer hover:text-accent'
+                                            : isActiveOrPast
+                                                ? 'text-white'
+                                                : 'text-white/20'
+                                            }`}
+                                    >
+                                        {label}
+                                    </button>
+                                )
+                            })}
+                        </div>
+                        <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                            <motion.div
+                                className="h-full bg-white"
+                                initial={{ width: '0%' }}
+                                animate={{ width: `${(step / 5) * 100}%` }}
+                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                            />
+                        </div>
                     </div>
-                    <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                        <motion.div
-                            className="h-full bg-white"
-                            initial={{ width: '0%' }}
-                            animate={{ width: `${(step / 5) * 100}%` }}
-                            transition={{ duration: 0.5, ease: "easeInOut" }}
-                        />
-                    </div>
-                </div>
+                )}
 
                 {/* Content */}
                 <div className="relative min-h-[500px]">
@@ -517,7 +645,7 @@ const BookingPage = () => {
                 </div>
 
                 {/* Navigation Buttons (Back) */}
-                {step > 1 && (
+                {step > 0 && (
                     <div className="fixed bottom-8 left-8 z-50">
                         <button
                             onClick={prevStep}
@@ -534,6 +662,113 @@ const BookingPage = () => {
 
     function renderStep() {
         switch (step) {
+            case 0:
+                // Paso 0: Selector de vehículos (solo para usuarios autenticados)
+                return (
+                    <div className="space-y-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
+                            {userVehicles.length > 0 ? 'Selecciona tu Vehículo' : 'Añade tu Primer Vehículo'}
+                        </h2>
+                        <p className="text-white/60 text-center -mt-4 mb-8">
+                            {userVehicles.length > 0
+                                ? 'Elige uno de tus vehículos guardados o añade uno nuevo'
+                                : 'Registra tu vehículo para agilizar tus próximas reservas'}
+                        </p>
+
+                        {userVehicles.length === 0 ? (
+                            // Sin vehículos guardados - Mostrar solo botón grande para añadir
+                            <div className="max-w-md mx-auto">
+                                <motion.button
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={handleAddNewVehicle}
+                                    className="w-full p-12 rounded-3xl border-2 border-dashed border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 text-white flex flex-col items-center justify-center gap-6 transition-all duration-300"
+                                >
+                                    <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
+                                        <Plus size={40} className="text-white" />
+                                    </div>
+                                    <div className="text-center">
+                                        <h3 className="text-2xl font-bold text-white mb-2">
+                                            Añadir Mi Vehículo
+                                        </h3>
+                                        <p className="text-white/60">
+                                            Comienza registrando tu primer vehículo
+                                        </p>
+                                    </div>
+                                </motion.button>
+                            </div>
+                        ) : (
+                            // Con vehículos guardados - Mostrar grid
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {/* Vehículos existentes */}
+                                {userVehicles.map((vehicle) => {
+                                    const vehicleImage = vehicle.vehicle_type === 'car' ? '/images/vehiculos/sedan.png'
+                                        : vehicle.vehicle_type === 'suv' ? '/images/vehiculos/suv.png'
+                                            : '/images/vehiculos/bike.png'
+
+                                    return (
+                                        <motion.button
+                                            key={vehicle.id}
+                                            whileHover={{ scale: 1.03, y: -5 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            onClick={() => handleExistingVehicleSelect(vehicle)}
+                                            className="relative overflow-hidden p-6 rounded-3xl border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white flex flex-col items-center gap-4 transition-all duration-300 group min-h-[240px]"
+                                        >
+                                            {vehicle.is_primary && (
+                                                <div className="absolute top-3 left-3">
+                                                    <span className="text-[10px] font-bold bg-blue-500/20 text-blue-500 px-2 py-1 rounded-full uppercase tracking-wider">
+                                                        Principal
+                                                    </span>
+                                                </div>
+                                            )}
+
+                                            {vehicle.nickname && (
+                                                <p className="text-white font-medium text-lg absolute top-3 right-3">
+                                                    {vehicle.nickname}
+                                                </p>
+                                            )}
+
+                                            <div className="flex-1 flex items-center justify-center mt-4">
+                                                <img src={vehicleImage} alt={vehicle.vehicle_type} className="w-40 h-24 object-contain" />
+                                            </div>
+
+                                            <div className="text-center w-full">
+                                                <h3 className="text-2xl font-bold text-white tracking-tight mb-1">
+                                                    {vehicle.plate}
+                                                </h3>
+                                                {(vehicle.brand || vehicle.model) && (
+                                                    <p className="text-white/60 text-sm capitalize">
+                                                        {vehicle.brand} {vehicle.model}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </motion.button>
+                                    )
+                                })}
+
+                                {/* Botón Añadir Vehículo Nuevo */}
+                                <motion.button
+                                    whileHover={{ scale: 1.03, y: -5 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={handleAddNewVehicle}
+                                    className="relative overflow-hidden p-6 rounded-3xl border-2 border-dashed border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 text-white flex flex-col items-center justify-center gap-4 transition-all duration-300 min-h-[240px]"
+                                >
+                                    <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
+                                        <Plus size={32} className="text-white" />
+                                    </div>
+                                    <div className="text-center">
+                                        <h3 className="text-xl font-bold text-white mb-1">
+                                            Añadir Vehículo Nuevo
+                                        </h3>
+                                        <p className="text-white/40 text-sm">
+                                            Registra un nuevo vehículo
+                                        </p>
+                                    </div>
+                                </motion.button>
+                            </div>
+                        )}
+                    </div>
+                )
             case 1:
                 return (
                     <div className="space-y-8">
@@ -759,22 +994,25 @@ const BookingPage = () => {
                                         <p className="text-white/60 text-sm">{t('booking.plate')}: {formData.clientInfo.plate}</p>
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-2">
-                                    <button
-                                        onClick={() => jumpToStep(1)}
-                                        className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-white/10"
-                                    >
-                                        <Edit2 size={12} />
-                                        {t('booking.vehicle')}
-                                    </button>
-                                    <button
-                                        onClick={() => jumpToStep(3)}
-                                        className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-white/10"
-                                    >
-                                        <Edit2 size={12} />
-                                        {t('booking.plate')}
-                                    </button>
-                                </div>
+                                {/* Solo mostrar botones de editar si NO usó vehículo existente */}
+                                {!useExistingVehicle && (
+                                    <div className="flex flex-col gap-2">
+                                        <button
+                                            onClick={() => jumpToStep(1)}
+                                            className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-white/10"
+                                        >
+                                            <Edit2 size={12} />
+                                            {t('booking.vehicle')}
+                                        </button>
+                                        <button
+                                            onClick={() => jumpToStep(3)}
+                                            className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-white/10"
+                                        >
+                                            <Edit2 size={12} />
+                                            {t('booking.plate')}
+                                        </button>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="flex items-center justify-between pb-6 border-b border-white/10">
@@ -829,7 +1067,7 @@ const BookingPage = () => {
                                 onClick={handleConfirm}
                                 variant="accent"
                             >
-                                {t('booking.confirm')}
+                                {t('booking.confirm_booking')}
                             </AnimatedButton>
                         </div>
                     </div>

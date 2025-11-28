@@ -17,6 +17,8 @@ const UserDashboard = () => {
     const [showAddVehicle, setShowAddVehicle] = useState(false)
     const [showCancelModal, setShowCancelModal] = useState(false)
     const [bookingToCancel, setBookingToCancel] = useState(null)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [vehicleToDelete, setVehicleToDelete] = useState(null)
 
     const getLocalizedPath = (path) => {
         const currentLang = i18n.language
@@ -86,21 +88,26 @@ const UserDashboard = () => {
         navigate(getLocalizedPath('/'))
     }
 
-    const handleDeleteVehicle = async (vehicleId, plate) => {
-        if (!confirm(t('dashboard.delete_vehicle_confirm', { plate }))) {
-            return
-        }
+    const handleDeleteVehicle = (vehicleId, plate) => {
+        setVehicleToDelete({ id: vehicleId, plate })
+        setShowDeleteModal(true)
+    }
+
+    const confirmDeleteVehicle = async () => {
+        if (!vehicleToDelete) return
 
         const { error } = await supabase
             .from('user_vehicles')
             .delete()
-            .eq('id', vehicleId)
+            .eq('id', vehicleToDelete.id)
 
         if (error) {
             alert(t('dashboard.delete_error') + ': ' + error.message)
         } else {
-            loadUserData() // Recargar datos
+            loadUserData()
         }
+        setShowDeleteModal(false)
+        setVehicleToDelete(null)
     }
 
     const handleCancelBooking = (bookingId) => {
@@ -213,37 +220,53 @@ const UserDashboard = () => {
                                 return (
                                     <div
                                         key={vehicle.id}
-                                        className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors relative group"
+                                        className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors relative group flex flex-col justify-between min-h-[220px]"
                                     >
                                         {/* Botón de eliminar */}
                                         <Tooltip content={t('dashboard.remove')} position="left">
                                             <button
                                                 onClick={() => handleDeleteVehicle(vehicle.id, vehicle.plate)}
-                                                className="absolute top-4 right-4 p-2 bg-red-500/10 hover:bg-red-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all"
+                                                className="absolute top-4 right-4 p-2 bg-red-500/10 hover:bg-red-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all z-10"
                                             >
                                                 <Trash2 size={16} className="text-red-500" />
                                             </button>
                                         </Tooltip>
 
-                                        <div className="flex items-start justify-between mb-4">
-                                            <div className="p-2">
-                                                <img src={getVehicleImage(vehicle.vehicle_type)} alt={vehicle.vehicle_type} className="w-16 h-10 object-contain" />
-                                            </div>
-                                            {vehicle.is_primary && (
-                                                <span className="text-xs bg-blue-500/20 text-blue-500 px-2 py-1 rounded-full">
+                                        {/* Primary Badge */}
+                                        {vehicle.is_primary && (
+                                            <div className="absolute top-4 left-4 z-10">
+                                                <span className="text-[10px] font-bold bg-blue-500/20 text-blue-500 px-2 py-1 rounded-full uppercase tracking-wider">
                                                     {t('dashboard.primary')}
                                                 </span>
+                                            </div>
+                                        )}
+
+                                        {/* Content Container */}
+                                        <div className="flex flex-col h-full">
+                                            {/* Top: Nickname */}
+                                            {vehicle.nickname && (
+                                                <div className="mb-2">
+                                                    <p className="text-white font-medium text-lg">{vehicle.nickname}</p>
+                                                </div>
                                             )}
+
+                                            {/* Middle: Image */}
+                                            <div className="flex-1 flex items-center justify-center my-4">
+                                                <img src={getVehicleImage(vehicle.vehicle_type)} alt={vehicle.vehicle_type} className="w-40 h-24 object-contain" />
+                                            </div>
+
+                                            {/* Bottom: Brand & Plate */}
+                                            <div className="flex items-end justify-between w-full">
+                                                {(vehicle.brand || vehicle.model) && (
+                                                    <p className="text-white text-sm font-medium mb-1 capitalize">
+                                                        {vehicle.brand} {vehicle.model} {vehicle.year}
+                                                    </p>
+                                                )}
+                                                <h3 className="text-xl font-bold text-white tracking-tight leading-none mb-1">
+                                                    {vehicle.plate}
+                                                </h3>
+                                            </div>
                                         </div>
-                                        <h3 className="text-xl font-bold text-white mb-1">{vehicle.plate}</h3>
-                                        {vehicle.nickname && (
-                                            <p className="text-white/60 text-sm mb-2">{vehicle.nickname}</p>
-                                        )}
-                                        {(vehicle.brand || vehicle.model) && (
-                                            <p className="text-white/40 text-sm">
-                                                {vehicle.brand} {vehicle.model} {vehicle.year}
-                                            </p>
-                                        )}
                                     </div>
                                 )
                             })}
@@ -356,6 +379,13 @@ const UserDashboard = () => {
                 message={t('dashboard.cancel_confirm_message')}
                 cancelText={t('dashboard.keep_booking')}
                 confirmText={t('dashboard.confirm_cancel')}
+            />
+
+            <DeleteVehicleModal
+                isOpen={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={confirmDeleteVehicle}
+                plate={vehicleToDelete?.plate}
             />
         </div >
     )
@@ -603,6 +633,48 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                         {loading ? t('dashboard.add_vehicle_modal.adding') : t('dashboard.add_vehicle_modal.add_button')}
                     </button>
                 </form>
+            </motion.div>
+        </div>
+    )
+}
+
+// Modal para confirmar eliminación
+const DeleteVehicleModal = ({ isOpen, onClose, onConfirm, plate }) => {
+    const { t } = useTranslation()
+
+    if (!isOpen) return null
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="bg-[#111] border border-white/10 rounded-3xl p-8 max-w-md w-full text-center"
+            >
+                <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <AlertCircle size={32} className="text-red-500" />
+                </div>
+
+                <h2 className="text-2xl font-bold text-white mb-2">{t('dashboard.delete_vehicle_title')}</h2>
+                <p className="text-white/60 mb-8">
+                    {t('dashboard.delete_vehicle_confirm', { plate })}
+                </p>
+
+                <div className="flex gap-3">
+                    <button
+                        onClick={onClose}
+                        className="flex-1 px-4 py-3 rounded-xl bg-white/5 text-white font-medium hover:bg-white/10 transition-colors"
+                    >
+                        {t('common.cancel')}
+                    </button>
+                    <button
+                        onClick={onConfirm}
+                        className="flex-1 px-4 py-3 rounded-xl bg-red-500 text-white font-medium hover:bg-red-600 transition-colors"
+                    >
+                        {t('common.delete')}
+                    </button>
+                </div>
             </motion.div>
         </div>
     )

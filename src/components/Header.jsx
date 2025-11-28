@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ArrowRight, Home, ChevronDown, ArrowUpRight } from 'lucide-react';
 import { useSmoothScroll } from './SmoothScroll';
 import { useTranslation } from 'react-i18next';
+import { supabase } from '../lib/supabase';
+import { Menu, X, ArrowRight, Home, ChevronDown, ArrowUpRight, User } from 'lucide-react';
 import './JetonHeader.css'; // Import the strict CSS
 
 const Header = () => {
@@ -13,6 +14,7 @@ const Header = () => {
   const [hoverLock, setHoverLock] = useState(false);
   const [hoveredService, setHoveredService] = useState(null);
   const [langOpen, setLangOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
   const { t, i18n } = useTranslation();
   const currentLang = i18n.language === 'en' ? 'EN' : 'ES';
@@ -28,6 +30,20 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { lenis } = useSmoothScroll();
+
+  useEffect(() => {
+    // Check active session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // -------------------------------------------------
   // Mouse‑move & scroll visibility handling
@@ -330,28 +346,41 @@ const Header = () => {
 
             {/* CTAs */}
             <div className="ctas hidden md:flex">
-              <a href={getLocalizedPath("/login")} className="_button" data-variant="ghost">
-                <span className="staggered-wrapper">
-                  {t('header.login').split("").map((char, i) => (
-                    <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
-                      {char === " " ? "\u00A0" : char}
+              {user ? (
+                <Link
+                  to={getLocalizedPath("/dashboard")}
+                  className="_button !bg-white !text-[#0046b8] transition-all duration-300 flex items-center gap-2"
+                  data-variant="ghost"
+                >
+                  <User size={18} />
+                  <span>{t('dashboard.title')}</span>
+                </Link>
+              ) : (
+                <>
+                  <a href={getLocalizedPath("/login")} className="_button" data-variant="ghost">
+                    <span className="staggered-wrapper">
+                      {t('header.login').split("").map((char, i) => (
+                        <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
+                          {char === " " ? "\u00A0" : char}
+                        </span>
+                      ))}
                     </span>
-                  ))}
-                </span>
-              </a>
-              <a
-                href={getLocalizedPath("/signup")}
-                className="_button !bg-white !text-[#0046b8] transition-all duration-300"
-                data-variant="ghost"
-              >
-                <span className="staggered-wrapper">
-                  {t('header.signup').split("").map((char, i) => (
-                    <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
-                      {char === " " ? "\u00A0" : char}
+                  </a>
+                  <a
+                    href={getLocalizedPath("/signup")}
+                    className="_button !bg-white !text-[#0046b8] transition-all duration-300"
+                    data-variant="ghost"
+                  >
+                    <span className="staggered-wrapper">
+                      {t('header.signup').split("").map((char, i) => (
+                        <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
+                          {char === " " ? "\u00A0" : char}
+                        </span>
+                      ))}
                     </span>
-                  ))}
-                </span>
-              </a>
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </div>
