@@ -206,8 +206,8 @@ const LoginPage = () => {
                                 )}
                             </div>
 
-                            <div className="flex items-center justify-between text-sm">
-                                <label className="flex items-center gap-3 cursor-pointer group select-none">
+                            <div className="flex items-center justify-between text-sm w-full gap-4">
+                                <label className="flex items-center gap-3 cursor-pointer group select-none flex-shrink-0">
                                     <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all duration-200 ${rememberMe
                                         ? 'bg-blue-600 border-blue-600'
                                         : 'border-white/30 bg-white/5 group-hover:border-white/50'
@@ -222,7 +222,7 @@ const LoginPage = () => {
                                     />
                                     <span className="text-white/60 group-hover:text-white/80 transition-colors">{t('auth.remember_me')}</span>
                                 </label>
-                                <Link to={getLocalizedPath('/forgot-password')} className="text-white/60 hover:text-white transition-colors">{t('auth.forgot_password')}</Link>
+                                <Link to={getLocalizedPath('/forgot-password')} className="text-white/60 hover:text-white transition-colors text-right ml-auto">{t('auth.forgot_password')}</Link>
                             </div>
 
                             <div className="pt-4">

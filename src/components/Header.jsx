@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSmoothScroll } from './SmoothScroll';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
-import { Menu, X, ArrowRight, Home, ChevronDown, ArrowUpRight, User, ArrowUp, ArrowDown } from 'lucide-react';
+import { Menu, X, ArrowRight, Home, ChevronDown, ArrowUpRight, User, ArrowUp, ArrowDown, Globe } from 'lucide-react';
 import './JetonHeader.css'; // Import the strict CSS
 
 const Header = () => {
@@ -17,7 +17,11 @@ const Header = () => {
   const [user, setUser] = useState(null);
 
   const { t, i18n } = useTranslation();
-  const currentLang = i18n.language === 'en' ? 'EN' : 'ES';
+  const currentLang = i18n.language?.startsWith('en') ? 'EN' : 'ES';
+
+  // ... (rest of code)
+
+
 
   const languages = [
     { code: 'ES', label: 'Español' },
@@ -50,6 +54,12 @@ const Header = () => {
   // -------------------------------------------------
   useEffect(() => {
     const handleMouseMove = (e) => {
+      // Always show on mobile
+      if (window.innerWidth < 768) {
+        setHidden(false);
+        return;
+      }
+
       const currentScrollY = lenis ? lenis.scroll : window.scrollY;
       const isAtTop = currentScrollY < 50;
       if (isAtTop) {
@@ -77,6 +87,12 @@ const Header = () => {
     };
 
     const handleScrollVisibility = (e) => {
+      // Always show on mobile
+      if (window.innerWidth < 768) {
+        setHidden(false);
+        return;
+      }
+
       // Support both lenis event object and native window fallback
       const currentScrollY = e && typeof e.scroll === 'number' ? e.scroll : window.scrollY;
       const isAtTop = currentScrollY < 50;
@@ -262,7 +278,19 @@ const Header = () => {
       }
     }
 
-    navigate(newPath);
+    console.log('Changing language to:', targetLang, 'New Path:', newPath);
+
+    // Explicitly change language in i18n
+    i18n.changeLanguage(targetLang);
+
+    // Force hard navigation to ensure language switch applies correctly
+    if (newPath !== currentPath) {
+      window.location.href = newPath;
+    } else {
+      // If path is same but language changed (rare but possible), force reload
+      window.location.reload();
+    }
+
     setLangOpen(false);
   };
 
@@ -543,31 +571,62 @@ const Header = () => {
           <div className="relative z-10 flex flex-col h-full overflow-hidden">
 
             {/* Top Bar */}
-            <div className="flex items-center justify-between px-6 pt-6 pb-4">
-              {/* Language Selector */}
-              <button
-                onClick={() => setLangOpen(!langOpen)}
-                className="flex items-center gap-2 px-4 py-2 bg-[#ff4f36] rounded-full text-white font-medium text-sm transition-colors hover:bg-[#ff6b55]"
-                style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-              >
-                <span className="_icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
-                    <path d="M12 22C17.5228 22 22 17.5229 22 12C22 6.47716 17.5228 2 12 2C6.47715 2 2 6.47716 2 12C2 17.5229 6.47715 22 12 22Z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                    <path d="M3 9H21" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                    <path d="M3 15H21" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                    <path d="M12 2C14.5013 4.73836 15.9228 8.29204 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29204 9.49872 4.73836 12 2V2Z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                  </svg>
-                </span>
-                <span>{currentLang}</span>
-                <ChevronDown size={16} />
-              </button>
+            <div className="relative z-50 flex items-center justify-between px-6 pt-8 pb-6 gap-4">
+              {/* Language Selector Wrapper */}
+              <div className="relative z-50">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLangOpen(!langOpen);
+                  }}
+                  className="_dropdown-button flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/50 !text-white hover:!bg-white/30 transition-all duration-300 !rounded-[16px] px-4 py-2 h-[48px]"
+                >
+                  <span className="_icon">
+                    <Globe size={20} />
+                  </span>
+                  <span className="uppercase tracking-wide text-base">{currentLang}</span>
+                  <ChevronDown size={16} className={`transition-transform duration-300 ${langOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Mobile Dropdown (Hardened) */}
+                {langOpen && (
+                  <div
+                    className="absolute top-[calc(100%+8px)] left-0 bg-white rounded-[16px] p-2 min-w-[160px] flex flex-col gap-1 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200"
+                    style={{ zIndex: 10000 }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        type="button"
+                        className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-[15px] font-medium cursor-pointer transition-colors w-full ${currentLang === lang.code
+                          ? 'bg-[#0046b8] text-white'
+                          : 'text-gray-900 hover:bg-gray-100'
+                          }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLanguageChange(lang.code);
+                          setLangOpen(false);
+                        }}
+                      >
+                        <span>{lang.label}</span>
+                        {currentLang === lang.code && (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Auth Button */}
               {user ? (
                 <Link
                   to={getLocalizedPath("/dashboard")}
                   onClick={() => setMenuOpen(false)}
-                  className="px-6 py-2 bg-white text-[#0046b8] rounded-xl font-bold text-sm hover:bg-gray-100 transition-colors"
+                  className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-[16px] flex items-center justify-center font-medium text-base"
                 >
                   {t('dashboard.title')}
                 </Link>
@@ -575,30 +634,14 @@ const Header = () => {
                 <a
                   href={getLocalizedPath("/signup")}
                   onClick={() => setMenuOpen(false)}
-                  className="px-6 py-2 bg-white text-[#0046b8] rounded-xl font-bold text-sm hover:bg-gray-100 transition-colors"
+                  className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-[16px] flex items-center justify-center font-medium text-base"
                 >
                   {t('header.signup')}
                 </a>
               )}
             </div>
 
-            {/* Language Dropdown (Mobile) */}
-            {langOpen && (
-              <div className="px-6 mb-4">
-                <div className="bg-white rounded-xl overflow-hidden p-2">
-                  {languages.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => handleLanguageChange(lang.code)}
-                      className={`w-full text-left px-4 py-3 rounded-lg font-medium text-sm transition-colors ${currentLang === lang.code ? 'bg-gray-100 text-[#0046b8]' : 'text-gray-600 hover:bg-gray-50'
-                        }`}
-                    >
-                      {lang.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+
 
             {/* Scrollable List */}
             <div className="flex-1 overflow-y-auto px-4 pb-32 space-y-6">
@@ -607,7 +650,7 @@ const Header = () => {
               <a
                 href={getLocalizedPath("/inicio")}
                 onClick={(e) => handleNavClick(e, '#inicio', '/inicio')}
-                className="flex items-center justify-between p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors group"
+                className={`flex items-center justify-between p-4 rounded-2xl transition-colors group ${activeSection === '#inicio' ? 'bg-white/10' : 'hover:bg-white/5'}`}
               >
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
@@ -615,7 +658,7 @@ const Header = () => {
                   </div>
                   <span className="text-xl font-bold text-white">{t('header.home')}</span>
                 </div>
-                <div className="w-2 h-2 rounded-full bg-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className={`w-2 h-2 rounded-full bg-white transition-opacity ${activeSection === '#inicio' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
               </a>
 
               {/* Personal Section */}
@@ -626,7 +669,7 @@ const Header = () => {
                   <a
                     href={getLocalizedPath("/precios")}
                     onClick={(e) => handleNavClick(e, '#precios', '/precios')}
-                    className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
+                    className={`flex items-center gap-4 p-2 rounded-xl transition-colors ${activeSection === '#precios' ? 'bg-white/10' : 'hover:bg-white/10'}`}
                   >
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-lg">
                       <span className="font-bold text-lg">$</span>
@@ -638,7 +681,7 @@ const Header = () => {
                   <a
                     href={getLocalizedPath("/roadmap")}
                     onClick={(e) => handleNavClick(e, '#roadmap', '/roadmap')}
-                    className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
+                    className={`flex items-center gap-4 p-2 rounded-xl transition-colors ${activeSection === '#roadmap' ? 'bg-white/10' : 'hover:bg-white/10'}`}
                   >
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white shadow-lg">
                       <ArrowRight size={24} />
@@ -652,8 +695,7 @@ const Header = () => {
               <a
                 href={getLocalizedPath("/membresias")}
                 onClick={(e) => handleNavClick(e, '#membresias', '/membresias')}
-                className="flex items-center justify-between p-4 bg-[#ff6b55] rounded-2xl hover:bg-[#ff8370] transition-colors"
-                style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
+                className={`flex items-center justify-between p-4 rounded-2xl transition-colors ${activeSection === '#membresias' ? 'bg-white/15' : 'hover:bg-white/10'}`}
               >
                 <div className="flex items-center gap-4">
                   <div className="w-8 h-8 rounded bg-white/20 flex items-center justify-center text-white font-bold">
