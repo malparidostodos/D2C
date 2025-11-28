@@ -161,6 +161,7 @@
         "no_bookings": "No tienes reservas",
         "make_booking": "Hacer una Reserva",
         "book_now": "Reservar Ahora",
+        "profile": "Perfil",
         "cancel_booking": "Cancelar",
         "cancel_confirm_title": "¿Cancelar Reserva?",
         "cancel_confirm_message": "¿Estás seguro de que quieres cancelar esta reserva? Esta acción no se puede deshacer.",
@@ -386,6 +387,25 @@
         ],
         "cancel": "Cancelar",
         "delete": "Eliminar"
+    },
+    "profile": {
+        "title": "Mi Perfil",
+        "subtitle": "Gestiona tu información personal",
+        "back_to_dashboard": "Volver al Dashboard",
+        "full_name": "Nombre Completo",
+        "full_name_placeholder": "Ingresa tu nombre completo",
+        "email_address": "Correo Electrónico",
+        "change_password": "Cambiar Contraseña",
+        "new_password": "Nueva Contraseña",
+        "update_name": "Actualizar Nombre",
+        "update_email": "Actualizar Correo",
+        "update_password": "Actualizar Contraseña",
+        "updating": "Actualizando...",
+        "name_updated": "Nombre actualizado exitosamente",
+        "email_updated": "Correo actualizado. Revisa tu bandeja de entrada para confirmar.",
+        "password_updated": "Contraseña actualizada exitosamente",
+        "name_required": "El nombre es requerido",
+        "email_note": "Te enviaremos un correo de confirmación a tu nueva dirección"
     },
     "pricing": {
         "exclusive_plans": "Planes Exclusivos",

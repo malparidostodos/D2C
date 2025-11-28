@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import { Link, useNavigate } from 'react-router-dom'
-import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle } from 'lucide-react'
+import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings } from 'lucide-react'
 import AnimatedButton from './AnimatedButton'
 import Tooltip from './Tooltip'
 import { useTranslation } from 'react-i18next'
@@ -170,13 +170,22 @@ const UserDashboard = () => {
                 Ta' <span className="text-accent">To'</span> Clean
             </Link>
 
-            <button
-                onClick={handleLogout}
-                className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50"
-            >
-                <LogOut size={18} />
-                <span className="hidden md:inline">{t('dashboard.logout')}</span>
-            </button>
+            <div className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-3 z-50">
+                <Link
+                    to={getLocalizedPath('/profile')}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                >
+                    <Settings size={18} />
+                    <span className="hidden md:inline">{t('dashboard.profile')}</span>
+                </Link>
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                >
+                    <LogOut size={18} />
+                    <span className="hidden md:inline">{t('dashboard.logout')}</span>
+                </button>
+            </div>
 
             <div className="max-w-6xl mx-auto">
                 {/* Header */}

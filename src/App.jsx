@@ -20,6 +20,7 @@ import SignUpPage from './components/SignUpPage'
 import ForgotPasswordPage from './components/ForgotPasswordPage'
 import ResetPasswordPage from './components/ResetPasswordPage'
 import UserDashboard from './components/UserDashboard'
+import ProfilePage from './components/ProfilePage'
 
 import LanguageWrapper from './components/LanguageWrapper'
 import { useTranslation } from 'react-i18next'
@@ -111,6 +112,7 @@ const AppRoutes = () => (
     <Route path="login" element={<LoginPage />} />
     <Route path="signup" element={<SignUpPage />} />
     <Route path="dashboard" element={<UserDashboard />} />
+    <Route path="profile" element={<ProfilePage />} />
     <Route path="forgot-password" element={<ForgotPasswordPage />} />
     <Route path="reset-password" element={<ResetPasswordPage />} />
     <Route path="*" element={<RedirectToHome />} />

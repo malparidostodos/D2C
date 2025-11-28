@@ -162,6 +162,7 @@
         "no_bookings": "You have no bookings",
         "make_booking": "Make a Booking",
         "book_now": "Book now",
+        "profile": "Profile",
         "cancel_booking": "Cancel",
         "cancel_confirm_title": "Cancel Booking?",
         "cancel_confirm_message": "Are you sure you want to cancel this booking? This action cannot be undone.",
@@ -394,6 +395,25 @@
         ],
         "cancel": "Cancel",
         "delete": "Delete"
+    },
+    "profile": {
+        "title": "My Profile",
+        "subtitle": "Manage your personal information",
+        "back_to_dashboard": "Back to Dashboard",
+        "full_name": "Full Name",
+        "full_name_placeholder": "Enter your full name",
+        "email_address": "Email Address",
+        "change_password": "Change Password",
+        "new_password": "New Password",
+        "update_name": "Update Name",
+        "update_email": "Update Email",
+        "update_password": "Update Password",
+        "updating": "Updating...",
+        "name_updated": "Name updated successfully",
+        "email_updated": "Email updated. Check your inbox to confirm.",
+        "password_updated": "Password updated successfully",
+        "name_required": "Name is required",
+        "email_note": "We'll send a confirmation email to your new address"
     },
     "pricing": {
         "exclusive_plans": "Exclusive Plans",
