@@ -410,11 +410,15 @@ const Header = () => {
 
       {/* Main Menu Structure (Bottom Pill) */}
       <div
-        className={`_menu`}
+        className={`_menu !z-[10000]`}
         style={{ transform: hidden ? 'translateY(250%)' : 'translateY(0)', transition: 'transform 0.35s ease-in-out' }}
       >
         <div
           className="menu-bar"
+          style={{
+            backgroundColor: menuOpen ? '#2563eb' : '',
+            transition: 'background-color 0.3s ease'
+          }}
           onMouseEnter={() => { setHoverLock(true); setHidden(false); }}
           onMouseLeave={() => { setHoverLock(false); setHoveredService(null); setServicesOpen(false); }}
         >
@@ -529,81 +533,155 @@ const Header = () => {
       {/* Mobile menu overlay */}
       {menuOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/90 backdrop-blur-xl flex flex-col items-center justify-center gap-8"
-          onClick={() => setMenuOpen(false)}
+          className="fixed inset-0 z-[9999] bg-[#f73b20] flex flex-col"
+          style={{ backgroundColor: '#f73b20' }} // Fallback to Jeton Red if blue not applied, but we will override
         >
-          {/* Mobile Language Selector */}
-          <div className="flex gap-4 mb-4" onClick={(e) => e.stopPropagation()}>
-            {languages.map((lang) => (
+          {/* Override background to Blue */}
+          <div className="absolute inset-0 bg-[#0046b8]" />
+
+          {/* Content Container */}
+          <div className="relative z-10 flex flex-col h-full overflow-hidden">
+
+            {/* Top Bar */}
+            <div className="flex items-center justify-between px-6 pt-6 pb-4">
+              {/* Language Selector */}
               <button
-                key={lang.code}
-                onClick={() => handleLanguageChange(lang.code)}
-                className={`px-4 py-2 rounded-full border ${currentLang === lang.code
-                  ? 'bg-white text-black border-white'
-                  : 'bg-transparent text-white border-white/30'
-                  } transition-all`}
+                onClick={() => setLangOpen(!langOpen)}
+                className="flex items-center gap-2 px-4 py-2 bg-[#ff4f36] rounded-full text-white font-medium text-sm transition-colors hover:bg-[#ff6b55]"
+                style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
               >
-                {lang.label}
+                <span className="_icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                    <path d="M12 22C17.5228 22 22 17.5229 22 12C22 6.47716 17.5228 2 12 2C6.47715 2 2 6.47716 2 12C2 17.5229 6.47715 22 12 22Z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                    <path d="M3 9H21" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                    <path d="M3 15H21" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                    <path d="M12 2C14.5013 4.73836 15.9228 8.29204 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29204 9.49872 4.73836 12 2V2Z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                  </svg>
+                </span>
+                <span>{currentLang}</span>
+                <ChevronDown size={16} />
               </button>
-            ))}
-          </div>
 
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={getLocalizedPath(link.path)}
-              onClick={(e) => handleNavClick(e, link.id, link.path)}
-              className="text-3xl font-display font-bold text-white hover:text-accent transition-colors"
-            >
-              {link.name}
-            </a>
-          ))}
-          {servicesDropdown.map((item) => (
-            <a
-              key={item.name}
-              href={getLocalizedPath(item.path)}
-              onClick={(e) => handleNavClick(e, item.id, item.path)}
-              className="text-2xl font-display font-bold text-white/70 hover:text-accent transition-colors"
-            >
-              {item.name}
-            </a>
-          ))}
-          <a
-            href={getLocalizedPath("/contacto")}
-            onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
-            className="text-3xl font-display font-bold text-accent"
-          >
-            {t('header.lets_talk').toUpperCase()}
-          </a>
-
-          {/* Mobile CTAs */}
-          <div className="flex flex-col gap-4 mt-8 w-full max-w-xs px-4">
-            {user ? (
-              <Link
-                to={getLocalizedPath("/dashboard")}
-                className="w-full py-3 bg-[#0046b8] text-white rounded-xl text-center font-bold text-lg"
-                onClick={() => setMenuOpen(false)}
-              >
-                {t('dashboard.title')}
-              </Link>
-            ) : (
-              <>
-                <a
-                  href={getLocalizedPath("/login")}
-                  className="w-full py-3 bg-white/10 text-white border border-white/20 rounded-xl text-center font-bold text-lg backdrop-blur-md"
+              {/* Auth Button */}
+              {user ? (
+                <Link
+                  to={getLocalizedPath("/dashboard")}
                   onClick={() => setMenuOpen(false)}
+                  className="px-6 py-2 bg-white text-[#0046b8] rounded-xl font-bold text-sm hover:bg-gray-100 transition-colors"
                 >
-                  {t('header.login')}
-                </a>
+                  {t('dashboard.title')}
+                </Link>
+              ) : (
                 <a
                   href={getLocalizedPath("/signup")}
-                  className="w-full py-3 bg-white text-[#0046b8] rounded-xl text-center font-bold text-lg"
                   onClick={() => setMenuOpen(false)}
+                  className="px-6 py-2 bg-white text-[#0046b8] rounded-xl font-bold text-sm hover:bg-gray-100 transition-colors"
                 >
                   {t('header.signup')}
                 </a>
-              </>
+              )}
+            </div>
+
+            {/* Language Dropdown (Mobile) */}
+            {langOpen && (
+              <div className="px-6 mb-4">
+                <div className="bg-white rounded-xl overflow-hidden p-2">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => handleLanguageChange(lang.code)}
+                      className={`w-full text-left px-4 py-3 rounded-lg font-medium text-sm transition-colors ${currentLang === lang.code ? 'bg-gray-100 text-[#0046b8]' : 'text-gray-600 hover:bg-gray-50'
+                        }`}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             )}
+
+            {/* Scrollable List */}
+            <div className="flex-1 overflow-y-auto px-4 pb-32 space-y-6">
+
+              {/* Homepage Item */}
+              <a
+                href={getLocalizedPath("/inicio")}
+                onClick={(e) => handleNavClick(e, '#inicio', '/inicio')}
+                className="flex items-center justify-between p-4 bg-white/10 rounded-2xl hover:bg-white/20 transition-colors group"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
+                    <Home size={20} />
+                  </div>
+                  <span className="text-xl font-bold text-white">{t('header.home')}</span>
+                </div>
+                <div className="w-2 h-2 rounded-full bg-white opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
+
+              {/* Personal Section */}
+              <div>
+                <h3 className="text-white/60 text-sm font-medium mb-4 px-2">{t('header.personal')}</h3>
+                <div className="space-y-2">
+                  {/* Precios */}
+                  <a
+                    href={getLocalizedPath("/precios")}
+                    onClick={(e) => handleNavClick(e, '#precios', '/precios')}
+                    className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-lg">
+                      <span className="font-bold text-lg">$</span>
+                    </div>
+                    <span className="text-lg font-bold text-white">{t('header.pricing')}</span>
+                  </a>
+
+                  {/* Proceso */}
+                  <a
+                    href={getLocalizedPath("/roadmap")}
+                    onClick={(e) => handleNavClick(e, '#roadmap', '/roadmap')}
+                    className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white shadow-lg">
+                      <ArrowRight size={24} />
+                    </div>
+                    <span className="text-lg font-bold text-white">{t('header.process')}</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Business Link (Membership) */}
+              <a
+                href={getLocalizedPath("/membresias")}
+                onClick={(e) => handleNavClick(e, '#membresias', '/membresias')}
+                className="flex items-center justify-between p-4 bg-[#ff6b55] rounded-2xl hover:bg-[#ff8370] transition-colors"
+                style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-8 h-8 rounded bg-white/20 flex items-center justify-center text-white font-bold">
+                    M
+                  </div>
+                  <span className="text-lg font-bold text-white">{t('header.memberships')}</span>
+                </div>
+                <ArrowUpRight size={20} className="text-white" />
+              </a>
+
+              {/* Company Section */}
+              <div>
+                <h3 className="text-white/60 text-sm font-medium mb-4 px-2">{t('header.contact')}</h3>
+                <div className="space-y-2">
+                  <a
+                    href={getLocalizedPath("/contacto")}
+                    onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
+                    className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white shadow-lg">
+                      <User size={24} />
+                    </div>
+                    <span className="text-lg font-bold text-white">{t('header.lets_talk')}</span>
+                  </a>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       )}
