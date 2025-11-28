@@ -73,26 +73,26 @@ const Benefits = () => {
   ]
 
   return (
-    <section id="beneficios" className="py-32 bg-background relative">
-      <div className="container">
-        <div className="text-center max-w-3xl mx-auto mb-20">
+    <section id="beneficios" className="py-16 md:py-32 bg-background relative">
+      <div className="container px-4 md:px-6">
+        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <span className="text-accent font-medium tracking-widest uppercase text-sm">{t('benefits.why_choose_us')}</span>
-            <h2 className="text-5xl md:text-6xl font-display font-bold text-white mt-4 mb-6 justify-center">
+            <span className="text-accent font-medium tracking-widest uppercase text-xs md:text-sm">{t('benefits.why_choose_us')}</span>
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold text-white mt-4 mb-4 md:mb-6 justify-center">
               {t('benefits.title')}
             </h2>
-            <p className="text-white/60 text-lg leading-relaxed">
+            <p className="text-white/60 text-base md:text-lg leading-relaxed">
               {t('benefits.subtitle')}
             </p>
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-[300px]">
           {benefits.map((benefit) => (
             <BenefitCard key={benefit.id} benefit={benefit} />
           ))}

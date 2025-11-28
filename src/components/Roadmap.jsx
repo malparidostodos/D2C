@@ -28,7 +28,7 @@ const ProcessCard = ({ step, index, totalSteps, scrollProgress }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.5, delay: index * 0.2 }}
-      className={`flex items-center justify-between w-full mb-8 ${isEven ? 'flex-row-reverse' : ''}`}
+      className={`flex items-center justify-between w-full mb-8 ${isEven ? 'md:flex-row-reverse' : ''}`}
     >
       <div className="hidden md:block w-5/12" />
 
@@ -125,24 +125,24 @@ const Roadmap = () => {
   ]
 
   return (
-    <section ref={containerRef} id="roadmap" className="py-32 bg-background relative overflow-hidden">
-      <div className="container relative z-10">
-        <div className="text-center mb-20">
-          <span className="text-accent font-medium tracking-widest uppercase text-sm">{t('roadmap.our_method')}</span>
-          <h2 className="text-5xl md:text-6xl font-display font-bold text-white mt-4 mb-6">
+    <section ref={containerRef} id="roadmap" className="py-16 md:py-32 bg-background relative overflow-hidden">
+      <div className="container relative z-10 px-4 md:px-6">
+        <div className="text-center mb-12 md:mb-20">
+          <span className="text-accent font-medium tracking-widest uppercase text-xs md:text-sm">{t('roadmap.our_method')}</span>
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold text-white mt-4 mb-4 md:mb-6">
             {t('roadmap.transformation_process')}
           </h2>
         </div>
 
         <div className="relative max-w-5xl mx-auto">
           {/* Vertical Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
+          <div className="absolute left-5 md:left-1/2 top-0 bottom-0 w-px bg-white/10 md:-translate-x-1/2" />
           <motion.div
             style={{ height }}
-            className="absolute left-4 md:left-1/2 top-0 w-px bg-accent -translate-x-1/2 origin-top"
+            className="absolute left-5 md:left-1/2 top-0 w-px bg-accent md:-translate-x-1/2 origin-top"
           />
 
-          <div className="flex flex-col gap-12">
+          <div className="flex flex-col gap-8 md:gap-12">
             {processSteps.map((step, index) => (
               <ProcessCard
                 key={step.id}

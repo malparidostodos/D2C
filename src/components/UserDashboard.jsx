@@ -425,7 +425,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, cancelT
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-[#111] border border-white/10 rounded-3xl p-8 max-w-md w-full text-center"
+                className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full text-center"
             >
                 <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                     <X size={32} className="text-red-500" />
@@ -551,7 +551,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-[#111] border border-white/10 rounded-3xl p-8 max-w-md w-full"
+                className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full"
             >
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-white">{t('dashboard.add_vehicle_modal.title')}</h2>
@@ -674,7 +674,7 @@ const DeleteVehicleModal = ({ isOpen, onClose, onConfirm, plate }) => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-[#111] border border-white/10 rounded-3xl p-8 max-w-md w-full text-center"
+                className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full text-center"
             >
                 <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
                     <AlertCircle size={32} className="text-red-500" />

@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSmoothScroll } from './SmoothScroll';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
-import { Menu, X, ArrowRight, Home, ChevronDown, ArrowUpRight, User } from 'lucide-react';
+import { Menu, X, ArrowRight, Home, ChevronDown, ArrowUpRight, User, ArrowUp, ArrowDown } from 'lucide-react';
 import './JetonHeader.css'; // Import the strict CSS
 
 const Header = () => {
@@ -279,6 +279,22 @@ const Header = () => {
     { name: t('header.memberships'), id: '#membresias', path: '/membresias' },
   ];
 
+  const scrollDown = () => {
+    if (lenis) {
+      lenis.scrollTo(window.scrollY + window.innerHeight);
+    } else {
+      window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+    }
+  };
+
+  const scrollUp = () => {
+    if (lenis) {
+      lenis.scrollTo(window.scrollY - window.innerHeight);
+    } else {
+      window.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       {/* Shadow hint */}
@@ -404,7 +420,7 @@ const Header = () => {
         >
           {/* INICIO */}
           <button
-            className={`_menu-button ${activeSection === '#inicio' ? '-active -exact' : ''}`}
+            className={`hidden md:flex _menu-button ${activeSection === '#inicio' ? '-active -exact' : ''}`}
             onClick={(e) => handleNavClick(e, '#inicio', '/inicio')}
             onMouseEnter={() => setServicesOpen(false)}
           >
@@ -412,9 +428,9 @@ const Header = () => {
             <Home size={20} strokeWidth={2} />
           </button>
 
-          {/* SERVICIOS Dropdown Trigger */}
+          {/* SERVICIOS Dropdown Trigger (Desktop Only) */}
           <button
-            className={`_menu-button ${isServiceActive ? '-active -exact' : ''}`}
+            className={`hidden md:flex _menu-button ${isServiceActive ? '-active -exact' : ''}`}
             aria-expanded={servicesOpen}
             data-services-open={servicesOpen ? 'true' : 'false'}
             onMouseEnter={() => { setServicesOpen(true); }}
@@ -475,9 +491,9 @@ const Header = () => {
             </div>
           </div>
 
-          {/* HABLEMOS CTA */}
+          {/* HABLEMOS CTA (Desktop Only) */}
           <button
-            className={`_menu-button group hidden md:flex ${activeSection === '#contacto' ? '-active -exact' : ''}`}
+            className={`hidden md:flex _menu-button group ${activeSection === '#contacto' ? '-active -exact' : ''}`}
             onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
             onMouseEnter={() => setServicesOpen(false)}
           >
@@ -486,9 +502,9 @@ const Header = () => {
             <ArrowUpRight className="ml-1 w-3 h-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:scale-110" />
           </button>
 
-          {/* CONTACTO */}
+          {/* CONTACTO (Desktop Only) */}
           <button
-            className={`_menu-button group ${activeSection === '#contacto' ? '-active -exact' : ''}`}
+            className={`hidden md:flex _menu-button group ${activeSection === '#contacto' ? '-active -exact' : ''}`}
             onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
             onMouseEnter={() => setServicesOpen(false)}
           >
@@ -497,12 +513,14 @@ const Header = () => {
             <ArrowUpRight className="ml-1 w-3 h-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:scale-110" />
           </button>
 
-          {/* Mobile Toggle */}
+          {/* Mobile Toggle (Single Pill) */}
           <button
-            className="md:hidden text-black ml-2"
+            className="md:hidden _menu-button flex items-center gap-2 px-6"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <X /> : <Menu />}
+            <div className="background"></div>
+            <span className="font-medium text-base">Menu</span>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
         </div>
@@ -514,6 +532,22 @@ const Header = () => {
           className="fixed inset-0 z-40 bg-black/90 backdrop-blur-xl flex flex-col items-center justify-center gap-8"
           onClick={() => setMenuOpen(false)}
         >
+          {/* Mobile Language Selector */}
+          <div className="flex gap-4 mb-4" onClick={(e) => e.stopPropagation()}>
+            {languages.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => handleLanguageChange(lang.code)}
+                className={`px-4 py-2 rounded-full border ${currentLang === lang.code
+                  ? 'bg-white text-black border-white'
+                  : 'bg-transparent text-white border-white/30'
+                  } transition-all`}
+              >
+                {lang.label}
+              </button>
+            ))}
+          </div>
+
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -541,6 +575,36 @@ const Header = () => {
           >
             {t('header.lets_talk').toUpperCase()}
           </a>
+
+          {/* Mobile CTAs */}
+          <div className="flex flex-col gap-4 mt-8 w-full max-w-xs px-4">
+            {user ? (
+              <Link
+                to={getLocalizedPath("/dashboard")}
+                className="w-full py-3 bg-[#0046b8] text-white rounded-xl text-center font-bold text-lg"
+                onClick={() => setMenuOpen(false)}
+              >
+                {t('dashboard.title')}
+              </Link>
+            ) : (
+              <>
+                <a
+                  href={getLocalizedPath("/login")}
+                  className="w-full py-3 bg-white/10 text-white border border-white/20 rounded-xl text-center font-bold text-lg backdrop-blur-md"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t('header.login')}
+                </a>
+                <a
+                  href={getLocalizedPath("/signup")}
+                  className="w-full py-3 bg-white text-[#0046b8] rounded-xl text-center font-bold text-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {t('header.signup')}
+                </a>
+              </>
+            )}
+          </div>
         </div>
       )}
     </>

@@ -853,16 +853,16 @@ const BookingPage = () => {
                                     whileHover={{ scale: 1.03 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={handleAddNewVehicle}
-                                    className="w-full p-12 rounded-3xl border-2 border-dashed border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 text-white flex flex-col items-center justify-center gap-6 transition-all duration-300"
+                                    className="w-full p-6 md:p-12 rounded-3xl border-2 border-dashed border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 text-white flex flex-col items-center justify-center gap-6 transition-all duration-300"
                                 >
-                                    <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
-                                        <Plus size={40} className="text-white" />
+                                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/10 flex items-center justify-center">
+                                        <Plus size={32} className="text-white md:w-10 md:h-10" />
                                     </div>
                                     <div className="text-center">
-                                        <h3 className="text-2xl font-bold text-white mb-2">
+                                        <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
                                             Añadir Mi Vehículo
                                         </h3>
-                                        <p className="text-white/60">
+                                        <p className="text-white/60 text-sm md:text-base">
                                             Comienza registrando tu primer vehículo
                                         </p>
                                     </div>
@@ -953,7 +953,7 @@ const BookingPage = () => {
                                     whileHover={{ scale: 1.03, y: -5 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleVehicleSelect(type)}
-                                    className={`relative overflow-hidden p-8 rounded-3xl border-2 flex flex-col items-center gap-6 transition-all duration-300 group ${formData.vehicleType?.id === type.id
+                                    className={`relative overflow-hidden p-6 md:p-8 rounded-3xl border-2 flex flex-col items-center gap-6 transition-all duration-300 group ${formData.vehicleType?.id === type.id
                                         ? 'bg-white text-black border-white shadow-[0_0_30px_rgba(255,255,255,0.3)]'
                                         : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white'
                                         }`}
@@ -1105,7 +1105,7 @@ const BookingPage = () => {
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
                             {t('booking.date_time')}
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                             <div>
                                 <label className="block text-white/60 text-sm mb-4">{t('booking.select_date')}</label>
                                 <CustomCalendar
@@ -1167,8 +1167,8 @@ const BookingPage = () => {
                             {t('booking.confirm_booking')}
                         </h2>
 
-                        <div className="bg-white/5 rounded-3xl p-8 border border-white/10 space-y-6">
-                            <div className="flex items-center justify-between pb-6 border-b border-white/10">
+                        <div className="bg-white/5 rounded-3xl p-6 md:p-8 border border-white/10 space-y-6">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-white/10 gap-4 md:gap-0">
                                 <div className="flex items-center gap-4">
                                     <div className="p-3">
                                         <img src={formData.vehicleType.image} alt={formData.vehicleType.name} className="w-20 h-14 object-contain" />
@@ -1181,7 +1181,7 @@ const BookingPage = () => {
                                 </div>
                                 {/* Solo mostrar botones de editar si NO usó vehículo existente */}
                                 {!useExistingVehicle && (
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-row md:flex-col gap-2 md:self-center self-end">
                                         <button
                                             onClick={() => jumpToStep(1)}
                                             className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-white/10"
@@ -1200,7 +1200,7 @@ const BookingPage = () => {
                                 )}
                             </div>
 
-                            <div className="flex items-center justify-between pb-6 border-b border-white/10">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-white/10 gap-4 md:gap-0">
                                 <div className="flex items-center gap-4">
                                     <div className="p-3 bg-white/10 rounded-full">
                                         <Check size={24} className="text-white" />
@@ -1213,14 +1213,14 @@ const BookingPage = () => {
                                 </div>
                                 <button
                                     onClick={() => jumpToStep(2)}
-                                    className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10"
+                                    className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10 md:self-center self-end"
                                 >
                                     <Edit2 size={14} />
                                     {t('booking.change')}
                                 </button>
                             </div>
 
-                            <div className="flex items-center justify-between pb-6 border-b border-white/10">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-white/10 gap-4 md:gap-0">
                                 <div className="flex items-center gap-4">
                                     <div className="p-3 bg-white/10 rounded-full">
                                         <CalendarIcon size={24} className="text-white" />
@@ -1232,7 +1232,7 @@ const BookingPage = () => {
                                 </div>
                                 <button
                                     onClick={() => jumpToStep(4)}
-                                    className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10"
+                                    className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10 md:self-center self-end"
                                 >
                                     <Edit2 size={14} />
                                     {t('booking.change')}

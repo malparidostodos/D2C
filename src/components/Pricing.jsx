@@ -40,19 +40,19 @@ const Pricing = () => {
     ]
 
     return (
-        <section id="membresias" className="py-32 bg-background relative overflow-hidden">
-            <div className="container relative z-10">
-                <div className="text-center mb-20">
-                    <span className="text-accent font-medium tracking-widest uppercase text-sm">{t('pricing.exclusive_plans')}</span>
-                    <h2 className="text-5xl md:text-6xl font-display font-bold text-white mt-4 mb-6">
+        <section id="membresias" className="py-16 md:py-32 bg-background relative overflow-hidden">
+            <div className="container relative z-10 px-4 md:px-6">
+                <div className="text-center mb-12 md:mb-20">
+                    <span className="text-accent font-medium tracking-widest uppercase text-xs md:text-sm">{t('pricing.exclusive_plans')}</span>
+                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold text-white mt-4 mb-4 md:mb-6">
                         {t('pricing.memberships')}
                     </h2>
-                    <p className="text-white/60 max-w-2xl mx-auto text-lg font-light">
+                    <p className="text-white/60 max-w-2xl mx-auto text-base md:text-lg font-light">
                         {t('pricing.subtitle')}
                     </p>
                 </div>
 
-                <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <div className="grid lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
                     {plans.map((plan, index) => (
                         <motion.div
                             key={plan.name}
@@ -60,7 +60,7 @@ const Pricing = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
-                            className={`relative group p-8 rounded-3xl border transition-all duration-300 ${plan.highlight
+                            className={`relative group p-6 md:p-8 rounded-3xl border transition-all duration-300 ${plan.highlight
                                 ? 'bg-white/10 border-white/20'
                                 : 'bg-surface border-white/5 hover:border-white/10'
                                 }`}
@@ -71,18 +71,18 @@ const Pricing = () => {
                                 </div>
                             )}
 
-                            <div className="mb-8">
-                                <h3 className="text-2xl font-bold text-white mb-2">{plan.name}</h3>
+                            <div className="mb-6 md:mb-8">
+                                <h3 className="text-xl md:text-2xl font-bold text-white mb-2">{plan.name}</h3>
                                 <p className="text-white/40 text-sm">{plan.description}</p>
                             </div>
 
-                            <div className="mb-8 flex items-baseline gap-1">
-                                <span className="text-4xl font-light text-white">$</span>
-                                <span className="text-5xl font-bold text-white tracking-tight">{plan.price}</span>
+                            <div className="mb-6 md:mb-8 flex items-baseline gap-1">
+                                <span className="text-3xl md:text-4xl font-light text-white">$</span>
+                                <span className="text-4xl md:text-5xl font-bold text-white tracking-tight">{plan.price}</span>
                                 <span className="text-white/40 ml-2">{plan.period}</span>
                             </div>
 
-                            <div className="space-y-4 mb-10">
+                            <div className="space-y-4 mb-8 md:mb-10">
                                 {plan.features.map((feature, i) => (
                                     <div key={i} className="flex items-start gap-3 text-white/70">
                                         <div className="mt-1 p-0.5 rounded-full bg-white/10 text-white">

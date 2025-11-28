@@ -27,11 +27,11 @@ const Collaboration = () => {
   }
 
   return (
-    <section id="colaboracion" className="py-24 bg-background relative">
+    <section id="colaboracion" className="py-16 md:py-24 bg-background relative">
       <div className="container px-5">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-8 select-none text-white">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-light mb-6 md:mb-8 select-none text-white">
               {t('collaboration.title_part1')}{' '}
               <span className="relative inline-block">
                 {t('collaboration.title_part2')}
@@ -83,8 +83,8 @@ const Collaboration = () => {
             </AnimatedButton>
           </div>
 
-          <div className="relative text-white">
-            <div className="relative w-full aspect-square max-w-md mx-auto">
+          <div className="relative text-white mt-12 md:mt-0">
+            <div className="relative w-full aspect-square max-w-[300px] md:max-w-md mx-auto scale-90 md:scale-100">
               <div className="absolute inset-0 border border-white/10 rounded-full"></div>
               <div className="absolute inset-8 border border-white/10 rounded-full"></div>
               <div className="absolute inset-16 border border-white/10 rounded-full"></div>
