@@ -43,7 +43,7 @@ BEGIN
       updated_at = NOW()
   WHERE status = 'pending'
     AND (
-      (booking_date || ' ' || booking_time)::timestamp AT TIME ZONE 'America/Bogota' < NOW() AT TIME ZONE 'America/Bogota'
+      (booking_date || ' ' || booking_time)::timestamp < (NOW() AT TIME ZONE 'America/Bogota')
     );
 END;
 $$;

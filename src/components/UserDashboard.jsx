@@ -27,6 +27,13 @@ const UserDashboard = () => {
 
     useEffect(() => {
         checkUser()
+
+        // Polling para actualizar estado en tiempo real (cada 1 minuto)
+        const interval = setInterval(() => {
+            loadUserData()
+        }, 60000)
+
+        return () => clearInterval(interval)
     }, [])
 
     const checkUser = async () => {
@@ -153,6 +160,30 @@ const UserDashboard = () => {
             case 'cancelled': return 'bg-red-500/20 text-red-500 border-red-500/30'
             default: return 'bg-gray-500/20 text-gray-500 border-gray-500/30'
         }
+    }
+
+    const getEffectiveStatus = (booking) => {
+        if (booking.status !== 'pending' && booking.status !== 'confirmed') return booking.status
+
+        // Verificar si la fecha/hora ya pasó (en hora Colombia)
+        try {
+            const now = new Date()
+            const colombiaTime = new Date(now.toLocaleString("en-US", { timeZone: "America/Bogota" }))
+
+            const [year, month, day] = booking.booking_date.split('-').map(Number)
+            const [hours, minutes, seconds] = booking.booking_time.split(':').map(Number)
+
+            // Crear fecha con los componentes (será interpretada como local, igual que colombiaTime)
+            const bookingDate = new Date(year, month - 1, day, hours, minutes, seconds || 0)
+
+            if (bookingDate < colombiaTime) {
+                return 'completed'
+            }
+        } catch (e) {
+            console.error('Error calculating effective status:', e)
+        }
+
+        return booking.status
     }
 
     const getStatusText = (status) => {
@@ -335,8 +366,8 @@ const UserDashboard = () => {
                                                     <h3 className="text-xl font-bold text-white">
                                                         {booking.service?.name || 'Servicio'}
                                                     </h3>
-                                                    <span className={`text-xs px-3 py-1 rounded-full border ${getStatusColor(booking.status)}`}>
-                                                        {getStatusText(booking.status)}
+                                                    <span className={`text-xs px-3 py-1 rounded-full border ${getStatusColor(getEffectiveStatus(booking))}`}>
+                                                        {getStatusText(getEffectiveStatus(booking))}
                                                     </span>
                                                 </div>
                                                 <p className="text-white/60 text-sm mb-3">
@@ -362,7 +393,7 @@ const UserDashboard = () => {
                                                     ${booking.total_price?.toLocaleString()}
                                                 </p>
 
-                                                {(booking.status === 'pending' || booking.status === 'confirmed') && (
+                                                {(getEffectiveStatus(booking) === 'pending' || getEffectiveStatus(booking) === 'confirmed') && (
                                                     <button
                                                         onClick={() => handleCancelBooking(booking.id)}
                                                         className="mt-2 text-sm text-red-500 hover:text-red-400 transition-colors flex items-center gap-1 ml-auto"
