@@ -256,15 +256,25 @@ const UserDashboard = () => {
                                             </div>
 
                                             {/* Bottom: Brand & Plate */}
-                                            <div className="flex items-end justify-between w-full">
-                                                {(vehicle.brand || vehicle.model) && (
-                                                    <p className="text-white text-sm font-medium mb-1 capitalize">
-                                                        {vehicle.brand} {vehicle.model} {vehicle.year}
-                                                    </p>
-                                                )}
-                                                <h3 className="text-xl font-bold text-white tracking-tight leading-none mb-1">
-                                                    {vehicle.plate}
-                                                </h3>
+                                            <div className="flex flex-col gap-3 w-full">
+                                                <div className="flex items-end justify-between w-full">
+                                                    {(vehicle.brand || vehicle.model) && (
+                                                        <p className="text-white text-sm font-medium mb-1 capitalize">
+                                                            {vehicle.brand} {vehicle.model} {vehicle.year}
+                                                        </p>
+                                                    )}
+                                                    <h3 className="text-xl font-bold text-white tracking-tight leading-none mb-1">
+                                                        {vehicle.plate}
+                                                    </h3>
+                                                </div>
+
+                                                <button
+                                                    onClick={() => navigate(getLocalizedPath('/reserva'), { state: { selectedVehicle: vehicle } })}
+                                                    className="w-full py-2 rounded-full bg-white text-black text-sm font-bold hover:bg-white/90 transition-colors flex items-center justify-center gap-2"
+                                                >
+                                                    <Calendar size={14} />
+                                                    {t('dashboard.book_now') || 'Reservar'}
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

@@ -170,6 +170,13 @@ const BookingPage = () => {
         if (location.state?.selectedService) {
             setFormData(prev => ({ ...prev, service: location.state.selectedService }))
         }
+        // Handle pre-selected vehicle from dashboard
+        if (location.state?.selectedVehicle) {
+            // We need to wait for userVehicles to be loaded, or just set it directly if we trust the data
+            // But since we load user data anyway, we can just set a flag or handle it after load
+            const vehicle = location.state.selectedVehicle
+            handleExistingVehicleSelect(vehicle)
+        }
     }, [location.state])
 
     // Cargar datos del usuario si está autenticado
@@ -200,9 +207,11 @@ const BookingPage = () => {
 
             setUserVehicles(vehiclesData || [])
 
-            // Siempre empezar en paso 0 para usuarios autenticados
-            setStep(0)
-            setMaxStep(0)
+            // Solo empezar en paso 0 si NO hay un vehículo pre-seleccionado desde el dashboard
+            if (!location.state?.selectedVehicle) {
+                setStep(0)
+                setMaxStep(0)
+            }
         }
         setLoadingVehicles(false)
     }

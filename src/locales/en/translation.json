@@ -156,12 +156,12 @@
         "add_vehicle": "Add Vehicle",
         "no_vehicles": "You have no registered vehicles",
         "add_vehicle_hint": "Add a vehicle to view booking history",
-        "delete_vehicle_confirm": "Are you sure you want to delete vehicle {{plate}}?",
         "delete_error": "Error deleting vehicle",
         "service_history": "Service History",
         "new_booking": "New Booking",
         "no_bookings": "You have no bookings",
         "make_booking": "Make a Booking",
+        "book_now": "Book now",
         "cancel_booking": "Cancel",
         "cancel_confirm_title": "Cancel Booking?",
         "cancel_confirm_message": "Are you sure you want to cancel this booking? This action cannot be undone.",
@@ -195,7 +195,9 @@
             "plate_taken_error": "This plate is already registered by another user",
             "adding": "Adding...",
             "add_button": "Add Vehicle"
-        }
+        },
+        "delete_vehicle_title": "Delete vehicle?",
+        "delete_vehicle_confirm": "Are you sure you want to delete vehicle {{plate}}? This action cannot be undone."
     },
     "benefits": {
         "why_choose_us": "Why choose us?",
@@ -389,7 +391,9 @@
             "F",
             "S",
             "S"
-        ]
+        ],
+        "cancel": "Cancel",
+        "delete": "Delete"
     },
     "pricing": {
         "exclusive_plans": "Exclusive Plans",

@@ -155,12 +155,12 @@
         "add_vehicle": "Agregar Vehículo",
         "no_vehicles": "No tienes vehículos registrados",
         "add_vehicle_hint": "Agrega un vehículo para ver el historial de reservas",
-        "delete_vehicle_confirm": "¿Seguro que quieres eliminar el vehículo {{plate}}?",
         "delete_error": "Error al eliminar vehículo",
         "service_history": "Historial de Servicios",
         "new_booking": "Nueva Reserva",
         "no_bookings": "No tienes reservas",
         "make_booking": "Hacer una Reserva",
+        "book_now": "Reservar Ahora",
         "cancel_booking": "Cancelar",
         "cancel_confirm_title": "¿Cancelar Reserva?",
         "cancel_confirm_message": "¿Estás seguro de que quieres cancelar esta reserva? Esta acción no se puede deshacer.",
@@ -194,7 +194,9 @@
             "plate_taken_error": "Esta placa ya está registrada por otro usuario",
             "adding": "Agregando...",
             "add_button": "Agregar Vehículo"
-        }
+        },
+        "delete_vehicle_title": "¿Eliminar vehículo?",
+        "delete_vehicle_confirm": "¿Estás seguro de eliminar el vehículo {{plate}}? Esta acción no se puede deshacer."
     },
     "benefits": {
         "why_choose_us": "¿Por qué elegirnos?",
@@ -381,7 +383,9 @@
             "V",
             "S",
             "D"
-        ]
+        ],
+        "cancel": "Cancelar",
+        "delete": "Eliminar"
     },
     "pricing": {
         "exclusive_plans": "Planes Exclusivos",
