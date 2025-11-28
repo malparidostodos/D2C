@@ -159,8 +159,8 @@ const ProfilePage = () => {
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className={`mb-6 p-4 rounded-xl border flex items-center gap-3 ${message.type === 'success'
-                                ? 'bg-green-500/10 border-green-500/30 text-green-500'
-                                : 'bg-red-500/10 border-red-500/30 text-red-500'
+                            ? 'bg-green-500/10 border-green-500/30 text-green-500'
+                            : 'bg-red-500/10 border-red-500/30 text-red-500'
                             }`}
                     >
                         {message.type === 'success' ? <Check size={20} /> : <AlertCircle size={20} />}

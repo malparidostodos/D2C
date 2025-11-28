@@ -7,7 +7,7 @@ import { supabase } from '../lib/supabase'
 import VehiclePlateSelector from './VehiclePlateSelector'
 import { useTranslation } from 'react-i18next'
 
-const CustomCalendar = ({ selectedDate, onSelect, availability = {} }) => {
+const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChange }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
     const [view, setView] = useState('days') // days, months, years
     const { t, i18n } = useTranslation()
@@ -28,12 +28,27 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {} }) => {
     }
 
     const handlePrev = () => {
-        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))
+        const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
+        setCurrentDate(newDate)
+        if (onMonthChange) {
+            onMonthChange(newDate)
+        }
     }
 
     const handleNext = () => {
-        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))
+        const newDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
+        setCurrentDate(newDate)
+        if (onMonthChange) {
+            onMonthChange(newDate)
+        }
     }
+
+    // Notify parent when component mounts or currentDate changes
+    useEffect(() => {
+        if (onMonthChange) {
+            onMonthChange(currentDate)
+        }
+    }, []) // Only on mount
 
     const isToday = (day) => {
         const today = new Date()
@@ -54,6 +69,15 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {} }) => {
         const today = new Date()
         today.setHours(0, 0, 0, 0)
         const checkDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
+
+        // Si es hoy, verificar si ya pasaron las 5 PM (17:00)
+        if (checkDate.getTime() === today.getTime()) {
+            const now = new Date()
+            if (now.getHours() >= 17) {
+                return true // Deshabilitar hoy si ya son las 5 PM o más
+            }
+        }
+
         return checkDate < today
     }
 
@@ -216,41 +240,72 @@ const BookingPage = () => {
         setLoadingVehicles(false)
     }
 
+    // Fetch availability when entering step 4 or when date changes
     useEffect(() => {
         if (step === 4) {
             fetchMonthAvailability()
         }
     }, [step])
 
-    const fetchMonthAvailability = async () => {
-        const currentDate = formData.date ? new Date(formData.date + 'T00:00:00') : new Date()
+    const fetchMonthAvailability = async (targetDate = null) => {
+        const currentDate = targetDate || (formData.date ? new Date(formData.date + 'T00:00:00') : new Date())
         const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
         const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)
 
+        // Usar RPC para obtener TODAS las reservas (ignora RLS)
+        // Esto asegura que veamos reservas de TODOS los usuarios, no solo del actual
         const { data, error } = await supabase
-            .from('bookings')
-            .select('booking_date, booking_time')
-            .gte('booking_date', firstDay.toISOString().split('T')[0])
-            .lte('booking_date', lastDay.toISOString().split('T')[0])
-            .not('status', 'eq', 'cancelled')
+            .rpc('get_global_availability', {
+                start_date: firstDay.toISOString().split('T')[0],
+                end_date: lastDay.toISOString().split('T')[0]
+            })
 
         if (error) {
-            console.error('Error fetching availability:', error)
+            console.error('Error fetching global availability:', error)
+            // Fallback: intentar con query normal (puede estar limitado por RLS)
+            const fallback = await supabase
+                .from('bookings')
+                .select('booking_date, booking_time')
+                .gte('booking_date', firstDay.toISOString().split('T')[0])
+                .lte('booking_date', lastDay.toISOString().split('T')[0])
+                .not('status', 'eq', 'cancelled')
+
+            if (fallback.error) {
+                console.error('Fallback query also failed:', fallback.error)
+                return
+            }
+            // Usar datos del fallback si RPC falla
+            buildAvailabilityMap(fallback.data)
             return
         }
 
+        buildAvailabilityMap(data)
+    }
+
+    // Helper para construir el mapa de disponibilidad
+    const buildAvailabilityMap = (bookings) => {
         const availabilityMap = {}
-        data?.forEach(booking => {
+        bookings?.forEach(booking => {
             const dateStr = booking.booking_date
             if (!availabilityMap[dateStr]) {
                 availabilityMap[dateStr] = []
             }
-            // Normalizar el formato de tiempo (quitar segundos si existen)
-            const timeStr = booking.booking_time.substring(0, 5) // "08:00:00" -> "08:00"
+            // Normalizar SIEMPRE el formato de tiempo a HH:MM (quitar segundos si existen)
+            let timeStr = booking.booking_time
+            if (typeof timeStr === 'string' && timeStr.length > 5) {
+                timeStr = timeStr.substring(0, 5) // "08:00:00" -> "08:00"
+            }
             availabilityMap[dateStr].push(timeStr)
         })
 
         setAvailability(availabilityMap)
+    }
+
+    // Handler when the month changes in the calendar
+    const handleMonthChange = (newDate) => {
+        if (step === 4) {
+            fetchMonthAvailability(newDate)
+        }
     }
 
     const vehicleTypes = [
@@ -443,6 +498,9 @@ const BookingPage = () => {
 
     const handleDateSelect = (date) => {
         setFormData({ ...formData, date, time: '' }) // Reset time when date changes
+        // Fetch availability for the selected date's month if not already fetched
+        const selectedDate = new Date(date + 'T00:00:00')
+        fetchMonthAvailability(selectedDate)
     }
 
     const handleTimeSelect = (time) => {
@@ -894,7 +952,16 @@ const BookingPage = () => {
                                     className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${touched.email && formData.clientInfo.email && !isEmailValid(formData.clientInfo.email) ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'
                                         }`}
                                     placeholder="juan@ejemplo.com"
+                                    disabled={isAuthenticated}
                                 />
+                                {!isAuthenticated && !useExistingVehicle && (
+                                    <p className="text-white/40 text-xs mt-2 flex items-start gap-1.5">
+                                        <svg className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                                        </svg>
+                                        <span>{t('booking.email_link_notice')}</span>
+                                    </p>
+                                )}
                             </div>
                             <div>
                                 <label className="block text-white/60 text-sm mb-2">{t('booking.phone')}</label>
@@ -937,7 +1004,12 @@ const BookingPage = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                             <div>
                                 <label className="block text-white/60 text-sm mb-4">{t('booking.select_date')}</label>
-                                <CustomCalendar selectedDate={formData.date} onSelect={handleDateSelect} availability={availability} />
+                                <CustomCalendar
+                                    selectedDate={formData.date}
+                                    onSelect={handleDateSelect}
+                                    availability={availability}
+                                    onMonthChange={handleMonthChange}
+                                />
                             </div>
                             <div>
                                 <label className="block text-white/60 text-sm mb-4">{t('booking.select_time')}</label>

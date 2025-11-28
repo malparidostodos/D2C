@@ -349,11 +349,17 @@ const Header = () => {
               {user ? (
                 <Link
                   to={getLocalizedPath("/dashboard")}
-                  className="_button !bg-white !text-[#0046b8] transition-all duration-300 flex items-center gap-2"
+                  className="_button !bg-[#0046b8] !text-white transition-all duration-300 flex items-center gap-2"
                   data-variant="ghost"
                 >
                   <User size={18} />
-                  <span>{t('dashboard.title')}</span>
+                  <span className="staggered-wrapper">
+                    {t('dashboard.title').split("").map((char, i) => (
+                      <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
+                        {char === " " ? "\u00A0" : char}
+                      </span>
+                    ))}
+                  </span>
                 </Link>
               ) : (
                 <>

@@ -103,7 +103,8 @@
         "confirmed_message": "We have sent your booking details to",
         "back_home": "Back to Home",
         "time_label": "Time",
-        "create_error": "Error creating booking. Please try again."
+        "create_error": "Error creating booking. Please try again.",
+        "email_link_notice": "This email will be used to link this booking to your account when you register"
     },
     "auth": {
         "mail": "example@mail.com",

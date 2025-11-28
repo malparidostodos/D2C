@@ -103,7 +103,8 @@
         "confirmed_message": "Hemos enviado los detalles de tu reserva a",
         "back_home": "Volver al Inicio",
         "time_label": "Hora",
-        "create_error": "Error al crear la reserva. Por favor intenta de nuevo."
+        "create_error": "Error al crear la reserva. Por favor intenta de nuevo.",
+        "email_link_notice": "Este correo se usará para vincular esta reserva a tu cuenta al registrarte"
     },
     "auth": {
         "mail": "ejemplo@correo.com",

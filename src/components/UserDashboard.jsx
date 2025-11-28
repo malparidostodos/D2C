@@ -42,45 +42,48 @@ const UserDashboard = () => {
     const loadUserData = async () => {
         setLoading(true)
 
-        // Cargar vehículos
-        const { data: vehiclesData } = await supabase
-            .from('user_vehicles')
-            .select('*')
-            .order('is_primary', { ascending: false })
+        try {
+            // 1. Actualizar estados de reservas pasadas
+            await supabase.rpc('check_and_update_booking_status')
 
-        setVehicles(vehiclesData || [])
+            // 2. Obtener usuario actual
+            const { data: { user } } = await supabase.auth.getUser()
+            if (!user) return
 
+            // 3. Vincular datos (reservas anónimas y crear vehículos)
+            // Esta función RPC hace todo el trabajo pesado en el servidor
+            if (user.email) {
+                await supabase.rpc('link_user_data', { user_email: user.email })
+            }
 
-        // Cargar reservas de las placas del usuario
-        if (vehiclesData && vehiclesData.length > 0) {
-            const plates = vehiclesData.map(v => v.plate)
+            // 4. Cargar vehículos (ahora incluirá los recién creados por el RPC)
+            const { data: vehiclesData } = await supabase
+                .from('user_vehicles')
+                .select('*')
+                .order('is_primary', { ascending: false })
 
-            // Construir query con OR para cada placa (más compatible)
-            let query = supabase
+            setVehicles(vehiclesData || [])
+
+            // 5. Cargar reservas (ahora incluirá las vinculadas por el RPC)
+            const { data: bookingsData, error: bookingsError } = await supabase
                 .from('bookings')
                 .select(`
                     *,
                     service:services(*)
                 `)
-
-            // Si hay solo una placa, usar eq; si hay varias, usar or
-            if (plates.length === 1) {
-                query = query.eq('vehicle_plate', plates[0])
-            } else {
-                const orConditions = plates.map(plate => `vehicle_plate.eq.${plate}`).join(',')
-                query = query.or(orConditions)
-            }
-
-            const { data: bookingsData, error: bookingsError } = await query.order('booking_date', { ascending: false })
+                .order('booking_date', { ascending: false })
 
             if (bookingsError) {
                 console.error('Error loading bookings:', bookingsError)
             }
 
             setBookings(bookingsData || [])
-        }
 
-        setLoading(false)
+        } catch (error) {
+            console.error('Error in loadUserData:', error)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const handleLogout = async () => {
@@ -197,7 +200,9 @@ const UserDashboard = () => {
                     <h1 className="text-4xl md:text-5xl font-display font-bold text-white mb-2">
                         {t('dashboard.title')}
                     </h1>
-                    <p className="text-white/60">{t('dashboard.welcome')}, {user?.email}</p>
+                    <p className="text-white/60">
+                        {t('dashboard.welcome')}, <span className={user?.user_metadata?.full_name ? "capitalize" : ""}>{user?.user_metadata?.full_name || user?.email}</span>
+                    </p>
                 </motion.div>
 
                 {/* Vehículos */}
@@ -344,7 +349,7 @@ const UserDashboard = () => {
                                                     </div>
                                                     <div className="flex items-center gap-2">
                                                         <Calendar size={16} />
-                                                        <span>{new Date(booking.booking_date).toLocaleDateString('es-CO', { dateStyle: 'medium' })}</span>
+                                                        <span>{new Date(booking.booking_date + 'T00:00:00').toLocaleDateString('es-CO', { dateStyle: 'medium', timeZone: 'UTC' })}</span>
                                                     </div>
                                                     <div className="flex items-center gap-2">
                                                         <Clock size={16} />
