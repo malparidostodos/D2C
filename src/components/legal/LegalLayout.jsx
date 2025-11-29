@@ -25,29 +25,30 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
     useEffect(() => {
         if (!sections || sections.length === 0) return;
 
-        const observerOptions = {
-            root: null,
-            rootMargin: '-20% 0px -70% 0px',
-            threshold: 0
-        };
+        const handleScroll = () => {
+            const fromTop = window.scrollY + 200;
 
-        const observerCallback = (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    setActiveSection(entry.target.id);
+            let current = '';
+            sections.forEach(section => {
+                const element = document.getElementById(section.id);
+                if (element) {
+                    const sectionTop = element.offsetTop;
+                    if (sectionTop <= fromTop) {
+                        current = section.id;
+                    }
                 }
             });
+
+            if (current !== activeSection) {
+                setActiveSection(current);
+            }
         };
 
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        handleScroll();
+        window.addEventListener('scroll', handleScroll);
 
-        sections.forEach((section) => {
-            const element = document.getElementById(section.id);
-            if (element) observer.observe(element);
-        });
-
-        return () => observer.disconnect();
-    }, [sections]);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [sections, activeSection]);
 
     const scrollToSection = (sectionId) => {
         const element = document.getElementById(sectionId);
@@ -78,11 +79,11 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
 
             {/* Main Content Area - Card */}
             <div className="flex-grow px-2 sm:px-4 pb-12">
-                <div className="max-w-[98%] mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[600px]">
+                <div className="max-w-[98%] mx-auto bg-white rounded-[2.5rem] shadow-2xl min-h-[600px]">
                     <div className={sections && sections.length > 0 ? "lg:grid lg:grid-cols-12" : "lg:grid lg:grid-cols-12"}>
 
                         {/* Sidebar Navigation - Policy Links */}
-                        <aside className="lg:col-span-3 bg-white border-b lg:border-b-0 lg:border-r border-gray-100 py-12 px-8">
+                        <aside className="lg:col-span-3 bg-white border-b lg:border-b-0 lg:border-r border-gray-100 py-12 px-8 rounded-l-[2.5rem]">
                             <nav className="space-y-1 lg:sticky lg:top-8">
                                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-6 px-4">
                                     {t('legal.menu_title')}
@@ -118,7 +119,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
 
                             {/* Section Navigation - Right Sidebar */}
                             {sections && sections.length > 0 && (
-                                <aside className="hidden lg:block lg:col-span-3 bg-gray-50 border-l border-gray-100 py-12 px-6">
+                                <aside className="hidden lg:block lg:col-span-3 bg-gray-50 border-l border-gray-100 py-12 px-6 rounded-r-[2.5rem]">
                                     <nav className="sticky top-8">
                                         <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
                                             {t('legal.on_this_page')}
