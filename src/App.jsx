@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Toaster } from 'sonner'
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import Header from './components/layout/Header'
 import Hero from './components/features/Hero'
@@ -143,6 +144,7 @@ const App = () => {
   const { t } = useTranslation()
   return (
     <SmoothScroll>
+      <Toaster position="top-right" theme="dark" richColors />
       <div
         style={{
           backgroundImage: "url('/images/BG2.jpg')",

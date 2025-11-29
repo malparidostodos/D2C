@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import StatusDropdown from './StatusDropdown'
+import { toast } from 'sonner'
 
 import SEO from '../ui/SEO'
 
@@ -132,10 +133,11 @@ const AdminDashboard = () => {
             calculateStats(bookings.map(b =>
                 b.id === bookingId ? { ...b, status: newStatus } : b
             ))
+            toast.success('Estado actualizado correctamente')
 
         } catch (error) {
             console.error('Error updating status:', error)
-            alert('Error al actualizar el estado')
+            toast.error('Error al actualizar el estado')
         }
     }
 

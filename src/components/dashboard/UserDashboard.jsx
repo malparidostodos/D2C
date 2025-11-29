@@ -6,6 +6,7 @@ import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, Aler
 import AnimatedButton from '../ui/AnimatedButton'
 import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 import SEO from '../ui/SEO'
 
@@ -140,8 +141,9 @@ const UserDashboard = () => {
             .eq('id', vehicleToDelete.id)
 
         if (error) {
-            alert(t('dashboard.delete_error') + ': ' + error.message)
+            toast.error(t('dashboard.delete_error') + ': ' + error.message)
         } else {
+            toast.success(t('dashboard.delete_success') || 'Vehículo eliminado correctamente')
             loadUserData()
         }
         setShowDeleteModal(false)
@@ -162,8 +164,9 @@ const UserDashboard = () => {
             .eq('id', bookingToCancel)
 
         if (error) {
-            alert(t('dashboard.cancel_error') + ': ' + error.message)
+            toast.error(t('dashboard.cancel_error') + ': ' + error.message)
         } else {
+            toast.success(t('dashboard.cancel_success') || 'Reserva cancelada correctamente')
             loadUserData()
         }
         setShowCancelModal(false)

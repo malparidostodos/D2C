@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { toast } from 'sonner'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -35,7 +36,7 @@ const ForgotPasswordPage = () => {
                 setSubmitted(true)
             } catch (error) {
                 console.error('Error sending reset password email:', error)
-                alert(t('auth.error_sending_email'))
+                toast.error(t('auth.error_sending_email'))
             }
         }
     }

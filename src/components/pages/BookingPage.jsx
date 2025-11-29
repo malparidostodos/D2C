@@ -7,6 +7,7 @@ import { supabase } from '../../lib/supabase'
 import VehiclePlateSelector from '../ui/VehiclePlateSelector'
 import { useTranslation } from 'react-i18next'
 import { Helmet } from 'react-helmet-async'
+import { toast } from 'sonner'
 
 const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChange }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
@@ -596,7 +597,7 @@ const BookingPage = () => {
 
         if (error) {
             console.error('Error creating booking:', error)
-            alert(t('booking.create_error'))
+            toast.error(t('booking.create_error'))
             return
         }
 

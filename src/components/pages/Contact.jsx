@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 const Contact = () => {
   const { t } = useTranslation()
@@ -39,7 +40,7 @@ const Contact = () => {
 
     // Simular envío
     setTimeout(() => {
-      alert(t('contact_section.newsletter.success'))
+      toast.success(t('contact_section.newsletter.success'))
       setEmail('')
       setIsSubmitting(false)
     }, 500)
@@ -71,9 +72,9 @@ const Contact = () => {
   }, [error])
 
   return (
-    <section id="contacto" className="bg-white min-h-screen flex flex-col contact-section">
+    <section id="contacto" className="bg-white min-h-screen flex flex-col text-[#0046b8] text-[clamp(0.875rem,1vw,2rem)]">
       <div
-        className="contact-container"
+        className="relative w-full flex flex-col flex-1"
         style={{
           paddingLeft: 'var(--base-padding-x)',
           paddingRight: 'var(--base-padding-x)',
@@ -81,84 +82,80 @@ const Contact = () => {
           paddingBottom: 'var(--base-padding-y)',
         }}
       >
-        <div className="contact-main-grid rounded-3xl p-8 md:p-12">
+        <div className="grid grid-cols-6 md:grid-cols-12 gap-[2vw] flex-1 rounded-3xl p-8 md:p-12">
           {/* Información de contacto */}
-          <div className="contact-info-container">
-            <div className="contact-info-grid">
+          <div className="col-span-6 md:col-span-12 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-[2vw] text-[0.875em] md:text-[1.25em] leading-[1.4] w-full">
               {/* Dirección */}
-              <div className="contact-address">
-                <div className="contact-text">{t('contact_section.address.line1')}</div>
-                <div className="contact-text">{t('contact_section.address.line2')}</div>
-                <div className="contact-text">{t('contact_section.address.country')}</div>
+              <div className="col-span-1 flex flex-col">
+                <div className="text-[#0046b8] text-[1em] leading-[1.4] font-normal">{t('contact_section.address.line1')}</div>
+                <div className="text-[#0046b8] text-[1em] leading-[1.4] font-normal">{t('contact_section.address.line2')}</div>
+                <div className="text-[#0046b8] text-[1em] leading-[1.4] font-normal">{t('contact_section.address.country')}</div>
               </div>
 
               {/* Redes sociales y Business */}
-              <div className="contact-socials-business">
-                <div className="contact-socials">
-                  <a href="#" className="contact-link text-arrow-wrapper select-none">
-                    <span className="text-arrow-icon-wrapper">
-                      <svg className="contact-link-icon" viewBox="0 0 24 24" fill="none">
+              <div className="col-span-1 flex flex-col gap-[2.5em] items-stretch">
+                <div className="flex flex-col items-start w-full">
+                  <a href="#" className="group flex items-center gap-2 relative overflow-visible w-full mt-[0.3em] first:mt-0">
+                    <span className="w-0 h-[20px] opacity-0 -translate-x-[10px] transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden shrink-0 flex items-center justify-center group-hover:w-[20px] group-hover:opacity-100 group-hover:translate-x-0">
+                      <svg className="w-[20px] h-[20px] shrink-0" viewBox="0 0 24 24" fill="none">
                         <path fillRule="evenodd" clipRule="evenodd" d="M6.948 18.113a.75.75 0 0 1-1.06-1.06l9.885-9.886H8.65a.75.75 0 1 1 0-1.5h9.682v9.682a.75.75 0 0 1-1.5 0v-7.12l-9.884 9.884Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" />
                       </svg>
                     </span>
-                    <span className="text-arrow-text select-none">Twitter / X</span>
+                    <span className="transition-transform duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:translate-x-[5px]">Twitter / X</span>
                   </a>
-                  <a href="#" className="contact-link text-arrow-wrapper select-none">
-                    <span className="text-arrow-icon-wrapper">
-                      <svg className="contact-link-icon" viewBox="0 0 24 24" fill="none">
+                  <a href="#" className="group flex items-center gap-2 relative overflow-visible w-full mt-[0.3em]">
+                    <span className="w-0 h-[20px] opacity-0 -translate-x-[10px] transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden shrink-0 flex items-center justify-center group-hover:w-[20px] group-hover:opacity-100 group-hover:translate-x-0">
+                      <svg className="w-[20px] h-[20px] shrink-0" viewBox="0 0 24 24" fill="none">
                         <path fillRule="evenodd" clipRule="evenodd" d="M6.948 18.113a.75.75 0 0 1-1.06-1.06l9.885-9.886H8.65a.75.75 0 1 1 0-1.5h9.682v9.682a.75.75 0 0 1-1.5 0v-7.12l-9.884 9.884Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" />
                       </svg>
                     </span>
-                    <span className="text-arrow-text select-none">Instagram</span>
+                    <span className="transition-transform duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:translate-x-[5px]">Instagram</span>
                   </a>
-                  <a href="#" className="contact-link text-arrow-wrapper select-none">
-                    <span className="text-arrow-icon-wrapper">
-                      <svg className="contact-link-icon" viewBox="0 0 24 24" fill="none">
+                  <a href="#" className="group flex items-center gap-2 relative overflow-visible w-full mt-[0.3em]">
+                    <span className="w-0 h-[20px] opacity-0 -translate-x-[10px] transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden shrink-0 flex items-center justify-center group-hover:w-[20px] group-hover:opacity-100 group-hover:translate-x-0">
+                      <svg className="w-[20px] h-[20px] shrink-0" viewBox="0 0 24 24" fill="none">
                         <path fillRule="evenodd" clipRule="evenodd" d="M6.948 18.113a.75.75 0 0 1-1.06-1.06l9.885-9.886H8.65a.75.75 0 1 1 0-1.5h9.682v9.682a.75.75 0 0 1-1.5 0v-7.12l-9.884 9.884Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" />
                       </svg>
                     </span>
-                    <span className="text-arrow-text select-none">Linkedin</span>
+                    <span className="transition-transform duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:translate-x-[5px]">Linkedin</span>
                   </a>
                 </div>
-                <div className="contact-business">
-                  <div className="contact-label select-none">{t('contact_section.business')}</div>
-                  <a href="mailto:business@tatotoclean.com" className="contact-link email-link">business@tatotoclean.com</a>
+                <div className="flex flex-col">
+                  <div className="text-[#0046b8] text-[1em] leading-[1.4] font-normal">{t('contact_section.business')}</div>
+                  <a href="mailto:business@tatotoclean.com" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity break-words">business@tatotoclean.com</a>
                 </div>
-                <div className="contact-enquires">
-                  <div className="contact-label select-none">{t('contact_section.general_enquiries')}</div>
-                  <a href="mailto:contacto@tatotoclean.com" className="contact-link email-link">contacto@tatotoclean.com</a>
+                <div className="flex flex-col">
+                  <div className="text-[#0046b8] text-[1em] leading-[1.4] font-normal">{t('contact_section.general_enquiries')}</div>
+                  <a href="mailto:contacto@tatotoclean.com" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity break-words">contacto@tatotoclean.com</a>
                 </div>
               </div>
 
               {/* Legal */}
-              <div className="contact-legal flex flex-col gap-4">
-                <Link to="/privacy-policy" className="contact-link email-link">{t('legal.privacy_policy')}</Link>
-                <Link to="/terms-conditions" className="contact-link email-link">{t('legal.terms_conditions')}</Link>
-                <Link to="/cookie-policy" className="contact-link email-link">{t('legal.cookie_policy')}</Link>
-                <Link to="/disclaimers" className="contact-link email-link">{t('legal.disclaimers.title')}</Link>
+              <div className="col-span-1 flex flex-col gap-4">
+                <Link to="/privacy-policy" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity">{t('legal.privacy_policy')}</Link>
+                <Link to="/terms-conditions" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity">{t('legal.terms_conditions')}</Link>
+                <Link to="/cookie-policy" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity">{t('legal.cookie_policy')}</Link>
+                <Link to="/disclaimers" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity">{t('legal.disclaimers.title')}</Link>
               </div>
 
               {/* Ayuda */}
-              <div className="contact-help flex flex-col gap-4">
-                <a href="#faq" className="contact-link email-link">{t('contact_section.footer.help.faq')}</a>
+              <div className="col-span-1 flex flex-col gap-4">
+                <a href="#faq" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity">{t('contact_section.footer.help.faq')}</a>
               </div>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="footer-bottom">
-          {/* Footer Columns - Removed as per request */}
-          <div className="footer-columns hidden">
-          </div>
-
+        <div className="relative z-10 w-full mt-[7vh] pb-20">
           {/* Footer Bottom - Copyright, Labs, Made by */}
-          <div className="footer-bottom-row">
-            <div className="footer-bottom-copyright">{t('contact_section.footer.bottom.copyright')}</div>
-            <a href="https://labs.tatotoclean.com" target="_blank" rel="noopener noreferrer" className="footer-bottom-labs">
+          <div className="flex flex-wrap justify-between items-center gap-6 md:gap-8 text-center md:text-left flex-col md:flex-row">
+            <div className="font-medium">{t('contact_section.footer.bottom.copyright')}</div>
+            <a href="https://labs.tatotoclean.com" target="_blank" rel="noopener noreferrer" className="font-medium text-[#0046b8] hover:underline relative group">
               {t('contact_section.footer.bottom.labs')}
             </a>
-            <div className="footer-bottom-tagline">
+            <div className="font-medium">
               {t('contact_section.footer.bottom.made_by')} <span className="text-red-500">❤️</span>
             </div>
           </div>
@@ -166,13 +163,13 @@ const Contact = () => {
           {/* Scroll to Top Button */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="footer-bottom-up"
+            className="absolute right-0 bottom-0 w-[3.5em] h-[3.5em] bg-black rounded-full flex items-center justify-center overflow-hidden group"
             aria-label={t('contact_section.footer.bottom.aria_label_scroll')}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" style={{ display: 'inline-block', position: 'relative', transform: 'translate3d(0, 0, 0)' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" className="transition-transform duration-400 ease-[cubic-bezier(0.35,0,0,1)] group-hover:-translate-y-[3em]">
               <path fill="#fff" fillRule="evenodd" d="M12 22a1 1 0 0 1-1-1V5.857l-6.223 6.224a1 1 0 0 1-1.415-1.415l7.9-7.9a1 1 0 0 1 1.414 0v.001l7.9 7.9a1 1 0 0 1-1.414 1.414L13 5.919V21a1 1 0 0 1-1 1Z" clipRule="evenodd" />
             </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" style={{ position: 'absolute' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" className="absolute translate-y-[3em] transition-transform duration-400 ease-[cubic-bezier(0.35,0,0,1)] group-hover:translate-y-0">
               <path fill="#fff" fillRule="evenodd" d="M12 22a1 1 0 0 1-1-1V5.857l-6.223 6.224a1 1 0 0 1-1.415-1.415l7.9-7.9a1 1 0 0 1 1.414 0v.001l7.9 7.9a1 1 0 0 1-1.414 1.414L13 5.919V21a1 1 0 0 1-1 1Z" clipRule="evenodd" />
             </svg>
           </button>
