@@ -7,16 +7,20 @@ import AnimatedButton from '../ui/AnimatedButton'
 import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { validatePlate, formatPlate } from '../../utils/vehicle'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 
 import SEO from '../ui/SEO'
 
 const UserDashboard = () => {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
     const [user, setUser] = useState(null)
-    const [vehicles, setVehicles] = useState([])
-    const [bookings, setBookings] = useState([])
-    const [loading, setLoading] = useState(true)
+
     const [showAddVehicle, setShowAddVehicle] = useState(false)
     const [showCancelModal, setShowCancelModal] = useState(false)
     const [bookingToCancel, setBookingToCancel] = useState(null)
@@ -34,28 +38,38 @@ const UserDashboard = () => {
         checkUser()
         checkAdminStatus()
 
-        // Polling para actualizar estado en tiempo real (cada 1 minuto)
-        // Mantenemos esto para actualizaciones basadas en tiempo (ej: pasar de pendiente a completado por hora)
-        const interval = setInterval(() => {
-            loadUserData()
-        }, 60000)
-
         // Suscripción a cambios en tiempo real (Supabase Realtime)
         const channels = supabase.channel('custom-all-channel')
             .on(
                 'postgres_changes',
                 { event: '*', schema: 'public', table: 'bookings' },
-                (payload) => {
-                    loadUserData()
+                () => {
+                    queryClient.invalidateQueries(['bookings'])
                 }
             )
             .subscribe()
 
         return () => {
-            clearInterval(interval)
             supabase.removeChannel(channels)
         }
     }, [])
+
+    // Initial Data Sync (RPCs)
+    useEffect(() => {
+        const syncData = async () => {
+            if (user?.email) {
+                try {
+                    await supabase.rpc('check_and_update_booking_status')
+                    await supabase.rpc('link_user_data', { user_email: user.email })
+                    queryClient.invalidateQueries(['vehicles'])
+                    queryClient.invalidateQueries(['bookings'])
+                } catch (error) {
+                    console.error("Error syncing data:", error)
+                }
+            }
+        }
+        syncData()
+    }, [user, queryClient])
 
     const checkAdminStatus = async () => {
         const { data: { user } } = await supabase.auth.getUser()
@@ -72,36 +86,30 @@ const UserDashboard = () => {
             return
         }
         setUser(session.user)
-        loadUserData()
     }
 
-    const loadUserData = async () => {
-        setLoading(true)
-
-        try {
-            // 1. Actualizar estados de reservas pasadas
-            await supabase.rpc('check_and_update_booking_status')
-
-            // 2. Obtener usuario actual
-            const { data: { user } } = await supabase.auth.getUser()
-            if (!user) return
-
-            // 3. Vincular datos (reservas anónimas y crear vehículos)
-            // Esta función RPC hace todo el trabajo pesado en el servidor
-            if (user.email) {
-                await supabase.rpc('link_user_data', { user_email: user.email })
-            }
-
-            // 4. Cargar vehículos (ahora incluirá los recién creados por el RPC)
-            const { data: vehiclesData } = await supabase
+    // Query for Vehicles
+    const { data: vehicles = [], isLoading: loadingVehicles } = useQuery({
+        queryKey: ['vehicles', user?.id],
+        queryFn: async () => {
+            if (!user) return []
+            const { data, error } = await supabase
                 .from('user_vehicles')
                 .select('*')
                 .order('is_primary', { ascending: false })
 
-            setVehicles(vehiclesData || [])
+            if (error) throw error
+            return data || []
+        },
+        enabled: !!user,
+    })
 
-            // 5. Cargar reservas (ahora incluirá las vinculadas por el RPC)
-            const { data: bookingsData, error: bookingsError } = await supabase
+    // Query for Bookings
+    const { data: bookings = [], isLoading: loadingBookings } = useQuery({
+        queryKey: ['bookings', user?.id],
+        queryFn: async () => {
+            if (!user) return []
+            const { data, error } = await supabase
                 .from('bookings')
                 .select(`
                     *,
@@ -109,18 +117,14 @@ const UserDashboard = () => {
                 `)
                 .order('booking_date', { ascending: false })
 
-            if (bookingsError) {
-                // console.error('Error loading bookings:', bookingsError)
-            }
+            if (error) throw error
+            return data || []
+        },
+        enabled: !!user,
+        refetchInterval: 60000, // Polling every minute
+    })
 
-            setBookings(bookingsData || [])
-
-        } catch (error) {
-            // console.error('Error in loadUserData:', error)
-        } finally {
-            setLoading(false)
-        }
-    }
+    const loading = loadingVehicles || loadingBookings
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
@@ -144,7 +148,7 @@ const UserDashboard = () => {
             toast.error(t('dashboard.delete_error') + ': ' + error.message)
         } else {
             toast.success(t('dashboard.delete_success') || 'Vehículo eliminado correctamente')
-            loadUserData()
+            queryClient.invalidateQueries(['vehicles'])
         }
         setShowDeleteModal(false)
         setVehicleToDelete(null)
@@ -167,7 +171,7 @@ const UserDashboard = () => {
             toast.error(t('dashboard.cancel_error') + ': ' + error.message)
         } else {
             toast.success(t('dashboard.cancel_success') || 'Reserva cancelada correctamente')
-            loadUserData()
+            queryClient.invalidateQueries(['bookings'])
         }
         setShowCancelModal(false)
         setBookingToCancel(null)
@@ -459,7 +463,7 @@ const UserDashboard = () => {
                 onClose={() => setShowAddVehicle(false)}
                 onSuccess={() => {
                     setShowAddVehicle(false)
-                    loadUserData()
+                    queryClient.invalidateQueries(['vehicles'])
                 }}
             />
 
@@ -526,15 +530,46 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, cancelT
 }
 
 // Modal para agregar vehículo
+const addVehicleSchema = z.object({
+    vehicleType: z.string(),
+    plate: z.string().min(1, "Plate is required"),
+    nickname: z.string().optional(),
+    brand: z.string().optional(),
+    model: z.string().optional()
+}).superRefine((data, ctx) => {
+    if (!validatePlate(data.plate, data.vehicleType)) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Invalid plate format",
+            path: ["plate"]
+        })
+    }
+})
+
 const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
     const { t } = useTranslation()
-    const [plate, setPlate] = useState('')
-    const [vehicleType, setVehicleType] = useState('car')
-    const [brand, setBrand] = useState('')
-    const [model, setModel] = useState('')
-    const [nickname, setNickname] = useState('')
-    const [loading, setLoading] = useState(false)
+    const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitting } } = useForm({
+        resolver: zodResolver(addVehicleSchema),
+        defaultValues: {
+            vehicleType: 'car',
+            plate: '',
+            nickname: '',
+            brand: '',
+            model: ''
+        }
+    })
+
+    const vehicleType = watch('vehicleType')
+    const plate = watch('plate')
     const [error, setError] = useState('')
+
+    // Reset form when modal opens/closes
+    useEffect(() => {
+        if (isOpen) {
+            reset()
+            setError('')
+        }
+    }, [isOpen, reset])
 
     const vehicleTypes = [
         { id: 'car', name: t('dashboard.vehicle_types.car'), image: '/images/vehiculos/sedan.png' },
@@ -542,33 +577,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
         { id: 'motorcycle', name: t('dashboard.vehicle_types.motorcycle'), image: '/images/vehiculos/bike.png' },
     ]
 
-    const validatePlate = (plate, typeId) => {
-        if (!plate) return false
-        const cleanPlate = plate.replace(/-/g, '').toUpperCase()
-        if (typeId === 'motorcycle') {
-            return /^[A-Z]{3}\d{2}[A-Z]?$/.test(cleanPlate)
-        } else {
-            return /^[A-Z]{3}\d{3}$/.test(cleanPlate)
-        }
-    }
-
-    const formatPlate = (value) => {
-        const clean = value.toUpperCase().replace(/[^A-Z0-9]/g, '')
-        if (clean.length > 3) {
-            return `${clean.slice(0, 3)}-${clean.slice(3, 6)}${clean.length > 6 ? clean.slice(6, 7) : ''}`
-        }
-        return clean
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        if (!validatePlate(plate, vehicleType)) {
-            setError(t('dashboard.add_vehicle_modal.plate_error'))
-            return
-        }
-
-        setLoading(true)
+    const onSubmit = async (formData) => {
         setError('')
 
         const { data: { user } } = await supabase.auth.getUser()
@@ -577,14 +586,13 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
         const { data: existingBookings } = await supabase
             .from('bookings')
             .select('client_email')
-            .eq('vehicle_plate', plate)
+            .eq('vehicle_plate', formData.plate)
             .limit(1)
 
         // Si la placa tiene reservas previas, verificar que el email coincida
         if (existingBookings && existingBookings.length > 0) {
             const bookingEmail = existingBookings[0].client_email
             if (bookingEmail !== user.email) {
-                setLoading(false)
                 setError(t('dashboard.add_vehicle_modal.plate_taken_error'))
                 return
             }
@@ -594,15 +602,13 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
             .from('user_vehicles')
             .insert([{
                 user_id: user.id,
-                plate: plate,
-                vehicle_type: vehicleType,
-                brand: brand || null,
-                model: model || null,
-                nickname: nickname || null
+                plate: formData.plate,
+                vehicle_type: formData.vehicleType,
+                brand: formData.brand || null,
+                model: formData.model || null,
+                nickname: formData.nickname || null
             }])
             .select()
-
-        setLoading(false)
 
         if (insertError) {
             if (insertError.code === '23505') {
@@ -635,7 +641,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Tipo de vehículo */}
                     <div>
                         <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.type_label')}</label>
@@ -646,8 +652,8 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                                         key={type.id}
                                         type="button"
                                         onClick={() => {
-                                            setVehicleType(type.id)
-                                            setPlate('')
+                                            setValue('vehicleType', type.id)
+                                            setValue('plate', '')
                                         }}
                                         className={`p-3 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${vehicleType === type.id
                                             ? 'bg-white text-black border-white'
@@ -672,13 +678,15 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                         </label>
                         <input
                             type="text"
-                            value={plate}
-                            onChange={(e) => setPlate(formatPlate(e.target.value))}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-white/50 transition-colors uppercase"
+                            {...register('plate')}
+                            onChange={(e) => setValue('plate', formatPlate(e.target.value))}
+                            className={`w-full bg-white/5 border rounded-xl p-3 text-white focus:outline-none transition-colors uppercase ${errors.plate ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
                             placeholder={vehicleType === 'motorcycle' ? 'ABC-12D' : 'ABC-123'}
                             maxLength={7}
-                            required
                         />
+                        {errors.plate && (
+                            <p className="text-red-500 text-xs mt-1">{t('dashboard.add_vehicle_modal.plate_error')}</p>
+                        )}
                     </div>
 
                     {/* Nickname */}
@@ -686,8 +694,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                         <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.nickname_label')}</label>
                         <input
                             type="text"
-                            value={nickname}
-                            onChange={(e) => setNickname(e.target.value)}
+                            {...register('nickname')}
                             className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-white/50 transition-colors"
                             placeholder={t('dashboard.add_vehicle_modal.nickname_placeholder')}
                         />
@@ -699,8 +706,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                             <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.brand_label')}</label>
                             <input
                                 type="text"
-                                value={brand}
-                                onChange={(e) => setBrand(e.target.value)}
+                                {...register('brand')}
                                 className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-white/50 transition-colors"
                                 placeholder="Toyota"
                             />
@@ -709,8 +715,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                             <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.model_label')}</label>
                             <input
                                 type="text"
-                                value={model}
-                                onChange={(e) => setModel(e.target.value)}
+                                {...register('model')}
                                 className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-white/50 transition-colors"
                                 placeholder="Corolla"
                             />
@@ -723,10 +728,10 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
 
                     <button
                         type="submit"
-                        disabled={loading || !validatePlate(plate, vehicleType)}
+                        disabled={isSubmitting}
                         className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? t('dashboard.add_vehicle_modal.adding') : t('dashboard.add_vehicle_modal.add_button')}
+                        {isSubmitting ? t('dashboard.add_vehicle_modal.adding') : t('dashboard.add_vehicle_modal.add_button')}
                     </button>
                 </form>
             </motion.div>

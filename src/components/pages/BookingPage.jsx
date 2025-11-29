@@ -8,6 +8,46 @@ import VehiclePlateSelector from '../ui/VehiclePlateSelector'
 import { useTranslation } from 'react-i18next'
 import { Helmet } from 'react-helmet-async'
 import { toast } from 'sonner'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { validatePlate, formatPlate } from '../../utils/vehicle'
+
+const bookingSchema = z.object({
+    vehicleType: z.object({
+        id: z.string(),
+        name: z.string(),
+        image: z.string(),
+        priceMultiplier: z.number(),
+        description: z.string()
+    }).nullable(),
+    service: z.object({
+        id: z.string(),
+        name: z.string(),
+        price: z.number(),
+        description: z.string(),
+        features: z.array(z.string())
+    }).nullable(),
+    clientInfo: z.object({
+        name: z.string().min(1, "Name is required"),
+        email: z.string().email("Invalid email"),
+        phone: z.string().optional(),
+        plate: z.string()
+    }),
+    date: z.string().min(1, "Date is required"),
+    time: z.string().min(1, "Time is required")
+}).superRefine((data, ctx) => {
+    if (data.clientInfo.plate && data.vehicleType) {
+        const isValid = validatePlate(data.clientInfo.plate, data.vehicleType.id)
+        if (!isValid) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Invalid plate format",
+                path: ["clientInfo", "plate"]
+            })
+        }
+    }
+})
 
 const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChange }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
@@ -174,27 +214,31 @@ const BookingPage = () => {
         return `${prefix}${path}`
     }
 
-    const [formData, setFormData] = useState({
-        vehicleType: null,
-        service: null,
-        clientInfo: {
-            name: '',
-            email: '',
-            phone: '',
-            plate: ''
+    const { control, handleSubmit, watch, setValue, trigger, formState: { errors, isValid } } = useForm({
+        resolver: zodResolver(bookingSchema),
+        defaultValues: {
+            vehicleType: null,
+            service: null,
+            clientInfo: {
+                name: '',
+                email: '',
+                phone: '',
+                plate: ''
+            },
+            date: '',
+            time: ''
         },
-        date: '',
-        time: ''
+        mode: 'onChange'
     })
 
-    const [touched, setTouched] = useState({
-        plate: false,
-        email: false
-    })
+    const formData = watch()
+    // const [touched, setTouched] = useState({ plate: false, email: false }) // Removed unused state
 
     useEffect(() => {
         if (location.state?.selectedService) {
-            setFormData(prev => ({ ...prev, service: location.state.selectedService }))
+            if (location.state?.selectedService) {
+                setValue('service', location.state.selectedService)
+            }
         }
         // Handle pre-selected vehicle from dashboard
         if (location.state?.selectedVehicle) {
@@ -216,14 +260,8 @@ const BookingPage = () => {
             setIsAuthenticated(true)
 
             // Precargar email y nombre
-            setFormData(prev => ({
-                ...prev,
-                clientInfo: {
-                    ...prev.clientInfo,
-                    email: user.email,
-                    name: user.user_metadata?.full_name || prev.clientInfo.name
-                }
-            }))
+            setValue('clientInfo.email', user.email)
+            setValue('clientInfo.name', user.user_metadata?.full_name || formData.clientInfo.name)
 
             // Cargar vehículos del usuario
             const { data: vehiclesData } = await supabase
@@ -351,7 +389,17 @@ const BookingPage = () => {
         '08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'
     ]
 
-    const nextStep = () => {
+    const nextStep = async () => {
+        let fieldsToValidate = []
+        if (step === 1) fieldsToValidate = ['vehicleType']
+        if (step === 2) fieldsToValidate = ['service']
+        if (step === 3) fieldsToValidate = ['clientInfo.name', 'clientInfo.email', 'clientInfo.plate']
+        if (step === 4) fieldsToValidate = ['date', 'time']
+
+        if (fieldsToValidate.length > 0) {
+            const isStepValid = await trigger(fieldsToValidate)
+            if (!isStepValid) return
+        }
         setDirection(1)
         let next = step + 1
 
@@ -399,12 +447,9 @@ const BookingPage = () => {
     const handleVehicleSelect = (type) => {
         // If changing vehicle type, we might need to reset plate validation/data
         if (formData.vehicleType?.id !== type.id) {
-            setFormData({
-                ...formData,
-                vehicleType: type,
-                clientInfo: { ...formData.clientInfo, plate: '' }
-            })
-            setTouched({ ...touched, plate: false })
+            setValue('vehicleType', type)
+            setValue('clientInfo.plate', '')
+            // setTouched({ ...touched, plate: false }) // Removed
             // Reset maxStep because subsequent steps (like plate validation) are now invalid/unchecked
             setMaxStep(2)
         }
@@ -422,14 +467,8 @@ const BookingPage = () => {
             'motorcycle': vehicleTypes[2]
         }
 
-        setFormData({
-            ...formData,
-            vehicleType: vehicleTypeMap[vehicle.vehicle_type],
-            clientInfo: {
-                ...formData.clientInfo,
-                plate: vehicle.plate
-            }
-        })
+        setValue('vehicleType', vehicleTypeMap[vehicle.vehicle_type])
+        setValue('clientInfo.plate', vehicle.plate)
 
         // Ir directamente a paso 2 (servicios)
         setDirection(1)
@@ -446,67 +485,24 @@ const BookingPage = () => {
     }
 
     const handleServiceSelect = (service) => {
-        setFormData({ ...formData, service })
+        setValue('service', service)
         nextStep()
     }
 
-    const validatePlate = (plate, typeId) => {
-        if (!plate) return false
-        const cleanPlate = plate.replace(/-/g, '').toUpperCase()
-        if (typeId === 'motorcycle') {
-            return /^[A-Z]{3}\d{2}[A-Z]?$/.test(cleanPlate)
-        } else {
-            return /^[A-Z]{3}\d{3}$/.test(cleanPlate)
-        }
-    }
 
-    const formatPlate = (value) => {
-        const clean = value.toUpperCase().replace(/[^A-Z0-9]/g, '')
-        if (clean.length > 3) {
-            return `${clean.slice(0, 3)}-${clean.slice(3, 6)}` + (clean.length > 6 ? clean.slice(6, 7) : '')
-        }
-        return clean
-    }
 
-    const handleClientInfoChange = (e) => {
-        const { name, value } = e.target
-        if (name === 'plate') {
-            const formatted = formatPlate(value)
-            if (formatted.length <= 7) {
-                setFormData({
-                    ...formData,
-                    clientInfo: { ...formData.clientInfo, plate: formatted }
-                })
-            }
-        } else {
-            setFormData({
-                ...formData,
-                clientInfo: { ...formData.clientInfo, [name]: value }
-            })
-        }
-    }
-
-    const handleBlur = (field) => {
-        setTouched({ ...touched, [field]: true })
-    }
-
-    const isPlateValid = () => {
-        return validatePlate(formData.clientInfo.plate, formData.vehicleType?.id)
-    }
-
-    const isEmailValid = (email) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-    }
+    // Removed handleClientInfoChange, handleBlur, isPlateValid, isEmailValid as they are replaced by react-hook-form logic
 
     const handleDateSelect = (date) => {
-        setFormData({ ...formData, date, time: '' }) // Reset time when date changes
+        setValue('date', date)
+        setValue('time', '') // Reset time when date changes
         // Fetch availability for the selected date's month if not already fetched
         const selectedDate = new Date(date + 'T00:00:00')
         fetchMonthAvailability(selectedDate)
     }
 
     const handleTimeSelect = (time) => {
-        setFormData({ ...formData, time })
+        setValue('time', time)
     }
 
     const isTimeSlotTaken = (time) => {
@@ -649,10 +645,7 @@ const BookingPage = () => {
 
         // Guardar credenciales en el estado para mostrar en la confirmación
         if (newUserCredentials) {
-            setFormData(prev => ({
-                ...prev,
-                newUserCredentials
-            }))
+            setValue('newUserCredentials', newUserCredentials)
         }
 
         setIsConfirmed(true)
@@ -1050,26 +1043,22 @@ const BookingPage = () => {
                                 <label className="block text-white/60 text-sm mb-2">{t('booking.full_name')}</label>
                                 <input
                                     type="text"
-                                    name="name"
-                                    value={formData.clientInfo.name}
-                                    onChange={handleClientInfoChange}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
+                                    {...control.register('clientInfo.name')}
+                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.name ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
                                     placeholder="Juan Pérez"
                                 />
+                                {errors.clientInfo?.name && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.name.message}</p>}
                             </div>
                             <div>
                                 <label className="block text-white/60 text-sm mb-2">{t('booking.email')}</label>
                                 <input
                                     type="email"
-                                    name="email"
-                                    value={formData.clientInfo.email}
-                                    onChange={handleClientInfoChange}
-                                    onBlur={() => handleBlur('email')}
-                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${touched.email && formData.clientInfo.email && !isEmailValid(formData.clientInfo.email) ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'
-                                        }`}
+                                    {...control.register('clientInfo.email')}
+                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.email ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
                                     placeholder="juan@ejemplo.com"
                                     disabled={isAuthenticated}
                                 />
+                                {errors.clientInfo?.email && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.email.message}</p>}
                                 {!isAuthenticated && !useExistingVehicle && (
                                     <p className="text-white/40 text-xs mt-2 flex items-start gap-1.5">
                                         <svg className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -1083,28 +1072,33 @@ const BookingPage = () => {
                                 <label className="block text-white/60 text-sm mb-2">{t('booking.phone')}</label>
                                 <input
                                     type="tel"
-                                    name="phone"
-                                    value={formData.clientInfo.phone}
-                                    onChange={handleClientInfoChange}
+                                    {...control.register('clientInfo.phone')}
                                     className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
                                     placeholder="300 123 4567"
                                 />
                             </div>
-                            <VehiclePlateSelector
-                                formData={formData}
-                                setFormData={setFormData}
-                                touched={touched}
-                                handleBlur={handleBlur}
-                                validatePlate={validatePlate}
-                                formatPlate={formatPlate}
-                                handleClientInfoChange={handleClientInfoChange}
+                            <Controller
+                                name="clientInfo.plate"
+                                control={control}
+                                render={({ field }) => (
+                                    <VehiclePlateSelector
+                                        value={field.value}
+                                        onChange={(val) => {
+                                            const formatted = formatPlate(val)
+                                            if (formatted.length <= 7) {
+                                                field.onChange(formatted)
+                                            }
+                                        }}
+                                        onBlur={field.onBlur}
+                                        vehicleType={formData.vehicleType}
+                                        error={errors.clientInfo?.plate}
+                                    />
+                                )}
                             />
                         </div>
                         <div className="flex justify-end pt-4">
                             <AnimatedButton
                                 onClick={nextStep}
-                                disabled={!formData.clientInfo.name || !isPlateValid() || !isEmailValid(formData.clientInfo.email)}
-                                className={(!formData.clientInfo.name || !isPlateValid() || !isEmailValid(formData.clientInfo.email)) ? 'opacity-50 cursor-not-allowed' : ''}
                             >
                                 {t('booking.next')}
                             </AnimatedButton>

@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { toast } from 'sonner'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail } from 'lucide-react'
@@ -11,10 +14,17 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
+const forgotPasswordSchema = z.object({
+    email: z.string().min(1, "Required").email("Invalid email")
+})
+
 const ForgotPasswordPage = () => {
     const { t, i18n } = useTranslation()
-    const [email, setEmail] = useState('')
     const [submitted, setSubmitted] = useState(false)
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: zodResolver(forgotPasswordSchema),
+        defaultValues: { email: '' }
+    })
     const navigate = useNavigate()
 
     const getLocalizedPath = (path) => {
@@ -22,22 +32,20 @@ const ForgotPasswordPage = () => {
         return currentLang === 'en' ? `/en${path}` : path
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        if (email) {
-            try {
-                // Invocar la Edge Function para enviar el correo personalizado
-                const { error } = await supabase.functions.invoke('send-password-reset-email', {
-                    body: { email }
-                })
+    const onSubmit = async (data) => {
+        const { email } = data
+        try {
+            // Invocar la Edge Function para enviar el correo personalizado
+            const { error } = await supabase.functions.invoke('send-password-reset-email', {
+                body: { email }
+            })
 
-                if (error) throw error
+            if (error) throw error
 
-                setSubmitted(true)
-            } catch (error) {
-                console.error('Error sending reset password email:', error)
-                toast.error(t('auth.error_sending_email'))
-            }
+            setSubmitted(true)
+        } catch (error) {
+            console.error('Error sending reset password email:', error)
+            toast.error(t('auth.error_sending_email'))
         }
     }
 
@@ -115,21 +123,31 @@ const ForgotPasswordPage = () => {
                             )}
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-white/80 ml-1">{t('auth.email')}</label>
                                 <div className="relative group">
-                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
+                                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${errors.email ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
                                         <Mail size={20} />
                                     </div>
                                     <input
                                         type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
+                                        {...register('email')}
+                                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors.email
+                                            ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
+                                            : 'border-white/10 focus:border-white/30 focus:bg-white/10'
+                                            }`}
                                         placeholder="ejemplo@correo.com"
-                                        required
                                     />
+                                    {errors.email && (
+                                        <motion.p
+                                            initial={{ opacity: 0, y: -5 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 text-xs"
+                                        >
+                                            {errors.email.message}
+                                        </motion.p>
+                                    )}
                                 </div>
                             </div>
 

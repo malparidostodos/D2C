@@ -3,7 +3,7 @@ import { Car, Truck, Bike, Plus, Check, AlertCircle } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useTranslation } from 'react-i18next';
 
-const VehiclePlateSelector = ({ formData, setFormData, touched, handleBlur, validatePlate, formatPlate, handleClientInfoChange }) => {
+const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) => {
     const { t } = useTranslation();
     const [userVehicles, setUserVehicles] = useState([]);
     const [showManualInput, setShowManualInput] = useState(false);
@@ -26,7 +26,7 @@ const VehiclePlateSelector = ({ formData, setFormData, touched, handleBlur, vali
             setUserVehicles(data || []);
 
             // If user has vehicles and hasn't selected one, preselect the first one if it matches the type
-            if (data && data.length > 0 && !formData.clientInfo.plate) {
+            if (data && data.length > 0 && !value) {
                 // Optional: logic to auto-select if needed
             }
         } else {
@@ -35,13 +35,7 @@ const VehiclePlateSelector = ({ formData, setFormData, touched, handleBlur, vali
     };
 
     const handleVehicleSelect = (vehicle) => {
-        setFormData(prev => ({
-            ...prev,
-            clientInfo: {
-                ...prev.clientInfo,
-                plate: vehicle.plate
-            }
-        }));
+        onChange(vehicle.plate);
         setShowManualInput(false);
     };
 
@@ -61,7 +55,7 @@ const VehiclePlateSelector = ({ formData, setFormData, touched, handleBlur, vali
                     <label className="block text-white/60 text-sm">
                         {t('vehicle_plate_selector.label')}
                         <span className="text-xs ml-2 text-white/40">
-                            ({formData.vehicleType?.id === 'motorcycle' ? 'AAA-00 o AAA-00A' : 'AAA-000'})
+                            ({vehicleType?.id === 'motorcycle' ? 'AAA-00 o AAA-00A' : 'AAA-000'})
                         </span>
                     </label>
                     {isAuthenticated && userVehicles.length > 0 && (
@@ -77,17 +71,17 @@ const VehiclePlateSelector = ({ formData, setFormData, touched, handleBlur, vali
                 <input
                     type="text"
                     name="plate"
-                    value={formData.clientInfo.plate}
-                    onChange={handleClientInfoChange}
-                    onBlur={() => handleBlur('plate')}
-                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors uppercase ${touched.plate && formData.clientInfo.plate && !validatePlate(formData.clientInfo.plate, formData.vehicleType?.id)
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                    onBlur={onBlur}
+                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors uppercase ${error
                         ? 'border-red-500 focus:border-red-500'
                         : 'border-white/10 focus:border-white/50'
                         }`}
-                    placeholder={formData.vehicleType?.id === 'motorcycle' ? 'ABC-12D' : 'ABC-123'}
+                    placeholder={vehicleType?.id === 'motorcycle' ? 'ABC-12D' : 'ABC-123'}
                 />
-                {touched.plate && formData.clientInfo.plate && !validatePlate(formData.clientInfo.plate, formData.vehicleType?.id) && (
-                    <p className="text-red-500 text-xs mt-1">{t('vehicle_plate_selector.invalid_format')}</p>
+                {error && (
+                    <p className="text-red-500 text-xs mt-1">{error.message || t('vehicle_plate_selector.invalid_format')}</p>
                 )}
             </div>
         );
@@ -99,20 +93,20 @@ const VehiclePlateSelector = ({ formData, setFormData, touched, handleBlur, vali
                 <label className="block text-white/60 text-sm mb-2">
                     {t('vehicle_plate_selector.label')}
                     <span className="text-xs ml-2 text-white/40">
-                        ({formData.vehicleType?.id === 'motorcycle' ? 'AAA-00 o AAA-00A' : 'AAA-000'})
+                        ({vehicleType?.id === 'motorcycle' ? 'AAA-00 o AAA-00A' : 'AAA-000'})
                     </span>
                 </label>
                 <input
                     type="text"
                     name="plate"
-                    value={formData.clientInfo.plate}
-                    onChange={handleClientInfoChange}
-                    onBlur={() => handleBlur('plate')}
-                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors uppercase ${touched.plate && formData.clientInfo.plate && !validatePlate(formData.clientInfo.plate, formData.vehicleType?.id)
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                    onBlur={onBlur}
+                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors uppercase ${error
                         ? 'border-red-500 focus:border-red-500'
                         : 'border-white/10 focus:border-white/50'
                         }`}
-                    placeholder={formData.vehicleType?.id === 'motorcycle' ? 'ABC-12D' : 'ABC-123'}
+                    placeholder={vehicleType?.id === 'motorcycle' ? 'ABC-12D' : 'ABC-123'}
                 />
                 <p className="text-white/40 text-xs mt-2">{t('vehicle_plate_selector.add_hint')}</p>
             </div>
@@ -134,8 +128,8 @@ const VehiclePlateSelector = ({ formData, setFormData, touched, handleBlur, vali
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {userVehicles.map((vehicle) => {
-                    const Icon = getVehicleIcon(vehicle.type); // Changed from vehicle_type to type based on typical schema, verify if needed
-                    const isSelected = formData.clientInfo.plate === vehicle.plate;
+                    const Icon = getVehicleIcon(vehicle.vehicle_type || vehicle.type); // Handle both naming conventions
+                    const isSelected = value === vehicle.plate;
                     return (
                         <button
                             key={vehicle.id}

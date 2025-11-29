@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail, Lock, AlertCircle, Check, Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -11,16 +14,25 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
+const loginSchema = z.object({
+    email: z.string().min(1, "Required").email("Invalid email"),
+    password: z.string().min(1, "Required"),
+    rememberMe: z.boolean().optional()
+})
+
 const LoginPage = () => {
     const navigate = useNavigate()
     const { t, i18n } = useTranslation()
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [showPassword, setShowPassword] = useState(false)
-    const [rememberMe, setRememberMe] = useState(false)
+    const [showPassword, setShowPassword] = React.useState(false)
 
-    const [errors, setErrors] = useState({})
-    const [touched, setTouched] = useState({})
+    const { register, handleSubmit, setValue, setError, watch, formState: { errors } } = useForm({
+        resolver: zodResolver(loginSchema),
+        defaultValues: {
+            email: '',
+            password: '',
+            rememberMe: false
+        }
+    })
 
     const getLocalizedPath = (path) => {
         const prefix = i18n.language === 'en' ? '/en' : ''
@@ -31,65 +43,32 @@ const LoginPage = () => {
     useEffect(() => {
         const savedEmail = localStorage.getItem('rememberedEmail')
         if (savedEmail) {
-            setEmail(savedEmail)
-            setRememberMe(true)
+            setValue('email', savedEmail)
+            setValue('rememberMe', true)
         }
-    }, [])
+    }, [setValue])
 
-    const validateForm = (values = {}) => {
-        const newErrors = {}
-        const currentEmail = values.email !== undefined ? values.email : email
-        const currentPassword = values.password !== undefined ? values.password : password
+    const onSubmit = async (data) => {
+        const { email, password, rememberMe } = data
 
-        if (!currentEmail) {
-            newErrors.email = t('auth.errors.required')
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currentEmail)) {
-            newErrors.email = t('auth.errors.invalid_email')
-        }
-
-        if (!currentPassword) {
-            newErrors.password = t('auth.errors.required')
-        }
-
-        setErrors(newErrors)
-        return Object.keys(newErrors).length === 0
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        // Mark all as touched
-        setTouched({
-            email: true,
-            password: true
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password
         })
 
-        if (validateForm()) {
-            const { error } = await supabase.auth.signInWithPassword({
-                email,
-                password
-            })
-
-            if (error) {
-                setErrors({ ...errors, password: t('auth.errors.login_failed') })
+        if (error) {
+            setError('password', { type: 'manual', message: t('auth.errors.login_failed') })
+        } else {
+            // Guardar o eliminar email según checkbox "Recordarme"
+            if (rememberMe) {
+                localStorage.setItem('rememberedEmail', email)
             } else {
-                // Guardar o eliminar email según checkbox "Recordarme"
-                if (rememberMe) {
-                    localStorage.setItem('rememberedEmail', email)
-                } else {
-                    localStorage.removeItem('rememberedEmail')
-                }
-                navigate(getLocalizedPath('/dashboard'))
+                localStorage.removeItem('rememberedEmail')
             }
+            navigate(getLocalizedPath('/dashboard'))
         }
     }
 
-    const handleBlur = (field, value) => {
-        if (value && value.trim()) {
-            setTouched(prev => ({ ...prev, [field]: true }))
-            validateForm()
-        }
-    }
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
@@ -125,41 +104,35 @@ const LoginPage = () => {
                             <p className="text-white/60">{t('auth.login_subtitle')}</p>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-white/80 ml-1">{t('auth.email')}</label>
                                 <div className="relative group">
-                                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${touched.email && errors.email ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
+                                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${errors.email ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
                                         <Mail size={20} />
                                     </div>
                                     <input
                                         type="email"
-                                        value={email}
-                                        onChange={(e) => {
-                                            const newValue = e.target.value
-                                            setEmail(newValue)
-                                            if (touched.email) validateForm({ email: newValue })
-                                        }}
-                                        onBlur={(e) => handleBlur('email', e.target.value)}
-                                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-10 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${touched.email && errors.email
+                                        {...register('email')}
+                                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-10 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors.email
                                             ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
                                             : 'border-white/10 focus:border-white/30 focus:bg-white/10'
                                             }`}
                                         placeholder="ejemplo@correo.com"
                                     />
-                                    {touched.email && errors.email && (
+                                    {errors.email && (
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 pointer-events-none">
                                             <AlertCircle size={18} />
                                         </div>
                                     )}
                                 </div>
-                                {touched.email && errors.email && (
+                                {errors.email && (
                                     <motion.p
                                         initial={{ opacity: 0, y: -5 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className="text-red-400 text-xs ml-1 flex items-center gap-1"
                                     >
-                                        {errors.email}
+                                        {errors.email.message}
                                     </motion.p>
                                 )}
                             </div>
@@ -167,19 +140,13 @@ const LoginPage = () => {
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-white/80 ml-1">{t('auth.password')}</label>
                                 <div className="relative group">
-                                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${touched.password && errors.password ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
+                                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${errors.password ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
                                         <Lock size={20} />
                                     </div>
                                     <input
                                         type={showPassword ? "text" : "password"}
-                                        value={password}
-                                        onChange={(e) => {
-                                            const newValue = e.target.value
-                                            setPassword(newValue)
-                                            if (touched.password) validateForm({ password: newValue })
-                                        }}
-                                        onBlur={(e) => handleBlur('password', e.target.value)}
-                                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-12 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${touched.password && errors.password
+                                        {...register('password')}
+                                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-12 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors.password
                                             ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
                                             : 'border-white/10 focus:border-white/30 focus:bg-white/10'
                                             }`}
@@ -194,36 +161,35 @@ const LoginPage = () => {
                                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                     </button>
 
-                                    {touched.password && errors.password && (
+                                    {errors.password && (
                                         <div className="absolute right-12 top-1/2 -translate-y-1/2 text-red-400 pointer-events-none pr-2">
                                             <AlertCircle size={18} />
                                         </div>
                                     )}
                                 </div>
-                                {touched.password && errors.password && (
+                                {errors.password && (
                                     <motion.p
                                         initial={{ opacity: 0, y: -5 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className="text-red-400 text-xs ml-1 flex items-center gap-1"
                                     >
-                                        {errors.password}
+                                        {errors.password.message}
                                     </motion.p>
                                 )}
                             </div>
 
                             <div className="flex items-center justify-between text-sm w-full gap-4">
                                 <label className="flex items-center gap-3 cursor-pointer group select-none flex-shrink-0">
-                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all duration-200 ${rememberMe
+                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all duration-200 ${watch('rememberMe')
                                         ? 'bg-blue-600 border-blue-600'
                                         : 'border-white/30 bg-white/5 group-hover:border-white/50'
                                         }`}>
-                                        {rememberMe && <Check size={14} className="text-white" strokeWidth={3} />}
+                                        {watch('rememberMe') && <Check size={14} className="text-white" strokeWidth={3} />}
                                     </div>
                                     <input
                                         type="checkbox"
                                         className="hidden"
-                                        checked={rememberMe}
-                                        onChange={(e) => setRememberMe(e.target.checked)}
+                                        {...register('rememberMe')}
                                     />
                                     <span className="text-white/60 group-hover:text-white/80 transition-colors">{t('auth.remember_me')}</span>
                                 </label>

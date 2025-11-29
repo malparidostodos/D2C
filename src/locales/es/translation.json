@@ -449,6 +449,13 @@
         "subtitle": "Elige el plan perfecto para tu vehículo",
         "most_popular": "Más Popular",
         "choose_plan": "Elegir Plan",
+        "gallery": {
+            "subtitle": "Resultados Reales",
+            "title_before": "Antes y",
+            "title_after": "Después",
+            "description": "Desliza para ver la transformación. Nuestros tratamientos devuelven la vida a tu vehículo.",
+            "label_after": "DESPUÉS"
+        },
         "plans": {
             "basic": {
                 "name": "Básico",

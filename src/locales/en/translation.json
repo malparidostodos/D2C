@@ -458,6 +458,13 @@
         "subtitle": "Choose the perfect plan for your vehicle",
         "most_popular": "Most Popular",
         "choose_plan": "Choose Plan",
+        "gallery": {
+            "subtitle": "Real Results",
+            "title_before": "Before and",
+            "title_after": "After",
+            "description": "Swipe to see the transformation. Our treatments bring your vehicle back to life.",
+            "label_after": "AFTER"
+        },
         "plans": {
             "basic": {
                 "name": "Basic",

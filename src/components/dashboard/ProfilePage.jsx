@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { motion } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
 import { Link, useNavigate } from 'react-router-dom'
@@ -8,24 +11,43 @@ import { useTranslation } from 'react-i18next'
 
 import SEO from '../ui/SEO'
 
+const nameSchema = z.object({
+    fullName: z.string().min(1, "Required")
+})
+
+const emailSchema = z.object({
+    email: z.string().email("Invalid email")
+})
+
+const passwordSchema = z.object({
+    newPassword: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(6, "Required")
+}).refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+})
+
 const ProfilePage = () => {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
-    // Form states
-    const [fullName, setFullName] = useState('')
-    const [newEmail, setNewEmail] = useState('')
-    const [currentPassword, setCurrentPassword] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+    // Forms
+    const { register: registerName, handleSubmit: handleSubmitName, setValue: setValueName, formState: { errors: errorsName, isSubmitting: isSubmittingName } } = useForm({
+        resolver: zodResolver(nameSchema)
+    })
+
+    const { register: registerEmail, handleSubmit: handleSubmitEmail, setValue: setValueEmail, formState: { errors: errorsEmail, isSubmitting: isSubmittingEmail } } = useForm({
+        resolver: zodResolver(emailSchema)
+    })
+
+    const { register: registerPassword, handleSubmit: handleSubmitPassword, reset: resetPassword, formState: { errors: errorsPassword, isSubmitting: isSubmittingPassword } } = useForm({
+        resolver: zodResolver(passwordSchema)
+    })
 
     // UI states
     const [isAdmin, setIsAdmin] = useState(false)
-
-    // UI states
-    const [updating, setUpdating] = useState(false)
     const [message, setMessage] = useState({ type: '', text: '' })
 
     const getLocalizedPath = (path) => {
@@ -44,8 +66,8 @@ const ProfilePage = () => {
             return
         }
         setUser(session.user)
-        setFullName(session.user.user_metadata?.full_name || '')
-        setNewEmail(session.user.email || '')
+        setValueName('fullName', session.user.user_metadata?.full_name || '')
+        setValueEmail('email', session.user.email || '')
 
         // Check if admin
         const { data: adminStatus } = await supabase.rpc('is_admin')
@@ -59,16 +81,10 @@ const ProfilePage = () => {
         setTimeout(() => setMessage({ type: '', text: '' }), 5000)
     }
 
-    const handleUpdateName = async (e) => {
-        e.preventDefault()
+    const onUpdateName = async (data) => {
         if (isAdmin) return
+        const { fullName } = data
 
-        if (!fullName.trim()) {
-            showMessage('error', t('profile.name_required'))
-            return
-        }
-
-        setUpdating(true)
         const { error } = await supabase.auth.updateUser({
             data: { full_name: fullName }
         })
@@ -79,21 +95,14 @@ const ProfilePage = () => {
             showMessage('success', t('profile.name_updated'))
             checkUser() // Refresh user data
         }
-        setUpdating(false)
     }
 
-    const handleUpdateEmail = async (e) => {
-        e.preventDefault()
+    const onUpdateEmail = async (data) => {
         if (isAdmin) return
+        const { email } = data
 
-        if (!newEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
-            showMessage('error', t('auth.errors.invalid_email'))
-            return
-        }
-
-        setUpdating(true)
         const { error } = await supabase.auth.updateUser({
-            email: newEmail
+            email: email
         })
 
         if (error) {
@@ -101,23 +110,11 @@ const ProfilePage = () => {
         } else {
             showMessage('success', t('profile.email_updated'))
         }
-        setUpdating(false)
     }
 
-    const handleUpdatePassword = async (e) => {
-        e.preventDefault()
+    const onUpdatePassword = async (data) => {
+        const { newPassword } = data
 
-        if (newPassword.length < 6) {
-            showMessage('error', t('auth.errors.password_length'))
-            return
-        }
-
-        if (newPassword !== confirmPassword) {
-            showMessage('error', t('auth.errors.password_mismatch'))
-            return
-        }
-
-        setUpdating(true)
         const { error } = await supabase.auth.updateUser({
             password: newPassword
         })
@@ -126,11 +123,8 @@ const ProfilePage = () => {
             showMessage('error', error.message)
         } else {
             showMessage('success', t('profile.password_updated'))
-            setCurrentPassword('')
-            setNewPassword('')
-            setConfirmPassword('')
+            resetPassword()
         }
-        setUpdating(false)
     }
 
     if (loading) {
@@ -197,21 +191,21 @@ const ProfilePage = () => {
                         <h2 className="text-xl font-bold text-white">{t('profile.full_name')}</h2>
                         {isAdmin && <span className="text-xs text-white/40 ml-auto bg-white/5 px-2 py-1 rounded">Admin Locked</span>}
                     </div>
-                    <form onSubmit={handleUpdateName} className="space-y-4">
+                    <form onSubmit={handleSubmitName(onUpdateName)} className="space-y-4">
                         <input
                             type="text"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            className={`w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors ${isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            {...registerName('fullName')}
+                            className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${isAdmin ? 'opacity-50 cursor-not-allowed border-white/10' : errorsName.fullName ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
                             placeholder={t('profile.full_name_placeholder')}
                             disabled={isAdmin}
                         />
+                        {errorsName.fullName && <p className="text-red-500 text-sm">{errorsName.fullName.message}</p>}
                         <AnimatedButton
                             type="submit"
-                            disabled={updating || !fullName.trim() || isAdmin}
-                            className={`w-full ${updating || !fullName.trim() || isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={isSubmittingName || isAdmin}
+                            className={`w-full ${isSubmittingName || isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
-                            {updating ? t('profile.updating') : t('profile.update_name')}
+                            {isSubmittingName ? t('profile.updating') : t('profile.update_name')}
                         </AnimatedButton>
                     </form>
                 </motion.section>
@@ -230,22 +224,22 @@ const ProfilePage = () => {
                         <h2 className="text-xl font-bold text-white">{t('profile.email_address')}</h2>
                         {isAdmin && <span className="text-xs text-white/40 ml-auto bg-white/5 px-2 py-1 rounded">Admin Locked</span>}
                     </div>
-                    <form onSubmit={handleUpdateEmail} className="space-y-4">
+                    <form onSubmit={handleSubmitEmail(onUpdateEmail)} className="space-y-4">
                         <input
                             type="email"
-                            value={newEmail}
-                            onChange={(e) => setNewEmail(e.target.value)}
-                            className={`w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors ${isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            {...registerEmail('email')}
+                            className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${isAdmin ? 'opacity-50 cursor-not-allowed border-white/10' : errorsEmail.email ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
                             placeholder={t('auth.mail')}
                             disabled={isAdmin}
                         />
+                        {errorsEmail.email && <p className="text-red-500 text-sm">{errorsEmail.email.message}</p>}
                         <p className="text-white/40 text-sm">{t('profile.email_note')}</p>
                         <AnimatedButton
                             type="submit"
-                            disabled={updating || !newEmail.trim() || newEmail === user?.email || isAdmin}
-                            className={`w-full ${updating || !newEmail.trim() || newEmail === user?.email || isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={isSubmittingEmail || isAdmin}
+                            className={`w-full ${isSubmittingEmail || isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
-                            {updating ? t('profile.updating') : t('profile.update_email')}
+                            {isSubmittingEmail ? t('profile.updating') : t('profile.update_email')}
                         </AnimatedButton>
                     </form>
                 </motion.section>
@@ -263,27 +257,27 @@ const ProfilePage = () => {
                         </div>
                         <h2 className="text-xl font-bold text-white">{t('profile.change_password')}</h2>
                     </div>
-                    <form onSubmit={handleUpdatePassword} className="space-y-4">
+                    <form onSubmit={handleSubmitPassword(onUpdatePassword)} className="space-y-4">
                         <input
                             type="password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
+                            {...registerPassword('newPassword')}
+                            className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errorsPassword.newPassword ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
                             placeholder={t('profile.new_password')}
                         />
+                        {errorsPassword.newPassword && <p className="text-red-500 text-sm">{errorsPassword.newPassword.message}</p>}
                         <input
                             type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
+                            {...registerPassword('confirmPassword')}
+                            className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errorsPassword.confirmPassword ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
                             placeholder={t('auth.confirm_password')}
                         />
+                        {errorsPassword.confirmPassword && <p className="text-red-500 text-sm">{errorsPassword.confirmPassword.message}</p>}
                         <AnimatedButton
                             type="submit"
-                            disabled={updating || !newPassword || !confirmPassword}
-                            className={`w-full ${updating || !newPassword || !confirmPassword ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={isSubmittingPassword}
+                            className={`w-full ${isSubmittingPassword ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
-                            {updating ? t('profile.updating') : t('profile.update_password')}
+                            {isSubmittingPassword ? t('profile.updating') : t('profile.update_password')}
                         </AnimatedButton>
                     </form>
                 </motion.section>

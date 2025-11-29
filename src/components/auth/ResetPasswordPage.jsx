@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { motion } from 'framer-motion'
 import { Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -10,15 +13,26 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
+const resetPasswordSchema = z.object({
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(6, "Required")
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+})
+
 const ResetPasswordPage = () => {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(false)
+
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: zodResolver(resetPasswordSchema),
+        defaultValues: { password: '', confirmPassword: '' }
+    })
 
     const getLocalizedPath = (path) => {
         const currentLang = i18n.language
@@ -39,20 +53,9 @@ const ResetPasswordPage = () => {
         })
     }, [])
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const onSubmit = async (data) => {
+        const { password } = data
         setError(null)
-
-        if (password !== confirmPassword) {
-            setError(t('auth.errors.password_mismatch'))
-            return
-        }
-
-        if (password.length < 6) {
-            setError(t('auth.errors.password_length'))
-            return
-        }
-
         setLoading(true)
 
         try {
@@ -111,20 +114,21 @@ const ResetPasswordPage = () => {
                                     <p className="text-white/60">{t('auth.new_password_subtitle')}</p>
                                 </div>
 
-                                <form onSubmit={handleSubmit} className="space-y-6">
+                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium text-white/80 ml-1">{t('auth.password')}</label>
                                         <div className="relative group">
-                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
+                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${errors.password ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
                                                 <Lock size={20} />
                                             </div>
                                             <input
                                                 type={showPassword ? "text" : "password"}
-                                                value={password}
-                                                onChange={(e) => setPassword(e.target.value)}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-12 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
+                                                {...register('password')}
+                                                className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-12 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors.password
+                                                    ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
+                                                    : 'border-white/10 focus:border-white/30 focus:bg-white/10'
+                                                    }`}
                                                 placeholder="••••••••"
-                                                required
                                             />
                                             <button
                                                 type="button"
@@ -133,23 +137,42 @@ const ResetPasswordPage = () => {
                                             >
                                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                             </button>
+                                            {errors.password && (
+                                                <motion.p
+                                                    initial={{ opacity: 0, y: -5 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="absolute right-12 top-1/2 -translate-y-1/2 text-red-400 text-xs pr-2"
+                                                >
+                                                    {errors.password.message}
+                                                </motion.p>
+                                            )}
                                         </div>
                                     </div>
 
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium text-white/80 ml-1">{t('auth.confirm_password')}</label>
                                         <div className="relative group">
-                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-white transition-colors duration-300">
+                                            <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${errors.confirmPassword ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
                                                 <Lock size={20} />
                                             </div>
                                             <input
                                                 type={showPassword ? "text" : "password"}
-                                                value={confirmPassword}
-                                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-12 text-white placeholder-white/30 focus:outline-none focus:border-white/30 focus:bg-white/10 transition-all duration-300"
+                                                {...register('confirmPassword')}
+                                                className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-12 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors.confirmPassword
+                                                    ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
+                                                    : 'border-white/10 focus:border-white/30 focus:bg-white/10'
+                                                    }`}
                                                 placeholder="••••••••"
-                                                required
                                             />
+                                            {errors.confirmPassword && (
+                                                <motion.p
+                                                    initial={{ opacity: 0, y: -5 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-red-400 text-xs"
+                                                >
+                                                    {errors.confirmPassword.message}
+                                                </motion.p>
+                                            )}
                                         </div>
                                     </div>
 

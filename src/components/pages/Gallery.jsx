@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 const Gallery = () => {
+    const { t } = useTranslation()
     const [sliderValue, setSliderValue] = useState(50)
     const [isDragging, setIsDragging] = useState(false)
 
@@ -21,6 +23,22 @@ const Gallery = () => {
         }
     }
 
+    const containerRef = React.useRef(null)
+    const [containerWidth, setContainerWidth] = useState(0)
+
+    React.useEffect(() => {
+        if (containerRef.current) {
+            setContainerWidth(containerRef.current.offsetWidth)
+        }
+        const handleResize = () => {
+            if (containerRef.current) {
+                setContainerWidth(containerRef.current.offsetWidth)
+            }
+        }
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
+
     return (
         <section className="py-24 px-4 md:px-8 bg-[#050505] relative overflow-hidden">
             <div className="max-w-7xl mx-auto">
@@ -30,7 +48,7 @@ const Gallery = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-accent text-sm font-bold tracking-widest uppercase mb-4 block"
                     >
-                        Resultados Reales
+                        {t('gallery.subtitle', 'Resultados Reales')}
                     </motion.span>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -38,7 +56,7 @@ const Gallery = () => {
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-6xl font-display font-bold text-white mb-6"
                     >
-                        Antes y <span className="text-accent">Después</span>
+                        {t('gallery.title_before', 'Antes y')} <span className="text-accent">{t('gallery.title_after', 'Después')}</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
@@ -46,11 +64,14 @@ const Gallery = () => {
                         transition={{ delay: 0.2 }}
                         className="text-white/60 max-w-2xl mx-auto text-lg"
                     >
-                        Desliza para ver la transformación. Nuestros tratamientos devuelven la vida a tu vehículo.
+                        {t('gallery.description', 'Desliza para ver la transformación. Nuestros tratamientos devuelven la vida a tu vehículo.')}
                     </motion.p>
                 </div>
 
-                <div className="relative max-w-5xl mx-auto aspect-[16/9] rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                <div
+                    ref={containerRef}
+                    className="relative max-w-5xl mx-auto aspect-[16/9] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#111]"
+                >
                     {/* Image Container */}
                     <div
                         className="relative w-full h-full cursor-ew-resize select-none"
@@ -65,34 +86,40 @@ const Gallery = () => {
                             setSliderValue(percentage)
                         }}
                     >
-                        {/* After Image (Base) */}
-                        <div className="absolute inset-0">
+                        {/* After Image (Base) - Clean */}
+                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] to-black">
                             <img
-                                src="/images/after.jpg"
+                                src="/images/vehiculos/sedan.png"
                                 alt="Después"
-                                className="w-full h-full object-cover"
+                                className="w-[80%] h-[80%] object-contain drop-shadow-[0_0_30px_rgba(0,70,184,0.3)]"
                                 draggable="false"
                             />
-                            <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-sm font-bold border border-white/10">
-                                DESPUÉS
+                        </div>
+
+                        {/* Before Image (Overlay) - Dirty Effect */}
+                        <div
+                            className="absolute inset-0 overflow-hidden bg-[#1a1a1a] border-r border-white/20"
+                            style={{ width: `${sliderValue}%` }}
+                        >
+                            <div
+                                className="absolute top-0 left-0 h-full flex items-center justify-center bg-gradient-to-br from-[#2a2a2a] to-[#111]"
+                                style={{ width: containerWidth }}
+                            >
+                                <img
+                                    src="/images/vehiculos/sedan.png"
+                                    alt="Antes"
+                                    className="w-[80%] h-[80%] object-contain filter grayscale sepia-[0.4] brightness-[0.6] opacity-80"
+                                    draggable="false"
+                                />
                             </div>
                         </div>
 
-                        {/* Before Image (Overlay) */}
-                        <div
-                            className="absolute inset-0 overflow-hidden"
-                            style={{ width: `${sliderValue}%` }}
-                        >
-                            <img
-                                src="/images/before.jpg"
-                                alt="Antes"
-                                className="absolute top-0 left-0 w-full h-full object-cover max-w-none"
-                                style={{ width: '100vw', maxWidth: '1152px' }} // Ajustar al ancho del contenedor padre
-                                draggable="false"
-                            />
-                            <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-sm font-bold border border-white/10">
-                                ANTES
-                            </div>
+                        {/* Labels - Positioned absolutely on top of everything */}
+                        <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-sm font-bold border border-white/10 z-30 pointer-events-none">
+                            {t('gallery.label_before', 'ANTES')}
+                        </div>
+                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-sm font-bold border border-white/10 z-30 pointer-events-none">
+                            {t('gallery.label_after', 'DESPUÉS')}
                         </div>
 
                         {/* Slider Handle */}

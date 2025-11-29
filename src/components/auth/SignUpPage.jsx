@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail, Lock, User, AlertCircle, Eye, EyeOff, CheckCircle, Check } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -11,120 +14,77 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
+const signupSchema = z.object({
+    name: z.string().min(1, "Required"),
+    email: z.string().min(1, "Required").email("Invalid email"),
+    password: z.string().min(1, "Required"),
+    confirmPassword: z.string().min(1, "Required"),
+    termsAccepted: z.literal(true, {
+        errorMap: () => ({ message: "You must accept the terms" }),
+    }),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+})
+
 const SignUpPage = () => {
     const navigate = useNavigate()
     const { t, i18n } = useTranslation()
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-    const [termsAccepted, setTermsAccepted] = useState(false)
     const [showSuccessModal, setShowSuccessModal] = useState(false)
 
-    const [errors, setErrors] = useState({})
-    const [touched, setTouched] = useState({})
+    const { register, handleSubmit, setError, formState: { errors } } = useForm({
+        resolver: zodResolver(signupSchema),
+        defaultValues: {
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+            termsAccepted: false
+        }
+    })
 
     const getLocalizedPath = (path) => {
         const prefix = i18n.language === 'en' ? '/en' : ''
         return `${prefix}${path}`
     }
 
-    const validateForm = (values = {}) => {
-        const newErrors = {}
-        const currentName = values.name !== undefined ? values.name : name
-        const currentEmail = values.email !== undefined ? values.email : email
-        const currentPassword = values.password !== undefined ? values.password : password
-        const currentConfirmPassword = values.confirmPassword !== undefined ? values.confirmPassword : confirmPassword
-        const currentTermsAccepted = values.termsAccepted !== undefined ? values.termsAccepted : termsAccepted
+    const onSubmit = async (data) => {
+        const { name, email, password } = data
 
-        if (!currentName.trim()) {
-            newErrors.name = t('auth.errors.required')
-        }
-
-        if (!currentEmail) {
-            newErrors.email = t('auth.errors.required')
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currentEmail)) {
-            newErrors.email = t('auth.errors.invalid_email')
-        }
-
-        if (!currentPassword) {
-            newErrors.password = t('auth.errors.required')
-        }
-
-        if (!currentConfirmPassword) {
-            newErrors.confirmPassword = t('auth.errors.required')
-        } else if (currentPassword !== currentConfirmPassword) {
-            newErrors.confirmPassword = t('auth.errors.password_mismatch')
-        }
-
-        if (!currentTermsAccepted) {
-            newErrors.terms = t('auth.errors.terms_required')
-        }
-
-        setErrors(newErrors)
-        return Object.keys(newErrors).length === 0
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        setTouched({
-            name: true,
-            email: true,
-            password: true,
-            confirmPassword: true,
-            terms: true
+        const { error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: { full_name: name }
+            }
         })
 
-        if (validateForm()) {
-            const { error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                    data: { full_name: name }
-                }
+        if (error) {
+            setError('email', { type: 'manual', message: error.message })
+        } else {
+            // 📧 Enviar correo de bienvenida
+            await supabase.functions.invoke('send-welcome-email', {
+                body: { email, name, password }
             })
 
-            if (error) {
-                setErrors({ ...errors, email: error.message })
-            } else {
-                // 📧 Enviar correo de bienvenida
-                await supabase.functions.invoke('send-welcome-email', {
-                    body: { email, name, password }
-                })
-
-                setShowSuccessModal(true)
-            }
-        }
-    }
-
-    const handleBlur = (field, value) => {
-        if (value && value.trim()) {
-            setTouched(prev => ({ ...prev, [field]: true }))
-            validateForm()
+            setShowSuccessModal(true)
         }
     }
 
     // Helper to render input fields
-    const renderInput = (label, value, setValue, fieldName, type = "text", Icon, placeholder, isPassword = false, showPass = false, setShowPass = null) => (
+    const renderInput = (label, fieldName, type = "text", Icon, placeholder, isPassword = false, showPass = false, setShowPass = null) => (
         <div className="space-y-2">
             <label className="text-sm font-medium text-white/80 ml-1">{label}</label>
             <div className="relative group">
-                <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${touched[fieldName] && errors[fieldName] ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
+                <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${errors[fieldName] ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
                     <Icon size={20} />
                 </div>
                 <input
                     type={isPassword ? (showPass ? "text" : "password") : type}
-                    value={value}
-                    onChange={(e) => {
-                        const newValue = e.target.value
-                        setValue(newValue)
-                        if (touched[fieldName]) validateForm({ [fieldName]: newValue })
-                    }}
-                    onBlur={(e) => handleBlur(fieldName, e.target.value)}
-                    className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 ${isPassword ? 'pr-12' : 'pr-10'} text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${touched[fieldName] && errors[fieldName]
+                    {...register(fieldName)}
+                    className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 ${isPassword ? 'pr-12' : 'pr-10'} text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors[fieldName]
                         ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
                         : 'border-white/10 focus:border-white/30 focus:bg-white/10'
                         }`}
@@ -141,19 +101,19 @@ const SignUpPage = () => {
                     </button>
                 )}
 
-                {touched[fieldName] && errors[fieldName] && (
+                {errors[fieldName] && (
                     <div className={`absolute ${isPassword ? 'right-12 pr-2' : 'right-3'} top-1/2 -translate-y-1/2 text-red-400 pointer-events-none`}>
                         <AlertCircle size={18} />
                     </div>
                 )}
             </div>
-            {touched[fieldName] && errors[fieldName] && (
+            {errors[fieldName] && (
                 <motion.p
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="text-red-400 text-xs ml-1 flex items-center gap-1"
                 >
-                    {errors[fieldName]}
+                    {errors[fieldName].message}
                 </motion.p>
             )}
         </div>
@@ -193,11 +153,11 @@ const SignUpPage = () => {
                             <p className="text-white/60">{t('auth.signup_subtitle')}</p>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-                            {renderInput(t('auth.full_name'), name, setName, "name", "text", User, "Juan Pérez")}
-                            {renderInput(t('auth.email'), email, setEmail, "email", "email", Mail, t('auth.mail'))}
-                            {renderInput(t('auth.password'), password, setPassword, "password", "password", Lock, "••••••••", true, showPassword, setShowPassword)}
-                            {renderInput(t('auth.confirm_password'), confirmPassword, setConfirmPassword, "confirmPassword", "password", Lock, "••••••••", true, showConfirmPassword, setShowConfirmPassword)}
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+                            {renderInput(t('auth.full_name'), "name", "text", User, "Juan Pérez")}
+                            {renderInput(t('auth.email'), "email", "email", Mail, t('auth.mail'))}
+                            {renderInput(t('auth.password'), "password", "password", Lock, "••••••••", true, showPassword, setShowPassword)}
+                            {renderInput(t('auth.confirm_password'), "confirmPassword", "password", Lock, "••••••••", true, showConfirmPassword, setShowConfirmPassword)}
 
                             <div className="space-y-2">
                                 <div className="flex items-start gap-3 pt-2">
@@ -205,11 +165,7 @@ const SignUpPage = () => {
                                         <input
                                             type="checkbox"
                                             id="terms"
-                                            checked={termsAccepted}
-                                            onChange={(e) => {
-                                                setTermsAccepted(e.target.checked)
-                                                if (touched.terms) validateForm({ termsAccepted: e.target.checked })
-                                            }}
+                                            {...register('termsAccepted')}
                                             className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-white/20 bg-white/5 transition-all checked:border-blue-500 checked:bg-blue-500 hover:border-white/40"
                                         />
                                         <Check className="pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity peer-checked:opacity-100" strokeWidth={3} />
@@ -225,13 +181,13 @@ const SignUpPage = () => {
                                         </Link>
                                     </label>
                                 </div>
-                                {touched.terms && errors.terms && (
+                                {errors.termsAccepted && (
                                     <motion.p
                                         initial={{ opacity: 0, y: -5 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         className="text-red-400 text-xs ml-1"
                                     >
-                                        {errors.terms}
+                                        {errors.termsAccepted.message}
                                     </motion.p>
                                 )}
                             </div>
