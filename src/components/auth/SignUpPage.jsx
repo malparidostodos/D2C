@@ -7,6 +7,8 @@ import Modal from '../ui/Modal'
 import LanguageSelector from '../ui/LanguageSelector'
 import { useTranslation } from 'react-i18next'
 
+import SEO from '../ui/SEO'
+
 import '../JetonHeader.css'
 
 const SignUpPage = () => {
@@ -159,6 +161,7 @@ const SignUpPage = () => {
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
+            <SEO title={t('auth.signup_title', 'Crear Cuenta')} />
             {/* Navbar Structure for Logo */}
             <div className="_navbar">
                 <div className="nav-container flex justify-between items-center">
@@ -213,11 +216,11 @@ const SignUpPage = () => {
                                     </div>
                                     <label htmlFor="terms" className="text-sm text-white/60 cursor-pointer select-none leading-tight">
                                         {t('auth.terms_agreement')}{' '}
-                                        <Link to={getLocalizedPath('/terms-conditions')} className="text-white hover:text-blue-400 transition-colors hover:underline" target="_blank">
+                                        <Link to={getLocalizedPath('/terms-conditions')} className="text-white hover:text-[var(--color-blue-light)] transition-colors hover:underline" target="_blank">
                                             {t('auth.terms_link')}
                                         </Link>
                                         {' '}{t('auth.and')}{' '}
-                                        <Link to={getLocalizedPath('/privacy-policy')} className="text-white hover:text-blue-400 transition-colors hover:underline" target="_blank">
+                                        <Link to={getLocalizedPath('/privacy-policy')} className="text-white hover:text-[var(--color-blue-light)] transition-colors hover:underline" target="_blank">
                                             {t('auth.privacy_link')}
                                         </Link>
                                     </label>

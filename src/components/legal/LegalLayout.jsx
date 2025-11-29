@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Header from '../layout/Header';
 import Contact from '../pages/Contact';
+import SEO from '../ui/SEO';
 
 const LegalLayout = ({ children, title, subtitle, sections }) => {
     const { t, i18n } = useTranslation();
@@ -61,6 +62,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
 
     return (
         <div className="min-h-screen bg-[#0046b8] font-sans flex flex-col">
+            <SEO title={title} description={subtitle} />
             <Header theme="white" />
 
             {/* Hero Section */}

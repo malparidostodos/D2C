@@ -6,6 +6,8 @@ import { User, Mail, Lock, ArrowLeft, Check, AlertCircle } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
 
+import SEO from '../ui/SEO'
+
 const ProfilePage = () => {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
@@ -18,6 +20,9 @@ const ProfilePage = () => {
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+
+    // UI states
+    const [isAdmin, setIsAdmin] = useState(false)
 
     // UI states
     const [updating, setUpdating] = useState(false)
@@ -41,6 +46,11 @@ const ProfilePage = () => {
         setUser(session.user)
         setFullName(session.user.user_metadata?.full_name || '')
         setNewEmail(session.user.email || '')
+
+        // Check if admin
+        const { data: adminStatus } = await supabase.rpc('is_admin')
+        setIsAdmin(!!adminStatus)
+
         setLoading(false)
     }
 
@@ -51,6 +61,8 @@ const ProfilePage = () => {
 
     const handleUpdateName = async (e) => {
         e.preventDefault()
+        if (isAdmin) return
+
         if (!fullName.trim()) {
             showMessage('error', t('profile.name_required'))
             return
@@ -72,6 +84,8 @@ const ProfilePage = () => {
 
     const handleUpdateEmail = async (e) => {
         e.preventDefault()
+        if (isAdmin) return
+
         if (!newEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
             showMessage('error', t('auth.errors.invalid_email'))
             return
@@ -129,6 +143,7 @@ const ProfilePage = () => {
 
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
+            <SEO title={t('profile.title', 'Mi Perfil')} />
             <Link to={getLocalizedPath('/')} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
                 Ta' <span className="text-accent">To'</span> Clean
             </Link>
@@ -180,19 +195,21 @@ const ProfilePage = () => {
                             <User size={20} className="text-white" />
                         </div>
                         <h2 className="text-xl font-bold text-white">{t('profile.full_name')}</h2>
+                        {isAdmin && <span className="text-xs text-white/40 ml-auto bg-white/5 px-2 py-1 rounded">Admin Locked</span>}
                     </div>
                     <form onSubmit={handleUpdateName} className="space-y-4">
                         <input
                             type="text"
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
+                            className={`w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors ${isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
                             placeholder={t('profile.full_name_placeholder')}
+                            disabled={isAdmin}
                         />
                         <AnimatedButton
                             type="submit"
-                            disabled={updating || !fullName.trim()}
-                            className={`w-full ${updating || !fullName.trim() ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={updating || !fullName.trim() || isAdmin}
+                            className={`w-full ${updating || !fullName.trim() || isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {updating ? t('profile.updating') : t('profile.update_name')}
                         </AnimatedButton>
@@ -211,20 +228,22 @@ const ProfilePage = () => {
                             <Mail size={20} className="text-white" />
                         </div>
                         <h2 className="text-xl font-bold text-white">{t('profile.email_address')}</h2>
+                        {isAdmin && <span className="text-xs text-white/40 ml-auto bg-white/5 px-2 py-1 rounded">Admin Locked</span>}
                     </div>
                     <form onSubmit={handleUpdateEmail} className="space-y-4">
                         <input
                             type="email"
                             value={newEmail}
                             onChange={(e) => setNewEmail(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
+                            className={`w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors ${isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
                             placeholder={t('auth.mail')}
+                            disabled={isAdmin}
                         />
                         <p className="text-white/40 text-sm">{t('profile.email_note')}</p>
                         <AnimatedButton
                             type="submit"
-                            disabled={updating || !newEmail.trim() || newEmail === user?.email}
-                            className={`w-full ${updating || !newEmail.trim() || newEmail === user?.email ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={updating || !newEmail.trim() || newEmail === user?.email || isAdmin}
+                            className={`w-full ${updating || !newEmail.trim() || newEmail === user?.email || isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {updating ? t('profile.updating') : t('profile.update_email')}
                         </AnimatedButton>

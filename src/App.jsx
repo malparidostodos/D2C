@@ -33,10 +33,13 @@ import PrivacyPolicy from './components/legal/PrivacyPolicy'
 import TermsConditions from './components/legal/TermsConditions'
 import Disclaimers from './components/legal/Disclaimers'
 
+import SEO from './components/ui/SEO'
+
 // Componente Home con todas las secciones
 const Home = () => {
   return (
     <div className="min-h-screen text-primary relative">
+      <SEO />
       <Header />
       <CustomScrollbar />
       <main>
@@ -56,7 +59,7 @@ const Home = () => {
 }
 
 // Componente que maneja el scroll a secciones
-const ScrollToSection = ({ sectionId }) => {
+const ScrollToSection = ({ sectionId, title, description }) => {
   const navigate = useNavigate()
   const location = useLocation()
   const { lenis } = useSmoothScroll()
@@ -75,15 +78,7 @@ const ScrollToSection = ({ sectionId }) => {
         }
       }
 
-      // Clean URL
-      const currentLang = i18n.language === 'en' ? '/en' : ''
-      const targetPath = currentLang || '/'
-
-      setTimeout(() => {
-        if (location.pathname !== targetPath) {
-          navigate(targetPath, { replace: true })
-        }
-      }, 1000)
+      // URL cleaning removed to persist SEO title and URL
     }
 
     // Wait for lenis to be ready
@@ -93,7 +88,12 @@ const ScrollToSection = ({ sectionId }) => {
     }
   }, [sectionId, navigate, location.pathname, lenis, i18n.language])
 
-  return <Home />
+  return (
+    <>
+      {title && <SEO title={title} description={description} />}
+      <Home />
+    </>
+  )
 }
 
 // Componente para redirigir rutas no válidas a home
@@ -109,35 +109,38 @@ const RedirectToHome = () => {
   return <Home />
 }
 
-const AppRoutes = () => (
-  <>
-    <Route index element={<Home />} />
-    <Route path="inicio" element={<ScrollToSection sectionId="#inicio" />} />
-    <Route path="beneficios" element={<ScrollToSection sectionId="#beneficios" />} />
-    <Route path="precios" element={<ScrollToSection sectionId="#precios" />} />
-    <Route path="roadmap" element={<ScrollToSection sectionId="#roadmap" />} />
-    <Route path="membresias" element={<ScrollToSection sectionId="#membresias" />} />
-    <Route path="contacto" element={<ScrollToSection sectionId="#contacto" />} />
-    <Route path="reserva" element={<BookingPage />} />
-    <Route path="login" element={<LoginPage />} />
-    <Route path="signup" element={<SignUpPage />} />
-    <Route path="dashboard" element={<UserDashboard />} />
-    <Route path="admin" element={<AdminDashboard />} />
-    <Route path="profile" element={<ProfilePage />} />
-    <Route path="forgot-password" element={<ForgotPasswordPage />} />
-    <Route path="reset-password" element={<ResetPasswordPage />} />
+const AppRoutes = ({ t }) => {
+  return (
+    <>
+      <Route index element={<Home />} />
+      <Route path="inicio" element={<ScrollToSection sectionId="#inicio" title={t('header.home')} />} />
+      <Route path="beneficios" element={<ScrollToSection sectionId="#beneficios" title={t('benefits.title')} />} />
+      <Route path="precios" element={<ScrollToSection sectionId="#precios" title={t('header.pricing')} />} />
+      <Route path="roadmap" element={<ScrollToSection sectionId="#roadmap" title={t('header.process')} />} />
+      <Route path="membresias" element={<ScrollToSection sectionId="#membresias" title={t('header.memberships')} />} />
+      <Route path="contacto" element={<ScrollToSection sectionId="#contacto" title={t('header.contact')} />} />
+      <Route path="reserva" element={<BookingPage />} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="signup" element={<SignUpPage />} />
+      <Route path="dashboard" element={<UserDashboard />} />
+      <Route path="admin" element={<AdminDashboard />} />
+      <Route path="profile" element={<ProfilePage />} />
+      <Route path="forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="reset-password" element={<ResetPasswordPage />} />
 
-    {/* Legal Routes */}
-    <Route path="cookie-policy" element={<CookiePolicy />} />
-    <Route path="privacy-policy" element={<PrivacyPolicy />} />
-    <Route path="terms-conditions" element={<TermsConditions />} />
-    <Route path="disclaimers" element={<Disclaimers />} />
+      {/* Legal Routes */}
+      <Route path="cookie-policy" element={<CookiePolicy />} />
+      <Route path="privacy-policy" element={<PrivacyPolicy />} />
+      <Route path="terms-conditions" element={<TermsConditions />} />
+      <Route path="disclaimers" element={<Disclaimers />} />
 
-    <Route path="*" element={<RedirectToHome />} />
-  </>
-)
+      <Route path="*" element={<RedirectToHome />} />
+    </>
+  )
+}
 
 const App = () => {
+  const { t } = useTranslation()
   return (
     <SmoothScroll>
       <div
@@ -154,12 +157,12 @@ const App = () => {
           <Routes>
             {/* English Routes */}
             <Route path="/en" element={<LanguageWrapper language="en" />}>
-              {AppRoutes()}
+              {AppRoutes({ t })}
             </Route>
 
             {/* Default (Spanish) Routes */}
             <Route path="/" element={<LanguageWrapper language="es" />}>
-              {AppRoutes()}
+              {AppRoutes({ t })}
             </Route>
           </Routes>
         </BrowserRouter>

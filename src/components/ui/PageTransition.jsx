@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
 import { useSmoothScroll } from './SmoothScroll';
 
@@ -56,19 +57,22 @@ const PageTransition = ({ children }) => {
             {displayChildren}
 
             {/* The Curtain */}
-            <div
-                className="fixed inset-0 z-[9999] pointer-events-none bg-[#0046b8]"
-                style={{
-                    transform: status === 'idle'
-                        ? 'translateY(100%)' // Hidden at bottom
-                        : status === 'covering'
-                            ? 'translateY(0%)' // Covering screen
-                            : 'translateY(-100%)', // Sliding away to top
-                    transition: status === 'idle'
-                        ? 'none' // Instant reset when idle
-                        : 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)'
-                }}
-            />
+            {createPortal(
+                <div
+                    className="fixed inset-0 z-[9999] pointer-events-none bg-[#0046b8]"
+                    style={{
+                        transform: status === 'idle'
+                            ? 'translateY(100%)' // Hidden at bottom
+                            : status === 'covering'
+                                ? 'translateY(0%)' // Covering screen
+                                : 'translateY(-100%)', // Sliding away to top
+                        transition: status === 'idle'
+                            ? 'none' // Instant reset when idle
+                            : 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                />,
+                document.body
+            )}
         </>
     );
 };

@@ -7,6 +7,8 @@ import AnimatedButton from '../ui/AnimatedButton'
 import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
 
+import SEO from '../ui/SEO'
+
 const UserDashboard = () => {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
@@ -227,6 +229,7 @@ const UserDashboard = () => {
 
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
+            <SEO title={t('dashboard.title', 'Panel de Usuario')} />
             <Link to={getLocalizedPath('/')} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
                 Ta' <span className="text-accent">To'</span> Clean
             </Link>

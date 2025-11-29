@@ -10,6 +10,8 @@ import {
 import { useTranslation } from 'react-i18next'
 import StatusDropdown from './StatusDropdown'
 
+import SEO from '../ui/SEO'
+
 const AdminDashboard = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
@@ -172,6 +174,7 @@ const AdminDashboard = () => {
 
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
+            <SEO title="Admin Dashboard" />
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <div>

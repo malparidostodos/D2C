@@ -372,9 +372,9 @@ const Header = ({ theme = 'default' }) => {
             <div className="_navbar">
                 <div className="nav-container">
                     {/* Logo */}
-                    <a href={getLocalizedPath('/')} className={`text-3xl font-display font-bold tracking-tighter ${theme === 'white' ? 'text-white' : 'text-black'}`}>
+                    <Link to={getLocalizedPath('/')} className={`text-3xl font-display font-bold tracking-tighter ${theme === 'white' ? 'text-white' : 'text-black'}`}>
                         Ta' <span className="text-accent">To'</span> Clean
-                    </a>
+                    </Link>
 
                     <div className="lang-cta-wrapper">
                         {/* Language Selector (Updated Structure) */}
@@ -444,7 +444,7 @@ const Header = ({ theme = 'default' }) => {
                                 </Link>
                             ) : (
                                 <>
-                                    <a href={getLocalizedPath("/login")} className={`_button ${theme === 'white' ? '!bg-transparent !text-white border border-white/40 hover:!bg-white/10' : ''}`} data-variant="ghost">
+                                    <Link to={getLocalizedPath("/login")} className={`_button ${theme === 'white' ? '!bg-transparent !text-white border border-white/40 hover:!bg-white/10' : ''}`} data-variant="ghost">
                                         <span className="staggered-wrapper">
                                             {t('header.login').split("").map((char, i) => (
                                                 <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
@@ -452,9 +452,9 @@ const Header = ({ theme = 'default' }) => {
                                                 </span>
                                             ))}
                                         </span>
-                                    </a>
-                                    <a
-                                        href={getLocalizedPath("/signup")}
+                                    </Link>
+                                    <Link
+                                        to={getLocalizedPath("/signup")}
                                         className="_button !bg-white !text-[#0046b8] transition-all duration-300"
                                         data-variant="ghost"
                                     >
@@ -465,7 +465,7 @@ const Header = ({ theme = 'default' }) => {
                                                 </span>
                                             ))}
                                         </span>
-                                    </a>
+                                    </Link>
                                 </>
                             )}
                         </div>
@@ -638,13 +638,13 @@ const Header = ({ theme = 'default' }) => {
                         >
                             {/* Login Button */}
                             {!user && (
-                                <a
-                                    href={getLocalizedPath("/login")}
+                                <Link
+                                    to={getLocalizedPath("/login")}
                                     onClick={handleMenuClose}
                                     className="_button !bg-white/10 !backdrop-blur-md !border !border-white/50 !text-white hover:!bg-white/30 transition-all duration-300 !h-[48px] !px-6 !rounded-[16px] flex items-center justify-center font-medium text-base"
                                 >
                                     {t('header.login')}
-                                </a>
+                                </Link>
                             )}
 
                             {/* Signup/Dashboard Button */}
@@ -657,13 +657,13 @@ const Header = ({ theme = 'default' }) => {
                                     {t('dashboard.title')}
                                 </Link>
                             ) : (
-                                <a
-                                    href={getLocalizedPath("/signup")}
+                                <Link
+                                    to={getLocalizedPath("/signup")}
                                     onClick={handleMenuClose}
                                     className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-[16px] flex items-center justify-center font-medium text-base"
                                 >
                                     {t('header.signup')}
-                                </a>
+                                </Link>
                             )}
                         </div>
 

@@ -6,6 +6,8 @@ import { supabase } from '../../lib/supabase'
 import LanguageSelector from '../ui/LanguageSelector'
 import { useTranslation } from 'react-i18next'
 
+import SEO from '../ui/SEO'
+
 import '../JetonHeader.css'
 
 const ResetPasswordPage = () => {
@@ -75,6 +77,7 @@ const ResetPasswordPage = () => {
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
+            <SEO title={t('auth.reset_password_title', 'Restablecer Contraseña')} />
             {/* Navbar Structure for Logo */}
             <div className="_navbar">
                 <div className="nav-container flex justify-between items-center">

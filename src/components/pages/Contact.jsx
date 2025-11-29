@@ -133,9 +133,9 @@ const Contact = () => {
 
               {/* Legal */}
               <div className="contact-legal flex flex-col gap-4">
-                <Link to="/cookie-policy" className="contact-link email-link">{t('legal.cookie_policy')}</Link>
                 <Link to="/privacy-policy" className="contact-link email-link">{t('legal.privacy_policy')}</Link>
                 <Link to="/terms-conditions" className="contact-link email-link">{t('legal.terms_conditions')}</Link>
+                <Link to="/cookie-policy" className="contact-link email-link">{t('legal.cookie_policy')}</Link>
                 <Link to="/disclaimers" className="contact-link email-link">{t('legal.disclaimers.title')}</Link>
               </div>
 
