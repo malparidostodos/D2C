@@ -45,7 +45,6 @@ const UserDashboard = () => {
                 'postgres_changes',
                 { event: '*', schema: 'public', table: 'bookings' },
                 (payload) => {
-                    console.log('Realtime update received:', payload)
                     loadUserData()
                 }
             )
@@ -110,13 +109,13 @@ const UserDashboard = () => {
                 .order('booking_date', { ascending: false })
 
             if (bookingsError) {
-                console.error('Error loading bookings:', bookingsError)
+                // console.error('Error loading bookings:', bookingsError)
             }
 
             setBookings(bookingsData || [])
 
         } catch (error) {
-            console.error('Error in loadUserData:', error)
+            // console.error('Error in loadUserData:', error)
         } finally {
             setLoading(false)
         }

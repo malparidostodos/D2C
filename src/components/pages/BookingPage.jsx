@@ -547,7 +547,7 @@ const BookingPage = () => {
                     console.error('Error creating user account:', signUpError)
                     // Continuar con la reserva aunque falle la creación de cuenta
                 } else {
-                    console.log('User account created successfully:', signUpData.user?.id)
+                    // console.log('User account created successfully:', signUpData.user?.id)
                     // Guardar credenciales para mostrar en la confirmación
                     newUserCredentials = { email, password }
                     newlyCreatedUser = signUpData.user
@@ -563,7 +563,7 @@ const BookingPage = () => {
                         if (signInError) {
                             console.error('Error signing in after account creation:', signInError)
                         } else {
-                            console.log('User signed in successfully after account creation')
+                            // console.log('User signed in successfully after account creation')
                         }
                     } catch (signInErr) {
                         console.error('Exception during auto sign-in:', signInErr)
@@ -602,8 +602,8 @@ const BookingPage = () => {
 
         // Enviar correo de confirmación
         try {
-            console.log('Attempting to send booking confirmation email')
-            console.log('New user credentials:', newUserCredentials ? 'Credentials exist' : 'No credentials')
+            // console.log('Attempting to send booking confirmation email')
+            // console.log('New user credentials:', newUserCredentials ? 'Credentials exist' : 'No credentials')
 
             // Usar fetch directo para evitar problemas de autenticación de usuario
             const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
@@ -633,13 +633,13 @@ const BookingPage = () => {
             })
 
             const result = await emailResponse.json()
-            console.log('Email response status:', emailResponse.status)
-            console.log('Email response:', result)
+            // console.log('Email response status:', emailResponse.status)
+            // console.log('Email response:', result)
 
             if (!emailResponse.ok) {
                 console.error('Error sending confirmation email:', result)
             } else {
-                console.log('Confirmation email sent successfully')
+                // console.log('Confirmation email sent successfully')
             }
         } catch (emailError) {
             console.error('Error invoking email function:', emailError)

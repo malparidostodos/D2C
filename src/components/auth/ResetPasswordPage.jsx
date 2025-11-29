@@ -34,7 +34,7 @@ const ResetPasswordPage = () => {
                 // If it doesn't, they might have an expired link.
                 // For now, we'll let them stay but maybe show a warning if no session?
                 // Actually, updatePassword requires an active session.
-                console.log("No active session found. Link might be invalid or expired.")
+                // console.log("No active session found. Link might be invalid or expired.")
             }
         })
     }, [])
@@ -68,7 +68,7 @@ const ResetPasswordPage = () => {
                 navigate(getLocalizedPath('/login'))
             }, 2000)
         } catch (error) {
-            console.error('Error updating password:', error)
+            // console.error('Error updating password:', error)
             setError(error.message)
         } finally {
             setLoading(false)

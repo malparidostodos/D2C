@@ -263,11 +263,6 @@ const Header = ({ theme = 'default' }) => {
         const targetLang = langCode.toLowerCase();
         const currentPath = location.pathname;
 
-        console.log('handleLanguageChange called with:', langCode);
-        console.log('Current language:', i18n.language);
-        console.log('Target language:', targetLang);
-        console.log('Current path:', currentPath);
-
         // Don't change if already on the target language
         if (i18n.language === targetLang) {
             console.log('Already on target language, skipping');

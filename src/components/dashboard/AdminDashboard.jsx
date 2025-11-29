@@ -40,7 +40,7 @@ const AdminDashboard = () => {
                         'postgres_changes',
                         { event: '*', schema: 'public', table: 'bookings' },
                         (payload) => {
-                            console.log('Admin realtime update:', payload)
+                            // console.log('Admin realtime update:', payload)
                             fetchBookings()
                         }
                     )
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
                 throw error
             }
 
-            console.log('Admin bookings fetched:', data)
+            // console.log('Admin bookings fetched:', data)
             setBookings(data || [])
             calculateStats(data || [])
 

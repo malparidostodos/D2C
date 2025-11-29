@@ -35,11 +35,11 @@ const HolographicText = ({ text = 'MEMBRESIAS' }) => {
       width: 100%;
       height: auto;
     `
-    
+
     // Crear múltiples instancias del texto
     const textElements = []
     const numTexts = 3 // Número de repeticiones
-    
+
     for (let i = 0; i < numTexts; i++) {
       const textElement = document.createElement('div')
       textElement.textContent = text
@@ -67,12 +67,12 @@ const HolographicText = ({ text = 'MEMBRESIAS' }) => {
       textContainer.appendChild(textElement)
       textElements.push(textElement)
     }
-    
+
     containerRef.current.appendChild(textContainer)
     textElementRef.current = textElements // Guardar array de elementos
-    
+
     // Debug: verificar que se crearon los elementos
-    console.log('Text elements created:', textElements.length)
+
 
     // Crear escena Three.js
     const scene = new THREE.Scene()
@@ -81,8 +81,8 @@ const HolographicText = ({ text = 'MEMBRESIAS' }) => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
     cameraRef.current = camera
 
-    const renderer = new THREE.WebGLRenderer({ 
-      alpha: true, 
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
       antialias: true
     })
     renderer.setSize(width, height)
@@ -164,24 +164,24 @@ const HolographicText = ({ text = 'MEMBRESIAS' }) => {
     const handleMouseMove = (e) => {
       if (!containerRef.current) return
       const rect = containerRef.current.getBoundingClientRect()
-      
+
       // Verificar si el mouse está dentro de la sección
-      const isInSection = e.clientX >= rect.left && 
-                          e.clientX <= rect.right && 
-                          e.clientY >= rect.top && 
-                          e.clientY <= rect.bottom
-      
+      const isInSection = e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom
+
       if (!isInSection) return
-      
+
       const x = e.clientX - rect.left
       const y = rect.height - (e.clientY - rect.top)
       material.uniforms.uMouse.value.set(x, y)
-      
+
       // Efecto en todos los textos HTML
       if (textElementRef.current && Array.isArray(textElementRef.current)) {
         const relX = (e.clientX - rect.left) / rect.width
         const relY = (e.clientY - rect.top) / rect.height
-        
+
         textElementRef.current.forEach((textElement) => {
           textElement.style.color = 'transparent'
           textElement.style.background = `linear-gradient(${relX * 360}deg, 
@@ -208,15 +208,15 @@ const HolographicText = ({ text = 'MEMBRESIAS' }) => {
     const handleMouseLeave = (e) => {
       if (!containerRef.current) return
       const rect = containerRef.current.getBoundingClientRect()
-      
+
       // Verificar si el mouse realmente salió de la sección
-      const isInSection = e.clientX >= rect.left && 
-                          e.clientX <= rect.right && 
-                          e.clientY >= rect.top && 
-                          e.clientY <= rect.bottom
-      
+      const isInSection = e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom
+
       if (isInSection) return
-      
+
       if (textElementRef.current && Array.isArray(textElementRef.current)) {
         textElementRef.current.forEach((textElement) => {
           textElement.style.color = 'rgba(0, 0, 0, 0.05)'
@@ -232,7 +232,7 @@ const HolographicText = ({ text = 'MEMBRESIAS' }) => {
 
     // Escuchar eventos en window para capturar el mouse en toda la sección
     window.addEventListener('mousemove', handleMouseMove)
-    
+
     // Encontrar el elemento padre (la sección) para detectar cuando el mouse sale
     const sectionElement = containerRef.current.closest('section')
     if (sectionElement) {
@@ -274,25 +274,25 @@ const HolographicText = ({ text = 'MEMBRESIAS' }) => {
         containerRef.current.removeEventListener('mouseleave', handleMouseLeave)
       }
       window.removeEventListener('resize', handleResize)
-      
+
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
       }
-      
+
       if (rendererRef.current && containerRef.current) {
         try {
           containerRef.current.removeChild(rendererRef.current.domElement)
-        } catch (e) {}
+        } catch (e) { }
         rendererRef.current.dispose()
       }
-      
+
       if (textElementRef.current) {
         const textContainer = containerRef.current?.querySelector('.holographic-text-container')
         if (textContainer && textContainer.parentNode) {
           textContainer.parentNode.removeChild(textContainer)
         }
       }
-      
+
       if (meshRef.current) {
         meshRef.current.geometry.dispose()
         meshRef.current.material.dispose()
@@ -303,10 +303,10 @@ const HolographicText = ({ text = 'MEMBRESIAS' }) => {
   }, [text])
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="holographic-canvas-container"
-      style={{ 
+      style={{
         position: 'absolute',
         top: 0,
         left: 0,

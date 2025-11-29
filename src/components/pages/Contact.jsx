@@ -36,7 +36,6 @@ const Contact = () => {
     setIsSubmitting(true)
 
     // Aquí puedes agregar la lógica para enviar el formulario
-    console.log('Newsletter subscription:', email)
 
     // Simular envío
     setTimeout(() => {
