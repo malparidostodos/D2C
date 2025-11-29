@@ -227,6 +227,24 @@
         "delete_vehicle_title": "¿Eliminar vehículo?",
         "delete_vehicle_confirm": "¿Estás seguro de eliminar el vehículo {{plate}}? Esta acción no se puede deshacer."
     },
+    "profile": {
+        "title": "Mi Perfil",
+        "subtitle": "Gestiona tu información personal y seguridad",
+        "back_to_dashboard": "Volver al Panel",
+        "full_name": "Nombre Completo",
+        "full_name_placeholder": "Tu nombre",
+        "email_address": "Correo Electrónico",
+        "email_note": "El correo electrónico se utiliza para iniciar sesión y recibir notificaciones.",
+        "change_password": "Cambiar Contraseña",
+        "new_password": "Nueva Contraseña",
+        "update_name": "Actualizar Nombre",
+        "update_email": "Actualizar Correo",
+        "update_password": "Actualizar Contraseña",
+        "updating": "Actualizando...",
+        "name_updated": "Nombre actualizado correctamente",
+        "email_updated": "Correo actualizado correctamente",
+        "password_updated": "Contraseña actualizada correctamente"
+    },
     "benefits": {
         "why_choose_us": "¿Por qué elegirnos?",
         "title": "Excelencia en cada detalle",
@@ -439,25 +457,6 @@
         ],
         "cancel": "Cancelar",
         "delete": "Eliminar"
-    },
-    "profile": {
-        "title": "Mi Perfil",
-        "subtitle": "Gestiona tu información personal",
-        "back_to_dashboard": "Volver al Dashboard",
-        "full_name": "Nombre Completo",
-        "full_name_placeholder": "Ingresa tu nombre completo",
-        "email_address": "Correo Electrónico",
-        "change_password": "Cambiar Contraseña",
-        "new_password": "Nueva Contraseña",
-        "update_name": "Actualizar Nombre",
-        "update_email": "Actualizar Correo",
-        "update_password": "Actualizar Contraseña",
-        "updating": "Actualizando...",
-        "name_updated": "Nombre actualizado exitosamente",
-        "email_updated": "Correo actualizado. Revisa tu bandeja de entrada para confirmar.",
-        "password_updated": "Contraseña actualizada exitosamente",
-        "name_required": "El nombre es requerido",
-        "email_note": "Te enviaremos un correo de confirmación a tu nueva dirección"
     },
     "pricing": {
         "exclusive_plans": "Planes Exclusivos",

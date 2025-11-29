@@ -130,7 +130,7 @@ const ProfilePage = () => {
     if (loading) {
         return (
             <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-                <div className="text-white text-xl">{t('common.loading')}</div>
+                <div className="text-white text-xl animate-pulse">{t('common.loading')}</div>
             </div>
         )
     }
@@ -138,28 +138,32 @@ const ProfilePage = () => {
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
             <SEO title={t('profile.title', 'Mi Perfil')} />
-            <Link to={getLocalizedPath('/')} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
-                Ta' <span className="text-accent">To'</span> Clean
-            </Link>
 
-            <div className="max-w-2xl mx-auto">
+            {/* Navbar Overlay */}
+            <div className="absolute top-6 left-6 md:top-8 md:left-8 z-50">
+                <Link to={getLocalizedPath('/')} className="text-2xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-opacity">
+                    Ta' <span className="text-accent">To'</span> Clean
+                </Link>
+            </div>
+
+            <div className="max-w-3xl mx-auto">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-8"
+                    className="mb-12"
                 >
                     <Link
                         to={getLocalizedPath('/dashboard')}
-                        className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-4"
+                        className="inline-flex items-center gap-2 text-white/40 hover:text-white transition-colors mb-6 group"
                     >
-                        <ArrowLeft size={20} />
+                        <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                         {t('profile.back_to_dashboard')}
                     </Link>
-                    <h1 className="text-4xl md:text-5xl font-display font-bold text-white mb-2">
+                    <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-3">
                         {t('profile.title')}
                     </h1>
-                    <p className="text-white/60">{t('profile.subtitle')}</p>
+                    <p className="text-white/40 text-lg">{t('profile.subtitle')}</p>
                 </motion.div>
 
                 {/* Message Toast */}
@@ -167,120 +171,142 @@ const ProfilePage = () => {
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className={`mb-6 p-4 rounded-xl border flex items-center gap-3 ${message.type === 'success'
-                            ? 'bg-green-500/10 border-green-500/30 text-green-500'
-                            : 'bg-red-500/10 border-red-500/30 text-red-500'
+                        className={`mb-8 p-4 rounded-2xl border flex items-center gap-3 ${message.type === 'success'
+                            ? 'bg-green-500/10 border-green-500/20 text-green-500'
+                            : 'bg-red-500/10 border-red-500/20 text-red-500'
                             }`}
                     >
                         {message.type === 'success' ? <Check size={20} /> : <AlertCircle size={20} />}
-                        <span>{message.text}</span>
+                        <span className="font-medium">{message.text}</span>
                     </motion.div>
                 )}
 
-                {/* Update Name */}
-                <motion.section
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 mb-6"
-                >
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-white/10 rounded-full">
-                            <User size={20} className="text-white" />
+                <div className="space-y-6">
+                    {/* Update Name */}
+                    <motion.section
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8"
+                    >
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="p-3 bg-white/5 rounded-full border border-white/5">
+                                <User size={24} className="text-white" />
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-bold text-white">{t('profile.full_name')}</h2>
+                                {isAdmin && <span className="text-xs text-accent bg-accent/10 px-2 py-0.5 rounded-full mt-1 inline-block">Admin Locked</span>}
+                            </div>
                         </div>
-                        <h2 className="text-xl font-bold text-white">{t('profile.full_name')}</h2>
-                        {isAdmin && <span className="text-xs text-white/40 ml-auto bg-white/5 px-2 py-1 rounded">Admin Locked</span>}
-                    </div>
-                    <form onSubmit={handleSubmitName(onUpdateName)} className="space-y-4">
-                        <input
-                            type="text"
-                            {...registerName('fullName')}
-                            className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${isAdmin ? 'opacity-50 cursor-not-allowed border-white/10' : errorsName.fullName ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
-                            placeholder={t('profile.full_name_placeholder')}
-                            disabled={isAdmin}
-                        />
-                        {errorsName.fullName && <p className="text-red-500 text-sm">{errorsName.fullName.message}</p>}
-                        <AnimatedButton
-                            type="submit"
-                            disabled={isSubmittingName || isAdmin}
-                            className={`w-full ${isSubmittingName || isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
-                            {isSubmittingName ? t('profile.updating') : t('profile.update_name')}
-                        </AnimatedButton>
-                    </form>
-                </motion.section>
+                        <form onSubmit={handleSubmitName(onUpdateName)} className="space-y-4">
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    {...registerName('fullName')}
+                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-all ${isAdmin ? 'opacity-50 cursor-not-allowed border-white/5' : errorsName.fullName ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/30 focus:bg-white/10'}`}
+                                    placeholder={t('profile.full_name_placeholder')}
+                                    disabled={isAdmin}
+                                />
+                            </div>
+                            {errorsName.fullName && <p className="text-red-500 text-sm pl-1">{errorsName.fullName.message}</p>}
+                            <div className="flex justify-end">
+                                <AnimatedButton
+                                    type="submit"
+                                    disabled={isSubmittingName || isAdmin}
+                                    className={isSubmittingName || isAdmin ? 'opacity-50 cursor-not-allowed' : ''}
+                                    variant="white"
+                                >
+                                    {isSubmittingName ? t('profile.updating') : t('profile.update_name')}
+                                </AnimatedButton>
+                            </div>
+                        </form>
+                    </motion.section>
 
-                {/* Update Email */}
-                <motion.section
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 mb-6"
-                >
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-white/10 rounded-full">
-                            <Mail size={20} className="text-white" />
+                    {/* Update Email */}
+                    <motion.section
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8"
+                    >
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="p-3 bg-white/5 rounded-full border border-white/5">
+                                <Mail size={24} className="text-white" />
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-bold text-white">{t('profile.email_address')}</h2>
+                                {isAdmin && <span className="text-xs text-accent bg-accent/10 px-2 py-0.5 rounded-full mt-1 inline-block">Admin Locked</span>}
+                            </div>
                         </div>
-                        <h2 className="text-xl font-bold text-white">{t('profile.email_address')}</h2>
-                        {isAdmin && <span className="text-xs text-white/40 ml-auto bg-white/5 px-2 py-1 rounded">Admin Locked</span>}
-                    </div>
-                    <form onSubmit={handleSubmitEmail(onUpdateEmail)} className="space-y-4">
-                        <input
-                            type="email"
-                            {...registerEmail('email')}
-                            className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${isAdmin ? 'opacity-50 cursor-not-allowed border-white/10' : errorsEmail.email ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
-                            placeholder={t('auth.mail')}
-                            disabled={isAdmin}
-                        />
-                        {errorsEmail.email && <p className="text-red-500 text-sm">{errorsEmail.email.message}</p>}
-                        <p className="text-white/40 text-sm">{t('profile.email_note')}</p>
-                        <AnimatedButton
-                            type="submit"
-                            disabled={isSubmittingEmail || isAdmin}
-                            className={`w-full ${isSubmittingEmail || isAdmin ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
-                            {isSubmittingEmail ? t('profile.updating') : t('profile.update_email')}
-                        </AnimatedButton>
-                    </form>
-                </motion.section>
+                        <form onSubmit={handleSubmitEmail(onUpdateEmail)} className="space-y-4">
+                            <div className="relative">
+                                <input
+                                    type="email"
+                                    {...registerEmail('email')}
+                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-all ${isAdmin ? 'opacity-50 cursor-not-allowed border-white/5' : errorsEmail.email ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/30 focus:bg-white/10'}`}
+                                    placeholder={t('auth.mail')}
+                                    disabled={isAdmin}
+                                />
+                            </div>
+                            {errorsEmail.email && <p className="text-red-500 text-sm pl-1">{errorsEmail.email.message}</p>}
+                            <p className="text-white/40 text-sm pl-1">{t('profile.email_note')}</p>
+                            <div className="flex justify-end">
+                                <AnimatedButton
+                                    type="submit"
+                                    disabled={isSubmittingEmail || isAdmin}
+                                    className={isSubmittingEmail || isAdmin ? 'opacity-50 cursor-not-allowed' : ''}
+                                    variant="white"
+                                >
+                                    {isSubmittingEmail ? t('profile.updating') : t('profile.update_email')}
+                                </AnimatedButton>
+                            </div>
+                        </form>
+                    </motion.section>
 
-                {/* Update Password */}
-                <motion.section
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6"
-                >
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-white/10 rounded-full">
-                            <Lock size={20} className="text-white" />
+                    {/* Update Password */}
+                    <motion.section
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8"
+                    >
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="p-3 bg-white/5 rounded-full border border-white/5">
+                                <Lock size={24} className="text-white" />
+                            </div>
+                            <h2 className="text-xl font-bold text-white">{t('profile.change_password')}</h2>
                         </div>
-                        <h2 className="text-xl font-bold text-white">{t('profile.change_password')}</h2>
-                    </div>
-                    <form onSubmit={handleSubmitPassword(onUpdatePassword)} className="space-y-4">
-                        <input
-                            type="password"
-                            {...registerPassword('newPassword')}
-                            className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errorsPassword.newPassword ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
-                            placeholder={t('profile.new_password')}
-                        />
-                        {errorsPassword.newPassword && <p className="text-red-500 text-sm">{errorsPassword.newPassword.message}</p>}
-                        <input
-                            type="password"
-                            {...registerPassword('confirmPassword')}
-                            className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errorsPassword.confirmPassword ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
-                            placeholder={t('auth.confirm_password')}
-                        />
-                        {errorsPassword.confirmPassword && <p className="text-red-500 text-sm">{errorsPassword.confirmPassword.message}</p>}
-                        <AnimatedButton
-                            type="submit"
-                            disabled={isSubmittingPassword}
-                            className={`w-full ${isSubmittingPassword ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
-                            {isSubmittingPassword ? t('profile.updating') : t('profile.update_password')}
-                        </AnimatedButton>
-                    </form>
-                </motion.section>
+                        <form onSubmit={handleSubmitPassword(onUpdatePassword)} className="space-y-4">
+                            <div className="space-y-4">
+                                <input
+                                    type="password"
+                                    {...registerPassword('newPassword')}
+                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-all ${errorsPassword.newPassword ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/30 focus:bg-white/10'}`}
+                                    placeholder={t('profile.new_password')}
+                                />
+                                {errorsPassword.newPassword && <p className="text-red-500 text-sm pl-1">{errorsPassword.newPassword.message}</p>}
+
+                                <input
+                                    type="password"
+                                    {...registerPassword('confirmPassword')}
+                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-all ${errorsPassword.confirmPassword ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/30 focus:bg-white/10'}`}
+                                    placeholder={t('auth.confirm_password')}
+                                />
+                                {errorsPassword.confirmPassword && <p className="text-red-500 text-sm pl-1">{errorsPassword.confirmPassword.message}</p>}
+                            </div>
+                            <div className="flex justify-end pt-2">
+                                <AnimatedButton
+                                    type="submit"
+                                    disabled={isSubmittingPassword}
+                                    className={isSubmittingPassword ? 'opacity-50 cursor-not-allowed' : ''}
+                                    variant="white"
+                                >
+                                    {isSubmittingPassword ? t('profile.updating') : t('profile.update_password')}
+                                </AnimatedButton>
+                            </div>
+                        </form>
+                    </motion.section>
+                </div>
             </div>
         </div>
     )

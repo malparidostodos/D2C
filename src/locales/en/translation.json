@@ -228,6 +228,24 @@
         "delete_vehicle_title": "Delete vehicle?",
         "delete_vehicle_confirm": "Are you sure you want to delete vehicle {{plate}}? This action cannot be undone."
     },
+    "profile": {
+        "title": "My Profile",
+        "subtitle": "Manage your personal information and security",
+        "back_to_dashboard": "Back to Dashboard",
+        "full_name": "Full Name",
+        "full_name_placeholder": "Your name",
+        "email_address": "Email Address",
+        "email_note": "Email is used for login and notifications.",
+        "change_password": "Change Password",
+        "new_password": "New Password",
+        "update_name": "Update Name",
+        "update_email": "Update Email",
+        "update_password": "Update Password",
+        "updating": "Updating...",
+        "name_updated": "Name updated successfully",
+        "email_updated": "Email updated successfully",
+        "password_updated": "Password updated successfully"
+    },
     "benefits": {
         "why_choose_us": "Why choose us?",
         "title": "Excellence in every detail",
@@ -447,25 +465,6 @@
         ],
         "cancel": "Cancel",
         "delete": "Delete"
-    },
-    "profile": {
-        "title": "My Profile",
-        "subtitle": "Manage your personal information",
-        "back_to_dashboard": "Back to Dashboard",
-        "full_name": "Full Name",
-        "full_name_placeholder": "Enter your full name",
-        "email_address": "Email Address",
-        "change_password": "Change Password",
-        "new_password": "New Password",
-        "update_name": "Update Name",
-        "update_email": "Update Email",
-        "update_password": "Update Password",
-        "updating": "Updating...",
-        "name_updated": "Name updated successfully",
-        "email_updated": "Email updated. Check your inbox to confirm.",
-        "password_updated": "Password updated successfully",
-        "name_required": "Name is required",
-        "email_note": "We'll send a confirmation email to your new address"
     },
     "pricing": {
         "exclusive_plans": "Exclusive Plans",
