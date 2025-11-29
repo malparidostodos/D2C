@@ -27,6 +27,9 @@ const UserDashboard = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [vehicleToDelete, setVehicleToDelete] = useState(null)
     const [isAdmin, setIsAdmin] = useState(false)
+    const [showAllHistory, setShowAllHistory] = useState(false)
+
+
 
     const getLocalizedPath = (path) => {
         const currentLang = i18n.language
@@ -438,7 +441,7 @@ const UserDashboard = () => {
                                 </div>
                             ) : (
                                 <div className="space-y-3">
-                                    {bookings.slice(0, 5).map((booking) => (
+                                    {bookings.slice(0, showAllHistory ? undefined : 5).map((booking) => (
                                         <div
                                             key={booking.id}
                                             className="bg-[#111] border border-white/10 rounded-2xl p-4 hover:bg-white/5 transition-colors group"
@@ -474,8 +477,11 @@ const UserDashboard = () => {
                                         </div>
                                     ))}
                                     {bookings.length > 5 && (
-                                        <button className="w-full py-3 text-center text-white/40 text-sm hover:text-white transition-colors">
-                                            {t('dashboard.view_all_history', 'Ver todo el historial')}
+                                        <button
+                                            onClick={() => setShowAllHistory(!showAllHistory)}
+                                            className="w-full py-3 text-center text-white/40 text-sm hover:text-white transition-colors"
+                                        >
+                                            {showAllHistory ? t('dashboard.show_less', 'Ver menos') : t('dashboard.view_all_history', 'Ver todo el historial')}
                                         </button>
                                     )}
                                 </div>
