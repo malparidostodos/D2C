@@ -20,6 +20,8 @@
         "cta_services": "View Services"
     },
     "booking": {
+        "seo_title": "Book Appointment | Ta' To' Clean",
+        "seo_description": "Schedule your appointment for premium wash, detailing, or ceramic coating. Transform your vehicle today.",
         "vehicle_types": {
             "car": {
                 "name": "Car",

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle, Plus } from 'lucide-react'
-import AnimatedButton from "../ui/AnimatedButton";
+import AnimatedButton from '../ui/AnimatedButton'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { supabase } from "../../lib/supabase";
+import { supabase } from '../../lib/supabase'
 import VehiclePlateSelector from '../ui/VehiclePlateSelector'
-import SEO from '../ui/SEO'
 import { useTranslation } from 'react-i18next'
+import { Helmet } from 'react-helmet-async'
 
 const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChange }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
@@ -96,7 +96,7 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
 
         // Empty slots for previous month
         for (let i = 0; i < firstDay; i++) {
-            days.push(<div key={`empty - ${i} `} className="h-10 w-10" />)
+            days.push(<div key={`empty-${i}`} className="h-10 w-10" />)
         }
 
         // Days
@@ -108,12 +108,12 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
                     key={i}
                     onClick={() => !disabled && onSelect(new Date(currentDate.getFullYear(), currentDate.getMonth(), i).toISOString().split('T')[0])}
                     disabled={disabled}
-                    className={`h - 10 w - 10 rounded - full flex items - center justify - center text - sm transition - colors ${isSelected(i)
+                    className={`h-10 w-10 rounded-full flex items-center justify-center text-sm transition-colors ${isSelected(i)
                         ? 'bg-white text-black font-bold'
                         : disabled
                             ? fullyBooked && !isPast(i) ? 'text-red-500/40 cursor-not-allowed line-through' : 'text-white/20 cursor-not-allowed'
                             : 'text-white hover:bg-white/10'
-                        } ${isToday(i) && !isSelected(i) ? 'border border-white/30' : ''} `}
+                        } ${isToday(i) && !isSelected(i) ? 'border border-white/30' : ''}`}
                 >
                     {i}
                 </button>
@@ -155,7 +155,7 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
 const BookingPage = () => {
     const location = useLocation()
     const navigate = useNavigate()
-    const [step, setStep] = useState(1)
+    const [step, setStep] = useState(0)
     const [maxStep, setMaxStep] = useState(1) // Track furthest step reached
     const [direction, setDirection] = useState(0)
     const [isConfirmed, setIsConfirmed] = useState(false)
@@ -170,7 +170,7 @@ const BookingPage = () => {
 
     const getLocalizedPath = (path) => {
         const prefix = i18n.language === 'en' ? '/en' : ''
-        return `${prefix}${path} `
+        return `${prefix}${path}`
     }
 
     const [formData, setFormData] = useState({
@@ -233,10 +233,10 @@ const BookingPage = () => {
             setUserVehicles(vehiclesData || [])
 
             // Solo empezar en paso 0 si NO hay un vehículo pre-seleccionado desde el dashboard
-            if (!location.state?.selectedVehicle) {
-                setStep(0)
-                setMaxStep(0)
-            }
+            // if (!location.state?.selectedVehicle) {
+            //     setStep(0)
+            //     setMaxStep(0)
+            // }
         }
         setLoadingVehicles(false)
     }
@@ -462,7 +462,7 @@ const BookingPage = () => {
     const formatPlate = (value) => {
         const clean = value.toUpperCase().replace(/[^A-Z0-9]/g, '')
         if (clean.length > 3) {
-            return `${clean.slice(0, 3)} -${clean.slice(3, 6)} ` + (clean.length > 6 ? clean.slice(6, 7) : '')
+            return `${clean.slice(0, 3)}-${clean.slice(3, 6)}` + (clean.length > 6 ? clean.slice(6, 7) : '')
         }
         return clean
     }
@@ -608,14 +608,14 @@ const BookingPage = () => {
             // Usar fetch directo para evitar problemas de autenticación de usuario
             const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
             const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
-            const functionUrl = `${SUPABASE_URL} /functions/v1 / send - booking - confirmation`
+            const functionUrl = `${SUPABASE_URL}/functions/v1/send-booking-confirmation`
 
             const emailResponse = await fetch(functionUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY} `,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
                 },
                 body: JSON.stringify({
                     clientName: formData.clientInfo.name,
@@ -676,7 +676,12 @@ const BookingPage = () => {
 
     if (isConfirmed) {
         return (
-            <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 flex items-center justify-center">
+            <main className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 flex items-center justify-center">
+                <Helmet>
+                    <title>{t('booking.confirmed_title')} | Ta' To' Clean</title>
+                    <meta name="description" content={t('booking.confirmed_message')} />
+                </Helmet>
+                <h1 className="sr-only">{t('booking.confirmed_title')}</h1>
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -737,13 +742,17 @@ const BookingPage = () => {
                         {t('booking.back_home')}
                     </AnimatedButton>
                 </motion.div>
-            </div>
+            </main>
         )
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 relative">
-            <SEO title={t('booking.seo_title', 'Reservar Cita')} description={t('booking.seo_desc', 'Reserva tu cita de detailing en línea.')} />
+        <main className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 relative">
+            <Helmet>
+                <title>{t('booking.seo_title')}</title>
+                <meta name="description" content={t('booking.seo_description')} />
+            </Helmet>
+            <h1 className="sr-only">{t('booking.seo_title')}</h1>
             <Link to={getLocalizedPath('/')} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
                 Ta' <span className="text-accent">To'</span> Clean
             </Link>
@@ -773,12 +782,12 @@ const BookingPage = () => {
                                         key={i}
                                         onClick={() => isClickable && jumpToStep(actualStep)}
                                         disabled={!isClickable}
-                                        className={`text - xs md: text - sm font - medium transition - colors ${isClickable
+                                        className={`text-xs md:text-sm font-medium transition-colors ${isClickable
                                             ? 'text-white cursor-pointer hover:text-accent'
                                             : isActiveOrPast
                                                 ? 'text-white'
                                                 : 'text-white/20'
-                                            } `}
+                                            }`}
                                     >
                                         {label}
                                     </button>
@@ -789,7 +798,7 @@ const BookingPage = () => {
                             <motion.div
                                 className="h-full bg-white"
                                 initial={{ width: '0%' }}
-                                animate={{ width: `${(step / 5) * 100}% ` }}
+                                animate={{ width: `${(step / 5) * 100}%` }}
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
                             />
                         </div>
@@ -830,7 +839,7 @@ const BookingPage = () => {
                     </div>
                 )}
             </div>
-        </div>
+        </main>
     )
 
     function renderStep() {
@@ -955,17 +964,17 @@ const BookingPage = () => {
                                     whileHover={{ scale: 1.03, y: -5 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleVehicleSelect(type)}
-                                    className={`relative overflow - hidden p - 6 md: p - 8 rounded - 3xl border - 2 flex flex - col items - center gap - 6 transition - all duration - 300 group ${formData.vehicleType?.id === type.id
+                                    className={`relative overflow-hidden p-6 md:p-8 rounded-3xl border-2 flex flex-col items-center gap-6 transition-all duration-300 group ${formData.vehicleType?.id === type.id
                                         ? 'bg-white text-black border-white shadow-[0_0_30px_rgba(255,255,255,0.3)]'
                                         : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white'
-                                        } `}
+                                        }`}
                                 >
                                     <div className="p-4">
                                         <img src={type.image} alt={type.name} className="w-40 h-28 object-contain" />
                                     </div>
                                     <div className="text-center">
                                         <span className="text-xl font-bold block mb-2">{type.name}</span>
-                                        <span className={`text - sm ${formData.vehicleType?.id === type.id ? 'text-black/60' : 'text-white/40'} `}>
+                                        <span className={`text-sm ${formData.vehicleType?.id === type.id ? 'text-black/60' : 'text-white/40'}`}>
                                             {type.description}
                                         </span>
                                     </div>
@@ -992,10 +1001,10 @@ const BookingPage = () => {
                                 <motion.div
                                     key={service.id}
                                     whileHover={{ scale: 1.02 }}
-                                    className={`p - 6 rounded - 2xl border - 2 cursor - pointer transition - all ${formData.service?.id === service.id
+                                    className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${formData.service?.id === service.id
                                         ? 'bg-white/10 border-white shadow-[0_0_20px_rgba(255,255,255,0.1)]'
                                         : 'bg-white/5 border-white/10 hover:border-white/30'
-                                        } `}
+                                        }`}
                                     onClick={() => handleServiceSelect(service)}
                                 >
                                     <div className="flex justify-between items-start mb-4">
@@ -1055,8 +1064,8 @@ const BookingPage = () => {
                                     value={formData.clientInfo.email}
                                     onChange={handleClientInfoChange}
                                     onBlur={() => handleBlur('email')}
-                                    className={`w - full bg - white / 5 border rounded - xl p - 4 text - white focus: outline - none transition - colors ${touched.email && formData.clientInfo.email && !isEmailValid(formData.clientInfo.email) ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'
-                                        } `}
+                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${touched.email && formData.clientInfo.email && !isEmailValid(formData.clientInfo.email) ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'
+                                        }`}
                                     placeholder="juan@ejemplo.com"
                                     disabled={isAuthenticated}
                                 />
@@ -1127,14 +1136,14 @@ const BookingPage = () => {
                                                 key={time}
                                                 onClick={() => !isTaken && handleTimeSelect(time)}
                                                 disabled={isTaken || !formData.date}
-                                                className={`p - 3 rounded - xl text - sm font - medium transition - all ${formData.time === time
+                                                className={`p-3 rounded-xl text-sm font-medium transition-all ${formData.time === time
                                                     ? 'bg-white text-black scale-105 shadow-lg'
                                                     : isTaken
                                                         ? 'bg-red-500/10 text-red-500/40 cursor-not-allowed line-through border border-red-500/20'
                                                         : !formData.date
                                                             ? 'bg-white/5 text-white/20 cursor-not-allowed border border-white/5'
                                                             : 'bg-white/5 text-white hover:bg-white/10 border border-white/5'
-                                                    } `}
+                                                    }`}
                                             >
                                                 {time}
                                             </button>

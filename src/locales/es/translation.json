@@ -20,6 +20,8 @@
         "cta_services": "Ver Servicios"
     },
     "booking": {
+        "seo_title": "Reservar | Ta' To' Clean",
+        "seo_description": "Agenda tu cita para lavado premium, detailing o recubrimiento cerámico. Transforma tu vehículo hoy.",
         "vehicle_types": {
             "car": {
                 "name": "Automóvil",

@@ -11,8 +11,10 @@
 - [ ] **Notificaciones Automáticas (Email/SMS)**
   - Edge functions para bienvenida y reset password implementadas.
   - *Falta:* Recordatorios automáticos (Cron jobs).
-- [ ] **SEO Dinámico (react-helmet-async)**
-  - *Pendiente implementation.*
+- [x] **SEO Dinámico (react-helmet-async)**
+  - Implementado componente `SEO` reutilizable.
+  - Integrado en todas las páginas (Home, Booking, Auth, Dashboard, Legal).
+  - Títulos dinámicos por sección en la Landing Page.
 
 ## 🔄 CAMBIAR (Refactorización y Lógica)
 
