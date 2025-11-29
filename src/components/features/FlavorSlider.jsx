@@ -1,9 +1,9 @@
 import { useGSAP } from "@gsap/react";
-import { flavorlists } from "../constants";
+import { flavorlists } from "../../constants";
 import gsap from "gsap";
 import { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
-import AnimatedButton from "./AnimatedButton";
+import AnimatedButton from "../ui/AnimatedButton";
 import { useTranslation } from 'react-i18next';
 
 const FlavorSlider = () => {

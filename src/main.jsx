@@ -10,12 +10,12 @@ import { SplitText } from 'gsap/SplitText'
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
-import ErrorBoundary from './components/ErrorBoundary'
+import ErrorBoundary from './components/layout/ErrorBoundary'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </React.StrictMode>,
+    <React.StrictMode>
+        <ErrorBoundary>
+            <App />
+        </ErrorBoundary>
+    </React.StrictMode>,
 )

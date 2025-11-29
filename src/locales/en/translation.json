@@ -263,10 +263,34 @@
             "aria_label": "Send newsletter form button"
         },
         "footer": {
-            "copyright": "©2025 Ta' To' Clean",
-            "labs": "R&D: labs.tatotoclean.com",
-            "made_by": "Made by Johan & Cursor with",
-            "aria_label_scroll": "Scroll to top"
+            "get_started": {
+                "title": "Get Started",
+                "book_service": "Book Service",
+                "create_account": "Create Account",
+                "login": "Login"
+            },
+            "services": {
+                "title": "Services",
+                "basic_wash": "Basic Wash",
+                "premium_wash": "Premium Wash",
+                "ceramic_coating": "Ceramic Coating",
+                "paint_correction": "Paint Correction",
+                "interior_detailing": "Interior Detailing"
+            },
+            "legal": {
+                "title": "Legal"
+            },
+            "help": {
+                "title": "Help",
+                "faq": "FAQ"
+            },
+            "bottom": {
+                "copyright": "©2025 Ta' To' Clean",
+                "labs": "R&D: labs.tatotoclean.com",
+                "made_by": "Tell us your story with",
+                "aria_label_scroll": "Scroll to top"
+            },
+            "disclaimers_link": "Disclaimers"
         }
     },
     "flavor_slider": {
@@ -461,6 +485,105 @@
                     "Fabric waterproofing"
                 ]
             }
+        }
+    },
+    "legal": {
+        "menu_title": "Legal",
+        "on_this_page": "On This Page",
+        "privacy_policy": "Privacy Policy",
+        "terms_conditions": "Terms and Conditions",
+        "cookie_policy": "Cookie Policy",
+        "disclaimers": {
+            "title": "Disclaimers",
+            "subtitle": "The information provided by Ta' To' Clean on our website is for general informational purposes only.",
+            "service_title": "Service Results Disclaimer",
+            "service_text": "Detailing results vary depending on: Previous vehicle condition. Surface deterioration. Environmental conditions. 100% defect correction is not guaranteed.",
+            "vehicle_title": "Vehicle Condition",
+            "vehicle_text": "While we take every precaution to ensure the safety of your vehicle while in our care, we are not liable for loss or damage due to theft, fire, or natural disasters beyond our control. We are not responsible for pre-existing damage.",
+            "links_title": "External Links Disclaimer",
+            "links_text": "The Site may contain links to other websites or content belonging to or originating from third parties. Such external links are not investigated, monitored, or checked for accuracy, adequacy, validity, reliability, availability, or completeness by us.",
+            "advice_title": "Professional Advice",
+            "advice_text": "The information on our website is for general informational purposes only. It should not be considered professional advice. Always seek the advice of a qualified professional with any questions you may have."
+        },
+        "cookie": {
+            "subtitle": "This policy explains how our website uses cookies and similar technologies to ensure proper functionality, enhance user experience, and support our service processes.",
+            "intro_title": "1. Introduction",
+            "intro_text": "Welcome to the Cookie Policy of Ta' To' Clean. This policy explains how our website uses cookies and similar technologies to ensure proper functionality, enhance user experience, and support our service processes, including booking management, customer interaction, and analytics. This Cookie Policy must be read together with our Privacy Policy and Terms & Conditions.",
+            "important_title": "2. Important Information",
+            "important_purpose_title": "2.1 Purpose of this Cookie Policy",
+            "important_purpose_text": "This Cookie Policy explains: What cookies are. What types of cookies we use. Why we use them. How users can manage, disable, or delete cookies. Which third parties may set cookies through our website.",
+            "important_controller_title": "2.2 Controller",
+            "important_controller_text": "Ta' To' Clean is responsible for the processing of data associated with cookies used on our website.",
+            "what_are_title": "3. What Are Cookies?",
+            "what_are_text": "Cookies are small text files stored on your device when you visit our website. They allow us to recognize your browser, remember preferences, support technical processes such as appointment bookings, and improve performance. Cookies may be: Session cookies: deleted once the browser closes. Persistent cookies: remain on your device for a defined period. First-party: set by Ta' To' Clean. Third-party: set by external service providers.",
+            "types_title": "4. Types of Cookies We Use",
+            "types_necessary_title": "4.1 Strictly Necessary Cookies",
+            "types_necessary_text": "These cookies are essential for the operation of the website and for enabling services such as: Completing appointment reservations. Temporarily storing booking information (name, email, phone, preferred date, and vehicle plate). Website security and fraud prevention. Technical functionality. These cookies cannot be disabled.",
+            "types_functional_title": "4.2 Functional / Preference Cookies",
+            "types_functional_text": "Used to improve the user experience by remembering: Language settings. Basic page preferences. Optional form data retention.",
+            "types_analytical_title": "4.3 Analytical and Performance Cookies",
+            "types_analytical_text": "Used to evaluate: How users interact with the booking process. Most visited sections of the website. Website performance, bounce rates, and errors. Third-party analytics may include: Google Analytics, Meta Pixel, Hosting provider monitoring tools. These require user consent.",
+            "types_marketing_title": "4.4 Marketing and Tracking Cookies (if applicable)",
+            "types_marketing_text": "Used to: Measure advertisement effectiveness. Conduct remarketing campaigns. Build anonymized interest profiles. These require explicit consent.",
+            "info_collected_title": "5. Information Collected Through Cookies",
+            "info_collected_text": "Depending on the type of cookie, they may collect: IP address, Device characteristics, Browser type, Session identifiers, Booking process steps, User click interactions, Date and time of visits. Cookies do not store raw personal data (name, email, phone, or license plate), but may interact with systems where such data is submitted securely.",
+            "managing_title": "6. Managing Cookies",
+            "managing_text": "Users can configure, accept, or reject cookies (except necessary cookies) through the cookie banner and through browser settings. Limiting cookies may affect booking functionality.",
+            "updates_title": "7. Updates to This Cookie Policy",
+            "updates_text": "Ta' To' Clean may update this policy at any time. The 'Last Updated' date will reflect changes."
+        },
+        "privacy": {
+            "intro_title": "1. Introduction",
+            "collection_title": "2. Information We Collect",
+            "collection_personal_subtitle": "2.1 Personal Information",
+            "collection_vehicle_subtitle": "2.2 Vehicle Information",
+            "collection_technical_subtitle": "2.3 Technical Information",
+            "use_title": "3. How We Use Your Information",
+            "storage_title": "4. Data Storage and Retention",
+            "sharing_title": "5. Data Sharing",
+            "rights_title": "6. Your Rights",
+            "cookies_title": "7. Cookies and Tracking",
+            "security_title": "8. Security Measures",
+            "minors_title": "9. Children and Minors",
+            "updates_title": "10. Updates to This Policy",
+            "contact_title": "11. Contact Information",
+            "subtitle": "Ta' To' Clean is committed to safeguarding your personal data. This Privacy Policy describes how we collect, use, store, and protect your information.",
+            "intro_text": "Ta' To' Clean is committed to safeguarding your personal data. This Privacy Policy describes how we collect, use, store, and protect your information when you access our website, use our services, or interact with us. This policy complies with Colombian data protection law (Law 1581 of 2012, Decree 1377 of 2013).",
+            "collection_text": "We collect information that you provide directly to us when: You create an account. You book a service. You contact us for support.",
+            "collection_personal_text": "Full name, Email address, Phone number, Address (when required for mobile services).",
+            "collection_vehicle_text": "Vehicle plate, Brand and model (optional), User-assigned nickname.",
+            "collection_technical_text": "IP address, Browser type, Cookie data (see our Cookie Policy).",
+            "use_text": "We use your information to: Process bookings and manage appointments. Communicate with you about your services. Improve our services and user experience. Send promotional updates (with your consent). Comply with legal obligations.",
+            "storage_text": "Your data is stored on Supabase (secure database provider) with cloud-located servers. We retain your data while you maintain an active account or as necessary to provide services. You can request data deletion at any time.",
+            "sharing_text": "We do not sell, trade, or otherwise transfer your personal information to third parties, except: Service providers (e.g., Supabase for storage). When required by law. With your explicit consent.",
+            "cookies_text": "See our Cookie Policy for detailed information on how we use cookies and similar technologies.",
+            "security_text": "We implement technical and organizational measures to protect your data against unauthorized access, loss, or damage. However, no system is 100% secure.",
+            "minors_text": "Our services are not directed to individuals under 18 years of age. We do not knowingly collect information from minors.",
+            "updates_text": "We may update this Privacy Policy occasionally. We will notify you of significant changes by email or through a notice on our website.",
+            "contact_text": "For privacy questions or data requests, contact us at: Email: privacy@tatotoclean.com"
+        },
+        "terms": {
+            "subtitle": "Please review our terms and conditions to fully understand how we handle your interactions with this website.",
+            "intro_title": "1. Introduction",
+            "intro_text": "These Terms and Conditions govern the use of Ta' To' Clean's website, booking platform, and services. By using our website, you agree to these Terms.",
+            "services_title": "2. Services Provided",
+            "services_text": "Ta' To' Clean provides automotive detailing and cleaning services. We reserve the right to refuse service to anyone for any reason at any time.",
+            "booking_title": "3. Bookings and Payments",
+            "booking_text": "Bookings are subject to availability. Prices for our services are subject to change without notice.",
+            "booking_process_subtitle": "3.1 Booking Process",
+            "booking_process_text": "Bookings are made through our website. You must provide accurate vehicle and contact information. You will receive a confirmation email once the booking is complete.",
+            "booking_payment_subtitle": "3.2 Payment Policy",
+            "booking_payment_text": "Payment is processed at the time of service. We accept multiple payment methods. Prices include applicable taxes.",
+            "accounts_title": "4. User Accounts",
+            "accounts_text": "You are responsible for maintaining the confidentiality of your account. You must not share your access credentials. We reserve the right to suspend or terminate accounts that violate these Terms.",
+            "liability_title": "5. Limitation of Liability",
+            "liability_text": "Ta' To' Clean shall not be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.",
+            "cancellation_title": "6. Cancellation Policy",
+            "cancellation_text": "You may cancel your booking up to 24 hours before the scheduled time for a full refund. Late cancellations may be subject to a fee.",
+            "ip_title": "7. Intellectual Property",
+            "ip_text": "All content on this website (text, graphics, logos) is owned by Ta' To' Clean and protected by intellectual property laws. You may not use our content without explicit permission.",
+            "changes_title": "8. Changes to Terms",
+            "changes_text": "We reserve the right, at our sole discretion, to modify or replace these Terms at any time. Significant changes will take effect 30 days after posting."
         }
     }
 }

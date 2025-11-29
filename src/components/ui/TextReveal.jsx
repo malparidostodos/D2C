@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { cn } from '../lib/utils'
+import { cn } from '../../lib/utils'
 
 export const TextReveal = ({ text, className, delay = 0 }) => {
     if (!text) return null;

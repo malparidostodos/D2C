@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../../lib/supabase'
 import { Link, useNavigate } from 'react-router-dom'
 import { User, Mail, Lock, ArrowLeft, Check, AlertCircle } from 'lucide-react'
-import AnimatedButton from './AnimatedButton'
+import AnimatedButton from '../ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
 
 const ProfilePage = () => {

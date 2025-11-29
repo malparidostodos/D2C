@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail, Lock, AlertCircle, Check, Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import AnimatedButton from './AnimatedButton'
-import { supabase } from '../lib/supabase'
+import AnimatedButton from '../ui/AnimatedButton'
+import { supabase } from '../../lib/supabase'
 import { useTranslation } from 'react-i18next'
 
-import './JetonHeader.css'
+import '../JetonHeader.css'
 
 const LoginPage = () => {
     const navigate = useNavigate()

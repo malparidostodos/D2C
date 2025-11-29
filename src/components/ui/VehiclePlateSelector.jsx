@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Car, Truck, Bike, Plus, Check, AlertCircle } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../../lib/supabase';
 import { useTranslation } from 'react-i18next';
 
 const VehiclePlateSelector = ({ formData, setFormData, touched, handleBlur, validatePlate, formatPlate, handleClientInfoChange }) => {

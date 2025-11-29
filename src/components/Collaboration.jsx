@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import AnimatedButton from './AnimatedButton'
+import AnimatedButton from './ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
 
 const Collaboration = () => {

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle, Plus } from 'lucide-react'
-import AnimatedButton from './AnimatedButton'
+import AnimatedButton from "../ui/AnimatedButton";
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
-import VehiclePlateSelector from './VehiclePlateSelector'
+import { supabase } from "../../lib/supabase";
+import VehiclePlateSelector from '../ui/VehiclePlateSelector'
 import { useTranslation } from 'react-i18next'
 
 const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChange }) => {
@@ -95,7 +95,7 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
 
         // Empty slots for previous month
         for (let i = 0; i < firstDay; i++) {
-            days.push(<div key={`empty-${i}`} className="h-10 w-10" />)
+            days.push(<div key={`empty - ${ i } `} className="h-10 w-10" />)
         }
 
         // Days
@@ -107,12 +107,13 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
                     key={i}
                     onClick={() => !disabled && onSelect(new Date(currentDate.getFullYear(), currentDate.getMonth(), i).toISOString().split('T')[0])}
                     disabled={disabled}
-                    className={`h-10 w-10 rounded-full flex items-center justify-center text-sm transition-colors ${isSelected(i)
-                        ? 'bg-white text-black font-bold'
-                        : disabled
-                            ? fullyBooked && !isPast(i) ? 'text-red-500/40 cursor-not-allowed line-through' : 'text-white/20 cursor-not-allowed'
-                            : 'text-white hover:bg-white/10'
-                        } ${isToday(i) && !isSelected(i) ? 'border border-white/30' : ''}`}
+                    className={`h - 10 w - 10 rounded - full flex items - center justify - center text - sm transition - colors ${
+    isSelected(i)
+    ? 'bg-white text-black font-bold'
+    : disabled
+        ? fullyBooked && !isPast(i) ? 'text-red-500/40 cursor-not-allowed line-through' : 'text-white/20 cursor-not-allowed'
+        : 'text-white hover:bg-white/10'
+} ${ isToday(i) && !isSelected(i) ? 'border border-white/30' : '' } `}
                 >
                     {i}
                 </button>
@@ -169,7 +170,7 @@ const BookingPage = () => {
 
     const getLocalizedPath = (path) => {
         const prefix = i18n.language === 'en' ? '/en' : ''
-        return `${prefix}${path}`
+        return `${ prefix }${ path } `
     }
 
     const [formData, setFormData] = useState({
@@ -461,7 +462,7 @@ const BookingPage = () => {
     const formatPlate = (value) => {
         const clean = value.toUpperCase().replace(/[^A-Z0-9]/g, '')
         if (clean.length > 3) {
-            return `${clean.slice(0, 3)}-${clean.slice(3, 6)}` + (clean.length > 6 ? clean.slice(6, 7) : '')
+            return `${ clean.slice(0, 3) } -${ clean.slice(3, 6) } ` + (clean.length > 6 ? clean.slice(6, 7) : '')
         }
         return clean
     }
@@ -607,14 +608,14 @@ const BookingPage = () => {
             // Usar fetch directo para evitar problemas de autenticación de usuario
             const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
             const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
-            const functionUrl = `${SUPABASE_URL}/functions/v1/send-booking-confirmation`
+            const functionUrl = `${ SUPABASE_URL } /functions/v1 / send - booking - confirmation`
 
             const emailResponse = await fetch(functionUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    'Authorization': `Bearer ${ SUPABASE_ANON_KEY } `,
                 },
                 body: JSON.stringify({
                     clientName: formData.clientInfo.name,
@@ -771,12 +772,13 @@ const BookingPage = () => {
                                         key={i}
                                         onClick={() => isClickable && jumpToStep(actualStep)}
                                         disabled={!isClickable}
-                                        className={`text-xs md:text-sm font-medium transition-colors ${isClickable
-                                            ? 'text-white cursor-pointer hover:text-accent'
-                                            : isActiveOrPast
-                                                ? 'text-white'
-                                                : 'text-white/20'
-                                            }`}
+                                        className={`text - xs md: text - sm font - medium transition - colors ${
+    isClickable
+        ? 'text-white cursor-pointer hover:text-accent'
+        : isActiveOrPast
+            ? 'text-white'
+            : 'text-white/20'
+} `}
                                     >
                                         {label}
                                     </button>
@@ -787,7 +789,7 @@ const BookingPage = () => {
                             <motion.div
                                 className="h-full bg-white"
                                 initial={{ width: '0%' }}
-                                animate={{ width: `${(step / 5) * 100}%` }}
+                                animate={{ width: `${ (step / 5) * 100 }% ` }}
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
                             />
                         </div>
@@ -953,17 +955,18 @@ const BookingPage = () => {
                                     whileHover={{ scale: 1.03, y: -5 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleVehicleSelect(type)}
-                                    className={`relative overflow-hidden p-6 md:p-8 rounded-3xl border-2 flex flex-col items-center gap-6 transition-all duration-300 group ${formData.vehicleType?.id === type.id
-                                        ? 'bg-white text-black border-white shadow-[0_0_30px_rgba(255,255,255,0.3)]'
-                                        : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white'
-                                        }`}
+                                    className={`relative overflow - hidden p - 6 md: p - 8 rounded - 3xl border - 2 flex flex - col items - center gap - 6 transition - all duration - 300 group ${
+    formData.vehicleType?.id === type.id
+    ? 'bg-white text-black border-white shadow-[0_0_30px_rgba(255,255,255,0.3)]'
+    : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white'
+} `}
                                 >
                                     <div className="p-4">
                                         <img src={type.image} alt={type.name} className="w-40 h-28 object-contain" />
                                     </div>
                                     <div className="text-center">
                                         <span className="text-xl font-bold block mb-2">{type.name}</span>
-                                        <span className={`text-sm ${formData.vehicleType?.id === type.id ? 'text-black/60' : 'text-white/40'}`}>
+                                        <span className={`text - sm ${ formData.vehicleType?.id === type.id ? 'text-black/60' : 'text-white/40' } `}>
                                             {type.description}
                                         </span>
                                     </div>
@@ -990,10 +993,11 @@ const BookingPage = () => {
                                 <motion.div
                                     key={service.id}
                                     whileHover={{ scale: 1.02 }}
-                                    className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${formData.service?.id === service.id
-                                        ? 'bg-white/10 border-white shadow-[0_0_20px_rgba(255,255,255,0.1)]'
-                                        : 'bg-white/5 border-white/10 hover:border-white/30'
-                                        }`}
+                                    className={`p - 6 rounded - 2xl border - 2 cursor - pointer transition - all ${
+    formData.service?.id === service.id
+    ? 'bg-white/10 border-white shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+    : 'bg-white/5 border-white/10 hover:border-white/30'
+} `}
                                     onClick={() => handleServiceSelect(service)}
                                 >
                                     <div className="flex justify-between items-start mb-4">
@@ -1053,8 +1057,9 @@ const BookingPage = () => {
                                     value={formData.clientInfo.email}
                                     onChange={handleClientInfoChange}
                                     onBlur={() => handleBlur('email')}
-                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${touched.email && formData.clientInfo.email && !isEmailValid(formData.clientInfo.email) ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'
-                                        }`}
+                                    className={`w - full bg - white / 5 border rounded - xl p - 4 text - white focus: outline - none transition - colors ${
+    touched.email && formData.clientInfo.email && !isEmailValid(formData.clientInfo.email) ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'
+} `}
                                     placeholder="juan@ejemplo.com"
                                     disabled={isAuthenticated}
                                 />
@@ -1125,14 +1130,15 @@ const BookingPage = () => {
                                                 key={time}
                                                 onClick={() => !isTaken && handleTimeSelect(time)}
                                                 disabled={isTaken || !formData.date}
-                                                className={`p-3 rounded-xl text-sm font-medium transition-all ${formData.time === time
-                                                    ? 'bg-white text-black scale-105 shadow-lg'
-                                                    : isTaken
-                                                        ? 'bg-red-500/10 text-red-500/40 cursor-not-allowed line-through border border-red-500/20'
-                                                        : !formData.date
-                                                            ? 'bg-white/5 text-white/20 cursor-not-allowed border border-white/5'
-                                                            : 'bg-white/5 text-white hover:bg-white/10 border border-white/5'
-                                                    }`}
+                                                className={`p - 3 rounded - xl text - sm font - medium transition - all ${
+    formData.time === time
+    ? 'bg-white text-black scale-105 shadow-lg'
+    : isTaken
+        ? 'bg-red-500/10 text-red-500/40 cursor-not-allowed line-through border border-red-500/20'
+        : !formData.date
+            ? 'bg-white/5 text-white/20 cursor-not-allowed border border-white/5'
+            : 'bg-white/5 text-white hover:bg-white/10 border border-white/5'
+} `}
                                             >
                                                 {time}
                                             </button>

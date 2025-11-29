@@ -1,32 +1,37 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import Header from './components/Header'
-import Hero from './components/Hero'
-import Benefits from './components/Benefits'
+import Header from './components/layout/Header'
+import Hero from './components/features/Hero'
+import Benefits from './components/features/Benefits'
 import Collaboration from './components/Collaboration'
 
-import FlavorSection from './components/FlavorSection'
-import Pricing from './components/Pricing'
-import Roadmap from './components/Roadmap'
-import Contact from './components/Contact'
-import CustomScrollbar from './components/CustomScrollbar'
-import SmoothScroll, { useSmoothScroll } from './components/SmoothScroll'
-import BookingPage from './components/BookingPage'
+import FlavorSection from './components/features/FlavorSection'
+import Pricing from './components/features/Pricing'
+import Roadmap from './components/features/Roadmap'
+import Contact from './components/pages/Contact'
+import CustomScrollbar from './components/ui/CustomScrollbar'
+import SmoothScroll, { useSmoothScroll } from './components/ui/SmoothScroll'
+import BookingPage from './components/pages/BookingPage'
 
-import LoginPage from './components/LoginPage'
+import LoginPage from './components/auth/LoginPage'
 
-import SignUpPage from './components/SignUpPage'
+import SignUpPage from './components/auth/SignUpPage'
 
-import ForgotPasswordPage from './components/ForgotPasswordPage'
-import ResetPasswordPage from './components/ResetPasswordPage'
-import UserDashboard from './components/UserDashboard'
-import ProfilePage from './components/ProfilePage'
-import AdminDashboard from './components/AdminDashboard'
-import Gallery from './components/Gallery'
-import Testimonials from './components/Testimonials'
+import ForgotPasswordPage from './components/auth/ForgotPasswordPage'
+import ResetPasswordPage from './components/auth/ResetPasswordPage'
+import UserDashboard from './components/dashboard/UserDashboard'
+import ProfilePage from './components/dashboard/ProfilePage'
+import AdminDashboard from './components/dashboard/AdminDashboard'
+import Gallery from './components/pages/Gallery'
+import Testimonials from './components/features/Testimonials'
 
-import LanguageWrapper from './components/LanguageWrapper'
+import LanguageWrapper from './components/layout/LanguageWrapper'
 import { useTranslation } from 'react-i18next'
+
+import CookiePolicy from './components/legal/CookiePolicy'
+import PrivacyPolicy from './components/legal/PrivacyPolicy'
+import TermsConditions from './components/legal/TermsConditions'
+import Disclaimers from './components/legal/Disclaimers'
 
 // Componente Home con todas las secciones
 const Home = () => {
@@ -121,6 +126,13 @@ const AppRoutes = () => (
     <Route path="profile" element={<ProfilePage />} />
     <Route path="forgot-password" element={<ForgotPasswordPage />} />
     <Route path="reset-password" element={<ResetPasswordPage />} />
+
+    {/* Legal Routes */}
+    <Route path="cookie-policy" element={<CookiePolicy />} />
+    <Route path="privacy-policy" element={<PrivacyPolicy />} />
+    <Route path="terms-conditions" element={<TermsConditions />} />
+    <Route path="disclaimers" element={<Disclaimers />} />
+
     <Route path="*" element={<RedirectToHome />} />
   </>
 )

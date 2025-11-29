@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 const Contact = () => {
@@ -176,13 +177,66 @@ const Contact = () => {
 
         {/* Footer */}
         <div className="footer-bottom">
-          <div className="footer-bottom-copyright select-none">{t('contact_section.footer.copyright')}</div>
-          <a href="https://labs.tatotoclean.com" target="_blank" className="footer-bottom-labs select-none">{t('contact_section.footer.labs')}</a>
-          <div className="footer-bottom-tagline select-none">{t('contact_section.footer.made_by')} <span className="text-red-500">❤️</span></div>
+          {/* Footer Columns */}
+          <div className="footer-columns">
+            {/* Comienza / Get Started */}
+            <div className="footer-column">
+              <h3 className="footer-column-title">{t('contact_section.footer.get_started.title')}</h3>
+              <ul className="footer-links">
+                <li><Link to="/booking">{t('contact_section.footer.get_started.book_service')}</Link></li>
+                <li><Link to="/signup">{t('contact_section.footer.get_started.create_account')}</Link></li>
+                <li><Link to="/login">{t('contact_section.footer.get_started.login')}</Link></li>
+              </ul>
+            </div>
+
+            {/* Servicios / Services */}
+            <div className="footer-column">
+              <h3 className="footer-column-title">{t('contact_section.footer.services.title')}</h3>
+              <ul className="footer-links">
+                <li><a href="#basic">{t('contact_section.footer.services.basic_wash')}</a></li>
+                <li><a href="#premium">{t('contact_section.footer.services.premium_wash')}</a></li>
+                <li><a href="#ceramic">{t('contact_section.footer.services.ceramic_coating')}</a></li>
+                <li><a href="#correction">{t('contact_section.footer.services.paint_correction')}</a></li>
+                <li><a href="#interior">{t('contact_section.footer.services.interior_detailing')}</a></li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div className="footer-column">
+              <h3 className="footer-column-title">{t('contact_section.footer.legal.title')}</h3>
+              <ul className="footer-links">
+                <li><Link to="/cookie-policy">{t('legal.cookie_policy')}</Link></li>
+                <li><Link to="/privacy-policy">{t('legal.privacy_policy')}</Link></li>
+                <li><Link to="/terms-conditions">{t('legal.terms_conditions')}</Link></li>
+                <li><Link to="/disclaimers">{t('contact_section.footer.disclaimers_link')}</Link></li>
+              </ul>
+            </div>
+
+            {/* Ayuda / Help */}
+            <div className="footer-column">
+              <h3 className="footer-column-title">{t('contact_section.footer.help.title')}</h3>
+              <ul className="footer-links">
+                <li><a href="#faq">{t('contact_section.footer.help.faq')}</a></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Footer Bottom - Copyright, Labs, Made by */}
+          <div className="footer-bottom-row">
+            <div className="footer-bottom-copyright">{t('contact_section.footer.bottom.copyright')}</div>
+            <a href="https://labs.tatotoclean.com" target="_blank" rel="noopener noreferrer" className="footer-bottom-labs">
+              {t('contact_section.footer.bottom.labs')}
+            </a>
+            <div className="footer-bottom-tagline">
+              {t('contact_section.footer.bottom.made_by')} <span className="text-red-500">❤️</span>
+            </div>
+          </div>
+
+          {/* Scroll to Top Button */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="footer-bottom-up"
-            aria-label={t('contact_section.footer.aria_label_scroll')}
+            aria-label={t('contact_section.footer.bottom.aria_label_scroll')}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" style={{ display: 'inline-block', position: 'relative', transform: 'translate3d(0, 0, 0)' }}>
               <path fill="#fff" fillRule="evenodd" d="M12 22a1 1 0 0 1-1-1V5.857l-6.223 6.224a1 1 0 0 1-1.415-1.415l7.9-7.9a1 1 0 0 1 1.414 0v.001l7.9 7.9a1 1 0 0 1-1.414 1.414L13 5.919V21a1 1 0 0 1-1 1Z" clipRule="evenodd" />

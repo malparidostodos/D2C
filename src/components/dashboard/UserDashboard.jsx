@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../../lib/supabase'
 import { Link, useNavigate } from 'react-router-dom'
 import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings } from 'lucide-react'
-import AnimatedButton from './AnimatedButton'
-import Tooltip from './Tooltip'
+import AnimatedButton from '../ui/AnimatedButton'
+import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
 
 const UserDashboard = () => {

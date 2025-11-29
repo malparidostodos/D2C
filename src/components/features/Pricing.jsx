@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Check, ArrowRight } from 'lucide-react'
-import AnimatedButton from './AnimatedButton'
+import AnimatedButton from '../ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
 
 const Pricing = () => {

@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Mail, Lock, User, AlertCircle, Eye, EyeOff, CheckCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
-import Modal from './ui/Modal'
+import { supabase } from '../../lib/supabase'
+import Modal from '../ui/Modal'
 import { useTranslation } from 'react-i18next'
 
-import './JetonHeader.css'
+import '../JetonHeader.css'
 
 const SignUpPage = () => {
     const navigate = useNavigate()
