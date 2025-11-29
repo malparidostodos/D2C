@@ -12,6 +12,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { validatePlate, formatPlate } from '../../utils/vehicle'
+import { vehicleBrands } from '../../data/vehicleData'
 
 const bookingSchema = z.object({
     vehicleType: z.object({
@@ -32,7 +33,9 @@ const bookingSchema = z.object({
         name: z.string().min(1, "Name is required"),
         email: z.string().email("Invalid email"),
         phone: z.string().optional(),
-        plate: z.string()
+        plate: z.string(),
+        brand: z.string().min(1, "Brand is required"),
+        model: z.string().optional()
     }),
     date: z.string().min(1, "Date is required"),
     time: z.string().min(1, "Time is required")
@@ -214,6 +217,30 @@ const BookingPage = () => {
         return `${prefix}${path}`
     }
 
+    const [brandSearch, setBrandSearch] = useState('')
+    const [showBrandList, setShowBrandList] = useState(false)
+    const [modelSearch, setModelSearch] = useState('')
+    const [showModelList, setShowModelList] = useState(false)
+
+    const brandDropdownRef = useRef(null)
+    const modelDropdownRef = useRef(null)
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (brandDropdownRef.current && !brandDropdownRef.current.contains(event.target)) {
+                setShowBrandList(false)
+            }
+            if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target)) {
+                setShowModelList(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [])
+
     const { control, handleSubmit, watch, setValue, trigger, formState: { errors, isValid } } = useForm({
         resolver: zodResolver(bookingSchema),
         defaultValues: {
@@ -223,7 +250,9 @@ const BookingPage = () => {
                 name: '',
                 email: '',
                 phone: '',
-                plate: ''
+                plate: '',
+                brand: '',
+                model: ''
             },
             date: '',
             time: ''
@@ -232,6 +261,23 @@ const BookingPage = () => {
     })
 
     const formData = watch()
+
+    const getFilteredBrands = () => {
+        if (!formData.vehicleType) return []
+        const type = formData.vehicleType.id
+        // Map internal type IDs to data keys
+        if (type === 'car') return vehicleBrands.car
+        if (type === 'suv') return vehicleBrands.suv
+        if (type === 'motorcycle') return vehicleBrands.motorcycle
+        return []
+    }
+
+    const getAvailableModels = () => {
+        if (!formData.clientInfo.brand) return []
+        const brands = getFilteredBrands()
+        const selectedBrand = brands.find(b => b.brand === formData.clientInfo.brand)
+        return selectedBrand ? selectedBrand.models : []
+    }
     // const [touched, setTouched] = useState({ plate: false, email: false }) // Removed unused state
 
     useEffect(() => {
@@ -393,7 +439,7 @@ const BookingPage = () => {
         let fieldsToValidate = []
         if (step === 1) fieldsToValidate = ['vehicleType']
         if (step === 2) fieldsToValidate = ['service']
-        if (step === 3) fieldsToValidate = ['clientInfo.name', 'clientInfo.email', 'clientInfo.plate']
+        if (step === 3) fieldsToValidate = ['clientInfo.name', 'clientInfo.email', 'clientInfo.plate', 'clientInfo.brand', 'clientInfo.model']
         if (step === 4) fieldsToValidate = ['date', 'time']
 
         if (fieldsToValidate.length > 0) {
@@ -449,6 +495,10 @@ const BookingPage = () => {
         if (formData.vehicleType?.id !== type.id) {
             setValue('vehicleType', type)
             setValue('clientInfo.plate', '')
+            setValue('clientInfo.brand', '')
+            setValue('clientInfo.model', '')
+            setBrandSearch('')
+            setModelSearch('')
             // setTouched({ ...touched, plate: false }) // Removed
             // Reset maxStep because subsequent steps (like plate validation) are now invalid/unchecked
             setMaxStep(2)
@@ -580,6 +630,8 @@ const BookingPage = () => {
             .insert([{
                 user_id: user?.id || null,
                 vehicle_plate: formData.clientInfo.plate,
+                vehicle_brand: formData.clientInfo.brand,
+                vehicle_model: formData.clientInfo.model,
                 vehicle_type: formData.vehicleType.id,
                 service_id: formData.service.id,
                 client_name: formData.clientInfo.name,
@@ -621,6 +673,8 @@ const BookingPage = () => {
                     bookingTime: formData.time,
                     serviceName: formData.service.name,
                     vehicleType: formData.vehicleType.name,
+                    vehicleBrand: formData.clientInfo.brand,
+                    vehicleModel: formData.clientInfo.model,
                     vehiclePlate: formData.clientInfo.plate,
                     totalPrice: formData.service.price * formData.vehicleType.priceMultiplier,
                     // Incluir credenciales si se creó una nueva cuenta
@@ -1089,13 +1143,123 @@ const BookingPage = () => {
                                                 field.onChange(formatted)
                                             }
                                         }}
-                                        onBlur={field.onBlur}
-                                        vehicleType={formData.vehicleType}
                                         error={errors.clientInfo?.plate}
                                     />
                                 )}
                             />
-                        </div>
+
+                            {/* Brand Selection */}
+                            <div className="relative" ref={brandDropdownRef}>
+                                <label className="block text-white/60 text-sm mb-2">{t('booking.brand')}</label>
+                                <div className={`relative ${showBrandList ? 'z-50' : ''}`}>
+                                    <input
+                                        type="text"
+                                        value={brandSearch}
+                                        onChange={(e) => {
+                                            setBrandSearch(e.target.value)
+                                            setValue('clientInfo.brand', e.target.value)
+                                            // Reset model when brand changes manually
+                                            setValue('clientInfo.model', '')
+                                            setModelSearch('')
+                                            setShowBrandList(true)
+                                        }}
+                                        onFocus={() => setShowBrandList(true)}
+                                        className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.brand ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
+                                        placeholder="Toyota, Chevrolet, Mazda..."
+                                    />
+
+                                    {/* Dropdown - Opens Downwards */}
+                                    {showBrandList && (
+                                        <div
+                                            className="absolute left-0 right-0 mt-2 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-48 overflow-y-auto z-[100] custom-scrollbar overscroll-contain"
+                                            onWheel={(e) => e.stopPropagation()}
+                                            onTouchStart={(e) => e.stopPropagation()}
+                                            onTouchMove={(e) => e.stopPropagation()}
+                                        >
+                                            {getFilteredBrands()
+                                                .filter(b => b.brand.toLowerCase().includes(brandSearch.toLowerCase()))
+                                                .map((item) => (
+                                                    <button
+                                                        key={item.brand}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setValue('clientInfo.brand', item.brand)
+                                                            setBrandSearch(item.brand)
+                                                            // Reset model when brand is selected
+                                                            setValue('clientInfo.model', '')
+                                                            setModelSearch('')
+                                                            setShowBrandList(false)
+                                                        }}
+                                                        className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors border-b border-white/5 last:border-0 flex items-center justify-between group"
+                                                    >
+                                                        <span className="font-medium">{item.brand}</span>
+                                                        <ChevronRight size={16} className="text-white/20 group-hover:text-white/60 transition-colors" />
+                                                    </button>
+                                                ))}
+                                            {getFilteredBrands().filter(b => b.brand.toLowerCase().includes(brandSearch.toLowerCase())).length === 0 && (
+                                                <div className="px-4 py-3 text-white/40 text-sm text-center">
+                                                    {t('booking.no_brands_found')}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                                {errors.clientInfo?.brand && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.brand.message}</p>}
+                            </div>
+
+                            {/* Model Selection */}
+                            <div className="relative" ref={modelDropdownRef}>
+                                <label className="block text-white/60 text-sm mb-2">{t('booking.model')}</label>
+                                <div className={`relative ${showModelList ? 'z-50' : ''}`}>
+                                    <input
+                                        type="text"
+                                        value={modelSearch}
+                                        onChange={(e) => {
+                                            setModelSearch(e.target.value)
+                                            setValue('clientInfo.model', e.target.value)
+                                            setShowModelList(true)
+                                        }}
+                                        onFocus={() => setShowModelList(true)}
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
+                                        placeholder="Corolla, Spark, 3..."
+                                        disabled={!formData.clientInfo.brand}
+                                    />
+
+                                    {/* Dropdown - Opens Upwards */}
+                                    {showModelList && formData.clientInfo.brand && (
+                                        <div
+                                            className="absolute left-0 right-0 bottom-full mb-2 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-48 overflow-y-auto z-[100] custom-scrollbar overscroll-contain"
+                                            onWheel={(e) => e.stopPropagation()}
+                                            onTouchStart={(e) => e.stopPropagation()}
+                                            onTouchMove={(e) => e.stopPropagation()}
+                                        >
+                                            {getAvailableModels()
+                                                .filter(model => model.toLowerCase().includes(modelSearch.toLowerCase()))
+                                                .map((model) => (
+                                                    <button
+                                                        key={model}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setValue('clientInfo.model', model)
+                                                            setModelSearch(model)
+                                                            setShowModelList(false)
+                                                        }}
+                                                        className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors border-b border-white/5 last:border-0 flex items-center justify-between group"
+                                                    >
+                                                        <span className="font-medium">{model}</span>
+                                                        <ChevronRight size={16} className="text-white/20 group-hover:text-white/60 transition-colors" />
+                                                    </button>
+                                                ))}
+                                            {getAvailableModels().length > 0 && getAvailableModels().filter(model => model.toLowerCase().includes(modelSearch.toLowerCase())).length === 0 && (
+                                                <div className="px-4 py-3 text-white/40 text-sm text-center">
+                                                    No models found
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div >
                         <div className="flex justify-end pt-4">
                             <AnimatedButton
                                 onClick={nextStep}
@@ -1103,7 +1267,7 @@ const BookingPage = () => {
                                 {t('booking.next')}
                             </AnimatedButton>
                         </div>
-                    </div>
+                    </div >
                 )
             case 4:
                 return (
@@ -1182,6 +1346,7 @@ const BookingPage = () => {
                                     <div>
                                         <p className="text-white/40 text-sm">{t('booking.vehicle')}</p>
                                         <p className="text-white font-bold text-lg">{formData.vehicleType.name}</p>
+                                        <p className="text-white/60 text-sm">{formData.clientInfo.brand} {formData.clientInfo.model}</p>
                                         <p className="text-white/60 text-sm">{t('booking.plate')}: {formData.clientInfo.plate}</p>
                                     </div>
                                 </div>
