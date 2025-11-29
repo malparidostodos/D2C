@@ -61,16 +61,16 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
 
     return (
         <div className="min-h-screen bg-[#0046b8] font-sans flex flex-col">
-            <Header />
+            <Header theme="white" />
 
             {/* Hero Section */}
             <div className="pt-96 pb-20 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-[95%] mx-auto flex flex-col md:flex-row justify-between items-end gap-8 text-white">
-                    <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight max-w-4xl">
+                    <h1 className="text-6xl sm:text-7xl md:text-8xl font-semibold tracking-tighter max-w-5xl">
                         {title}
                     </h1>
                     {subtitle && (
-                        <p className="text-blue-100 text-lg md:text-xl max-w-xl leading-relaxed text-right md:text-right mb-2 font-medium">
+                        <p className="text-blue-100 text-xl md:text-2xl max-w-xl leading-relaxed text-right md:text-right mb-2 font-medium">
                             {subtitle}
                         </p>
                     )}
@@ -84,7 +84,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
 
                         {/* Sidebar Navigation - Policy Links */}
                         <aside className="lg:col-span-3 bg-white border-b lg:border-b-0 lg:border-r border-gray-100 py-12 px-8 rounded-l-[2.5rem]">
-                            <nav className="space-y-1 lg:sticky lg:top-8">
+                            <nav className="space-y-2 lg:sticky lg:top-8">
                                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-6 px-4">
                                     {t('legal.menu_title')}
                                 </h3>
@@ -95,7 +95,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
                                         <Link
                                             key={link.path}
                                             to={fullPath}
-                                            className={`group flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 border-l-2 ${isActive
+                                            className={`group flex items-center px-4 py-3 text-base font-medium transition-all duration-200 border-l-2 ${isActive
                                                 ? 'border-[#0046b8] text-[#0046b8]'
                                                 : 'border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300'
                                                 }`}
@@ -112,7 +112,14 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
 
                             {/* Content */}
                             <main className={sections && sections.length > 0 ? "lg:col-span-9 p-8 sm:p-12 lg:p-16" : "p-8 sm:p-12 lg:p-20"}>
-                                <div className="prose prose-lg max-w-none text-gray-600 prose-headings:text-[#1A1D1F] prose-headings:font-bold prose-h3:text-3xl prose-h3:font-extrabold prose-h3:mt-8 prose-a:text-[#0046b8] prose-strong:text-[#1A1D1F] prose-li:marker:text-[#0046b8]">
+                                <div className="max-w-none text-gray-600 
+                                    [&_h1]:text-5xl [&_h1]:font-bold [&_h1]:text-[#1A1D1F] [&_h1]:mb-8 [&_h1]:tracking-tight
+                                    [&_h2]:text-4xl [&_h2]:font-semibold [&_h2]:text-[#1A1D1F] [&_h2]:mt-16 [&_h2]:mb-6 [&_h2]:tracking-tight
+                                    [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:text-[#1A1D1F] [&_h3]:mt-10 [&_h3]:mb-4
+                                    [&_p]:text-lg [&_p]:leading-relaxed [&_p]:text-gray-600 [&_p]:mb-6
+                                    [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_li]:mb-2 [&_li]:text-lg
+                                    [&_a]:text-[#0046b8] [&_a]:no-underline hover:[&_a]:underline
+                                    [&_strong]:text-[#1A1D1F] [&_strong]:font-semibold">
                                     {children}
                                 </div>
                             </main>

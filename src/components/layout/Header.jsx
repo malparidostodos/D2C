@@ -6,7 +6,7 @@ import { supabase } from '../../lib/supabase';
 import { Menu, X, ArrowRight, Home, ChevronDown, ArrowUpRight, User, ArrowUp, ArrowDown, Globe } from 'lucide-react';
 import '../JetonHeader.css'; // Import the strict CSS
 
-const Header = () => {
+const Header = ({ theme = 'default' }) => {
     const [hidden, setHidden] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [menuClosing, setMenuClosing] = useState(false);
@@ -372,7 +372,7 @@ const Header = () => {
             <div className="_navbar">
                 <div className="nav-container">
                     {/* Logo */}
-                    <a href={getLocalizedPath('/')} className="text-3xl font-display font-bold text-black tracking-tighter">
+                    <a href={getLocalizedPath('/')} className={`text-3xl font-display font-bold tracking-tighter ${theme === 'white' ? 'text-white' : 'text-black'}`}>
                         Ta' <span className="text-accent">To'</span> Clean
                     </a>
 
@@ -430,7 +430,7 @@ const Header = () => {
                             {user ? (
                                 <Link
                                     to={getLocalizedPath("/dashboard")}
-                                    className="_button !bg-[#0046b8] !text-white transition-all duration-300 flex items-center gap-2"
+                                    className={`_button transition-all duration-300 flex items-center gap-2 ${theme === 'white' ? '!bg-white !text-[#0046b8]' : '!bg-[#0046b8] !text-white'}`}
                                     data-variant="ghost"
                                 >
                                     <User size={18} />
@@ -444,7 +444,7 @@ const Header = () => {
                                 </Link>
                             ) : (
                                 <>
-                                    <a href={getLocalizedPath("/login")} className="_button" data-variant="ghost">
+                                    <a href={getLocalizedPath("/login")} className={`_button ${theme === 'white' ? '!bg-transparent !text-white border border-white/40 hover:!bg-white/10' : ''}`} data-variant="ghost">
                                         <span className="staggered-wrapper">
                                             {t('header.login').split("").map((char, i) => (
                                                 <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
