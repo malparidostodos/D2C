@@ -70,7 +70,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
                         {title}
                     </h1>
                     {subtitle && (
-                        <p className="text-blue-100 text-xl md:text-2xl max-w-xl leading-relaxed text-right md:text-right mb-2 font-medium">
+                        <p className="text-blue-100 text-xl md:text-2xl max-w-xl leading-relaxed text-left mb-2 font-medium">
                             {subtitle}
                         </p>
                     )}

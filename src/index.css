@@ -1703,7 +1703,7 @@ button:hover .scroll-top-text-line span svg {
    CONTACT SECTION - Estilo Lusion responsive
    ======================================== */
 .contact-section {
-  color: var(--color-black);
+  color: var(--color-blue);
   font-size: clamp(0.875rem, 1vw, 2rem);
 }
 
@@ -1729,7 +1729,7 @@ button:hover .scroll-top-text-line span svg {
 }
 
 .contact-info-container {
-  grid-column: 1 / span 6;
+  grid-column: 1 / span 12;
   width: 100%;
 }
 
@@ -1741,7 +1741,7 @@ button:hover .scroll-top-text-line span svg {
 
 .contact-info-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   column-gap: var(--grid-gap);
   font-size: 1.25em;
   line-height: 1.4;
@@ -1762,7 +1762,7 @@ button:hover .scroll-top-text-line span svg {
 }
 
 .contact-address {
-  grid-column: 1 / span 3;
+  grid-column: span 1;
   display: flex;
   flex-direction: column;
 }
@@ -1774,7 +1774,7 @@ button:hover .scroll-top-text-line span svg {
 }
 
 .contact-socials-business {
-  grid-column: 4 / span 3;
+  grid-column: span 1;
   display: flex;
   flex-direction: column;
   gap: 2.5em;
@@ -1870,7 +1870,7 @@ button:hover .scroll-top-text-line span svg {
 .contact-text,
 .contact-link,
 .contact-label {
-  color: var(--color-black);
+  color: var(--color-blue);
   font-size: 1em;
   line-height: 1.4;
   font-weight: 400;
@@ -1963,7 +1963,7 @@ button:hover .scroll-top-text-line span svg {
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin: 0 0 0.6em 0;
-  color: var(--color-black);
+  color: var(--color-blue);
 }
 
 .contact-newsletter-form {
@@ -1991,6 +1991,7 @@ button:hover .scroll-top-text-line span svg {
   background-color: var(--color-off-white, #f0f1fa);
   border-radius: 1.125em;
   transition: background-color 0.3s ease;
+  color: var(--color-blue);
 }
 
 .contact-newsletter-input::placeholder {
@@ -2131,7 +2132,7 @@ button:hover .scroll-top-text-line span svg {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 1.25rem;
-  color: var(--color-black);
+  color: var(--color-blue);
 }
 
 .footer-links {
@@ -2144,7 +2145,7 @@ button:hover .scroll-top-text-line span svg {
 }
 
 .footer-links a {
-  color: #666;
+  color: var(--color-blue);
   text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 450;
@@ -2154,7 +2155,8 @@ button:hover .scroll-top-text-line span svg {
 
 @media (hover: hover) {
   .footer-links a:hover {
-    color: var(--color-black);
+    color: var(--color-blue);
+    opacity: 0.8;
   }
 }
 
@@ -2188,7 +2190,7 @@ button:hover .scroll-top-text-line span svg {
   padding-bottom: 0.1em;
   width: fit-content;
   font-weight: 500;
-  color: var(--color-black);
+  color: var(--color-blue);
   text-decoration: none;
   will-change: transform;
 }
@@ -2199,7 +2201,7 @@ button:hover .scroll-top-text-line span svg {
   bottom: 0;
   width: 100%;
   height: 0.125em;
-  background: var(--color-black);
+  background: var(--color-blue);
   transition: transform 0.6s cubic-bezier(0.35, 0, 0, 1);
   transform-origin: left;
   transform: scale3d(0, 1, 1);

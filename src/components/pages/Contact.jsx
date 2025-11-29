@@ -130,95 +130,27 @@ const Contact = () => {
                   <a href="mailto:contacto@tatotoclean.com" className="contact-link email-link">contacto@tatotoclean.com</a>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Newsletter */}
-          <div className="contact-newsletter">
-            <h3 className="contact-newsletter-title select-none">
-              {t('contact_section.newsletter.title').split('\n').map((line, i) => (
-                <React.Fragment key={i}>
-                  {line}
-                  {i === 0 && <br />}
-                </React.Fragment>
-              ))}
-            </h3>
-            <form ref={formRef} onSubmit={handleSubmit} className="contact-newsletter-form" noValidate>
-              <div className="contact-newsletter-input-wrapper">
-                <input
-                  type="text"
-                  name="email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  className={`contact-newsletter-input ${error ? 'error' : ''}`}
-                  placeholder={t('contact_section.newsletter.placeholder')}
-                  disabled={isSubmitting}
-                />
-                <button
-                  type="submit"
-                  className="contact-newsletter-button"
-                  aria-label={t('contact_section.newsletter.aria_label')}
-                  disabled={isSubmitting}
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M1.9999 11.9998C1.9999 12.552 2.44762 12.9997 2.9999 12.9997H18.9757C18.8901 13.148 18.7838 13.2876 18.657 13.4144L12.2931 19.7784C11.9025 20.1689 11.9025 20.8021 12.2931 21.1926C12.6836 21.5831 13.3168 21.5831 13.7073 21.1926L22.1926 12.7073C22.5831 12.3168 22.5831 11.6836 22.1926 11.2931L22.1924 11.293L13.7071 2.80767C13.3166 2.41715 12.6834 2.41715 12.2929 2.80767C11.9024 3.1982 11.9024 3.83136 12.2929 4.22189L18.657 10.586C18.7836 10.7126 18.8896 10.8518 18.9752 10.9998H2.9999C2.44762 10.9997 1.9999 11.4475 1.9999 11.9998Z" fill="black" />
-                  </svg>
-                </button>
-                {error && (
-                  <div className="contact-newsletter-error">
-                    <span className="error-icon">!</span>
-                    <span className="error-message select-none">{error}</span>
-                  </div>
-                )}
+              {/* Legal */}
+              <div className="contact-legal flex flex-col gap-4">
+                <Link to="/cookie-policy" className="contact-link email-link">{t('legal.cookie_policy')}</Link>
+                <Link to="/privacy-policy" className="contact-link email-link">{t('legal.privacy_policy')}</Link>
+                <Link to="/terms-conditions" className="contact-link email-link">{t('legal.terms_conditions')}</Link>
+                <Link to="/disclaimers" className="contact-link email-link">{t('legal.disclaimers.title')}</Link>
               </div>
-            </form>
+
+              {/* Ayuda */}
+              <div className="contact-help flex flex-col gap-4">
+                <a href="#faq" className="contact-link email-link">{t('contact_section.footer.help.faq')}</a>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Footer */}
         <div className="footer-bottom">
-          {/* Footer Columns */}
-          <div className="footer-columns">
-            {/* Comienza / Get Started */}
-            <div className="footer-column">
-              <h3 className="footer-column-title">{t('contact_section.footer.get_started.title')}</h3>
-              <ul className="footer-links">
-                <li><Link to="/booking">{t('contact_section.footer.get_started.book_service')}</Link></li>
-                <li><Link to="/signup">{t('contact_section.footer.get_started.create_account')}</Link></li>
-                <li><Link to="/login">{t('contact_section.footer.get_started.login')}</Link></li>
-              </ul>
-            </div>
-
-            {/* Servicios / Services */}
-            <div className="footer-column">
-              <h3 className="footer-column-title">{t('contact_section.footer.services.title')}</h3>
-              <ul className="footer-links">
-                <li><a href="#basic">{t('contact_section.footer.services.basic_wash')}</a></li>
-                <li><a href="#premium">{t('contact_section.footer.services.premium_wash')}</a></li>
-                <li><a href="#ceramic">{t('contact_section.footer.services.ceramic_coating')}</a></li>
-                <li><a href="#correction">{t('contact_section.footer.services.paint_correction')}</a></li>
-                <li><a href="#interior">{t('contact_section.footer.services.interior_detailing')}</a></li>
-              </ul>
-            </div>
-
-            {/* Legal */}
-            <div className="footer-column">
-              <h3 className="footer-column-title">{t('contact_section.footer.legal.title')}</h3>
-              <ul className="footer-links">
-                <li><Link to="/cookie-policy">{t('legal.cookie_policy')}</Link></li>
-                <li><Link to="/privacy-policy">{t('legal.privacy_policy')}</Link></li>
-                <li><Link to="/terms-conditions">{t('legal.terms_conditions')}</Link></li>
-                <li><Link to="/disclaimers">{t('contact_section.footer.disclaimers_link')}</Link></li>
-              </ul>
-            </div>
-
-            {/* Ayuda / Help */}
-            <div className="footer-column">
-              <h3 className="footer-column-title">{t('contact_section.footer.help.title')}</h3>
-              <ul className="footer-links">
-                <li><a href="#faq">{t('contact_section.footer.help.faq')}</a></li>
-              </ul>
-            </div>
+          {/* Footer Columns - Removed as per request */}
+          <div className="footer-columns hidden">
           </div>
 
           {/* Footer Bottom - Copyright, Labs, Made by */}

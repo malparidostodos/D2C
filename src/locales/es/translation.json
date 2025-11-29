@@ -139,6 +139,10 @@
             "login_failed": "Email o contraseña incorrectos",
             "password_length": "La contraseña debe tener al menos 6 caracteres"
         },
+        "terms_agreement": "Confirmo que he leído y acepto los",
+        "terms_link": "Términos y Condiciones",
+        "privacy_link": "Política de Privacidad",
+        "and": "y",
         "forgot_password_title": "Recuperar Contraseña",
         "forgot_password_subtitle": "Ingresa tu email para recibir un enlace de recuperación",
         "email_sent_title": "¡Correo enviado!",
@@ -487,7 +491,7 @@
         "cookie_policy": "Política de Cookies",
         "disclaimers": {
             "title": "Descargos de Responsabilidad",
-            "subtitle": "La información proporcionada por Ta' To' Clean en nuestro sitio web es solo para fines informativos generales.",
+            "subtitle": "Por favor, revise nuestros descargos de responsabilidad, para entender completamente cómo manejamos sus interacciones con este sitio web.",
             "service_title": "Descargo de Responsabilidad sobre Resultados del Servicio",
             "service_text": "Los resultados del detailing varían dependiendo de: Condición previa del vehículo. Deterioro de la superficie. Condiciones ambientales. No se garantiza una corrección del 100% de los defectos.",
             "vehicle_title": "Condición del Vehículo",
@@ -498,7 +502,7 @@
             "advice_text": "La información en nuestro sitio web es solo para fines informáticos generales. No debe considerarse como asesoramiento profesional. Siempre busca el consejo de un profesional calificado con cualquier pregunta que puedas tener."
         },
         "cookie": {
-            "subtitle": "Esta política explica cómo nuestro sitio web usa cookies y tecnologías similares para garantizar la funcionalidad adecuada, mejorar la experiencia del usuario y respaldar nuestros procesos de servicio.",
+            "subtitle": "Nuestro sitio web utiliza cookies para distinguirle de otros usuarios de nuestro sitio web.",
             "intro_title": "1. Introducción",
             "intro_text": "Bienvenido a la Política de Cookies de Ta' To' Clean. Esta política explica cómo nuestro sitio web utiliza cookies y tecnologías similares para garantizar el correcto funcionamiento, mejorar la experiencia del usuario y respaldar nuestros procesos de servicio, incluida la gestión de reservas, la interacción con los clientes y el análisis. Esta Política de Cookies debe leerse junto con nuestra Política de Privacidad y Términos y Condiciones.",
             "important_title": "2. Información Importante",
@@ -539,7 +543,7 @@
             "minors_title": "9. Menores de Edad",
             "updates_title": "10. Actualizaciones de esta Política",
             "contact_title": "11. Información de Contacto",
-            "subtitle": "Ta' To' Clean está comprometido a salvaguardar tus datos personales. Esta Política de Privacidad describe cómo recopilamos, usamos, almacenamos y protegemos tu información.",
+            "subtitle": "Por favor, revise nuestra política de privacidad, para entender completamente cómo manejamos sus interacciones con este sitio web.",
             "intro_text": "Ta' To' Clean está comprometido a salvaguardar tus datos personales. Esta Política de Privacidad describe cómo recopilamos, usamos, almacenamos y protegemos tu información cuando accedes a nuestro sitio web, programas servicios o interactúas con nosotros. Esta política cumple con la ley colombiana de protección de datos (Ley 1581 de 2012, Decreto 1377 de 2013).",
             "collection_text": "Recopilamos información que nos proporcionas directamente cuando: Creas una cuenta. Reservas un servicio. Te comunicas con nosotros para soporte.",
             "collection_personal_text": "Nombre completo, Correo electrónico, Número de teléfono, Dirección (cuando se requiera para servicios a domicilio).",
@@ -556,7 +560,7 @@
             "contact_text": "Para preguntas sobre privacidad o solicitudes de datos, contáctanos en: Correo electrónico: privacy@tatotoclean.com"
         },
         "terms": {
-            "subtitle": "Por favor revisa nuestros términos y condiciones para comprender completamente cómo manejamos tus interacciones con este sitio web.",
+            "subtitle": "Por favor revise nuestros términos y condiciones para comprender completamente cómo manejamos tus interacciones con este sitio web.",
             "intro_title": "1. Introducción",
             "intro_text": "Estos Términos y Condiciones gobiernan el uso del sitio web de Ta' To' Clean, la plataforma de reservas y los servicios. Al utilizar nuestro sitio web, aceptas estos Términos.",
             "services_title": "2. Servicios Proporcionados",
@@ -578,5 +582,12 @@
             "changes_title": "8. Cambios a los Términos",
             "changes_text": "Nos reservamos el derecho, a nuestra sola discreción, de modificar o reemplazar estos Términos en cualquier momento. Los cambios significativos entrarán en vigor 30 días después de la publicación."
         }
+    },
+    "cookie_consent": {
+        "message": "Utilizamos cookies para mejorar tu experiencia y analizar nuestro tráfico. Al continuar navegando, aceptas nuestra política de cookies.",
+        "accept": "Aceptar",
+        "decline": "Rechazar",
+        "manage": "Gestionar",
+        "learn_more": "Leer más"
     }
 }

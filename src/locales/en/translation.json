@@ -137,8 +137,13 @@
             "invalid_email": "Enter a valid email",
             "password_mismatch": "Passwords do not match",
             "login_failed": "Incorrect email or password",
-            "password_length": "Password must be at least 6 characters"
+            "password_length": "Password must be at least 6 characters",
+            "terms_required": "You must accept the terms and conditions"
         },
+        "terms_agreement": "I confirm that I have read and agree to the",
+        "terms_link": "Terms and Conditions",
+        "privacy_link": "Privacy Policy",
+        "and": "and",
         "forgot_password_title": "Recover Password",
         "forgot_password_subtitle": "Enter your email to receive a recovery link",
         "email_sent_title": "Email sent!",
@@ -495,7 +500,7 @@
         "cookie_policy": "Cookie Policy",
         "disclaimers": {
             "title": "Disclaimers",
-            "subtitle": "The information provided by Ta' To' Clean on our website is for general informational purposes only.",
+            "subtitle": "Please review our disclaimers, to fully understand how we handle your interactions with this website.",
             "service_title": "Service Results Disclaimer",
             "service_text": "Detailing results vary depending on: Previous vehicle condition. Surface deterioration. Environmental conditions. 100% defect correction is not guaranteed.",
             "vehicle_title": "Vehicle Condition",
@@ -506,7 +511,7 @@
             "advice_text": "The information on our website is for general informational purposes only. It should not be considered professional advice. Always seek the advice of a qualified professional with any questions you may have."
         },
         "cookie": {
-            "subtitle": "This policy explains how our website uses cookies and similar technologies to ensure proper functionality, enhance user experience, and support our service processes.",
+            "subtitle": "Please review our privacy policy, to fully understand how we handle your interactions with this website.",
             "intro_title": "1. Introduction",
             "intro_text": "Welcome to the Cookie Policy of Ta' To' Clean. This policy explains how our website uses cookies and similar technologies to ensure proper functionality, enhance user experience, and support our service processes, including booking management, customer interaction, and analytics. This Cookie Policy must be read together with our Privacy Policy and Terms & Conditions.",
             "important_title": "2. Important Information",
@@ -547,7 +552,7 @@
             "minors_title": "9. Children and Minors",
             "updates_title": "10. Updates to This Policy",
             "contact_title": "11. Contact Information",
-            "subtitle": "Ta' To' Clean is committed to safeguarding your personal data. This Privacy Policy describes how we collect, use, store, and protect your information.",
+            "subtitle": "Please review our privacy policy, to fully understand how we handle your interactions with this website.",
             "intro_text": "Ta' To' Clean is committed to safeguarding your personal data. This Privacy Policy describes how we collect, use, store, and protect your information when you access our website, use our services, or interact with us. This policy complies with Colombian data protection law (Law 1581 of 2012, Decree 1377 of 2013).",
             "collection_text": "We collect information that you provide directly to us when: You create an account. You book a service. You contact us for support.",
             "collection_personal_text": "Full name, Email address, Phone number, Address (when required for mobile services).",
@@ -585,5 +590,12 @@
             "changes_title": "8. Changes to Terms",
             "changes_text": "We reserve the right, at our sole discretion, to modify or replace these Terms at any time. Significant changes will take effect 30 days after posting."
         }
+    },
+    "cookie_consent": {
+        "message": "We use cookies to improve your experience and analyze our traffic. By continuing to browse, you agree to our cookie policy.",
+        "accept": "Accept",
+        "decline": "Decline",
+        "manage": "Manage",
+        "learn_more": "Learn more"
     }
 }

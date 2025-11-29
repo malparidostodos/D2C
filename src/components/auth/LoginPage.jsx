@@ -4,6 +4,7 @@ import { ArrowLeft, Mail, Lock, AlertCircle, Check, Eye, EyeOff } from 'lucide-r
 import { Link, useNavigate } from 'react-router-dom'
 import AnimatedButton from '../ui/AnimatedButton'
 import { supabase } from '../../lib/supabase'
+import LanguageSelector from '../ui/LanguageSelector'
 import { useTranslation } from 'react-i18next'
 
 import '../JetonHeader.css'
@@ -92,13 +93,14 @@ const LoginPage = () => {
         <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
             {/* Navbar Structure for Logo */}
             <div className="_navbar">
-                <div className="nav-container">
+                <div className="nav-container flex justify-between items-center">
                     <Link
                         to={getLocalizedPath('/')}
                         className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
                     </Link>
+                    <LanguageSelector />
                 </div>
             </div>
 

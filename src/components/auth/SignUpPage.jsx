@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Mail, Lock, User, AlertCircle, Eye, EyeOff, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Mail, Lock, User, AlertCircle, Eye, EyeOff, CheckCircle, Check } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import Modal from '../ui/Modal'
+import LanguageSelector from '../ui/LanguageSelector'
 import { useTranslation } from 'react-i18next'
 
 import '../JetonHeader.css'
@@ -17,6 +18,7 @@ const SignUpPage = () => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [termsAccepted, setTermsAccepted] = useState(false)
     const [showSuccessModal, setShowSuccessModal] = useState(false)
 
     const [errors, setErrors] = useState({})
@@ -33,6 +35,7 @@ const SignUpPage = () => {
         const currentEmail = values.email !== undefined ? values.email : email
         const currentPassword = values.password !== undefined ? values.password : password
         const currentConfirmPassword = values.confirmPassword !== undefined ? values.confirmPassword : confirmPassword
+        const currentTermsAccepted = values.termsAccepted !== undefined ? values.termsAccepted : termsAccepted
 
         if (!currentName.trim()) {
             newErrors.name = t('auth.errors.required')
@@ -54,6 +57,10 @@ const SignUpPage = () => {
             newErrors.confirmPassword = t('auth.errors.password_mismatch')
         }
 
+        if (!currentTermsAccepted) {
+            newErrors.terms = t('auth.errors.terms_required')
+        }
+
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
     }
@@ -65,7 +72,8 @@ const SignUpPage = () => {
             name: true,
             email: true,
             password: true,
-            confirmPassword: true
+            confirmPassword: true,
+            terms: true
         })
 
         if (validateForm()) {
@@ -153,13 +161,14 @@ const SignUpPage = () => {
         <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
             {/* Navbar Structure for Logo */}
             <div className="_navbar">
-                <div className="nav-container">
+                <div className="nav-container flex justify-between items-center">
                     <Link
                         to={getLocalizedPath('/')}
                         className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
                     </Link>
+                    <LanguageSelector />
                 </div>
             </div>
 
@@ -186,6 +195,43 @@ const SignUpPage = () => {
                             {renderInput(t('auth.email'), email, setEmail, "email", "email", Mail, t('auth.mail'))}
                             {renderInput(t('auth.password'), password, setPassword, "password", "password", Lock, "••••••••", true, showPassword, setShowPassword)}
                             {renderInput(t('auth.confirm_password'), confirmPassword, setConfirmPassword, "confirmPassword", "password", Lock, "••••••••", true, showConfirmPassword, setShowConfirmPassword)}
+
+                            <div className="space-y-2">
+                                <div className="flex items-start gap-3 pt-2">
+                                    <div className="relative flex items-center mt-0.5">
+                                        <input
+                                            type="checkbox"
+                                            id="terms"
+                                            checked={termsAccepted}
+                                            onChange={(e) => {
+                                                setTermsAccepted(e.target.checked)
+                                                if (touched.terms) validateForm({ termsAccepted: e.target.checked })
+                                            }}
+                                            className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-white/20 bg-white/5 transition-all checked:border-blue-500 checked:bg-blue-500 hover:border-white/40"
+                                        />
+                                        <Check className="pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity peer-checked:opacity-100" strokeWidth={3} />
+                                    </div>
+                                    <label htmlFor="terms" className="text-sm text-white/60 cursor-pointer select-none leading-tight">
+                                        {t('auth.terms_agreement')}{' '}
+                                        <Link to={getLocalizedPath('/terms-conditions')} className="text-white hover:text-blue-400 transition-colors hover:underline" target="_blank">
+                                            {t('auth.terms_link')}
+                                        </Link>
+                                        {' '}{t('auth.and')}{' '}
+                                        <Link to={getLocalizedPath('/privacy-policy')} className="text-white hover:text-blue-400 transition-colors hover:underline" target="_blank">
+                                            {t('auth.privacy_link')}
+                                        </Link>
+                                    </label>
+                                </div>
+                                {touched.terms && errors.terms && (
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="text-red-400 text-xs ml-1"
+                                    >
+                                        {errors.terms}
+                                    </motion.p>
+                                )}
+                            </div>
 
                             <div className="pt-4">
                                 <button
