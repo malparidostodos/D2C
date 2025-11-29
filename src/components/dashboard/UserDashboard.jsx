@@ -26,19 +26,17 @@ const UserDashboard = () => {
     const [bookingToCancel, setBookingToCancel] = useState(null)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [vehicleToDelete, setVehicleToDelete] = useState(null)
+    const [isAdmin, setIsAdmin] = useState(false)
 
     const getLocalizedPath = (path) => {
         const currentLang = i18n.language
         return currentLang === 'en' ? `/en${path}` : path
     }
 
-    const [isAdmin, setIsAdmin] = useState(false)
-
     useEffect(() => {
         checkUser()
         checkAdminStatus()
 
-        // Suscripción a cambios en tiempo real (Supabase Realtime)
         const channels = supabase.channel('custom-all-channel')
             .on(
                 'postgres_changes',
@@ -54,7 +52,6 @@ const UserDashboard = () => {
         }
     }, [])
 
-    // Initial Data Sync (RPCs)
     useEffect(() => {
         const syncData = async () => {
             if (user?.email) {
@@ -88,7 +85,6 @@ const UserDashboard = () => {
         setUser(session.user)
     }
 
-    // Query for Vehicles
     const { data: vehicles = [], isLoading: loadingVehicles } = useQuery({
         queryKey: ['vehicles', user?.id],
         queryFn: async () => {
@@ -104,7 +100,6 @@ const UserDashboard = () => {
         enabled: !!user,
     })
 
-    // Query for Bookings
     const { data: bookings = [], isLoading: loadingBookings } = useQuery({
         queryKey: ['bookings', user?.id],
         queryFn: async () => {
@@ -121,7 +116,7 @@ const UserDashboard = () => {
             return data || []
         },
         enabled: !!user,
-        refetchInterval: 60000, // Polling every minute
+        refetchInterval: 60000,
     })
 
     const loading = loadingVehicles || loadingBookings
@@ -188,36 +183,29 @@ const UserDashboard = () => {
 
     const getStatusColor = (status) => {
         switch (status) {
-            case 'pending': return 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30'
-            case 'confirmed': return 'bg-blue-500/20 text-blue-500 border-blue-500/30'
-            case 'in_progress': return 'bg-purple-500/20 text-purple-500 border-purple-500/30'
-            case 'completed': return 'bg-green-500/20 text-green-500 border-green-500/30'
-            case 'cancelled': return 'bg-red-500/20 text-red-500 border-red-500/30'
-            default: return 'bg-gray-500/20 text-gray-500 border-gray-500/30'
+            case 'pending': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
+            case 'confirmed': return 'bg-blue-500/10 text-blue-500 border-blue-500/20'
+            case 'in_progress': return 'bg-purple-500/10 text-purple-500 border-purple-500/20'
+            case 'completed': return 'bg-green-500/10 text-green-500 border-green-500/20'
+            case 'cancelled': return 'bg-red-500/10 text-red-500 border-red-500/20'
+            default: return 'bg-gray-500/10 text-gray-500 border-gray-500/20'
         }
     }
 
     const getEffectiveStatus = (booking) => {
         if (booking.status !== 'pending' && booking.status !== 'confirmed') return booking.status
-
-        // Verificar si la fecha/hora ya pasó (en hora Colombia)
         try {
             const now = new Date()
             const colombiaTime = new Date(now.toLocaleString("en-US", { timeZone: "America/Bogota" }))
-
             const [year, month, day] = booking.booking_date.split('-').map(Number)
             const [hours, minutes, seconds] = booking.booking_time.split(':').map(Number)
-
-            // Crear fecha con los componentes (será interpretada como local, igual que colombiaTime)
             const bookingDate = new Date(year, month - 1, day, hours, minutes, seconds || 0)
-
             if (bookingDate < colombiaTime) {
                 return 'completed'
             }
         } catch (e) {
             console.error('Error calculating effective status:', e)
         }
-
         return booking.status
     }
 
@@ -225,10 +213,18 @@ const UserDashboard = () => {
         return t(`dashboard.status.${status}`)
     }
 
+    // Filter active bookings (pending or confirmed)
+    const activeBookings = bookings.filter(b => {
+        const status = getEffectiveStatus(b)
+        return status === 'pending' || status === 'confirmed'
+    })
+
+    const nextBooking = activeBookings.length > 0 ? activeBookings[activeBookings.length - 1] : null
+
     if (loading) {
         return (
             <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-                <div className="text-white text-xl">{t('common.loading')}</div>
+                <div className="text-white text-xl animate-pulse">{t('common.loading')}</div>
             </div>
         )
     }
@@ -236,229 +232,261 @@ const UserDashboard = () => {
     return (
         <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
             <SEO title={t('dashboard.title', 'Panel de Usuario')} />
-            <Link to={getLocalizedPath('/')} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
-                Ta' <span className="text-accent">To'</span> Clean
-            </Link>
+
+            {/* Navbar Overlay */}
+            <div className="absolute top-6 left-6 md:top-8 md:left-8 z-50">
+                <Link to={getLocalizedPath('/')} className="text-2xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-opacity">
+                    Ta' <span className="text-accent">To'</span> Clean
+                </Link>
+            </div>
 
             <div className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-3 z-50">
                 {isAdmin && (
                     <Link
                         to="/admin"
-                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-accent text-white font-bold hover:bg-accent/90 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-accent text-white font-bold hover:bg-accent/90 transition-colors shadow-lg shadow-accent/20"
                     >
                         <Settings size={18} />
-                        <span className="hidden md:inline">Admin Panel</span>
+                        <span className="hidden md:inline">Admin</span>
                     </Link>
                 )}
                 <Link
                     to={getLocalizedPath('/profile')}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                    className="p-3 rounded-full bg-white/5 text-white hover:bg-white/10 transition-colors border border-white/5"
+                    title={t('dashboard.profile')}
                 >
-                    <Settings size={18} />
-                    <span className="hidden md:inline">{t('dashboard.profile')}</span>
+                    <Settings size={20} />
                 </Link>
                 <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 text-white hover:bg-red-500/10 hover:text-red-400 transition-all border border-white/5 hover:border-red-500/20"
                 >
                     <LogOut size={18} />
-                    <span className="hidden md:inline">{t('dashboard.logout')}</span>
+                    <span className="hidden md:inline font-medium">{t('dashboard.logout')}</span>
                 </button>
             </div>
 
-            <div className="max-w-6xl mx-auto">
-                {/* Header */}
+            <div className="max-w-7xl mx-auto">
+                {/* Welcome Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-12"
                 >
-                    <h1 className="text-4xl md:text-5xl font-display font-bold text-white mb-2">
-                        {t('dashboard.title')}
+                    <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-3">
+                        {t('dashboard.welcome')}, <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 capitalize">{user?.user_metadata?.full_name?.split(' ')[0] || 'User'}</span>
                     </h1>
-                    <p className="text-white/60">
-                        {t('dashboard.welcome')}, <span className={user?.user_metadata?.full_name ? "capitalize" : ""}>{user?.user_metadata?.full_name || user?.email}</span>
+                    <p className="text-white/40 text-lg">
+                        {t('dashboard.subtitle', 'Gestiona tus vehículos y reservas desde aquí')}
                     </p>
                 </motion.div>
 
-                {/* Vehículos */}
-                <motion.section
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="mb-12"
-                >
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-white">{t('dashboard.my_vehicles')}</h2>
-                        <button
-                            onClick={() => setShowAddVehicle(true)}
-                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors font-medium"
+                {/* Stats Overview */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="bg-[#111] border border-white/10 rounded-3xl p-6 relative overflow-hidden group"
+                    >
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <Car size={80} />
+                        </div>
+                        <p className="text-white/40 text-sm font-medium mb-1">{t('dashboard.total_vehicles', 'Total Vehículos')}</p>
+                        <h3 className="text-4xl font-bold text-white">{vehicles.length}</h3>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="bg-[#111] border border-white/10 rounded-3xl p-6 relative overflow-hidden group"
+                    >
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <Calendar size={80} />
+                        </div>
+                        <p className="text-white/40 text-sm font-medium mb-1">{t('dashboard.active_bookings', 'Reservas Activas')}</p>
+                        <h3 className="text-4xl font-bold text-white">{activeBookings.length}</h3>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20 rounded-3xl p-6 relative overflow-hidden group cursor-pointer hover:border-accent/40 transition-colors"
+                        onClick={() => navigate(getLocalizedPath('/reserva'))}
+                    >
+                        <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity">
+                            <Plus size={80} />
+                        </div>
+                        <div className="h-full flex flex-col justify-center">
+                            <h3 className="text-2xl font-bold text-white mb-1">{t('dashboard.new_booking')}</h3>
+                            <p className="text-white/60 text-sm">{t('dashboard.book_now_hint', 'Agenda tu próxima cita')}</p>
+                        </div>
+                    </motion.div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Left Column: Vehicles */}
+                    <div className="lg:col-span-2 space-y-8">
+                        <motion.section
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
                         >
-                            <Plus size={18} />
-                            {t('dashboard.add_vehicle')}
-                        </button>
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                                    <Car className="text-accent" size={24} />
+                                    {t('dashboard.my_vehicles')}
+                                </h2>
+                                <button
+                                    onClick={() => setShowAddVehicle(true)}
+                                    className="text-sm font-medium text-white/60 hover:text-white transition-colors flex items-center gap-1"
+                                >
+                                    <Plus size={16} />
+                                    {t('dashboard.add_vehicle')}
+                                </button>
+                            </div>
+
+                            {vehicles.length === 0 ? (
+                                <div className="bg-[#111] border border-white/10 rounded-3xl p-12 text-center border-dashed">
+                                    <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <Car size={32} className="text-white/40" />
+                                    </div>
+                                    <p className="text-white/60 mb-6">{t('dashboard.no_vehicles')}</p>
+                                    <button
+                                        onClick={() => setShowAddVehicle(true)}
+                                        className="px-6 py-3 rounded-full bg-white text-black font-bold hover:bg-white/90 transition-colors"
+                                    >
+                                        {t('dashboard.add_first_vehicle', 'Añadir Primer Vehículo')}
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {vehicles.map((vehicle) => (
+                                        <div
+                                            key={vehicle.id}
+                                            className="group bg-[#111] border border-white/10 rounded-3xl p-6 hover:border-white/20 transition-all duration-300 relative overflow-hidden"
+                                        >
+                                            {/* Background Gradient */}
+                                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                            <div className="relative z-10">
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <div>
+                                                        {vehicle.nickname && (
+                                                            <p className="text-white/60 text-xs font-medium uppercase tracking-wider mb-1">{vehicle.nickname}</p>
+                                                        )}
+                                                        <h3 className="text-2xl font-bold text-white tracking-tight">{vehicle.plate}</h3>
+                                                        {(vehicle.brand || vehicle.model) && (
+                                                            <p className="text-white/40 text-sm capitalize">
+                                                                {vehicle.brand} {vehicle.model}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex gap-2">
+                                                        {vehicle.is_primary && (
+                                                            <span className="bg-accent/20 text-accent text-[10px] font-bold px-2 py-1 rounded-full uppercase">
+                                                                {t('dashboard.primary')}
+                                                            </span>
+                                                        )}
+                                                        <button
+                                                            onClick={() => handleDeleteVehicle(vehicle.id, vehicle.plate)}
+                                                            className="p-2 hover:bg-red-500/20 hover:text-red-400 text-white/20 rounded-full transition-colors"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center justify-between mt-8">
+                                                    <img
+                                                        src={getVehicleImage(vehicle.vehicle_type)}
+                                                        alt={vehicle.vehicle_type}
+                                                        className="w-32 h-20 object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                                                    />
+                                                    <button
+                                                        onClick={() => navigate(getLocalizedPath('/reserva'), { state: { selectedVehicle: vehicle } })}
+                                                        className="px-5 py-2.5 rounded-full bg-white text-black text-sm font-bold hover:bg-white/90 hover:scale-105 transition-all shadow-lg shadow-white/10"
+                                                    >
+                                                        {t('dashboard.book_now')}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </motion.section>
                     </div>
 
-                    {vehicles.length === 0 ? (
-                        <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
-                            <p className="text-white/60 mb-4">{t('dashboard.no_vehicles')}</p>
-                            <p className="text-white/40 text-sm">{t('dashboard.add_vehicle_hint')}</p>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {vehicles.map((vehicle) => {
-                                return (
-                                    <div
-                                        key={vehicle.id}
-                                        className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-colors relative group flex flex-col justify-between min-h-[220px]"
-                                    >
-                                        {/* Botón de eliminar */}
-                                        <Tooltip content={t('dashboard.remove')} position="left">
-                                            <button
-                                                onClick={() => handleDeleteVehicle(vehicle.id, vehicle.plate)}
-                                                className="absolute top-4 right-4 p-2 bg-red-500/10 hover:bg-red-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-all z-10"
-                                            >
-                                                <Trash2 size={16} className="text-red-500" />
-                                            </button>
-                                        </Tooltip>
+                    {/* Right Column: Recent Activity */}
+                    <div className="space-y-8">
+                        <motion.section
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                        >
+                            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                                <Clock className="text-accent" size={24} />
+                                {t('dashboard.service_history')}
+                            </h2>
 
-                                        {/* Primary Badge */}
-                                        {vehicle.is_primary && (
-                                            <div className="absolute top-4 left-4 z-10">
-                                                <span className="text-[10px] font-bold bg-blue-500/20 text-blue-500 px-2 py-1 rounded-full uppercase tracking-wider">
-                                                    {t('dashboard.primary')}
+                            {bookings.length === 0 ? (
+                                <div className="bg-[#111] border border-white/10 rounded-3xl p-8 text-center">
+                                    <p className="text-white/40 text-sm">{t('dashboard.no_bookings')}</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-3">
+                                    {bookings.slice(0, 5).map((booking) => (
+                                        <div
+                                            key={booking.id}
+                                            className="bg-[#111] border border-white/10 rounded-2xl p-4 hover:bg-white/5 transition-colors group"
+                                        >
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <h4 className="text-white font-bold text-sm">{booking.service?.name}</h4>
+                                                    <p className="text-white/40 text-xs">{new Date(booking.booking_date + 'T00:00:00').toLocaleDateString('es-CO', { dateStyle: 'medium' })} • {booking.booking_time}</p>
+                                                </div>
+                                                <span className={`text-[10px] font-bold px-2 py-1 rounded-full border ${getStatusColor(getEffectiveStatus(booking))}`}>
+                                                    {getStatusText(getEffectiveStatus(booking))}
                                                 </span>
                                             </div>
-                                        )}
 
-                                        {/* Content Container */}
-                                        <div className="flex flex-col h-full">
-                                            {/* Top: Nickname */}
-                                            {vehicle.nickname && (
-                                                <div className="mb-2">
-                                                    <p className="text-white font-medium text-lg">{vehicle.nickname}</p>
+                                            <div className="flex justify-between items-center mt-3">
+                                                <div className="flex items-center gap-2 text-white/40 text-xs">
+                                                    <Car size={12} />
+                                                    <span>{booking.vehicle_plate}</span>
                                                 </div>
-                                            )}
-
-                                            {/* Middle: Image */}
-                                            <div className="flex-1 flex items-center justify-center my-4">
-                                                <img src={getVehicleImage(vehicle.vehicle_type)} alt={vehicle.vehicle_type} className="w-40 h-24 object-contain" />
-                                            </div>
-
-                                            {/* Bottom: Brand & Plate */}
-                                            <div className="flex flex-col gap-3 w-full">
-                                                <div className="flex items-end justify-between w-full">
-                                                    {(vehicle.brand || vehicle.model) && (
-                                                        <p className="text-white text-sm font-medium mb-1 capitalize">
-                                                            {vehicle.brand} {vehicle.model} {vehicle.year}
-                                                        </p>
+                                                <div className="flex items-center gap-3">
+                                                    <span className="text-white font-bold text-sm">${booking.total_price?.toLocaleString()}</span>
+                                                    {(getEffectiveStatus(booking) === 'pending' || getEffectiveStatus(booking) === 'confirmed') && (
+                                                        <button
+                                                            onClick={() => handleCancelBooking(booking.id)}
+                                                            className="text-white/20 hover:text-red-400 transition-colors"
+                                                            title={t('dashboard.cancel_booking')}
+                                                        >
+                                                            <X size={14} />
+                                                        </button>
                                                     )}
-                                                    <h3 className="text-xl font-bold text-white tracking-tight leading-none mb-1">
-                                                        {vehicle.plate}
-                                                    </h3>
                                                 </div>
-
-                                                <button
-                                                    onClick={() => navigate(getLocalizedPath('/reserva'), { state: { selectedVehicle: vehicle } })}
-                                                    className="w-full py-2 rounded-full bg-white text-black text-sm font-bold hover:bg-white/90 transition-colors flex items-center justify-center gap-2"
-                                                >
-                                                    <Calendar size={14} />
-                                                    {t('dashboard.book_now') || 'Reservar'}
-                                                </button>
                                             </div>
                                         </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    )}
-                </motion.section>
-
-                {/* Historial de Reservas */}
-                <motion.section
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                >
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-white">{t('dashboard.service_history')}</h2>
-                        <Link to={getLocalizedPath('/reserva')}>
-                            <button className="flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black hover:bg-white/90 transition-colors font-medium text-sm">
-                                <Plus size={16} />
-                                {t('dashboard.new_booking')}
-                            </button>
-                        </Link>
+                                    ))}
+                                    {bookings.length > 5 && (
+                                        <button className="w-full py-3 text-center text-white/40 text-sm hover:text-white transition-colors">
+                                            {t('dashboard.view_all_history', 'Ver todo el historial')}
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </motion.section>
                     </div>
-
-                    {
-                        bookings.length === 0 ? (
-                            <div className="bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
-                                <p className="text-white/60 mb-4">{t('dashboard.no_bookings')}</p>
-                                <AnimatedButton href={getLocalizedPath('/reserva')} variant="white">
-                                    {t('dashboard.make_booking')}
-                                </AnimatedButton>
-                            </div>
-                        ) : (
-                            <div className="space-y-4">
-                                {bookings.map((booking) => (
-                                    <div
-                                        key={booking.id}
-                                        className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/[0.07] transition-colors"
-                                    >
-                                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                                            <div className="flex-1">
-                                                <div className="flex items-center gap-3 mb-2">
-                                                    <h3 className="text-xl font-bold text-white">
-                                                        {booking.service?.name || 'Servicio'}
-                                                    </h3>
-                                                    <span className={`text-xs px-3 py-1 rounded-full border ${getStatusColor(getEffectiveStatus(booking))}`}>
-                                                        {getStatusText(getEffectiveStatus(booking))}
-                                                    </span>
-                                                </div>
-                                                <p className="text-white/60 text-sm mb-3">
-                                                    {booking.service?.description}
-                                                </p>
-                                                <div className="flex flex-wrap gap-4 text-sm text-white/40">
-                                                    <div className="flex items-center gap-2">
-                                                        <Car size={16} />
-                                                        <span>{booking.vehicle_plate}</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <Calendar size={16} />
-                                                        <span>{new Date(booking.booking_date + 'T00:00:00').toLocaleDateString('es-CO', { dateStyle: 'medium', timeZone: 'UTC' })}</span>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <Clock size={16} />
-                                                        <span>{booking.booking_time}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <p className="text-2xl font-bold text-white">
-                                                    ${booking.total_price?.toLocaleString()}
-                                                </p>
-
-                                                {(getEffectiveStatus(booking) === 'pending' || getEffectiveStatus(booking) === 'confirmed') && (
-                                                    <button
-                                                        onClick={() => handleCancelBooking(booking.id)}
-                                                        className="mt-2 text-sm text-red-500 hover:text-red-400 transition-colors flex items-center gap-1 ml-auto"
-                                                    >
-                                                        <X size={14} />
-                                                        {t('dashboard.cancel_booking')}
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )
-                    }
-                </motion.section >
-            </div >
+                </div>
+            </div>
 
             {/* Modal Agregar Vehículo */}
-            < AddVehicleModal
+            <AddVehicleModal
                 isOpen={showAddVehicle}
                 onClose={() => setShowAddVehicle(false)}
                 onSuccess={() => {
@@ -487,7 +515,7 @@ const UserDashboard = () => {
                 onConfirm={confirmDeleteVehicle}
                 plate={vehicleToDelete?.plate}
             />
-        </div >
+        </div>
     )
 }
 

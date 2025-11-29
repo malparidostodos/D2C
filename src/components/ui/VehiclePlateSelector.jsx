@@ -55,7 +55,7 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
                     <label className="block text-white/60 text-sm">
                         {t('vehicle_plate_selector.label')}
                         <span className="text-xs ml-2 text-white/40">
-                            ({vehicleType?.id === 'motorcycle' ? 'AAA-00 o AAA-00A' : 'AAA-000'})
+                            ({vehicleType?.id === 'motorcycle' ? 'AAA-00A / AAA-00' : 'AAA-000'})
                         </span>
                     </label>
                     {isAuthenticated && userVehicles.length > 0 && (
@@ -78,7 +78,7 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
                         ? 'border-red-500 focus:border-red-500'
                         : 'border-white/10 focus:border-white/50'
                         }`}
-                    placeholder={vehicleType?.id === 'motorcycle' ? 'ABC-12D' : 'ABC-123'}
+                    placeholder={vehicleType?.id === 'motorcycle' ? 'AAA-00A / AAA-00' : 'ABC-123'}
                 />
                 {error && (
                     <p className="text-red-500 text-xs mt-1">{error.message || t('vehicle_plate_selector.invalid_format')}</p>
@@ -93,7 +93,7 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
                 <label className="block text-white/60 text-sm mb-2">
                     {t('vehicle_plate_selector.label')}
                     <span className="text-xs ml-2 text-white/40">
-                        ({vehicleType?.id === 'motorcycle' ? 'AAA-00 o AAA-00A' : 'AAA-000'})
+                        ({vehicleType?.id === 'motorcycle' ? 'AAA-00A / AAA-00' : 'AAA-000'})
                     </span>
                 </label>
                 <input
@@ -106,7 +106,7 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
                         ? 'border-red-500 focus:border-red-500'
                         : 'border-white/10 focus:border-white/50'
                         }`}
-                    placeholder={vehicleType?.id === 'motorcycle' ? 'ABC-12D' : 'ABC-123'}
+                    placeholder={vehicleType?.id === 'motorcycle' ? 'AAA-00A / AAA-00' : 'ABC-123'}
                 />
                 <p className="text-white/40 text-xs mt-2">{t('vehicle_plate_selector.add_hint')}</p>
             </div>

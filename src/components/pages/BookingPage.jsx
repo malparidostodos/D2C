@@ -14,43 +14,7 @@ import { z } from 'zod'
 import { validatePlate, formatPlate } from '../../utils/vehicle'
 import { vehicleBrands } from '../../data/vehicleData'
 
-const bookingSchema = z.object({
-    vehicleType: z.object({
-        id: z.string(),
-        name: z.string(),
-        image: z.string(),
-        priceMultiplier: z.number(),
-        description: z.string()
-    }).nullable(),
-    service: z.object({
-        id: z.string(),
-        name: z.string(),
-        price: z.number(),
-        description: z.string(),
-        features: z.array(z.string())
-    }).nullable(),
-    clientInfo: z.object({
-        name: z.string().min(1, "Name is required"),
-        email: z.string().email("Invalid email"),
-        phone: z.string().optional(),
-        plate: z.string(),
-        brand: z.string().min(1, "Brand is required"),
-        model: z.string().optional()
-    }),
-    date: z.string().min(1, "Date is required"),
-    time: z.string().min(1, "Time is required")
-}).superRefine((data, ctx) => {
-    if (data.clientInfo.plate && data.vehicleType) {
-        const isValid = validatePlate(data.clientInfo.plate, data.vehicleType.id)
-        if (!isValid) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "Invalid plate format",
-                path: ["clientInfo", "plate"]
-            })
-        }
-    }
-})
+
 
 const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChange }) => {
     const [currentDate, setCurrentDate] = useState(new Date())
@@ -211,6 +175,7 @@ const BookingPage = () => {
     const [userVehicles, setUserVehicles] = useState([])
     const [loadingVehicles, setLoadingVehicles] = useState(true)
     const [useExistingVehicle, setUseExistingVehicle] = useState(false) // Si selecciona vehículo existente
+    const [newUserCredentials, setNewUserCredentials] = useState(null) // Credenciales de usuario nuevo creado automáticamente
 
     const getLocalizedPath = (path) => {
         const prefix = i18n.language === 'en' ? '/en' : ''
@@ -240,6 +205,44 @@ const BookingPage = () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
     }, [])
+
+    const bookingSchema = z.object({
+        vehicleType: z.object({
+            id: z.string(),
+            name: z.string(),
+            image: z.string(),
+            priceMultiplier: z.number(),
+            description: z.string()
+        }).nullable(),
+        service: z.object({
+            id: z.string(),
+            name: z.string(),
+            price: z.number(),
+            description: z.string(),
+            features: z.array(z.string())
+        }).nullable(),
+        clientInfo: z.object({
+            name: z.string().min(1, t('auth.errors.required')),
+            email: z.string().email(t('auth.errors.invalid_email')),
+            phone: z.string().optional(),
+            plate: z.string().min(1, t('auth.errors.required')),
+            brand: z.string().min(1, t('auth.errors.required')),
+            model: z.string().optional()
+        }),
+        date: z.string().min(1, t('auth.errors.required')),
+        time: z.string().min(1, t('auth.errors.required'))
+    }).superRefine((data, ctx) => {
+        if (data.clientInfo.plate && data.vehicleType) {
+            const isValid = validatePlate(data.clientInfo.plate, data.vehicleType.id)
+            if (!isValid) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: t('dashboard.add_vehicle_modal.plate_error'),
+                    path: ["clientInfo", "plate"]
+                })
+            }
+        }
+    })
 
     const { control, handleSubmit, watch, setValue, trigger, formState: { errors, isValid } } = useForm({
         resolver: zodResolver(bookingSchema),
@@ -445,6 +448,49 @@ const BookingPage = () => {
         if (fieldsToValidate.length > 0) {
             const isStepValid = await trigger(fieldsToValidate)
             if (!isStepValid) return
+
+            // Check for duplicate vehicle when adding a new one (Step 3)
+            if (step === 3 && !useExistingVehicle) {
+                // 1. Check local duplicates (if authenticated)
+                if (isAuthenticated) {
+                    const duplicateVehicle = userVehicles.find(v => v.plate === formData.clientInfo.plate)
+                    if (duplicateVehicle) {
+                        toast.error(t('booking.vehicle_already_exists', { defaultValue: 'This vehicle is already in your list. Please select it from the vehicle selector.' }))
+                        return
+                    }
+                }
+
+                // 2. Check global duplicates (Supabase)
+                try {
+                    const { data: { user } } = await supabase.auth.getUser()
+                    const { data: existingBookings } = await supabase
+                        .from('bookings')
+                        .select('client_email')
+                        .eq('vehicle_plate', formData.clientInfo.plate)
+                        .limit(1)
+
+                    if (existingBookings && existingBookings.length > 0) {
+                        const bookingEmail = existingBookings[0].client_email
+
+                        // If authenticated, check if it's NOT my email
+                        if (user && bookingEmail !== user.email) {
+                            toast.error(t('dashboard.add_vehicle_modal.plate_taken_error'))
+                            return
+                        }
+
+                        // If NOT authenticated, if it exists, it's taken
+                        if (!user) {
+                            toast.error(t('dashboard.add_vehicle_modal.plate_taken_error'))
+                            return
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking plate availability:', error)
+                    // Optional: fail open or closed? Let's fail open but log it, or maybe show generic error.
+                    // For now, we proceed if check fails to avoid blocking user on network error, 
+                    // but ideally we should probably warn.
+                }
+            }
         }
         setDirection(1)
         let next = step + 1
@@ -569,7 +615,6 @@ const BookingPage = () => {
 
     const handleConfirm = async () => {
         let { data: { user } } = await supabase.auth.getUser()
-        let newUserCredentials = null
         let newlyCreatedUser = null
 
         // Si no hay usuario autenticado, crear cuenta automáticamente
@@ -596,7 +641,7 @@ const BookingPage = () => {
                 } else {
                     // console.log('User account created successfully:', signUpData.user?.id)
                     // Guardar credenciales para mostrar en la confirmación
-                    newUserCredentials = { email, password }
+                    setNewUserCredentials({ email, password })
                     newlyCreatedUser = signUpData.user
 
                     // Iniciar sesión automáticamente con las credenciales creadas
@@ -630,8 +675,6 @@ const BookingPage = () => {
             .insert([{
                 user_id: user?.id || null,
                 vehicle_plate: formData.clientInfo.plate,
-                vehicle_brand: formData.clientInfo.brand,
-                vehicle_model: formData.clientInfo.model,
                 vehicle_type: formData.vehicleType.id,
                 service_id: formData.service.id,
                 client_name: formData.clientInfo.name,
@@ -733,7 +776,7 @@ const BookingPage = () => {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="max-w-xl w-full bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 text-center"
+                    className="max-w-3xl w-full bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 text-center"
                 >
                     <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-8">
                         <CheckCircle size={48} className="text-green-500" />
@@ -761,7 +804,7 @@ const BookingPage = () => {
                     </div>
 
                     {/* Mostrar credenciales si se creó una nueva cuenta */}
-                    {formData.newUserCredentials && (
+                    {newUserCredentials && (
                         <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6 mb-8 text-left">
                             <h3 className="text-xl font-bold text-blue-400 mb-3 flex items-center gap-2">
                                 <User size={20} />
@@ -770,14 +813,14 @@ const BookingPage = () => {
                             <p className="text-white/80 text-sm mb-4">
                                 {t('booking.account_created_message')}
                             </p>
-                            <div className="bg-white/5 rounded-xl p-4 space-y-3">
+                            <div className="bg-white/5 rounded-xl p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <span className="text-white/40 text-sm block mb-1">{t('booking.credentials_email')}</span>
-                                    <span className="text-white font-mono font-bold text-lg">{formData.newUserCredentials.email}</span>
+                                    <span className="text-white font-mono font-bold text-lg break-all">{newUserCredentials.email}</span>
                                 </div>
                                 <div>
                                     <span className="text-white/40 text-sm block mb-1">{t('booking.credentials_password')}</span>
-                                    <span className="text-white font-mono font-bold text-lg">{formData.newUserCredentials.password}</span>
+                                    <span className="text-white font-mono font-bold text-lg">{newUserCredentials.password}</span>
                                 </div>
                             </div>
                             <p className="text-white/60 text-xs mt-4">
@@ -897,12 +940,12 @@ const BookingPage = () => {
                 return (
                     <div className="space-y-8">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
-                            {userVehicles.length > 0 ? 'Selecciona tu Vehículo' : 'Añade tu Primer Vehículo'}
+                            {userVehicles.length > 0 ? t('booking.select_vehicle') : t('booking.add_first_vehicle_title')}
                         </h2>
                         <p className="text-white/60 text-center -mt-4 mb-8">
                             {userVehicles.length > 0
-                                ? 'Elige uno de tus vehículos guardados o añade uno nuevo'
-                                : 'Registra tu vehículo para agilizar tus próximas reservas'}
+                                ? t('booking.select_vehicle_subtitle')
+                                : t('booking.add_first_vehicle_subtitle')}
                         </p>
 
                         {userVehicles.length === 0 ? (
@@ -919,10 +962,10 @@ const BookingPage = () => {
                                     </div>
                                     <div className="text-center">
                                         <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
-                                            Añadir Mi Vehículo
+                                            {t('booking.add_my_vehicle_button')}
                                         </h3>
                                         <p className="text-white/60 text-sm md:text-base">
-                                            Comienza registrando tu primer vehículo
+                                            {t('booking.add_first_vehicle_button_subtitle')}
                                         </p>
                                     </div>
                                 </motion.button>
@@ -1088,176 +1131,192 @@ const BookingPage = () => {
                 )
             case 3:
                 return (
-                    <div className="space-y-8 max-w-2xl mx-auto">
+                    <div className="space-y-8 max-w-5xl mx-auto">
                         <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
                             {t('booking.your_details')}
                         </h2>
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-white/60 text-sm mb-2">{t('booking.full_name')}</label>
-                                <input
-                                    type="text"
-                                    {...control.register('clientInfo.name')}
-                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.name ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
-                                    placeholder="Juan Pérez"
-                                />
-                                {errors.clientInfo?.name && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.name.message}</p>}
-                            </div>
-                            <div>
-                                <label className="block text-white/60 text-sm mb-2">{t('booking.email')}</label>
-                                <input
-                                    type="email"
-                                    {...control.register('clientInfo.email')}
-                                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.email ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
-                                    placeholder="juan@ejemplo.com"
-                                    disabled={isAuthenticated}
-                                />
-                                {errors.clientInfo?.email && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.email.message}</p>}
-                                {!isAuthenticated && !useExistingVehicle && (
-                                    <p className="text-white/40 text-xs mt-2 flex items-start gap-1.5">
-                                        <svg className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                                        </svg>
-                                        <span>{t('booking.email_link_notice')}</span>
-                                    </p>
-                                )}
-                            </div>
-                            <div>
-                                <label className="block text-white/60 text-sm mb-2">{t('booking.phone')}</label>
-                                <input
-                                    type="tel"
-                                    {...control.register('clientInfo.phone')}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
-                                    placeholder="300 123 4567"
-                                />
-                            </div>
-                            <Controller
-                                name="clientInfo.plate"
-                                control={control}
-                                render={({ field }) => (
-                                    <VehiclePlateSelector
-                                        value={field.value}
-                                        onChange={(val) => {
-                                            const formatted = formatPlate(val)
-                                            if (formatted.length <= 7) {
-                                                field.onChange(formatted)
-                                            }
-                                        }}
-                                        error={errors.clientInfo?.plate}
-                                    />
-                                )}
-                            />
-
-                            {/* Brand Selection */}
-                            <div className="relative" ref={brandDropdownRef}>
-                                <label className="block text-white/60 text-sm mb-2">{t('booking.brand')}</label>
-                                <div className={`relative ${showBrandList ? 'z-50' : ''}`}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {/* Left Column: Personal Info */}
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-white/60 text-sm mb-2">{t('booking.full_name')}</label>
                                     <input
                                         type="text"
-                                        value={brandSearch}
-                                        onChange={(e) => {
-                                            setBrandSearch(e.target.value)
-                                            setValue('clientInfo.brand', e.target.value)
-                                            // Reset model when brand changes manually
-                                            setValue('clientInfo.model', '')
-                                            setModelSearch('')
-                                            setShowBrandList(true)
-                                        }}
-                                        onFocus={() => setShowBrandList(true)}
-                                        className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.brand ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
-                                        placeholder="Toyota, Chevrolet, Mazda..."
+                                        {...control.register('clientInfo.name')}
+                                        className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.name ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
+                                        placeholder="Juan Pérez"
                                     />
-
-                                    {/* Dropdown - Opens Downwards */}
-                                    {showBrandList && (
-                                        <div
-                                            className="absolute left-0 right-0 mt-2 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-48 overflow-y-auto z-[100] custom-scrollbar overscroll-contain"
-                                            onWheel={(e) => e.stopPropagation()}
-                                            onTouchStart={(e) => e.stopPropagation()}
-                                            onTouchMove={(e) => e.stopPropagation()}
-                                        >
-                                            {getFilteredBrands()
-                                                .filter(b => b.brand.toLowerCase().includes(brandSearch.toLowerCase()))
-                                                .map((item) => (
-                                                    <button
-                                                        key={item.brand}
-                                                        type="button"
-                                                        onClick={() => {
-                                                            setValue('clientInfo.brand', item.brand)
-                                                            setBrandSearch(item.brand)
-                                                            // Reset model when brand is selected
-                                                            setValue('clientInfo.model', '')
-                                                            setModelSearch('')
-                                                            setShowBrandList(false)
-                                                        }}
-                                                        className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors border-b border-white/5 last:border-0 flex items-center justify-between group"
-                                                    >
-                                                        <span className="font-medium">{item.brand}</span>
-                                                        <ChevronRight size={16} className="text-white/20 group-hover:text-white/60 transition-colors" />
-                                                    </button>
-                                                ))}
-                                            {getFilteredBrands().filter(b => b.brand.toLowerCase().includes(brandSearch.toLowerCase())).length === 0 && (
-                                                <div className="px-4 py-3 text-white/40 text-sm text-center">
-                                                    {t('booking.no_brands_found')}
-                                                </div>
-                                            )}
-                                        </div>
+                                    {errors.clientInfo?.name && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.name.message}</p>}
+                                </div>
+                                <div>
+                                    <label className="block text-white/60 text-sm mb-2">{t('booking.email')}</label>
+                                    <input
+                                        type="email"
+                                        {...control.register('clientInfo.email')}
+                                        className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.email ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
+                                        placeholder="juan@ejemplo.com"
+                                        disabled={isAuthenticated}
+                                    />
+                                    {errors.clientInfo?.email && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.email.message}</p>}
+                                    {!isAuthenticated && !useExistingVehicle && (
+                                        <p className="text-white/40 text-xs mt-2 flex items-start gap-1.5">
+                                            <svg className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                                            </svg>
+                                            <span>{t('booking.email_link_notice')}</span>
+                                        </p>
                                     )}
                                 </div>
-                                {errors.clientInfo?.brand && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.brand.message}</p>}
-                            </div>
-
-                            {/* Model Selection */}
-                            <div className="relative" ref={modelDropdownRef}>
-                                <label className="block text-white/60 text-sm mb-2">{t('booking.model')}</label>
-                                <div className={`relative ${showModelList ? 'z-50' : ''}`}>
+                                <div>
+                                    <label className="block text-white/60 text-sm mb-2">{t('booking.phone')}</label>
                                     <input
-                                        type="text"
-                                        value={modelSearch}
-                                        onChange={(e) => {
-                                            setModelSearch(e.target.value)
-                                            setValue('clientInfo.model', e.target.value)
-                                            setShowModelList(true)
-                                        }}
-                                        onFocus={() => setShowModelList(true)}
+                                        type="tel"
+                                        {...control.register('clientInfo.phone')}
                                         className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
-                                        placeholder="Corolla, Spark, 3..."
-                                        disabled={!formData.clientInfo.brand}
+                                        placeholder="300 123 4567"
                                     />
-
-                                    {/* Dropdown - Opens Upwards */}
-                                    {showModelList && formData.clientInfo.brand && (
-                                        <div
-                                            className="absolute left-0 right-0 bottom-full mb-2 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-48 overflow-y-auto z-[100] custom-scrollbar overscroll-contain"
-                                            onWheel={(e) => e.stopPropagation()}
-                                            onTouchStart={(e) => e.stopPropagation()}
-                                            onTouchMove={(e) => e.stopPropagation()}
-                                        >
-                                            {getAvailableModels()
-                                                .filter(model => model.toLowerCase().includes(modelSearch.toLowerCase()))
-                                                .map((model) => (
-                                                    <button
-                                                        key={model}
-                                                        type="button"
-                                                        onClick={() => {
-                                                            setValue('clientInfo.model', model)
-                                                            setModelSearch(model)
-                                                            setShowModelList(false)
-                                                        }}
-                                                        className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors border-b border-white/5 last:border-0 flex items-center justify-between group"
-                                                    >
-                                                        <span className="font-medium">{model}</span>
-                                                        <ChevronRight size={16} className="text-white/20 group-hover:text-white/60 transition-colors" />
-                                                    </button>
-                                                ))}
-                                            {getAvailableModels().length > 0 && getAvailableModels().filter(model => model.toLowerCase().includes(modelSearch.toLowerCase())).length === 0 && (
-                                                <div className="px-4 py-3 text-white/40 text-sm text-center">
-                                                    No models found
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
                                 </div>
+                            </div>
+
+                            {/* Right Column: Vehicle Info */}
+                            <div className="space-y-4">
+                                {/* Brand Selection */}
+                                <div className="relative" ref={brandDropdownRef}>
+                                    <label className="block text-white/60 text-sm mb-2">{t('booking.brand')}</label>
+                                    <div className={`relative ${showBrandList ? 'z-50' : ''}`}>
+                                        <input
+                                            type="text"
+                                            value={brandSearch}
+                                            onChange={(e) => {
+                                                setBrandSearch(e.target.value)
+                                                setValue('clientInfo.brand', e.target.value)
+                                                // Reset model when brand changes manually
+                                                setValue('clientInfo.model', '')
+                                                setModelSearch('')
+                                                setShowBrandList(true)
+                                            }}
+                                            onFocus={() => setShowBrandList(true)}
+                                            className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.brand ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
+                                            placeholder={
+                                                formData.vehicleType?.id === 'motorcycle' ? "Yamaha, Honda, Suzuki..." :
+                                                    formData.vehicleType?.id === 'suv' ? "Toyota, Ford, Chevrolet..." :
+                                                        "Toyota, Chevrolet, Mazda..."
+                                            }
+                                        />
+
+                                        {/* Dropdown - Opens Downwards */}
+                                        {showBrandList && (
+                                            <div
+                                                className="absolute left-0 right-0 mt-2 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-96 overflow-y-auto z-[100] custom-scrollbar overscroll-contain"
+                                                onWheel={(e) => e.stopPropagation()}
+                                                onTouchStart={(e) => e.stopPropagation()}
+                                                onTouchMove={(e) => e.stopPropagation()}
+                                            >
+                                                {getFilteredBrands()
+                                                    .filter(b => b.brand.toLowerCase().includes(brandSearch.toLowerCase()))
+                                                    .map((item) => (
+                                                        <button
+                                                            key={item.brand}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setValue('clientInfo.brand', item.brand)
+                                                                setBrandSearch(item.brand)
+                                                                // Reset model when brand is selected
+                                                                setValue('clientInfo.model', '')
+                                                                setModelSearch('')
+                                                                setShowBrandList(false)
+                                                            }}
+                                                            className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors border-b border-white/5 last:border-0 flex items-center justify-between group"
+                                                        >
+                                                            <span className="font-medium">{item.brand}</span>
+                                                            <ChevronRight size={16} className="text-white/20 group-hover:text-white/60 transition-colors" />
+                                                        </button>
+                                                    ))}
+                                                {getFilteredBrands().filter(b => b.brand.toLowerCase().includes(brandSearch.toLowerCase())).length === 0 && (
+                                                    <div className="px-4 py-3 text-white/40 text-sm text-center">
+                                                        {t('booking.no_brands_found')}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {errors.clientInfo?.brand && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.brand.message}</p>}
+                                </div>
+
+                                {/* Model Selection */}
+                                <div className="relative" ref={modelDropdownRef}>
+                                    <label className="block text-white/60 text-sm mb-2">{t('booking.model')}</label>
+                                    <div className={`relative ${showModelList ? 'z-50' : ''}`}>
+                                        <input
+                                            type="text"
+                                            value={modelSearch}
+                                            onChange={(e) => {
+                                                setModelSearch(e.target.value)
+                                                setValue('clientInfo.model', e.target.value)
+                                                setShowModelList(true)
+                                            }}
+                                            onFocus={() => setShowModelList(true)}
+                                            className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
+                                            placeholder={
+                                                formData.vehicleType?.id === 'motorcycle' ? "MT-09, XTZ, GSX..." :
+                                                    formData.vehicleType?.id === 'suv' ? "Fortuner, Explorer, Tahoe..." :
+                                                        "Corolla, Spark, 3..."
+                                            }
+                                            disabled={!formData.clientInfo.brand}
+                                        />
+
+                                        {/* Dropdown - Opens Upwards */}
+                                        {showModelList && formData.clientInfo.brand && (
+                                            <div
+                                                className="absolute left-0 right-0 bottom-full mb-2 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-96 overflow-y-auto z-[100] custom-scrollbar overscroll-contain"
+                                                onWheel={(e) => e.stopPropagation()}
+                                                onTouchStart={(e) => e.stopPropagation()}
+                                                onTouchMove={(e) => e.stopPropagation()}
+                                            >
+                                                {getAvailableModels()
+                                                    .filter(model => model.toLowerCase().includes(modelSearch.toLowerCase()))
+                                                    .map((model) => (
+                                                        <button
+                                                            key={model}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setValue('clientInfo.model', model)
+                                                                setModelSearch(model)
+                                                                setShowModelList(false)
+                                                            }}
+                                                            className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors border-b border-white/5 last:border-0 flex items-center justify-between group"
+                                                        >
+                                                            <span className="font-medium">{model}</span>
+                                                            <ChevronRight size={16} className="text-white/20 group-hover:text-white/60 transition-colors" />
+                                                        </button>
+                                                    ))}
+                                                {getAvailableModels().length > 0 && getAvailableModels().filter(model => model.toLowerCase().includes(modelSearch.toLowerCase())).length === 0 && (
+                                                    <div className="px-4 py-3 text-white/40 text-sm text-center">
+                                                        No models found
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <Controller
+                                    name="clientInfo.plate"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <VehiclePlateSelector
+                                            value={field.value}
+                                            onChange={(val) => {
+                                                const formatted = formatPlate(val)
+                                                if (formatted.length <= 7) {
+                                                    field.onChange(formatted)
+                                                }
+                                            }}
+                                            error={errors.clientInfo?.plate}
+                                            vehicleType={formData.vehicleType}
+                                        />
+                                    )}
+                                />
                             </div>
                         </div >
                         <div className="flex justify-end pt-4">
@@ -1403,6 +1462,27 @@ const BookingPage = () => {
                                 </div>
                                 <button
                                     onClick={() => jumpToStep(4)}
+                                    className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10 md:self-center self-end"
+                                >
+                                    <Edit2 size={14} />
+                                    {t('booking.change')}
+                                </button>
+                            </div>
+
+                            <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-white/10 gap-4 md:gap-0">
+                                <div className="flex items-center gap-4">
+                                    <div className="p-3 bg-white/10 rounded-full">
+                                        <User size={24} className="text-white" />
+                                    </div>
+                                    <div>
+                                        <p className="text-white/40 text-sm">{t('booking.your_details')}</p>
+                                        <p className="text-white font-bold text-lg">{formData.clientInfo.name}</p>
+                                        <p className="text-white/60 text-sm">{formData.clientInfo.email}</p>
+                                        <p className="text-white/60 text-sm">{formData.clientInfo.phone}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => jumpToStep(3)}
                                     className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10 md:self-center self-end"
                                 >
                                     <Edit2 size={14} />

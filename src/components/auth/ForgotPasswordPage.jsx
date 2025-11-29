@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Mail } from 'lucide-react'
+import { ArrowLeft, Mail, AlertCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import LanguageSelector from '../ui/LanguageSelector'
@@ -14,13 +14,14 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
-const forgotPasswordSchema = z.object({
-    email: z.string().min(1, "Required").email("Invalid email")
-})
-
 const ForgotPasswordPage = () => {
     const { t, i18n } = useTranslation()
     const [submitted, setSubmitted] = useState(false)
+
+    const forgotPasswordSchema = z.object({
+        email: z.string().min(1, t('auth.errors.required')).email(t('auth.errors.invalid_email'))
+    })
+
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(forgotPasswordSchema),
         defaultValues: { email: '' }
@@ -140,15 +141,20 @@ const ForgotPasswordPage = () => {
                                         placeholder="ejemplo@correo.com"
                                     />
                                     {errors.email && (
-                                        <motion.p
-                                            initial={{ opacity: 0, y: -5 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 text-xs"
-                                        >
-                                            {errors.email.message}
-                                        </motion.p>
+                                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 pointer-events-none">
+                                            <AlertCircle size={18} />
+                                        </div>
                                     )}
                                 </div>
+                                {errors.email && (
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="text-red-400 text-xs ml-1 flex items-center gap-1"
+                                    >
+                                        {errors.email.message}
+                                    </motion.p>
+                                )}
                             </div>
 
                             <div className="pt-2">

@@ -13,14 +13,6 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
-const resetPasswordSchema = z.object({
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string().min(6, "Required")
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-})
-
 const ResetPasswordPage = () => {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
@@ -28,6 +20,14 @@ const ResetPasswordPage = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(false)
+
+    const resetPasswordSchema = z.object({
+        password: z.string().min(6, t('auth.errors.password_length')),
+        confirmPassword: z.string().min(6, t('auth.errors.required'))
+    }).refine((data) => data.password === data.confirmPassword, {
+        message: t('auth.errors.password_mismatch'),
+        path: ["confirmPassword"],
+    })
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(resetPasswordSchema),

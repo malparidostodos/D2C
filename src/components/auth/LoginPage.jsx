@@ -14,16 +14,16 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
-const loginSchema = z.object({
-    email: z.string().min(1, "Required").email("Invalid email"),
-    password: z.string().min(1, "Required"),
-    rememberMe: z.boolean().optional()
-})
-
 const LoginPage = () => {
     const navigate = useNavigate()
     const { t, i18n } = useTranslation()
     const [showPassword, setShowPassword] = React.useState(false)
+
+    const loginSchema = z.object({
+        email: z.string().min(1, t('auth.errors.required')).email(t('auth.errors.invalid_email')),
+        password: z.string().min(1, t('auth.errors.required')),
+        rememberMe: z.boolean().optional()
+    })
 
     const { register, handleSubmit, setValue, setError, watch, formState: { errors } } = useForm({
         resolver: zodResolver(loginSchema),

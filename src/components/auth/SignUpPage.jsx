@@ -14,25 +14,25 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
-const signupSchema = z.object({
-    name: z.string().min(1, "Required"),
-    email: z.string().min(1, "Required").email("Invalid email"),
-    password: z.string().min(1, "Required"),
-    confirmPassword: z.string().min(1, "Required"),
-    termsAccepted: z.literal(true, {
-        errorMap: () => ({ message: "You must accept the terms" }),
-    }),
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-})
-
 const SignUpPage = () => {
     const navigate = useNavigate()
     const { t, i18n } = useTranslation()
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [showSuccessModal, setShowSuccessModal] = useState(false)
+
+    const signupSchema = z.object({
+        name: z.string().min(1, t('auth.errors.required')),
+        email: z.string().min(1, t('auth.errors.required')).email(t('auth.errors.invalid_email')),
+        password: z.string().min(6, t('auth.errors.password_length')),
+        confirmPassword: z.string().min(1, t('auth.errors.required')),
+        termsAccepted: z.boolean().refine(val => val === true, {
+            message: t('auth.errors.terms_required')
+        }),
+    }).refine((data) => data.password === data.confirmPassword, {
+        message: t('auth.errors.password_mismatch'),
+        path: ["confirmPassword"],
+    })
 
     const { register, handleSubmit, setError, formState: { errors } } = useForm({
         resolver: zodResolver(signupSchema),
