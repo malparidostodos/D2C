@@ -111,6 +111,8 @@ const RedirectToHome = () => {
   return <Home />
 }
 
+import PublicRoute from './components/auth/PublicRoute'
+
 const AppRoutes = ({ t }) => {
   return (
     <>
@@ -122,9 +124,14 @@ const AppRoutes = ({ t }) => {
       <Route path="membresias" element={<ScrollToSection sectionId="#membresias" title={t('header.memberships')} />} />
       <Route path="contacto" element={<ScrollToSection sectionId="#contacto" title={t('header.contact')} />} />
       <Route path="reserva" element={<BookingPage />} />
-      <Route path="login" element={<LoginPage />} />
-      <Route path="signup" element={<SignUpPage />} />
-      <Route path="forgot-password" element={<ForgotPasswordPage />} />
+
+      {/* Public Only Routes (Redirect to Dashboard if logged in) */}
+      <Route element={<PublicRoute />}>
+        <Route path="login" element={<LoginPage />} />
+        <Route path="signup" element={<SignUpPage />} />
+        <Route path="forgot-password" element={<ForgotPasswordPage />} />
+      </Route>
+
       <Route path="reset-password" element={<LanguageWrapper><ResetPasswordPage /></LanguageWrapper>} />
 
       {/* Dashboard Routes with Layout */}

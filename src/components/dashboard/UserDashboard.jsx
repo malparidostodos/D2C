@@ -434,7 +434,7 @@ const UserDashboard = () => {
                                             <div className="flex justify-between items-start mb-2">
                                                 <div>
                                                     <h4 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} font-bold text-sm transition-colors`}>{booking.service?.name}</h4>
-                                                    <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-xs transition-colors`}>{new Date(booking.booking_date + 'T00:00:00').toLocaleDateString('es-CO', { dateStyle: 'medium' })} â€¢ {booking.booking_time}</p>
+                                                    <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-xs transition-colors`}>{new Date(booking.booking_date + 'T00:00:00').toLocaleDateString('es-CO', { dateStyle: 'medium' })} • {booking.booking_time}</p>
                                                 </div>
                                                 <span className={`text-[10px] font-bold px-2 py-1 rounded-full border ${getStatusColor(getEffectiveStatus(booking))}`}>
                                                     {getStatusText(getEffectiveStatus(booking))}
@@ -451,10 +451,11 @@ const UserDashboard = () => {
                                                     {(getEffectiveStatus(booking) === 'pending' || getEffectiveStatus(booking) === 'confirmed') && (
                                                         <button
                                                             onClick={() => handleCancelBooking(booking.id)}
-                                                            className={`${isDarkMode ? 'text-white/20 hover:text-red-400' : 'text-gray-400 hover:text-red-500'} transition-colors`}
-                                                            title={t('dashboard.cancel_booking')}
+                                                            className={`px-3 py-1 rounded-lg text-xs font-medium border transition-colors ${isDarkMode
+                                                                ? 'border-red-500/30 text-red-400 hover:bg-red-500/10'
+                                                                : 'border-red-200 text-red-600 hover:bg-red-50'}`}
                                                         >
-                                                            <X size={14} />
+                                                            {t('dashboard.cancel_booking')}
                                                         </button>
                                                     )}
                                                 </div>

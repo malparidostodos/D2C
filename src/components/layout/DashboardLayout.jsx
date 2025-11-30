@@ -5,7 +5,7 @@ import DashboardSidebar from '../dashboard/DashboardSidebar'
 
 const DashboardLayout = () => {
     const navigate = useNavigate()
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true)
     const [isAdmin, setIsAdmin] = useState(false)
     const [isAdminLoading, setIsAdminLoading] = useState(true)
     const [isDarkMode, setIsDarkMode] = useState(() => {

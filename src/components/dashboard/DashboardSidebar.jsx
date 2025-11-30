@@ -19,9 +19,9 @@ const CustomMenuIcon = ({ size = 24, className = "" }) => (
         strokeLinejoin="round"
         className={className}
     >
-        <line x1="3" y1="6" x2="21" y2="6" />
-        <line x1="3" y1="12" x2="21" y2="12" />
-        <line x1="11" y1="18" x2="21" y2="18" />
+        <line x1="3" y1="6" x2="21" y2="6" />     {/* Línea 1 */}
+        <line x1="7" y1="12" x2="21" y2="12" />    {/* Línea 2 (recortada a la izquierda) */}
+        <line x1="11" y1="18" x2="21" y2="18" />   {/* Línea 3 */}
     </svg>
 )
 
