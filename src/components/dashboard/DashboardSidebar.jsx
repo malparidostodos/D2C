@@ -54,13 +54,16 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
         ...(isAdmin ? [{ icon: Shield, label: 'Admin', path: '/admin' }] : []),
     ]
 
-    const SidebarContent = () => {
+    const SidebarContent = ({ isMobile = false }) => {
         const [langOpen, setLangOpen] = useState(false)
         const currentLang = i18n.language?.startsWith('en') ? 'EN' : 'ES'
         const languages = [
             { code: 'es', label: 'Español' },
             { code: 'en', label: 'English' }
         ]
+
+        // Force expanded state for mobile
+        const effectiveCollapsed = isMobile ? false : isCollapsed
 
         const handleLanguageChange = (langCode) => {
             const targetLang = langCode.toLowerCase();
@@ -101,10 +104,10 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
         return (
             <div className="flex flex-col h-full">
                 {/* Logo Area */}
-                <div className={`p-6 mb-6 flex items-center relative h-[60px] ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+                <div className={`${isMobile ? 'pt-8 pb-6 px-6' : 'p-6'} mb-6 flex items-center relative h-[60px] ${effectiveCollapsed ? 'justify-center' : 'justify-between'}`}>
                     <Link
                         to={getLocalizedPath('/')}
-                        className={`text-2xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-all duration-300 flex items-center gap-2 whitespace-nowrap ${isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto delay-100'}`}
+                        className={`text-2xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-all duration-300 flex items-center gap-2 whitespace-nowrap ${effectiveCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto delay-100'}`}
                     >
                         Ta' <span className="text-accent">To'</span> Clean
                     </Link>
@@ -112,9 +115,9 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                     {/* Desktop Toggle (Visible only on desktop) */}
                     <button
                         onClick={toggleCollapse}
-                        className={`absolute top-1/2 right-0 -translate-y-1/2 h-[60px] min-w-[50px] text-center leading-[60px] cursor-pointer transition-all duration-500 ease-in-out text-gray-400 hover:text-white hidden lg:block ${!isCollapsed ? 'text-right' : ''}`}
+                        className={`absolute top-1/2 right-0 -translate-y-1/2 h-[60px] min-w-[50px] text-center leading-[60px] cursor-pointer transition-all duration-500 ease-in-out text-gray-400 hover:text-white hidden lg:block ${!effectiveCollapsed ? 'text-right' : ''}`}
                     >
-                        {isCollapsed ? <Menu size={23} /> : <CustomMenuIcon size={23} />}
+                        {effectiveCollapsed ? <Menu size={23} /> : <CustomMenuIcon size={23} />}
                     </button>
                 </div>
 
@@ -130,18 +133,18 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                                 className={`relative flex items-center px-4 py-3 rounded-xl transition-all duration-300 group ${isActive
                                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
                                     : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                                    } ${isCollapsed ? 'justify-center' : 'gap-3'}`}
+                                    } ${effectiveCollapsed ? 'justify-center' : 'gap-3'}`}
                             >
                                 <item.icon size={20} className={`min-w-[20px] ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-white transition-colors'}`} />
-                                <span className={`font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
+                                <span className={`font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${effectiveCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
                                     {item.label}
                                 </span>
-                                {!isCollapsed && isActive && (
+                                {!effectiveCollapsed && isActive && (
                                     <ChevronRight size={16} className="ml-auto opacity-50 transition-opacity duration-300 delay-150" />
                                 )}
 
                                 {/* Custom Tooltip */}
-                                {isCollapsed && (
+                                {effectiveCollapsed && (
                                     <div className="absolute left-full ml-6 px-3 py-2 bg-white text-black text-sm font-medium rounded-md opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap z-50 shadow-xl pointer-events-none">
                                         {item.label}
                                     </div>
@@ -154,15 +157,15 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                 {/* Bottom Actions */}
                 <div className="p-4 mt-auto space-y-4 border-t border-white/5">
                     {/* Language Selector (Navbar Style with Label) */}
-                    <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} px-4 py-2`}>
-                        <span className={`text-sm text-gray-400 font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
+                    <div className={`flex items-center ${effectiveCollapsed ? 'justify-center' : 'justify-between'} px-4 py-2`}>
+                        <span className={`text-sm text-gray-400 font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${effectiveCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
                             {t('common.language', 'Idioma')}
                         </span>
 
-                        <div className={`relative ${isCollapsed ? '' : ''}`}>
+                        <div className={`relative ${effectiveCollapsed ? '' : ''}`}>
                             <button
                                 onClick={() => setLangOpen(!langOpen)}
-                                className={`flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/10 !text-white hover:!bg-white/20 transition-all duration-300 rounded-xl ${isCollapsed ? 'w-10 h-10 p-0' : 'px-3 py-2'}`}
+                                className={`flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/10 !text-white hover:!bg-white/20 transition-all duration-300 rounded-xl ${effectiveCollapsed ? 'w-10 h-10 p-0' : 'px-3 py-2'}`}
                             >
                                 <span className="_icon">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
@@ -172,7 +175,7 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                                         <path d="M12 2C14.5013 4.73836 15.9228 8.29204 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29204 9.49872 4.73836 12 2V2Z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
                                     </svg>
                                 </span>
-                                {!isCollapsed && (
+                                {!effectiveCollapsed && (
                                     <>
                                         <span className="text-sm">{currentLang}</span>
                                         <span className={`ml-1 transition-transform duration-200 ${langOpen ? 'rotate-180' : ''}`}>
@@ -193,7 +196,7 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: 10 }}
-                                            className={`absolute bottom-full mb-2 bg-[#111] border border-white/10 rounded-xl overflow-hidden shadow-xl z-50 ${isCollapsed ? 'left-0 w-40' : 'right-0 w-32'}`}
+                                            className={`absolute bottom-full mb-2 bg-[#111] border border-white/10 rounded-xl overflow-hidden shadow-xl z-50 ${effectiveCollapsed ? 'left-0 w-40' : 'right-0 w-32'}`}
                                         >
                                             {languages.map((lang) => (
                                                 <button
@@ -219,26 +222,26 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                         </div>
                     </div>
 
-                    <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} px-4 py-2`}>
-                        <span className={`text-sm text-gray-400 font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
+                    <div className={`flex items-center ${effectiveCollapsed ? 'justify-center' : 'justify-between'} px-4 py-2`}>
+                        <span className={`text-sm text-gray-400 font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${effectiveCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
                             {t('common.theme', 'Tema')}
                         </span>
-                        <div className={`${isCollapsed ? 'scale-75' : ''} transition-transform duration-300`}>
+                        <div className={`${effectiveCollapsed ? 'scale-75' : ''} transition-transform duration-300`}>
                             <ThemeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
                         </div>
                     </div>
 
                     <button
                         onClick={handleLogout}
-                        className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-300 group ${isCollapsed ? 'justify-center' : ''}`}
+                        className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-300 group ${effectiveCollapsed ? 'justify-center' : ''}`}
                     >
                         <LogOut size={20} className="group-hover:scale-110 transition-transform min-w-[20px]" />
-                        <span className={`font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
+                        <span className={`font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${effectiveCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
                             {t('auth.logout', 'Cerrar Sesión')}
                         </span>
 
                         {/* Custom Tooltip for Logout */}
-                        {isCollapsed && (
+                        {effectiveCollapsed && (
                             <div className="absolute left-full ml-6 px-3 py-2 bg-white text-black text-sm font-medium rounded-md opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap z-50 shadow-xl pointer-events-none">
                                 {t('auth.logout', 'Cerrar Sesión')}
                             </div>
@@ -286,11 +289,11 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                         >
                             <button
                                 onClick={() => setIsMobileOpen(false)}
-                                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white"
+                                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors z-10 cursor-pointer"
                             >
                                 <X size={24} />
                             </button>
-                            <SidebarContent />
+                            <SidebarContent isMobile={true} />
                         </motion.div>
                     </>
                 )}
