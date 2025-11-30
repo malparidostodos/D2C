@@ -27,6 +27,7 @@ import Gallery from './components/pages/Gallery'
 import Testimonials from './components/features/Testimonials'
 
 import LanguageWrapper from './components/layout/LanguageWrapper'
+import DashboardLayout from './components/layout/DashboardLayout'
 import { useTranslation } from 'react-i18next'
 
 import CookiePolicy from './components/legal/CookiePolicy'
@@ -123,11 +124,15 @@ const AppRoutes = ({ t }) => {
       <Route path="reserva" element={<BookingPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="signup" element={<SignUpPage />} />
-      <Route path="dashboard" element={<UserDashboard />} />
-      <Route path="admin" element={<AdminDashboard />} />
-      <Route path="profile" element={<ProfilePage />} />
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="reset-password" element={<ResetPasswordPage />} />
+      <Route path="reset-password" element={<LanguageWrapper><ResetPasswordPage /></LanguageWrapper>} />
+
+      {/* Dashboard Routes with Layout */}
+      <Route element={<DashboardLayout />}>
+        <Route path="dashboard" element={<UserDashboard />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="admin" element={<AdminDashboard />} />
+      </Route>
 
       {/* Legal Routes */}
       <Route path="cookie-policy" element={<CookiePolicy />} />

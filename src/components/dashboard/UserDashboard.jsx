@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
-import { Link, useNavigate } from 'react-router-dom'
-import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings, Edit2, Shield } from 'lucide-react'
+import { Link, useNavigate, useOutletContext } from 'react-router-dom'
+import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings, Edit2, Shield, Sun, Moon } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
@@ -18,6 +18,7 @@ import SEO from '../ui/SEO'
 const UserDashboard = () => {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
+    const { isDarkMode, isAdmin } = useOutletContext()
     const queryClient = useQueryClient()
     const [user, setUser] = useState(null)
 
@@ -26,7 +27,6 @@ const UserDashboard = () => {
     const [bookingToCancel, setBookingToCancel] = useState(null)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [vehicleToDelete, setVehicleToDelete] = useState(null)
-    const [isAdmin, setIsAdmin] = useState(false)
     const [showAllHistory, setShowAllHistory] = useState(false)
 
     const [showEditVehicleModal, setShowEditVehicleModal] = useState(false)
@@ -39,7 +39,6 @@ const UserDashboard = () => {
 
     useEffect(() => {
         checkUser()
-        checkAdminStatus()
 
         const channels = supabase.channel('custom-all-channel')
             .on(
@@ -72,13 +71,7 @@ const UserDashboard = () => {
         syncData()
     }, [user, queryClient])
 
-    const checkAdminStatus = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user) {
-            const { data } = await supabase.rpc('is_admin')
-            setIsAdmin(!!data)
-        }
-    }
+
 
     const checkUser = async () => {
         const { data: { session } } = await supabase.auth.getSession()
@@ -111,9 +104,9 @@ const UserDashboard = () => {
             const { data, error } = await supabase
                 .from('bookings')
                 .select(`
-                    *,
-                    service:services(*)
-                `)
+                                                        *,
+                                                        service:services(*)
+                                                    `)
                 .order('booking_date', { ascending: false })
 
             if (error) throw error
@@ -151,7 +144,7 @@ const UserDashboard = () => {
         if (error) {
             toast.error(t('dashboard.delete_error') + ': ' + error.message)
         } else {
-            toast.success(t('dashboard.delete_success') || 'Vehículo eliminado correctamente')
+            toast.success(t('dashboard.delete_success') || 'VehÃ­culo eliminado correctamente')
             queryClient.invalidateQueries(['vehicles'])
         }
         setShowDeleteModal(false)
@@ -191,13 +184,23 @@ const UserDashboard = () => {
     }
 
     const getStatusColor = (status) => {
+        if (isDarkMode) {
+            switch (status) {
+                case 'pending': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
+                case 'confirmed': return 'bg-blue-500/10 text-blue-500 border-blue-500/20'
+                case 'in_progress': return 'bg-purple-500/10 text-purple-500 border-purple-500/20'
+                case 'completed': return 'bg-green-500/10 text-green-500 border-green-500/20'
+                case 'cancelled': return 'bg-red-500/10 text-red-500 border-red-500/20'
+                default: return 'bg-gray-500/10 text-gray-500 border-gray-500/20'
+            }
+        }
         switch (status) {
-            case 'pending': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
-            case 'confirmed': return 'bg-blue-500/10 text-blue-500 border-blue-500/20'
-            case 'in_progress': return 'bg-purple-500/10 text-purple-500 border-purple-500/20'
-            case 'completed': return 'bg-green-500/10 text-green-500 border-green-500/20'
-            case 'cancelled': return 'bg-red-500/10 text-red-500 border-red-500/20'
-            default: return 'bg-gray-500/10 text-gray-500 border-gray-500/20'
+            case 'pending': return 'bg-yellow-50 text-yellow-700 border-yellow-200'
+            case 'confirmed': return 'bg-blue-50 text-blue-700 border-blue-200'
+            case 'in_progress': return 'bg-purple-50 text-purple-700 border-purple-200'
+            case 'completed': return 'bg-green-50 text-green-700 border-green-200'
+            case 'cancelled': return 'bg-red-50 text-red-700 border-red-200'
+            default: return 'bg-gray-50 text-gray-700 border-gray-200'
         }
     }
 
@@ -239,98 +242,64 @@ const UserDashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
-            <SEO title={t('dashboard.title', 'Panel de Usuario')} />
+        <div className="min-h-screen">
+            <SEO title={t('dashboard.seo_title', 'Mi Dashboard | TaToClean')} />
 
-            {/* Navbar Overlay */}
-            <div className="absolute top-6 left-6 md:top-8 md:left-8 z-50">
-                <Link to={getLocalizedPath('/')} className="text-2xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-opacity">
-                    Ta' <span className="text-accent">To'</span> Clean
-                </Link>
-            </div>
+            {/* Welcome Header */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8 md:mb-12"
+            >
+                <h1 className="text-3xl md:text-5xl font-display font-bold text-white mb-2 tracking-tight">
+                    {t('dashboard.welcome')}, <span className="capitalize">{user?.user_metadata?.full_name?.split(' ')[0]}</span>
+                </h1>
+                <p className="text-gray-400 text-lg">{t('dashboard.subtitle', 'Gestiona tus vehÃ­culos y reservas')}</p>
+            </motion.div>
 
-            <div className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-3 z-50">
-                {isAdmin && (
-                    <Link
-                        to="/admin"
-                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 border border-blue-400/20"
-                    >
-                        <Shield size={18} />
-                        <span className="hidden md:inline">Admin</span>
-                    </Link>
-                )}
-                <Link
-                    to={getLocalizedPath('/profile')}
-                    className="p-3 rounded-full bg-white/5 text-white hover:bg-white/10 transition-colors border border-white/5"
-                    title={t('dashboard.profile')}
-                >
-                    <Settings size={20} />
-                </Link>
-                <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 text-white hover:bg-red-500/10 hover:text-red-400 transition-all border border-white/5 hover:border-red-500/20"
-                >
-                    <LogOut size={18} />
-                    <span className="hidden md:inline font-medium">{t('dashboard.logout')}</span>
-                </button>
-            </div>
-
-            <div className="max-w-7xl mx-auto">
-                {/* Welcome Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-14"
-                >
-                    <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-3">
-                        {t('dashboard.welcome')}, <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 capitalize">{user?.user_metadata?.full_name?.split(' ')[0] || 'User'}</span>
-                    </h1>
-                    <p className="text-white/40 text-lg">
-                        {t('dashboard.subtitle', 'Gestiona tus vehículos y reservas desde aquí')}
-                    </p>
-                </motion.div>
-
+            {/* Main Content Card */}
+            <div className={`${isDarkMode ? 'bg-transparent' : 'bg-white rounded-[2.5rem] shadow-2xl'} p-6 md:p-12 transition-all duration-300`}>
                 {/* Stats Overview */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-14">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="bg-[#111] border border-white/10 rounded-3xl p-6 relative overflow-hidden group"
+                        className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-6 relative overflow-hidden group transition-colors`}
                     >
-                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-10 group-hover:opacity-20 text-white' : 'opacity-5 group-hover:opacity-10 text-gray-900'}`}>
                             <Car size={80} strokeWidth={2.5} />
                         </div>
-                        <p className="text-white/40 text-sm font-medium mb-1">{t('dashboard.total_vehicles', 'Total Vehículos')}</p>
-                        <h3 className="text-4xl font-bold text-white">{vehicles.length}</h3>
+                        <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm font-medium mb-1 transition-colors`}>{t('dashboard.total_vehicles', 'Total VehÃ­culos')}</p>
+                        <h3 className={`text-4xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>{vehicles.length}</h3>
                     </motion.div>
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="bg-[#111] border border-white/10 rounded-3xl p-6 relative overflow-hidden group"
+                        className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-6 relative overflow-hidden group transition-colors`}
                     >
-                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-10 group-hover:opacity-20 text-white' : 'opacity-5 group-hover:opacity-10 text-gray-900'}`}>
                             <Calendar size={80} strokeWidth={2.5} />
                         </div>
-                        <p className="text-white/40 text-sm font-medium mb-1">{t('dashboard.active_bookings', 'Reservas Activas')}</p>
-                        <h3 className="text-4xl font-bold text-white">{activeBookings.length}</h3>
+                        <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm font-medium mb-1 transition-colors`}>{t('dashboard.active_bookings', 'Reservas Activas')}</p>
+                        <h3 className={`text-4xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>{activeBookings.length}</h3>
                     </motion.div>
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="bg-gradient-to-br from-accent/20 to-accent/5 border border-accent/20 rounded-3xl p-6 relative overflow-hidden group cursor-pointer hover:border-accent/40 transition-colors"
+                        className={`${isDarkMode ? 'bg-gradient-to-br from-accent/20 to-accent/5 border-accent/20 hover:border-accent/40' : 'bg-gradient-to-br from-blue-600 to-blue-700 hover:shadow-xl hover:shadow-blue-600/20'} border rounded-3xl p-6 relative overflow-hidden group cursor-pointer transition-all`}
                         onClick={() => navigate(getLocalizedPath('/reserva'))}
                     >
-                        <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-30 transition-opacity">
+                        <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-20 group-hover:opacity-30' : 'opacity-20 group-hover:opacity-30 text-white'}`}>
                             <Plus size={80} />
                         </div>
-                        <div className="h-full flex flex-col justify-center">
+                        <div className="h-full flex flex-col justify-center relative z-10">
                             <h3 className="text-2xl font-bold text-white mb-1">{t('dashboard.new_booking')}</h3>
-                            <p className="text-white/60 text-sm">{t('dashboard.book_now_hint', 'Agenda tu próxima cita')}</p>
+                            <p className={`${isDarkMode ? 'text-white/60' : 'text-blue-100'} text-sm transition-colors`}>{t('dashboard.book_now_hint', 'Agenda tu prÃ³xima cita')}</p>
                         </div>
                     </motion.div>
                 </div>
@@ -344,13 +313,13 @@ const UserDashboard = () => {
                             transition={{ delay: 0.4 }}
                         >
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                                    <Car className="text-accent" size={24} strokeWidth={2.5} />
+                                <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} flex items-center gap-2 transition-colors`}>
+                                    <Car className={isDarkMode ? 'text-accent' : 'text-blue-600'} size={24} strokeWidth={2.5} />
                                     {t('dashboard.my_vehicles')}
                                 </h2>
                                 <button
                                     onClick={() => setShowAddVehicle(true)}
-                                    className="text-sm font-medium text-white/60 hover:text-white transition-colors flex items-center gap-1"
+                                    className={`text-sm font-medium ${isDarkMode ? 'text-white/60 hover:text-white' : 'text-gray-500 hover:text-blue-600'} transition-colors flex items-center gap-1`}
                                 >
                                     <Plus size={16} />
                                     {t('dashboard.add_vehicle')}
@@ -358,16 +327,16 @@ const UserDashboard = () => {
                             </div>
 
                             {vehicles.length === 0 ? (
-                                <div className="bg-[#111] border border-white/10 rounded-3xl p-12 text-center border-dashed">
-                                    <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <Car size={32} strokeWidth={2.5} className="text-white/40" />
+                                <div className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-12 text-center border-dashed transition-colors`}>
+                                    <div className={`w-16 h-16 ${isDarkMode ? 'bg-white/5' : 'bg-white shadow-sm'} rounded-full flex items-center justify-center mx-auto mb-4 transition-colors`}>
+                                        <Car size={32} strokeWidth={2.5} className={isDarkMode ? 'text-white/40' : 'text-gray-400'} />
                                     </div>
-                                    <p className="text-white/60 mb-6">{t('dashboard.no_vehicles')}</p>
+                                    <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-500'} mb-6 transition-colors`}>{t('dashboard.no_vehicles')}</p>
                                     <button
                                         onClick={() => setShowAddVehicle(true)}
-                                        className="px-6 py-3 rounded-full bg-white text-black font-bold hover:bg-white/90 transition-colors"
+                                        className={`px-6 py-3 rounded-full ${isDarkMode ? 'bg-white text-black hover:bg-white/90' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20'} font-bold transition-all`}
                                     >
-                                        {t('dashboard.add_first_vehicle', 'Añadir Primer Vehículo')}
+                                        {t('dashboard.add_first_vehicle', 'AÃ±adir Primer VehÃ­culo')}
                                     </button>
                                 </div>
                             ) : (
@@ -375,40 +344,40 @@ const UserDashboard = () => {
                                     {vehicles.map((vehicle) => (
                                         <div
                                             key={vehicle.id}
-                                            className="group bg-[#111] border border-white/10 rounded-3xl p-6 hover:border-white/20 transition-all duration-300 relative overflow-hidden"
+                                            className={`group ${isDarkMode ? 'bg-[#111] border-white/10 hover:border-white/20' : 'bg-gray-50 border-gray-200 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/5'} border rounded-3xl p-6 transition-all duration-300 relative overflow-hidden`}
                                         >
                                             {/* Background Gradient */}
-                                            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                            <div className={`absolute inset-0 bg-gradient-to-br ${isDarkMode ? 'from-white/5' : 'from-blue-50/50'} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
                                             <div className="relative z-10">
                                                 <div className="flex justify-between items-start mb-4">
                                                     <div>
                                                         {vehicle.nickname && (
-                                                            <p className="text-white/60 text-xs font-medium uppercase tracking-wider mb-1">{vehicle.nickname}</p>
+                                                            <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-500'} text-xs font-medium uppercase tracking-wider mb-1 transition-colors`}>{vehicle.nickname}</p>
                                                         )}
-                                                        <h3 className="text-2xl font-bold text-white tracking-tight">{vehicle.plate}</h3>
+                                                        <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} tracking-tight transition-colors`}>{vehicle.plate}</h3>
                                                         {(vehicle.brand || vehicle.model) && (
-                                                            <p className="text-white/40 text-sm capitalize">
+                                                            <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm capitalize transition-colors`}>
                                                                 {vehicle.brand} {vehicle.model}
                                                             </p>
                                                         )}
                                                     </div>
                                                     <div className="flex gap-2">
                                                         {vehicle.is_primary && (
-                                                            <span className="bg-accent/20 text-accent text-[10px] font-bold px-2 py-1 rounded-full uppercase">
+                                                            <span className={`${isDarkMode ? 'bg-accent/20 text-accent' : 'bg-blue-100 text-blue-700'} text-[10px] font-bold px-2 py-1 rounded-full uppercase transition-colors`}>
                                                                 {t('dashboard.primary')}
                                                             </span>
                                                         )}
                                                         <button
                                                             onClick={() => handleEditVehicle(vehicle)}
-                                                            className="p-2 hover:bg-white/10 hover:text-white text-white/20 rounded-full transition-colors"
-                                                            title={t('dashboard.edit_vehicle_title', 'Editar Vehículo')}
+                                                            className={`p-2 ${isDarkMode ? 'hover:bg-white/10 hover:text-white text-white/20' : 'hover:bg-white hover:text-blue-600 text-gray-400 hover:shadow-sm'} rounded-full transition-colors`}
+                                                            title={t('dashboard.edit_vehicle_title', 'Editar VehÃ­culo')}
                                                         >
                                                             <Edit2 size={16} />
                                                         </button>
                                                         <button
                                                             onClick={() => handleDeleteVehicle(vehicle.id, vehicle.plate)}
-                                                            className="p-2 hover:bg-red-500/20 hover:text-red-400 text-white/20 rounded-full transition-colors"
+                                                            className={`p-2 ${isDarkMode ? 'hover:bg-red-500/20 hover:text-red-400 text-white/20' : 'hover:bg-red-50 hover:text-red-500 text-gray-400'} rounded-full transition-colors`}
                                                         >
                                                             <Trash2 size={16} />
                                                         </button>
@@ -419,11 +388,11 @@ const UserDashboard = () => {
                                                     <img
                                                         src={getVehicleImage(vehicle.vehicle_type)}
                                                         alt={vehicle.vehicle_type}
-                                                        className="w-32 h-20 object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                                                        className={`w-32 h-20 object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 ${!isDarkMode && 'mix-blend-multiply'}`}
                                                     />
                                                     <button
                                                         onClick={() => navigate(getLocalizedPath('/reserva'), { state: { selectedVehicle: vehicle } })}
-                                                        className="px-5 py-2.5 rounded-full bg-white text-black text-sm font-bold hover:bg-white/90 hover:scale-105 transition-all shadow-lg shadow-white/10"
+                                                        className={`px-5 py-2.5 rounded-full ${isDarkMode ? 'bg-white text-black hover:bg-white/90 shadow-white/10' : 'bg-gray-900 text-white hover:bg-black shadow-gray-900/20'} text-sm font-bold hover:scale-105 transition-all shadow-lg`}
                                                     >
                                                         {t('dashboard.book_now')}
                                                     </button>
@@ -443,26 +412,26 @@ const UserDashboard = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
                         >
-                            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                                <Clock className="text-accent" size={24} strokeWidth={2.5} />
+                            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-6 flex items-center gap-2 transition-colors`}>
+                                <Clock className={isDarkMode ? 'text-accent' : 'text-blue-600'} size={24} strokeWidth={2.5} />
                                 {t('dashboard.service_history')}
                             </h2>
 
                             {bookings.length === 0 ? (
-                                <div className="bg-[#111] border border-white/10 rounded-3xl p-8 text-center">
-                                    <p className="text-white/40 text-sm">{t('dashboard.no_bookings')}</p>
+                                <div className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-8 text-center transition-colors`}>
+                                    <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm transition-colors`}>{t('dashboard.no_bookings')}</p>
                                 </div>
                             ) : (
                                 <div className="space-y-3">
                                     {bookings.slice(0, showAllHistory ? undefined : 5).map((booking) => (
                                         <div
                                             key={booking.id}
-                                            className="bg-[#111] border border-white/10 rounded-2xl p-4 hover:bg-white/5 transition-colors group"
+                                            className={`${isDarkMode ? 'bg-[#111] border-white/10 hover:bg-white/5' : 'bg-gray-50 border-gray-200 hover:bg-white hover:shadow-md'} border rounded-2xl p-4 transition-all group`}
                                         >
                                             <div className="flex justify-between items-start mb-2">
                                                 <div>
-                                                    <h4 className="text-white font-bold text-sm">{booking.service?.name}</h4>
-                                                    <p className="text-white/40 text-xs">{new Date(booking.booking_date + 'T00:00:00').toLocaleDateString('es-CO', { dateStyle: 'medium' })} • {booking.booking_time}</p>
+                                                    <h4 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} font-bold text-sm transition-colors`}>{booking.service?.name}</h4>
+                                                    <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-xs transition-colors`}>{new Date(booking.booking_date + 'T00:00:00').toLocaleDateString('es-CO', { dateStyle: 'medium' })} â€¢ {booking.booking_time}</p>
                                                 </div>
                                                 <span className={`text-[10px] font-bold px-2 py-1 rounded-full border ${getStatusColor(getEffectiveStatus(booking))}`}>
                                                     {getStatusText(getEffectiveStatus(booking))}
@@ -470,16 +439,16 @@ const UserDashboard = () => {
                                             </div>
 
                                             <div className="flex justify-between items-center mt-3">
-                                                <div className="flex items-center gap-2 text-white/40 text-xs">
+                                                <div className={`flex items-center gap-2 ${isDarkMode ? 'text-white/40' : 'text-gray-400'} text-xs transition-colors`}>
                                                     <Car size={12} />
                                                     <span>{booking.vehicle_plate}</span>
                                                 </div>
                                                 <div className="flex items-center gap-3">
-                                                    <span className="text-white font-bold text-sm">${booking.total_price?.toLocaleString()}</span>
+                                                    <span className={`${isDarkMode ? 'text-white' : 'text-gray-900'} font-bold text-sm transition-colors`}>${booking.total_price?.toLocaleString()}</span>
                                                     {(getEffectiveStatus(booking) === 'pending' || getEffectiveStatus(booking) === 'confirmed') && (
                                                         <button
                                                             onClick={() => handleCancelBooking(booking.id)}
-                                                            className="text-white/20 hover:text-red-400 transition-colors"
+                                                            className={`${isDarkMode ? 'text-white/20 hover:text-red-400' : 'text-gray-400 hover:text-red-500'} transition-colors`}
                                                             title={t('dashboard.cancel_booking')}
                                                         >
                                                             <X size={14} />
@@ -492,7 +461,7 @@ const UserDashboard = () => {
                                     {bookings.length > 5 && (
                                         <button
                                             onClick={() => setShowAllHistory(!showAllHistory)}
-                                            className="w-full py-3 text-center text-white/40 text-sm hover:text-white transition-colors"
+                                            className={`w-full py-3 text-center ${isDarkMode ? 'text-white/40 hover:text-white' : 'text-gray-500 hover:text-gray-900'} text-sm transition-colors`}
                                         >
                                             {showAllHistory ? t('dashboard.show_less', 'Ver menos') : t('dashboard.view_all_history', 'Ver todo el historial')}
                                         </button>
@@ -503,49 +472,50 @@ const UserDashboard = () => {
                     </div>
                 </div>
             </div>
+            {/* Modals */}
+            <AnimatePresence>
+                <AddVehicleModal
+                    isOpen={showAddVehicle || showEditVehicleModal}
+                    onClose={() => {
+                        setShowAddVehicle(false)
+                        setShowEditVehicleModal(false)
+                        setVehicleToEdit(null)
+                    }}
+                    onSuccess={() => {
+                        setShowAddVehicle(false)
+                        setShowEditVehicleModal(false)
+                        setVehicleToEdit(null)
+                        queryClient.invalidateQueries(['vehicles'])
+                    }}
+                    vehicleToEdit={vehicleToEdit}
+                />
 
-            {/* Modal Agregar/Editar Vehículo */}
-            <AddVehicleModal
-                isOpen={showAddVehicle || showEditVehicleModal}
-                onClose={() => {
-                    setShowAddVehicle(false)
-                    setShowEditVehicleModal(false)
-                    setVehicleToEdit(null)
-                }}
-                onSuccess={() => {
-                    setShowAddVehicle(false)
-                    setShowEditVehicleModal(false)
-                    setVehicleToEdit(null)
-                    queryClient.invalidateQueries(['vehicles'])
-                }}
-                vehicleToEdit={vehicleToEdit}
-            />
+                {/* Modal ConfirmaciÃ³n Cancelar */}
+                <ConfirmationModal
+                    isOpen={showCancelModal}
+                    onClose={() => {
+                        setShowCancelModal(false)
+                        setBookingToCancel(null)
+                    }}
+                    onConfirm={confirmCancelBooking}
+                    title={t('dashboard.cancel_confirm_title')}
+                    message={t('dashboard.cancel_confirm_message')}
+                    cancelText={t('dashboard.keep_booking')}
+                    confirmText={t('dashboard.confirm_cancel')}
+                />
 
-            {/* Modal Confirmación Cancelar */}
-            <ConfirmationModal
-                isOpen={showCancelModal}
-                onClose={() => {
-                    setShowCancelModal(false)
-                    setBookingToCancel(null)
-                }}
-                onConfirm={confirmCancelBooking}
-                title={t('dashboard.cancel_confirm_title')}
-                message={t('dashboard.cancel_confirm_message')}
-                cancelText={t('dashboard.keep_booking')}
-                confirmText={t('dashboard.confirm_cancel')}
-            />
-
-            <DeleteVehicleModal
-                isOpen={showDeleteModal}
-                onClose={() => setShowDeleteModal(false)}
-                onConfirm={confirmDeleteVehicle}
-                plate={vehicleToDelete?.plate}
-            />
+                <DeleteVehicleModal
+                    isOpen={showDeleteModal}
+                    onClose={() => setShowDeleteModal(false)}
+                    onConfirm={confirmDeleteVehicle}
+                    plate={vehicleToDelete?.plate}
+                />
+            </AnimatePresence>
         </div >
     )
 }
 
-// Modal de Confirmación Genérico
+// Modal de ConfirmaciÃ³n GenÃ©rico
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, cancelText, confirmText }) => {
     if (!isOpen) return null
 
@@ -583,7 +553,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, cancelT
     )
 }
 
-// Modal para agregar vehículo
+// Modal para agregar vehÃ­culo
 const addVehicleSchema = z.object({
     vehicleType: z.string(),
     plate: z.string().min(1, "Plate is required"),
@@ -650,9 +620,9 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
 
         const { data: { user } } = await supabase.auth.getUser()
 
-        // Si estamos editando y la placa cambió, verificar duplicados
+        // Si estamos editando y la placa cambiÃ³, verificar duplicados
         if (!vehicleToEdit || (vehicleToEdit && vehicleToEdit.plate !== formData.plate)) {
-            // 🔒 VALIDACIÓN DE SEGURIDAD: Verificar si la placa ya tiene reservas
+            // ðŸ”’ VALIDACIÃ“N DE SEGURIDAD: Verificar si la placa ya tiene reservas
             const { data: existingBookings } = await supabase
                 .from('bookings')
                 .select('client_email')
@@ -672,7 +642,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
         let errorResult = null
 
         if (vehicleToEdit) {
-            // Actualizar vehículo existente
+            // Actualizar vehÃ­culo existente
             const { error: updateError } = await supabase
                 .from('user_vehicles')
                 .update({
@@ -686,7 +656,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
 
             errorResult = updateError
         } else {
-            // Insertar nuevo vehículo
+            // Insertar nuevo vehÃ­culo
             const { error: insertError } = await supabase
                 .from('user_vehicles')
                 .insert([{
@@ -724,7 +694,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
             >
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-bold text-white">
-                        {vehicleToEdit ? t('dashboard.edit_vehicle_title', 'Editar Vehículo') : t('dashboard.add_vehicle_modal.title')}
+                        {vehicleToEdit ? t('dashboard.edit_vehicle_title', 'Editar VehÃ­culo') : t('dashboard.add_vehicle_modal.title')}
                     </h2>
                     <button
                         onClick={onClose}
@@ -736,7 +706,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* ... form fields ... */}
-                    {/* Tipo de vehículo */}
+                    {/* Tipo de vehÃ­culo */}
                     <div>
                         <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.type_label')}</label>
                         <div className="grid grid-cols-3 gap-2">
@@ -828,7 +798,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
                     >
                         {isSubmitting
                             ? (vehicleToEdit ? t('dashboard.updating', 'Actualizando...') : t('dashboard.add_vehicle_modal.adding'))
-                            : (vehicleToEdit ? t('dashboard.update_vehicle', 'Actualizar Vehículo') : t('dashboard.add_vehicle_modal.add_button'))}
+                            : (vehicleToEdit ? t('dashboard.update_vehicle', 'Actualizar VehÃ­culo') : t('dashboard.add_vehicle_modal.add_button'))}
                     </button>
                 </form>
             </motion.div>
@@ -836,7 +806,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
     )
 }
 
-// Modal para confirmar eliminación
+// Modal para confirmar eliminaciÃ³n
 const DeleteVehicleModal = ({ isOpen, onClose, onConfirm, plate }) => {
     const { t } = useTranslation()
 

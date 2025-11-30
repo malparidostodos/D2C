@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 import { User, Mail, Lock, ArrowLeft, Check, AlertCircle, Edit2 } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
@@ -15,6 +15,7 @@ import SEO from '../ui/SEO'
 const ProfilePage = () => {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
+    const { isDarkMode } = useOutletContext()
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
@@ -141,7 +142,7 @@ const ProfilePage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] font-sans flex flex-col">
+        <div className={`font-sans flex flex-col ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
             <SEO title={t('profile.title', 'Mi Perfil')} />
 
 
@@ -153,17 +154,10 @@ const ProfilePage = () => {
                 className="pt-12 pb-12 px-4 sm:px-6 lg:px-8"
             >
                 <div className="max-w-[95%] mx-auto text-white">
-                    <Link
-                        to={getLocalizedPath('/dashboard')}
-                        className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6 group"
-                    >
-                        <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                        {t('profile.back_to_dashboard')}
-                    </Link>
-                    <h1 className="text-5xl md:text-6xl font-semibold tracking-tighter mb-4">
+                    <h1 className={`text-5xl md:text-6xl font-semibold tracking-tighter mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                         {t('profile.title')}
                     </h1>
-                    <p className="text-white/60 text-xl max-w-xl">
+                    <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-500'} text-xl max-w-xl`}>
                         {t('profile.subtitle')}
                     </p>
                 </div>
@@ -175,7 +169,7 @@ const ProfilePage = () => {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-                    className="max-w-[95%] mx-auto bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 min-h-[600px]"
+                    className={`max-w-[95%] mx-auto ${isDarkMode ? 'bg-[#111] border border-white/10' : 'bg-white'} rounded-[2.5rem] shadow-2xl p-8 md:p-12 min-h-[600px]`}
                 >
                     <div className="max-w-5xl mx-auto">
 
@@ -204,20 +198,20 @@ const ProfilePage = () => {
                             transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
                             className="mb-12"
                         >
-                            <h3 className="text-lg font-semibold text-gray-900 mb-4">Avatar</h3>
+                            <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-4`}>Avatar</h3>
                             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-                                <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center border-4 border-white shadow-lg relative overflow-hidden group">
+                                <div className={`w-24 h-24 rounded-full ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-gray-100 border-white'} flex items-center justify-center border-4 shadow-lg relative overflow-hidden group`}>
                                     {user?.user_metadata?.avatar_url ? (
                                         <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                                     ) : (
                                         <User size={40} className="text-gray-400" />
                                     )}
                                 </div>
-                                <div className="flex-1 w-full md:w-auto border-2 border-dashed border-gray-200 rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors cursor-pointer group">
+                                <div className={`flex-1 w-full md:w-auto border-2 border-dashed ${isDarkMode ? 'border-white/10 hover:bg-white/5' : 'border-gray-200 hover:bg-gray-50'} rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-colors cursor-pointer group`}>
                                     <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mb-3 text-blue-600 group-hover:scale-110 transition-transform">
                                         <User size={20} />
                                     </div>
-                                    <p className="text-sm font-medium text-gray-900">Click here to upload your file or drag.</p>
+                                    <p className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Click here to upload your file or drag.</p>
                                     <p className="text-xs text-gray-500 mt-1">Supported Format: SVG, JPG, PNG (10mb each)</p>
                                 </div>
                             </div>
@@ -233,14 +227,14 @@ const ProfilePage = () => {
                             <div className="space-y-8">
                                 {/* Name Form */}
                                 <form onSubmit={handleSubmitName(onUpdateName)} className="space-y-2">
-                                    <label className="text-sm font-semibold text-gray-900">{t('profile.full_name')}</label>
+                                    <label className={`text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('profile.full_name')}</label>
                                     <div className="relative group">
                                         <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={20} />
                                         <input
                                             type="text"
                                             {...registerName('fullName')}
                                             disabled={isAdmin || !isEditingName}
-                                            className={`w-full bg-white border rounded-xl py-3.5 pl-12 pr-12 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsName.fullName ? 'border-red-500' : 'border-gray-200'} ${!isEditingName ? 'bg-gray-50 text-gray-500' : ''} ${isAdmin ? 'bg-gray-200/50 cursor-not-allowed opacity-100' : ''}`}
+                                            className={`w-full ${isDarkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-white border-gray-200 text-gray-900'} border rounded-xl py-3.5 pl-12 pr-12 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsName.fullName ? 'border-red-500' : ''} ${!isEditingName ? (isDarkMode ? 'bg-white/5 text-gray-400' : 'bg-gray-50 text-gray-500') : ''} ${isAdmin ? 'bg-gray-200/50 cursor-not-allowed opacity-100' : ''}`}
                                             placeholder={t('profile.full_name_placeholder')}
                                         />
                                         {!isAdmin ? (
@@ -279,14 +273,14 @@ const ProfilePage = () => {
 
                                 {/* Email Form */}
                                 <form onSubmit={handleSubmitEmail(onUpdateEmail)} className="space-y-2">
-                                    <label className="text-sm font-semibold text-gray-900">{t('profile.email_address')}</label>
+                                    <label className={`text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('profile.email_address')}</label>
                                     <div className="relative group">
                                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={20} />
                                         <input
                                             type="email"
                                             {...registerEmail('email')}
                                             disabled={isAdmin || !isEditingEmail}
-                                            className={`w-full bg-white border rounded-xl py-3.5 pl-12 pr-12 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsEmail.email ? 'border-red-500' : 'border-gray-200'} ${!isEditingEmail ? 'bg-gray-50 text-gray-500' : ''} ${isAdmin ? 'bg-gray-200/50 cursor-not-allowed opacity-100' : ''}`}
+                                            className={`w-full ${isDarkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-white border-gray-200 text-gray-900'} border rounded-xl py-3.5 pl-12 pr-12 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsEmail.email ? 'border-red-500' : ''} ${!isEditingEmail ? (isDarkMode ? 'bg-white/5 text-gray-400' : 'bg-gray-50 text-gray-500') : ''} ${isAdmin ? 'bg-gray-200/50 cursor-not-allowed opacity-100' : ''}`}
                                             placeholder={t('auth.mail')}
                                         />
                                         {!isAdmin ? (
@@ -329,13 +323,13 @@ const ProfilePage = () => {
                             <div className="space-y-8">
                                 <form onSubmit={handleSubmitPassword(onUpdatePassword)} className="space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-gray-900">{t('profile.change_password')}</label>
+                                        <label className={`text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('profile.change_password')}</label>
                                         <div className="relative group">
                                             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={20} />
                                             <input
                                                 type="password"
                                                 {...registerPassword('newPassword')}
-                                                className={`w-full bg-white border rounded-xl py-3.5 pl-12 pr-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsPassword.newPassword ? 'border-red-500' : 'border-gray-200'}`}
+                                                className={`w-full ${isDarkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-white border-gray-200 text-gray-900'} border rounded-xl py-3.5 pl-12 pr-4 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsPassword.newPassword ? 'border-red-500' : ''}`}
                                                 placeholder={t('profile.new_password')}
                                             />
                                         </div>
@@ -343,13 +337,13 @@ const ProfilePage = () => {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label className="text-sm font-semibold text-gray-900">{t('auth.confirm_password')}</label>
+                                        <label className={`text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('auth.confirm_password')}</label>
                                         <div className="relative group">
                                             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={20} />
                                             <input
                                                 type="password"
                                                 {...registerPassword('confirmPassword')}
-                                                className={`w-full bg-white border rounded-xl py-3.5 pl-12 pr-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsPassword.confirmPassword ? 'border-red-500' : 'border-gray-200'}`}
+                                                className={`w-full ${isDarkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-white border-gray-200 text-gray-900'} border rounded-xl py-3.5 pl-12 pr-4 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsPassword.confirmPassword ? 'border-red-500' : ''}`}
                                                 placeholder={t('auth.confirm_password')}
                                             />
                                         </div>

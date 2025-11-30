@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import {
     Calendar, Clock, CheckCircle, XCircle, AlertCircle,
     Search, Filter, ChevronDown, MoreHorizontal,
@@ -16,6 +16,7 @@ import SEO from '../ui/SEO'
 const AdminDashboard = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
+    const { isDarkMode } = useOutletContext()
     const [bookings, setBookings] = useState([])
     const [loading, setLoading] = useState(true)
     const [verifyingAdmin, setVerifyingAdmin] = useState(true)
@@ -168,31 +169,24 @@ const AdminDashboard = () => {
 
     if (verifyingAdmin) {
         return (
-            <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-                <div className="text-white/60">Verificando acceso...</div>
+            <div className={`min-h-[50vh] flex items-center justify-center ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
+                <div>Verificando acceso...</div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8">
+        <div className={`pt-32 pb-20 px-4 md:px-8 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
             <SEO title="Admin Dashboard" />
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <div>
-                        <button
-                            onClick={() => navigate('/dashboard')}
-                            className="flex items-center gap-2 text-white/60 hover:text-white mb-4 transition-colors"
-                        >
-                            <ArrowLeft size={20} />
-                            <span>Volver al Dashboard</span>
-                        </button>
-                        <h1 className="text-3xl font-bold text-white mb-2">Panel de Administración</h1>
-                        <p className="text-white/60">Gestiona tus reservas y clientes</p>
+                        <h1 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Panel de Administración</h1>
+                        <p className={isDarkMode ? 'text-white/60' : 'text-gray-500'}>Gestiona tus reservas y clientes</p>
                     </div>
                     <button
                         onClick={fetchBookings}
-                        className="w-full md:w-auto px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+                        className={`w-full md:w-auto px-4 py-2 rounded-lg transition-colors ${isDarkMode ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-900'}`}
                     >
                         Actualizar
                     </button>
@@ -204,34 +198,41 @@ const AdminDashboard = () => {
                         title="Ingresos Totales"
                         value={`$${stats.totalRevenue.toLocaleString()}`}
                         icon={<DollarSign className="text-green-500" />}
+                        isDarkMode={isDarkMode}
                     />
                     <StatCard
                         title="Reservas Totales"
                         value={stats.totalBookings}
                         icon={<Calendar className="text-blue-500" />}
+                        isDarkMode={isDarkMode}
                     />
                     <StatCard
                         title="Pendientes"
                         value={stats.pendingBookings}
                         icon={<Clock className="text-yellow-500" />}
+                        isDarkMode={isDarkMode}
                     />
                     <StatCard
                         title="Completadas"
                         value={stats.completedBookings}
                         icon={<CheckCircle className="text-purple-500" />}
+                        isDarkMode={isDarkMode}
                     />
                 </div>
 
                 {/* Filters & Search */}
                 <div className="flex flex-col md:flex-row gap-4 mb-6">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" size={20} />
+                        <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`} size={20} />
                         <input
                             type="text"
                             placeholder="Buscar por nombre, email o placa..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white focus:outline-none focus:border-white/30"
+                            className={`w-full rounded-xl pl-10 pr-4 py-3 focus:outline-none border ${isDarkMode
+                                    ? 'bg-white/5 border-white/10 text-white focus:border-white/30'
+                                    : 'bg-white border-gray-200 text-gray-900 focus:border-gray-300 shadow-sm'
+                                }`}
                         />
                     </div>
                     <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
@@ -240,8 +241,8 @@ const AdminDashboard = () => {
                                 key={status}
                                 onClick={() => setFilter(status)}
                                 className={`px-4 py-2 rounded-lg capitalize whitespace-nowrap transition-colors ${filter === status
-                                    ? 'bg-white text-black font-medium'
-                                    : 'bg-white/5 text-white/60 hover:bg-white/10'
+                                        ? (isDarkMode ? 'bg-white text-black font-medium' : 'bg-black text-white font-medium')
+                                        : (isDarkMode ? 'bg-white/5 text-white/60 hover:bg-white/10' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
                                     }`}
                             >
                                 {status === 'all' ? 'Todos' : status}
@@ -251,42 +252,42 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Bookings List - Responsive */}
-                <div className="bg-transparent md:bg-white/5 md:border md:border-white/10 rounded-2xl overflow-hidden">
+                <div className={`rounded-2xl overflow-hidden ${isDarkMode ? 'bg-transparent md:bg-white/5 md:border md:border-white/10' : 'bg-transparent md:bg-white md:border md:border-gray-200 md:shadow-sm'}`}>
 
                     {/* Mobile View (Cards) */}
                     <div className="md:hidden space-y-4">
                         {loading ? (
-                            <div className="text-center text-white/40 py-8">Cargando reservas...</div>
+                            <div className={`text-center py-8 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Cargando reservas...</div>
                         ) : filteredBookings.length === 0 ? (
-                            <div className="text-center text-white/40 py-8">No se encontraron reservas</div>
+                            <div className={`text-center py-8 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>No se encontraron reservas</div>
                         ) : (
                             filteredBookings.map((booking) => (
-                                <div key={booking.id} className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-4">
+                                <div key={booking.id} className={`border rounded-xl p-5 space-y-4 ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200 shadow-sm'}`}>
                                     <div className="flex justify-between items-start">
                                         <div>
-                                            <h3 className="text-white font-bold text-lg">{booking.client_name}</h3>
-                                            <p className="text-white/40 text-sm">{booking.client_email}</p>
+                                            <h3 className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{booking.client_name}</h3>
+                                            <p className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{booking.client_email}</p>
                                         </div>
-                                        <span className="bg-white/10 px-2 py-1 rounded text-xs font-mono text-white">
+                                        <span className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'}`}>
                                             {booking.vehicle_plate}
                                         </span>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-4 text-sm">
                                         <div>
-                                            <p className="text-white/40 mb-1">Servicio</p>
-                                            <p className="text-white">{booking.service_name || booking.service?.name || 'Servicio'}</p>
+                                            <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Servicio</p>
+                                            <p className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.service_name || booking.service?.name || 'Servicio'}</p>
                                         </div>
                                         <div>
-                                            <p className="text-white/40 mb-1">Fecha</p>
-                                            <p className="text-white">{booking.booking_date} {booking.booking_time}</p>
+                                            <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Fecha</p>
+                                            <p className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.booking_date} {booking.booking_time}</p>
                                         </div>
                                         <div>
-                                            <p className="text-white/40 mb-1">Precio</p>
-                                            <p className="text-white font-bold">${booking.total_price?.toLocaleString()}</p>
+                                            <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Precio</p>
+                                            <p className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>${booking.total_price?.toLocaleString()}</p>
                                         </div>
                                         <div>
-                                            <p className="text-white/40 mb-1">Estado</p>
+                                            <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Estado</p>
                                             <StatusDropdown
                                                 currentStatus={booking.status}
                                                 onStatusChange={(newStatus) => handleStatusChange(booking.id, newStatus)}
@@ -303,56 +304,56 @@ const AdminDashboard = () => {
                     <div className="hidden md:block overflow-x-auto">
                         <table className="w-full text-left">
                             <thead>
-                                <tr className="border-b border-white/10 bg-white/5">
-                                    <th className="p-4 text-white/60 font-medium text-sm">Cliente</th>
-                                    <th className="p-4 text-white/60 font-medium text-sm">Vehículo</th>
-                                    <th className="p-4 text-white/60 font-medium text-sm">Servicio</th>
-                                    <th className="p-4 text-white/60 font-medium text-sm">Fecha</th>
-                                    <th className="p-4 text-white/60 font-medium text-sm">Estado</th>
-                                    <th className="p-4 text-white/60 font-medium text-sm">Precio</th>
-                                    <th className="p-4 text-white/60 font-medium text-sm">Acciones</th>
+                                <tr className={`border-b ${isDarkMode ? 'border-white/10 bg-white/5' : 'border-gray-200 bg-gray-50'}`}>
+                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Cliente</th>
+                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Vehículo</th>
+                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Servicio</th>
+                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Fecha</th>
+                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Estado</th>
+                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Precio</th>
+                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/5">
+                            <tbody className={`divide-y ${isDarkMode ? 'divide-white/5' : 'divide-gray-200'}`}>
                                 {loading ? (
                                     <tr>
-                                        <td colSpan="7" className="p-8 text-center text-white/40">
+                                        <td colSpan="7" className={`p-8 text-center ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>
                                             Cargando reservas...
                                         </td>
                                     </tr>
                                 ) : filteredBookings.length === 0 ? (
                                     <tr>
-                                        <td colSpan="7" className="p-8 text-center text-white/40">
+                                        <td colSpan="7" className={`p-8 text-center ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>
                                             No se encontraron reservas
                                         </td>
                                     </tr>
                                 ) : (
                                     filteredBookings.map((booking) => (
-                                        <tr key={booking.id} className="hover:bg-white/[0.02] transition-colors">
+                                        <tr key={booking.id} className={`transition-colors ${isDarkMode ? 'hover:bg-white/[0.02]' : 'hover:bg-gray-50'}`}>
                                             <td className="p-4">
-                                                <div className="font-medium text-white">{booking.client_name}</div>
-                                                <div className="text-sm text-white/40">{booking.client_email}</div>
+                                                <div className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{booking.client_name}</div>
+                                                <div className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{booking.client_email}</div>
                                             </td>
                                             <td className="p-4">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="bg-white/10 px-2 py-1 rounded text-xs font-mono text-white">
+                                                    <span className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'}`}>
                                                         {booking.vehicle_plate}
                                                     </span>
                                                 </div>
                                             </td>
-                                            <td className="p-4 text-white/80">
+                                            <td className={`p-4 ${isDarkMode ? 'text-white/80' : 'text-gray-700'}`}>
                                                 {booking.service_name || booking.service?.name || 'Servicio'}
                                             </td>
                                             <td className="p-4">
-                                                <div className="text-white">{booking.booking_date}</div>
-                                                <div className="text-sm text-white/40">{booking.booking_time}</div>
+                                                <div className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.booking_date}</div>
+                                                <div className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{booking.booking_time}</div>
                                             </td>
                                             <td className="p-4">
                                                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
                                                     {booking.status}
                                                 </span>
                                             </td>
-                                            <td className="p-4 text-white font-medium">
+                                            <td className={`p-4 font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                                 ${booking.total_price?.toLocaleString()}
                                             </td>
                                             <td className="p-4">
@@ -376,15 +377,15 @@ const AdminDashboard = () => {
     )
 }
 
-const StatCard = ({ title, value, icon }) => (
-    <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+const StatCard = ({ title, value, icon, isDarkMode }) => (
+    <div className={`border rounded-2xl p-6 ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200 shadow-sm'}`}>
         <div className="flex justify-between items-start mb-4">
-            <h3 className="text-white/60 text-sm font-medium">{title}</h3>
-            <div className="p-2 bg-white/5 rounded-lg">
+            <h3 className={`text-sm font-medium ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{title}</h3>
+            <div className={`p-2 rounded-lg ${isDarkMode ? 'bg-white/5' : 'bg-gray-50'}`}>
                 {icon}
             </div>
         </div>
-        <p className="text-3xl font-bold text-white">{value}</p>
+        <p className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{value}</p>
     </div>
 )
 
