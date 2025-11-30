@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { User, Mail, Lock, ArrowLeft, Check, AlertCircle, Edit2 } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
-import Header from '../layout/Header'
+
 
 import SEO from '../ui/SEO'
 
@@ -143,14 +143,14 @@ const ProfilePage = () => {
     return (
         <div className="min-h-screen bg-[#050505] font-sans flex flex-col">
             <SEO title={t('profile.title', 'Mi Perfil')} />
-            <Header theme="white" />
+
 
             {/* Hero Section */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="pt-48 pb-12 px-4 sm:px-6 lg:px-8"
+                className="pt-12 pb-12 px-4 sm:px-6 lg:px-8"
             >
                 <div className="max-w-[95%] mx-auto text-white">
                     <Link
@@ -240,10 +240,10 @@ const ProfilePage = () => {
                                             type="text"
                                             {...registerName('fullName')}
                                             disabled={isAdmin || !isEditingName}
-                                            className={`w-full bg-white border rounded-xl py-3.5 pl-12 pr-12 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsName.fullName ? 'border-red-500' : 'border-gray-200'} ${!isEditingName ? 'bg-gray-50 text-gray-500' : ''}`}
+                                            className={`w-full bg-white border rounded-xl py-3.5 pl-12 pr-12 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsName.fullName ? 'border-red-500' : 'border-gray-200'} ${!isEditingName ? 'bg-gray-50 text-gray-500' : ''} ${isAdmin ? 'bg-gray-200/50 cursor-not-allowed opacity-100' : ''}`}
                                             placeholder={t('profile.full_name_placeholder')}
                                         />
-                                        {!isAdmin && (
+                                        {!isAdmin ? (
                                             <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                                 {isEditingName ? (
                                                     <button
@@ -268,6 +268,10 @@ const ProfilePage = () => {
                                                     </button>
                                                 )}
                                             </div>
+                                        ) : (
+                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" title="Edición bloqueada para administradores">
+                                                <Lock size={18} />
+                                            </div>
                                         )}
                                     </div>
                                     {errorsName.fullName && <p className="text-red-500 text-sm pl-1">{errorsName.fullName.message}</p>}
@@ -282,10 +286,10 @@ const ProfilePage = () => {
                                             type="email"
                                             {...registerEmail('email')}
                                             disabled={isAdmin || !isEditingEmail}
-                                            className={`w-full bg-white border rounded-xl py-3.5 pl-12 pr-12 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsEmail.email ? 'border-red-500' : 'border-gray-200'} ${!isEditingEmail ? 'bg-gray-50 text-gray-500' : ''}`}
+                                            className={`w-full bg-white border rounded-xl py-3.5 pl-12 pr-12 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsEmail.email ? 'border-red-500' : 'border-gray-200'} ${!isEditingEmail ? 'bg-gray-50 text-gray-500' : ''} ${isAdmin ? 'bg-gray-200/50 cursor-not-allowed opacity-100' : ''}`}
                                             placeholder={t('auth.mail')}
                                         />
-                                        {!isAdmin && (
+                                        {!isAdmin ? (
                                             <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                                 {isEditingEmail ? (
                                                     <button
@@ -310,10 +314,14 @@ const ProfilePage = () => {
                                                     </button>
                                                 )}
                                             </div>
+                                        ) : (
+                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" title="Edición bloqueada para administradores">
+                                                <Lock size={18} />
+                                            </div>
                                         )}
                                     </div>
                                     {errorsEmail.email && <p className="text-red-500 text-sm pl-1">{errorsEmail.email.message}</p>}
-                                    <p className="text-xs text-gray-500">{t('profile.email_note')}</p>
+                                    {!isAdmin && <p className="text-xs text-gray-500">{t('profile.email_note')}</p>}
                                 </form>
                             </div>
 

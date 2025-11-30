@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import {
     Calendar, Clock, CheckCircle, XCircle, AlertCircle,
     Search, Filter, ChevronDown, MoreHorizontal,
-    DollarSign, Users, TrendingUp, Car
+    DollarSign, Users, TrendingUp, Car, ArrowLeft
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import StatusDropdown from './StatusDropdown'
@@ -180,6 +180,13 @@ const AdminDashboard = () => {
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <div>
+                        <button
+                            onClick={() => navigate('/dashboard')}
+                            className="flex items-center gap-2 text-white/60 hover:text-white mb-4 transition-colors"
+                        >
+                            <ArrowLeft size={20} />
+                            <span>Volver al Dashboard</span>
+                        </button>
                         <h1 className="text-3xl font-bold text-white mb-2">Panel de Administración</h1>
                         <p className="text-white/60">Gestiona tus reservas y clientes</p>
                     </div>

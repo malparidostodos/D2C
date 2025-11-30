@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
 import { Link, useNavigate } from 'react-router-dom'
-import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings, Edit2 } from 'lucide-react'
+import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings, Edit2, Shield } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
@@ -253,9 +253,9 @@ const UserDashboard = () => {
                 {isAdmin && (
                     <Link
                         to="/admin"
-                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-accent text-white font-bold hover:bg-accent/90 transition-colors shadow-lg shadow-accent/20"
+                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 border border-blue-400/20"
                     >
-                        <Settings size={18} />
+                        <Shield size={18} />
                         <span className="hidden md:inline">Admin</span>
                     </Link>
                 )}
@@ -280,7 +280,7 @@ const UserDashboard = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-12"
+                    className="mb-14"
                 >
                     <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-3">
                         {t('dashboard.welcome')}, <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 capitalize">{user?.user_metadata?.full_name?.split(' ')[0] || 'User'}</span>
@@ -291,7 +291,7 @@ const UserDashboard = () => {
                 </motion.div>
 
                 {/* Stats Overview */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -299,7 +299,7 @@ const UserDashboard = () => {
                         className="bg-[#111] border border-white/10 rounded-3xl p-6 relative overflow-hidden group"
                     >
                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <Car size={80} />
+                            <Car size={80} strokeWidth={2.5} />
                         </div>
                         <p className="text-white/40 text-sm font-medium mb-1">{t('dashboard.total_vehicles', 'Total Vehículos')}</p>
                         <h3 className="text-4xl font-bold text-white">{vehicles.length}</h3>
@@ -312,7 +312,7 @@ const UserDashboard = () => {
                         className="bg-[#111] border border-white/10 rounded-3xl p-6 relative overflow-hidden group"
                     >
                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <Calendar size={80} />
+                            <Calendar size={80} strokeWidth={2.5} />
                         </div>
                         <p className="text-white/40 text-sm font-medium mb-1">{t('dashboard.active_bookings', 'Reservas Activas')}</p>
                         <h3 className="text-4xl font-bold text-white">{activeBookings.length}</h3>
@@ -335,9 +335,9 @@ const UserDashboard = () => {
                     </motion.div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                     {/* Left Column: Vehicles */}
-                    <div className="lg:col-span-2 space-y-8">
+                    <div className="lg:col-span-2 space-y-10">
                         <motion.section
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -345,7 +345,7 @@ const UserDashboard = () => {
                         >
                             <div className="flex justify-between items-center mb-6">
                                 <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                                    <Car className="text-accent" size={24} />
+                                    <Car className="text-accent" size={24} strokeWidth={2.5} />
                                     {t('dashboard.my_vehicles')}
                                 </h2>
                                 <button
@@ -360,7 +360,7 @@ const UserDashboard = () => {
                             {vehicles.length === 0 ? (
                                 <div className="bg-[#111] border border-white/10 rounded-3xl p-12 text-center border-dashed">
                                     <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <Car size={32} className="text-white/40" />
+                                        <Car size={32} strokeWidth={2.5} className="text-white/40" />
                                     </div>
                                     <p className="text-white/60 mb-6">{t('dashboard.no_vehicles')}</p>
                                     <button
@@ -444,7 +444,7 @@ const UserDashboard = () => {
                             transition={{ delay: 0.5 }}
                         >
                             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                                <Clock className="text-accent" size={24} />
+                                <Clock className="text-accent" size={24} strokeWidth={2.5} />
                                 {t('dashboard.service_history')}
                             </h2>
 
