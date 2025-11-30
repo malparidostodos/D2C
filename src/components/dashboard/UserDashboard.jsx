@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
 import { Link, useNavigate } from 'react-router-dom'
-import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings } from 'lucide-react'
+import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings, Edit2 } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
@@ -29,7 +29,8 @@ const UserDashboard = () => {
     const [isAdmin, setIsAdmin] = useState(false)
     const [showAllHistory, setShowAllHistory] = useState(false)
 
-
+    const [showEditVehicleModal, setShowEditVehicleModal] = useState(false)
+    const [vehicleToEdit, setVehicleToEdit] = useState(null)
 
     const getLocalizedPath = (path) => {
         const currentLang = i18n.language
@@ -127,6 +128,11 @@ const UserDashboard = () => {
     const handleLogout = async () => {
         await supabase.auth.signOut()
         navigate(getLocalizedPath('/'))
+    }
+
+    const handleEditVehicle = (vehicle) => {
+        setVehicleToEdit(vehicle)
+        setShowEditVehicleModal(true)
     }
 
     const handleDeleteVehicle = (vehicleId, plate) => {
@@ -394,6 +400,13 @@ const UserDashboard = () => {
                                                             </span>
                                                         )}
                                                         <button
+                                                            onClick={() => handleEditVehicle(vehicle)}
+                                                            className="p-2 hover:bg-white/10 hover:text-white text-white/20 rounded-full transition-colors"
+                                                            title={t('dashboard.edit_vehicle_title', 'Editar Vehículo')}
+                                                        >
+                                                            <Edit2 size={16} />
+                                                        </button>
+                                                        <button
                                                             onClick={() => handleDeleteVehicle(vehicle.id, vehicle.plate)}
                                                             className="p-2 hover:bg-red-500/20 hover:text-red-400 text-white/20 rounded-full transition-colors"
                                                         >
@@ -491,14 +504,21 @@ const UserDashboard = () => {
                 </div>
             </div>
 
-            {/* Modal Agregar Vehículo */}
+            {/* Modal Agregar/Editar Vehículo */}
             <AddVehicleModal
-                isOpen={showAddVehicle}
-                onClose={() => setShowAddVehicle(false)}
+                isOpen={showAddVehicle || showEditVehicleModal}
+                onClose={() => {
+                    setShowAddVehicle(false)
+                    setShowEditVehicleModal(false)
+                    setVehicleToEdit(null)
+                }}
                 onSuccess={() => {
                     setShowAddVehicle(false)
+                    setShowEditVehicleModal(false)
+                    setVehicleToEdit(null)
                     queryClient.invalidateQueries(['vehicles'])
                 }}
+                vehicleToEdit={vehicleToEdit}
             />
 
             {/* Modal Confirmación Cancelar */}
@@ -521,7 +541,7 @@ const UserDashboard = () => {
                 onConfirm={confirmDeleteVehicle}
                 plate={vehicleToDelete?.plate}
             />
-        </div>
+        </div >
     )
 }
 
@@ -580,7 +600,7 @@ const addVehicleSchema = z.object({
     }
 })
 
-const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
+const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
     const { t } = useTranslation()
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(addVehicleSchema),
@@ -597,13 +617,27 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
     const plate = watch('plate')
     const [error, setError] = useState('')
 
-    // Reset form when modal opens/closes
+    // Reset form when modal opens/closes or vehicleToEdit changes
     useEffect(() => {
         if (isOpen) {
-            reset()
+            if (vehicleToEdit) {
+                setValue('vehicleType', vehicleToEdit.vehicle_type)
+                setValue('plate', vehicleToEdit.plate)
+                setValue('nickname', vehicleToEdit.nickname || '')
+                setValue('brand', vehicleToEdit.brand || '')
+                setValue('model', vehicleToEdit.model || '')
+            } else {
+                reset({
+                    vehicleType: 'car',
+                    plate: '',
+                    nickname: '',
+                    brand: '',
+                    model: ''
+                })
+            }
             setError('')
         }
-    }, [isOpen, reset])
+    }, [isOpen, vehicleToEdit, reset, setValue])
 
     const vehicleTypes = [
         { id: 'car', name: t('dashboard.vehicle_types.car'), image: '/images/vehiculos/sedan.png' },
@@ -616,39 +650,62 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
 
         const { data: { user } } = await supabase.auth.getUser()
 
-        // 🔒 VALIDACIÓN DE SEGURIDAD: Verificar si la placa ya tiene reservas
-        const { data: existingBookings } = await supabase
-            .from('bookings')
-            .select('client_email')
-            .eq('vehicle_plate', formData.plate)
-            .limit(1)
+        // Si estamos editando y la placa cambió, verificar duplicados
+        if (!vehicleToEdit || (vehicleToEdit && vehicleToEdit.plate !== formData.plate)) {
+            // 🔒 VALIDACIÓN DE SEGURIDAD: Verificar si la placa ya tiene reservas
+            const { data: existingBookings } = await supabase
+                .from('bookings')
+                .select('client_email')
+                .eq('vehicle_plate', formData.plate)
+                .limit(1)
 
-        // Si la placa tiene reservas previas, verificar que el email coincida
-        if (existingBookings && existingBookings.length > 0) {
-            const bookingEmail = existingBookings[0].client_email
-            if (bookingEmail !== user.email) {
-                setError(t('dashboard.add_vehicle_modal.plate_taken_error'))
-                return
+            // Si la placa tiene reservas previas, verificar que el email coincida
+            if (existingBookings && existingBookings.length > 0) {
+                const bookingEmail = existingBookings[0].client_email
+                if (bookingEmail !== user.email) {
+                    setError(t('dashboard.add_vehicle_modal.plate_taken_error'))
+                    return
+                }
             }
         }
 
-        const { data, error: insertError } = await supabase
-            .from('user_vehicles')
-            .insert([{
-                user_id: user.id,
-                plate: formData.plate,
-                vehicle_type: formData.vehicleType,
-                brand: formData.brand || null,
-                model: formData.model || null,
-                nickname: formData.nickname || null
-            }])
-            .select()
+        let errorResult = null
 
-        if (insertError) {
-            if (insertError.code === '23505') {
+        if (vehicleToEdit) {
+            // Actualizar vehículo existente
+            const { error: updateError } = await supabase
+                .from('user_vehicles')
+                .update({
+                    plate: formData.plate,
+                    vehicle_type: formData.vehicleType,
+                    brand: formData.brand || null,
+                    model: formData.model || null,
+                    nickname: formData.nickname || null
+                })
+                .eq('id', vehicleToEdit.id)
+
+            errorResult = updateError
+        } else {
+            // Insertar nuevo vehículo
+            const { error: insertError } = await supabase
+                .from('user_vehicles')
+                .insert([{
+                    user_id: user.id,
+                    plate: formData.plate,
+                    vehicle_type: formData.vehicleType,
+                    brand: formData.brand || null,
+                    model: formData.model || null,
+                    nickname: formData.nickname || null
+                }])
+
+            errorResult = insertError
+        }
+
+        if (errorResult) {
+            if (errorResult.code === '23505') {
                 setError(t('dashboard.add_vehicle_modal.plate_exists_error'))
             } else {
-                setError(insertError.message)
+                setError(errorResult.message)
             }
         } else {
             onSuccess()
@@ -666,7 +723,9 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                 className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full"
             >
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold text-white">{t('dashboard.add_vehicle_modal.title')}</h2>
+                    <h2 className="text-2xl font-bold text-white">
+                        {vehicleToEdit ? t('dashboard.edit_vehicle_title', 'Editar Vehículo') : t('dashboard.add_vehicle_modal.title')}
+                    </h2>
                     <button
                         onClick={onClose}
                         className="p-2 hover:bg-white/10 rounded-full transition-colors"
@@ -676,6 +735,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    {/* ... form fields ... */}
                     {/* Tipo de vehículo */}
                     <div>
                         <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.type_label')}</label>
@@ -687,7 +747,8 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                                         type="button"
                                         onClick={() => {
                                             setValue('vehicleType', type.id)
-                                            setValue('plate', '')
+                                            // Solo limpiar placa si cambia tipo y NO estamos editando (o si el usuario quiere cambiarla)
+                                            // setValue('plate', '') 
                                         }}
                                         className={`p-3 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${vehicleType === type.id
                                             ? 'bg-white text-black border-white'
@@ -765,7 +826,9 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess }) => {
                         disabled={isSubmitting}
                         className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {isSubmitting ? t('dashboard.add_vehicle_modal.adding') : t('dashboard.add_vehicle_modal.add_button')}
+                        {isSubmitting
+                            ? (vehicleToEdit ? t('dashboard.updating', 'Actualizando...') : t('dashboard.add_vehicle_modal.adding'))
+                            : (vehicleToEdit ? t('dashboard.update_vehicle', 'Actualizar Vehículo') : t('dashboard.add_vehicle_modal.add_button'))}
                     </button>
                 </form>
             </motion.div>

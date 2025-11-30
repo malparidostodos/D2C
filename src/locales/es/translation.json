@@ -167,7 +167,9 @@
         "update_password_button": "Actualizar contraseña",
         "updating": "Actualizando...",
         "password_updated_title": "¡Contraseña actualizada!",
-        "redirecting_login": "Redirigiendo al inicio de sesión..."
+        "redirecting_login": "Redirigiendo al inicio de sesión...",
+        "password_length": "La contraseña debe tener al menos 6 caracteres",
+        "passwords_mismatch": "Las contraseñas no coinciden"
     },
     "dashboard": {
         "title": "Mi Cuenta",
@@ -226,7 +228,10 @@
             "add_button": "Agregar Vehículo"
         },
         "delete_vehicle_title": "¿Eliminar vehículo?",
-        "delete_vehicle_confirm": "¿Estás seguro de eliminar el vehículo {{plate}}? Esta acción no se puede deshacer."
+        "delete_vehicle_confirm": "¿Estás seguro de eliminar el vehículo {{plate}}? Esta acción no se puede deshacer.",
+        "edit_vehicle_title": "Editar Vehículo",
+        "updating": "Actualizando...",
+        "update_vehicle": "Actualizar Vehículo"
     },
     "profile": {
         "title": "Mi Perfil",
@@ -457,7 +462,9 @@
             "D"
         ],
         "cancel": "Cancelar",
-        "delete": "Eliminar"
+        "delete": "Eliminar",
+        "required": "Requerido",
+        "invalid_email": "Correo inválido"
     },
     "pricing": {
         "exclusive_plans": "Planes Exclusivos",

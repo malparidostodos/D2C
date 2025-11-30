@@ -168,7 +168,9 @@
         "updating": "Updating...",
         "password_updated_title": "Password Updated!",
         "redirecting_login": "Redirecting to login...",
-        "redirecting_login_message": "Redirecting to login..."
+        "redirecting_login_message": "Redirecting to login...",
+        "password_length": "Password must be at least 6 characters",
+        "passwords_mismatch": "Passwords don't match"
     },
     "dashboard": {
         "title": "My Account",
@@ -227,7 +229,10 @@
             "add_button": "Add Vehicle"
         },
         "delete_vehicle_title": "Delete vehicle?",
-        "delete_vehicle_confirm": "Are you sure you want to delete vehicle {{plate}}? This action cannot be undone."
+        "delete_vehicle_confirm": "Are you sure you want to delete vehicle {{plate}}? This action cannot be undone.",
+        "edit_vehicle_title": "Edit Vehicle",
+        "updating": "Updating...",
+        "update_vehicle": "Update Vehicle"
     },
     "profile": {
         "title": "My Profile",
@@ -465,7 +470,9 @@
             "S"
         ],
         "cancel": "Cancel",
-        "delete": "Delete"
+        "delete": "Delete",
+        "required": "Required",
+        "invalid_email": "Invalid email"
     },
     "pricing": {
         "exclusive_plans": "Exclusive Plans",

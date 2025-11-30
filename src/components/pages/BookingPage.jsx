@@ -670,6 +670,29 @@ const BookingPage = () => {
             }
         }
 
+        // Guardar vehículo si es nuevo y tenemos usuario (autenticado o recién creado)
+        if (user && !useExistingVehicle) {
+            try {
+                const { error: vehicleError } = await supabase
+                    .from('user_vehicles')
+                    .insert([{
+                        user_id: user.id,
+                        plate: formData.clientInfo.plate,
+                        vehicle_type: formData.vehicleType.id,
+                        brand: formData.clientInfo.brand || null,
+                        model: formData.clientInfo.model || null,
+                        nickname: null
+                    }])
+
+                if (vehicleError) {
+                    // Si falla (ej: duplicado), solo lo logueamos y continuamos con la reserva
+                    console.error('Error saving vehicle:', vehicleError)
+                }
+            } catch (err) {
+                console.error('Exception saving vehicle:', err)
+            }
+        }
+
         const { data, error } = await supabase
             .from('bookings')
             .insert([{
