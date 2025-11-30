@@ -146,7 +146,12 @@ const ProfilePage = () => {
             <Header theme="white" />
 
             {/* Hero Section */}
-            <div className="pt-48 pb-12 px-4 sm:px-6 lg:px-8">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="pt-48 pb-12 px-4 sm:px-6 lg:px-8"
+            >
                 <div className="max-w-[95%] mx-auto text-white">
                     <Link
                         to={getLocalizedPath('/dashboard')}
@@ -162,11 +167,16 @@ const ProfilePage = () => {
                         {t('profile.subtitle')}
                     </p>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Main Content Card */}
             <div className="flex-grow px-2 sm:px-4 pb-12">
-                <div className="max-w-[95%] mx-auto bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 min-h-[600px]">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                    className="max-w-[95%] mx-auto bg-white rounded-[2.5rem] shadow-2xl p-8 md:p-12 min-h-[600px]"
+                >
                     <div className="max-w-5xl mx-auto">
 
                         {/* Message Toast */}
@@ -188,7 +198,12 @@ const ProfilePage = () => {
                         </AnimatePresence>
 
                         {/* Avatar Section */}
-                        <div className="mb-12">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+                            className="mb-12"
+                        >
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Avatar</h3>
                             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
                                 <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center border-4 border-white shadow-lg relative overflow-hidden group">
@@ -206,9 +221,14 @@ const ProfilePage = () => {
                                     <p className="text-xs text-gray-500 mt-1">Supported Format: SVG, JPG, PNG (10mb each)</p>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+                            className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8"
+                        >
                             {/* Left Column */}
                             <div className="space-y-8">
                                 {/* Name Form */}
@@ -339,10 +359,10 @@ const ProfilePage = () => {
                                     </div>
                                 </form>
                             </div>
-                        </div>
+                        </motion.div>
 
                     </div>
-                </div>
+                </motion.div>
             </div>
         </div>
     )
