@@ -7,6 +7,7 @@ const DashboardLayout = () => {
     const navigate = useNavigate()
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
     const [isAdmin, setIsAdmin] = useState(false)
+    const [isAdminLoading, setIsAdminLoading] = useState(true)
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const saved = localStorage.getItem('dashboardTheme')
         return saved ? JSON.parse(saved) : false
@@ -26,10 +27,16 @@ const DashboardLayout = () => {
     }, [])
 
     const checkAdminStatus = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user) {
-            const { data } = await supabase.rpc('is_admin')
-            setIsAdmin(!!data)
+        try {
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user) {
+                const { data } = await supabase.rpc('is_admin')
+                setIsAdmin(!!data)
+            }
+        } catch (error) {
+            console.error('Error checking admin status:', error)
+        } finally {
+            setIsAdminLoading(false)
         }
     }
 
@@ -49,7 +56,7 @@ const DashboardLayout = () => {
             {/* Main Content Area */}
             <div className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-72'}`}>
                 <div className="p-4 md:p-8 pt-20 lg:pt-8">
-                    <Outlet context={{ isDarkMode, isAdmin }} />
+                    <Outlet context={{ isDarkMode, isAdmin, isAdminLoading }} />
                 </div>
             </div>
         </div>

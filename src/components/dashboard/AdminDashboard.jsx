@@ -12,14 +12,20 @@ import StatusDropdown from './StatusDropdown'
 import { toast } from 'sonner'
 
 import SEO from '../ui/SEO'
+import AdminDashboardSkeleton from './AdminDashboardSkeleton'
 
 const AdminDashboard = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const { isDarkMode } = useOutletContext()
+    const { isDarkMode, isAdmin, isAdminLoading } = useOutletContext()
     const [bookings, setBookings] = useState([])
     const [loading, setLoading] = useState(true)
-    const [verifyingAdmin, setVerifyingAdmin] = useState(true)
+    const [minLoading, setMinLoading] = useState(true)
+
+    useEffect(() => {
+        const timer = setTimeout(() => setMinLoading(false), 800)
+        return () => clearTimeout(timer)
+    }, [])
     const [filter, setFilter] = useState('all')
     const [searchTerm, setSearchTerm] = useState('')
     const [stats, setStats] = useState({
@@ -30,54 +36,33 @@ const AdminDashboard = () => {
     })
 
     useEffect(() => {
+        if (isAdminLoading) return
+
+        if (!isAdmin) {
+            navigate(-1)
+            return
+        }
+
         const init = async () => {
-            const isAllowed = await checkAdmin()
-            if (isAllowed) {
-                setVerifyingAdmin(false)
-                fetchBookings()
+            fetchBookings()
 
-                // Suscripción a cambios en tiempo real
-                const channels = supabase.channel('admin-bookings-channel')
-                    .on(
-                        'postgres_changes',
-                        { event: '*', schema: 'public', table: 'bookings' },
-                        (payload) => {
-                            // console.log('Admin realtime update:', payload)
-                            fetchBookings()
-                        }
-                    )
-                    .subscribe()
+            // Suscripción a cambios en tiempo real
+            const channels = supabase.channel('admin-bookings-channel')
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: 'bookings' },
+                    (payload) => {
+                        fetchBookings()
+                    }
+                )
+                .subscribe()
 
-                return () => {
-                    supabase.removeChannel(channels)
-                }
+            return () => {
+                supabase.removeChannel(channels)
             }
         }
         init()
-    }, [])
-
-    const checkAdmin = async () => {
-        try {
-            const { data: { user } } = await supabase.auth.getUser()
-            if (!user) {
-                navigate('/login')
-                return false
-            }
-
-            // Verificar si es admin usando la función segura de base de datos
-            const { data: isAdmin, error } = await supabase.rpc('is_admin')
-
-            if (error || !isAdmin) {
-                console.warn('Acceso denegado: Usuario no es administrador')
-                navigate('/') // Redirigir al home o dashboard de usuario
-                return false
-            }
-            return true
-        } catch (e) {
-            navigate('/')
-            return false
-        }
-    }
+    }, [isAdmin, isAdminLoading])
 
     const fetchBookings = async () => {
         setLoading(true)
@@ -167,19 +152,24 @@ const AdminDashboard = () => {
         }
     }
 
-    if (verifyingAdmin) {
-        return (
-            <div className={`min-h-[50vh] flex items-center justify-center ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
-                <div>Verificando acceso...</div>
-            </div>
-        )
+    if (isAdminLoading) return null
+
+    if (!isAdmin) return null
+
+    if (loading || minLoading) {
+        return <AdminDashboardSkeleton isDarkMode={isDarkMode} />
     }
 
     return (
         <div className={`pt-32 pb-20 px-4 md:px-8 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
             <SEO title="Admin Dashboard" />
             <div className="max-w-7xl mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4"
+                >
                     <div>
                         <h1 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Panel de Administración</h1>
                         <p className={isDarkMode ? 'text-white/60' : 'text-gray-500'}>Gestiona tus reservas y clientes</p>
@@ -190,10 +180,15 @@ const AdminDashboard = () => {
                     >
                         Actualizar
                     </button>
-                </div>
+                </motion.div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
+                >
                     <StatCard
                         title="Ingresos Totales"
                         value={`$${stats.totalRevenue.toLocaleString()}`}
@@ -218,10 +213,15 @@ const AdminDashboard = () => {
                         icon={<CheckCircle className="text-purple-500" />}
                         isDarkMode={isDarkMode}
                     />
-                </div>
+                </motion.div>
 
                 {/* Filters & Search */}
-                <div className="flex flex-col md:flex-row gap-4 mb-6">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="flex flex-col md:flex-row gap-4 mb-6"
+                >
                     <div className="relative flex-1">
                         <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`} size={20} />
                         <input
@@ -230,8 +230,8 @@ const AdminDashboard = () => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className={`w-full rounded-xl pl-10 pr-4 py-3 focus:outline-none border ${isDarkMode
-                                    ? 'bg-white/5 border-white/10 text-white focus:border-white/30'
-                                    : 'bg-white border-gray-200 text-gray-900 focus:border-gray-300 shadow-sm'
+                                ? 'bg-white/5 border-white/10 text-white focus:border-white/30'
+                                : 'bg-white border-gray-200 text-gray-900 focus:border-gray-300 shadow-sm'
                                 }`}
                         />
                     </div>
@@ -241,18 +241,23 @@ const AdminDashboard = () => {
                                 key={status}
                                 onClick={() => setFilter(status)}
                                 className={`px-4 py-2 rounded-lg capitalize whitespace-nowrap transition-colors ${filter === status
-                                        ? (isDarkMode ? 'bg-white text-black font-medium' : 'bg-black text-white font-medium')
-                                        : (isDarkMode ? 'bg-white/5 text-white/60 hover:bg-white/10' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
+                                    ? (isDarkMode ? 'bg-white text-black font-medium' : 'bg-black text-white font-medium')
+                                    : (isDarkMode ? 'bg-white/5 text-white/60 hover:bg-white/10' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
                                     }`}
                             >
-                                {status === 'all' ? 'Todos' : status}
+                                {status === 'all' ? 'Todos' : t(`dashboard.status.${status}`, status)}
                             </button>
                         ))}
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Bookings List - Responsive */}
-                <div className={`rounded-2xl overflow-hidden ${isDarkMode ? 'bg-transparent md:bg-white/5 md:border md:border-white/10' : 'bg-transparent md:bg-white md:border md:border-gray-200 md:shadow-sm'}`}>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    className={`rounded-2xl overflow-hidden ${isDarkMode ? 'bg-transparent md:bg-white/5 md:border md:border-white/10' : 'bg-transparent md:bg-white md:border md:border-gray-200 md:shadow-sm'}`}
+                >
 
                     {/* Mobile View (Cards) */}
                     <div className="md:hidden space-y-4">
@@ -292,6 +297,7 @@ const AdminDashboard = () => {
                                                 currentStatus={booking.status}
                                                 onStatusChange={(newStatus) => handleStatusChange(booking.id, newStatus)}
                                                 getStatusColor={getStatusColor}
+                                                isDarkMode={isDarkMode}
                                             />
                                         </div>
                                     </div>
@@ -350,7 +356,7 @@ const AdminDashboard = () => {
                                             </td>
                                             <td className="p-4">
                                                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
-                                                    {booking.status}
+                                                    {t(`dashboard.status.${booking.status}`, booking.status)}
                                                 </span>
                                             </td>
                                             <td className={`p-4 font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -362,6 +368,7 @@ const AdminDashboard = () => {
                                                         currentStatus={booking.status}
                                                         onStatusChange={(newStatus) => handleStatusChange(booking.id, newStatus)}
                                                         getStatusColor={getStatusColor}
+                                                        isDarkMode={isDarkMode}
                                                     />
                                                 </div>
                                             </td>
@@ -371,7 +378,7 @@ const AdminDashboard = () => {
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </div>
     )

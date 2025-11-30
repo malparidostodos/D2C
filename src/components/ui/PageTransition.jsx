@@ -11,6 +11,13 @@ const PageTransition = ({ children }) => {
     const childrenRef = useRef(children);
     const { lenis } = useSmoothScroll();
 
+    // Helper to check if a path is part of the dashboard
+    const isDashboardPath = (path) => {
+        // Normalize path to remove language prefix if present
+        const normalizedPath = path.replace(/^\/(en|es)/, '') || '/';
+        return ['/dashboard', '/profile', '/admin'].some(p => normalizedPath.startsWith(p));
+    };
+
     // Keep ref updated with latest children
     useEffect(() => {
         childrenRef.current = children;
@@ -18,11 +25,27 @@ const PageTransition = ({ children }) => {
 
     useEffect(() => {
         if (location.pathname !== prevPath.current) {
-            // Path changed, start transition
-            setStatus('covering');
-            prevPath.current = location.pathname;
+            const isPrevDashboard = isDashboardPath(prevPath.current);
+            const isNextDashboard = isDashboardPath(location.pathname);
+
+            // If navigating BETWEEN dashboard pages, skip the curtain
+            if (isPrevDashboard && isNextDashboard) {
+                // Immediate switch without animation
+                window.scrollTo(0, 0);
+                if (lenis) {
+                    lenis.scrollTo(0, { immediate: true });
+                }
+                setDisplayChildren(childrenRef.current);
+                prevPath.current = location.pathname;
+                // Ensure status is idle
+                setStatus('idle');
+            } else {
+                // Normal transition with curtain
+                setStatus('covering');
+                prevPath.current = location.pathname;
+            }
         }
-    }, [location.pathname]);
+    }, [location.pathname, lenis]);
 
     useEffect(() => {
         if (status === 'covering') {
@@ -49,7 +72,7 @@ const PageTransition = ({ children }) => {
             }, 600);
             return () => clearTimeout(timer);
         }
-    }, [status]);
+    }, [status, lenis]);
 
     return (
         <>

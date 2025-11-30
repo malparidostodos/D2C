@@ -135,8 +135,8 @@ const ProfilePage = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-                <div className="text-white text-xl animate-pulse">{t('common.loading')}</div>
+            <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-[#050505]' : 'bg-gray-50'}`}>
+                <div className={`text-xl animate-pulse ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('common.loading')}</div>
             </div>
         )
     }

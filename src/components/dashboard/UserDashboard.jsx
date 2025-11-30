@@ -14,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import SEO from '../ui/SEO'
+import DashboardSkeleton from './DashboardSkeleton'
 
 const UserDashboard = () => {
     const { t, i18n } = useTranslation()
@@ -28,6 +29,12 @@ const UserDashboard = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [vehicleToDelete, setVehicleToDelete] = useState(null)
     const [showAllHistory, setShowAllHistory] = useState(false)
+    const [minLoading, setMinLoading] = useState(true)
+
+    useEffect(() => {
+        const timer = setTimeout(() => setMinLoading(false), 800)
+        return () => clearTimeout(timer)
+    }, [])
 
     const [showEditVehicleModal, setShowEditVehicleModal] = useState(false)
     const [vehicleToEdit, setVehicleToEdit] = useState(null)
@@ -116,7 +123,7 @@ const UserDashboard = () => {
         refetchInterval: 60000,
     })
 
-    const loading = loadingVehicles || loadingBookings
+    const loading = !user || loadingVehicles || loadingBookings || minLoading
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
@@ -234,11 +241,7 @@ const UserDashboard = () => {
     const nextBooking = activeBookings.length > 0 ? activeBookings[activeBookings.length - 1] : null
 
     if (loading) {
-        return (
-            <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-                <div className="text-white text-xl animate-pulse">{t('common.loading')}</div>
-            </div>
-        )
+        return <DashboardSkeleton isDarkMode={isDarkMode} />
     }
 
     return (
@@ -251,10 +254,10 @@ const UserDashboard = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-8 md:mb-12"
             >
-                <h1 className="text-3xl md:text-5xl font-display font-bold text-white mb-2 tracking-tight">
+                <h1 className={`text-3xl md:text-5xl font-display font-bold mb-2 tracking-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                     {t('dashboard.welcome')}, <span className="capitalize">{user?.user_metadata?.full_name?.split(' ')[0]}</span>
                 </h1>
-                <p className="text-gray-400 text-lg">{t('dashboard.subtitle', 'Gestiona tus vehÃ­culos y reservas')}</p>
+                <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-lg`}>{t('dashboard.subtitle', 'Gestiona tus vehículos y reservas')}</p>
             </motion.div>
 
             {/* Main Content Card */}

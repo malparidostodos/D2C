@@ -207,6 +207,7 @@
             "motorcycle": "Motocicleta"
         },
         "status": {
+            "all": "Todos",
             "pending": "Pendiente",
             "confirmed": "Confirmada",
             "in_progress": "En Proceso",
