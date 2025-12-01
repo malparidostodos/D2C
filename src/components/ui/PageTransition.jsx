@@ -15,7 +15,7 @@ const PageTransition = ({ children }) => {
     const isDashboardPath = (path) => {
         // Normalize path to remove language prefix if present
         const normalizedPath = path.replace(/^\/(en|es)/, '') || '/';
-        return ['/dashboard', '/profile', '/admin'].some(p => normalizedPath.startsWith(p));
+        return ['/dashboard', '/profile', '/admin', '/rate-service', '/reviews'].some(p => normalizedPath.startsWith(p));
     };
 
     // Keep ref updated with latest children

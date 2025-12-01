@@ -123,25 +123,25 @@ const Contact = () => {
                 </div>
                 <div className="flex flex-col">
                   <div className="text-[#0046b8] text-[1em] leading-[1.4] font-normal">{t('contact_section.business')}</div>
-                  <a href="mailto:business@tatotoclean.com" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity break-words">business@tatotoclean.com</a>
+                  <a href="mailto:business@tatotoclean.com" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal break-words relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">business@tatotoclean.com</a>
                 </div>
                 <div className="flex flex-col">
                   <div className="text-[#0046b8] text-[1em] leading-[1.4] font-normal">{t('contact_section.general_enquiries')}</div>
-                  <a href="mailto:contacto@tatotoclean.com" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity break-words">contacto@tatotoclean.com</a>
+                  <a href="mailto:contacto@tatotoclean.com" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal break-words relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">contacto@tatotoclean.com</a>
                 </div>
               </div>
 
               {/* Legal */}
               <div className="col-span-1 flex flex-col gap-4">
-                <Link to="/privacy-policy" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity">{t('legal.privacy_policy')}</Link>
-                <Link to="/terms-conditions" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity">{t('legal.terms_conditions')}</Link>
-                <Link to="/cookie-policy" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity">{t('legal.cookie_policy')}</Link>
-                <Link to="/disclaimers" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity">{t('legal.disclaimers.title')}</Link>
+                <Link to="/privacy-policy" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.privacy_policy')}</Link>
+                <Link to="/terms-conditions" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.terms_conditions')}</Link>
+                <Link to="/cookie-policy" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.cookie_policy')}</Link>
+                <Link to="/disclaimers" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.disclaimers.title')}</Link>
               </div>
 
               {/* Ayuda */}
               <div className="col-span-1 flex flex-col gap-4">
-                <a href="#faq" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal hover:opacity-80 transition-opacity">{t('contact_section.footer.help.faq')}</a>
+                <a href="#faq" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('contact_section.footer.help.faq')}</a>
               </div>
             </div>
           </div>

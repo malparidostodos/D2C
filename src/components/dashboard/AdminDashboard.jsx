@@ -5,10 +5,11 @@ import { useNavigate, useOutletContext } from 'react-router-dom'
 import {
     Calendar, Clock, CheckCircle, XCircle, AlertCircle,
     Search, Filter, ChevronDown, MoreHorizontal,
-    DollarSign, Users, TrendingUp, Car, ArrowLeft, ArrowUpDown
+    DollarSign, Users, TrendingUp, Car, ArrowLeft, ArrowUpDown, MessageSquare
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import StatusDropdown from './StatusDropdown'
+import AdminReviews from './AdminReviews'
 import { toast } from 'sonner'
 
 import SEO from '../ui/SEO'
@@ -34,6 +35,7 @@ const AdminDashboard = () => {
         pendingBookings: 0,
         completedBookings: 0
     })
+    const [activeTab, setActiveTab] = useState('bookings')
 
     useEffect(() => {
         if (isAdminLoading) return
@@ -283,179 +285,128 @@ const AdminDashboard = () => {
                     />
                 </motion.div>
 
-                {/* Filters & Search */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="flex flex-col md:flex-row gap-4 mb-6"
-                >
-                    <div className="relative flex-1">
-                        <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`} size={20} />
-                        <input
-                            type="text"
-                            placeholder="Buscar por nombre, email o placa..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className={`w-full rounded-xl pl-10 pr-4 py-3 focus:outline-none border ${isDarkMode
-                                ? 'bg-white/5 border-white/10 text-white focus:border-white/30'
-                                : 'bg-white border-gray-200 text-gray-900 focus:border-gray-300 shadow-sm'
-                                }`}
-                        />
-                    </div>
-                    <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
-                        {['all', 'pending', 'confirmed', 'in_progress', 'completed', 'cancelled'].map((status) => (
-                            <button
-                                key={status}
-                                onClick={() => setFilter(status)}
-                                className={`px-4 py-2 rounded-lg capitalize whitespace-nowrap transition-colors ${filter === status
-                                    ? (isDarkMode ? 'bg-white text-black font-medium' : 'bg-black text-white font-medium')
-                                    : (isDarkMode ? 'bg-white/5 text-white/60 hover:bg-white/10' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
-                                    }`}
-                            >
-                                {status === 'all' ? 'Todos' : t(`dashboard.status.${status}`, status)}
-                            </button>
-                        ))}
-                    </div>
-                </motion.div>
-
-                {/* Bookings List - Responsive */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className={`rounded-2xl overflow-hidden ${isDarkMode ? 'bg-transparent md:bg-white/5 md:border md:border-white/10' : 'bg-transparent md:bg-white md:border md:border-gray-200 md:shadow-sm'}`}
-                >
-
-                    {/* Mobile View (Cards) */}
-                    <div className="md:hidden space-y-4">
-                        {loading ? (
-                            <div className={`text-center py-8 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Cargando reservas...</div>
-                        ) : filteredBookings.length === 0 ? (
-                            <div className={`text-center py-8 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>No se encontraron reservas</div>
-                        ) : (
-                            filteredBookings.map((booking) => (
-                                <div key={booking.id} className={`border rounded-xl p-5 space-y-4 ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200 shadow-sm'}`}>
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <h3 className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{booking.client_name}</h3>
-                                            <p className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{booking.client_email}</p>
-                                        </div>
-                                        <span className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'}`}>
-                                            {booking.vehicle_plate}
-                                        </span>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4 text-sm">
-                                        <div>
-                                            <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Servicio</p>
-                                            <p className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.service_name || booking.service?.name || 'Servicio'}</p>
-                                        </div>
-                                        <div>
-                                            <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Fecha</p>
-                                            <p className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.booking_date} {booking.booking_time}</p>
-                                        </div>
-                                        <div>
-                                            <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Precio</p>
-                                            <p className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>${booking.total_price?.toLocaleString()}</p>
-                                        </div>
-                                        <div>
-                                            <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Estado</p>
-                                            <StatusDropdown
-                                                currentStatus={booking.status}
-                                                onStatusChange={(newStatus) => handleStatusChange(booking.id, newStatus)}
-                                                getStatusColor={getStatusColor}
-                                                isDarkMode={isDarkMode}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
+                {/* Tabs */}
+                <div className="flex gap-4 mb-8 border-b border-gray-200 dark:border-white/10">
+                    <button
+                        onClick={() => setActiveTab('bookings')}
+                        className={`pb-4 px-2 font-medium transition-colors relative ${activeTab === 'bookings'
+                                ? (isDarkMode ? 'text-white' : 'text-gray-900')
+                                : (isDarkMode ? 'text-white/40 hover:text-white/60' : 'text-gray-500 hover:text-gray-700')
+                            }`}
+                    >
+                        <div className="flex items-center gap-2">
+                            <Calendar size={18} />
+                            Reservas
+                        </div>
+                        {activeTab === 'bookings' && (
+                            <motion.div
+                                layoutId="activeTab"
+                                className={`absolute bottom-0 left-0 w-full h-0.5 ${isDarkMode ? 'bg-white' : 'bg-gray-900'}`}
+                            />
                         )}
-                    </div>
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('reviews')}
+                        className={`pb-4 px-2 font-medium transition-colors relative ${activeTab === 'reviews'
+                                ? (isDarkMode ? 'text-white' : 'text-gray-900')
+                                : (isDarkMode ? 'text-white/40 hover:text-white/60' : 'text-gray-500 hover:text-gray-700')
+                            }`}
+                    >
+                        <div className="flex items-center gap-2">
+                            <MessageSquare size={18} />
+                            Reseñas
+                        </div>
+                        {activeTab === 'reviews' && (
+                            <motion.div
+                                layoutId="activeTab"
+                                className={`absolute bottom-0 left-0 w-full h-0.5 ${isDarkMode ? 'bg-white' : 'bg-gray-900'}`}
+                            />
+                        )}
+                    </button>
+                </div>
 
-                    {/* Desktop View (Table) */}
-                    <div className="hidden md:block overflow-x-auto">
-                        <table className="w-full text-left">
-                            <thead>
-                                <tr className={`border-b ${isDarkMode ? 'border-white/10 bg-white/5' : 'border-gray-200 bg-gray-50'}`}>
-                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Cliente</th>
-                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Vehículo</th>
-                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Servicio</th>
-                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
-                                        <button
-                                            onClick={toggleDateSort}
-                                            className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
-                                        >
-                                            Fecha
-                                            <ArrowUpDown size={14} className={dateSort !== 'none' ? 'text-blue-500' : ''} />
-                                        </button>
-                                    </th>
-                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
-                                        <button
-                                            onClick={toggleStatusSort}
-                                            className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
-                                        >
-                                            Estado
-                                            <ArrowUpDown size={14} className={priceSort === 'none' && dateSort === 'none' ? 'text-blue-500' : ''} />
-                                        </button>
-                                    </th>
-                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
-                                        <button
-                                            onClick={togglePriceSort}
-                                            className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
-                                        >
-                                            Precio
-                                            <ArrowUpDown size={14} className={priceSort !== 'none' ? 'text-blue-500' : ''} />
-                                        </button>
-                                    </th>
-                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody className={`divide-y ${isDarkMode ? 'divide-white/5' : 'divide-gray-200'}`}>
+                {activeTab === 'reviews' ? (
+                    <AdminReviews isDarkMode={isDarkMode} />
+                ) : (
+                    <>
+                        {/* Filters & Search */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="flex flex-col md:flex-row gap-4 mb-6"
+                        >
+                            <div className="relative flex-1">
+                                <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`} size={20} />
+                                <input
+                                    type="text"
+                                    placeholder="Buscar por nombre, email o placa..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className={`w-full rounded-xl pl-10 pr-4 py-3 focus:outline-none border ${isDarkMode
+                                        ? 'bg-white/5 border-white/10 text-white focus:border-white/30'
+                                        : 'bg-white border-gray-200 text-gray-900 focus:border-gray-300 shadow-sm'
+                                        }`}
+                                />
+                            </div>
+                            <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+                                {['all', 'pending', 'confirmed', 'in_progress', 'completed', 'cancelled'].map((status) => (
+                                    <button
+                                        key={status}
+                                        onClick={() => setFilter(status)}
+                                        className={`px-4 py-2 rounded-lg capitalize whitespace-nowrap transition-colors ${filter === status
+                                            ? (isDarkMode ? 'bg-white text-black font-medium' : 'bg-black text-white font-medium')
+                                            : (isDarkMode ? 'bg-white/5 text-white/60 hover:bg-white/10' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
+                                            }`}
+                                    >
+                                        {status === 'all' ? 'Todos' : t(`dashboard.status.${status}`, status)}
+                                    </button>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* Bookings List - Responsive */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                            className={`rounded-2xl overflow-hidden ${isDarkMode ? 'bg-transparent md:bg-white/5 md:border md:border-white/10' : 'bg-transparent md:bg-white md:border md:border-gray-200 md:shadow-sm'}`}
+                        >
+
+                            {/* Mobile View (Cards) */}
+                            <div className="md:hidden space-y-4">
                                 {loading ? (
-                                    <tr>
-                                        <td colSpan="7" className={`p-8 text-center ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>
-                                            Cargando reservas...
-                                        </td>
-                                    </tr>
+                                    <div className={`text-center py-8 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Cargando reservas...</div>
                                 ) : filteredBookings.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="7" className={`p-8 text-center ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>
-                                            No se encontraron reservas
-                                        </td>
-                                    </tr>
+                                    <div className={`text-center py-8 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>No se encontraron reservas</div>
                                 ) : (
                                     filteredBookings.map((booking) => (
-                                        <tr key={booking.id} className={`transition-colors ${isDarkMode ? 'hover:bg-white/[0.02]' : 'hover:bg-gray-50'}`}>
-                                            <td className="p-4">
-                                                <div className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{booking.client_name}</div>
-                                                <div className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{booking.client_email}</div>
-                                            </td>
-                                            <td className="p-4">
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'}`}>
-                                                        {booking.vehicle_plate}
-                                                    </span>
+                                        <div key={booking.id} className={`border rounded-xl p-5 space-y-4 ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200 shadow-sm'}`}>
+                                            <div className="flex justify-between items-start">
+                                                <div>
+                                                    <h3 className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{booking.client_name}</h3>
+                                                    <p className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{booking.client_email}</p>
                                                 </div>
-                                            </td>
-                                            <td className={`p-4 ${isDarkMode ? 'text-white/80' : 'text-gray-700'}`}>
-                                                {booking.service_name || booking.service?.name || 'Servicio'}
-                                            </td>
-                                            <td className="p-4">
-                                                <div className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.booking_date}</div>
-                                                <div className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{booking.booking_time}</div>
-                                            </td>
-                                            <td className="p-4">
-                                                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
-                                                    {t(`dashboard.status.${booking.status}`, booking.status)}
+                                                <span className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'}`}>
+                                                    {booking.vehicle_plate}
                                                 </span>
-                                            </td>
-                                            <td className={`p-4 font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                                ${booking.total_price?.toLocaleString()}
-                                            </td>
-                                            <td className="p-4">
-                                                <div className="flex items-center gap-2">
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-4 text-sm">
+                                                <div>
+                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Servicio</p>
+                                                    <p className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.service_name || booking.service?.name || 'Servicio'}</p>
+                                                </div>
+                                                <div>
+                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Fecha</p>
+                                                    <p className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.booking_date} {booking.booking_time}</p>
+                                                </div>
+                                                <div>
+                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Precio</p>
+                                                    <p className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>${booking.total_price?.toLocaleString()}</p>
+                                                </div>
+                                                <div>
+                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Estado</p>
                                                     <StatusDropdown
                                                         currentStatus={booking.status}
                                                         onStatusChange={(newStatus) => handleStatusChange(booking.id, newStatus)}
@@ -463,14 +414,111 @@ const AdminDashboard = () => {
                                                         isDarkMode={isDarkMode}
                                                     />
                                                 </div>
-                                            </td>
-                                        </tr>
+                                            </div>
+                                        </div>
                                     ))
                                 )}
-                            </tbody>
-                        </table>
-                    </div>
-                </motion.div>
+                            </div>
+
+                            {/* Desktop View (Table) */}
+                            <div className="hidden md:block overflow-x-auto">
+                                <table className="w-full text-left">
+                                    <thead>
+                                        <tr className={`border-b ${isDarkMode ? 'border-white/10 bg-white/5' : 'border-gray-200 bg-gray-50'}`}>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Cliente</th>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Vehículo</th>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Servicio</th>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
+                                                <button
+                                                    onClick={toggleDateSort}
+                                                    className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
+                                                >
+                                                    Fecha
+                                                    <ArrowUpDown size={14} className={dateSort !== 'none' ? 'text-blue-500' : ''} />
+                                                </button>
+                                            </th>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
+                                                <button
+                                                    onClick={toggleStatusSort}
+                                                    className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
+                                                >
+                                                    Estado
+                                                    <ArrowUpDown size={14} className={priceSort === 'none' && dateSort === 'none' ? 'text-blue-500' : ''} />
+                                                </button>
+                                            </th>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
+                                                <button
+                                                    onClick={togglePriceSort}
+                                                    className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
+                                                >
+                                                    Precio
+                                                    <ArrowUpDown size={14} className={priceSort !== 'none' ? 'text-blue-500' : ''} />
+                                                </button>
+                                            </th>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className={`divide-y ${isDarkMode ? 'divide-white/5' : 'divide-gray-200'}`}>
+                                        {loading ? (
+                                            <tr>
+                                                <td colSpan="7" className={`p-8 text-center ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>
+                                                    Cargando reservas...
+                                                </td>
+                                            </tr>
+                                        ) : filteredBookings.length === 0 ? (
+                                            <tr>
+                                                <td colSpan="7" className={`p-8 text-center ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>
+                                                    No se encontraron reservas
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            filteredBookings.map((booking) => (
+                                                <tr key={booking.id} className={`transition-colors ${isDarkMode ? 'hover:bg-white/[0.02]' : 'hover:bg-gray-50'}`}>
+                                                    <td className="p-4">
+                                                        <div className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{booking.client_name}</div>
+                                                        <div className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{booking.client_email}</div>
+                                                    </td>
+                                                    <td className="p-4">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'}`}>
+                                                                {booking.vehicle_plate}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td className={`p-4 ${isDarkMode ? 'text-white/80' : 'text-gray-700'}`}>
+                                                        {booking.service_name || booking.service?.name || 'Servicio'}
+                                                    </td>
+                                                    <td className="p-4">
+                                                        <div className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.booking_date}</div>
+                                                        <div className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{booking.booking_time}</div>
+                                                    </td>
+                                                    <td className="p-4">
+                                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
+                                                            {t(`dashboard.status.${booking.status}`, booking.status)}
+                                                        </span>
+                                                    </td>
+                                                    <td className={`p-4 font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                        ${booking.total_price?.toLocaleString()}
+                                                    </td>
+                                                    <td className="p-4">
+                                                        <div className="flex items-center gap-2">
+                                                            <StatusDropdown
+                                                                currentStatus={booking.status}
+                                                                onStatusChange={(newStatus) => handleStatusChange(booking.id, newStatus)}
+                                                                getStatusColor={getStatusColor}
+                                                                isDarkMode={isDarkMode}
+                                                            />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
             </div>
         </div>
     )

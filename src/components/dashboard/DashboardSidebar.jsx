@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, User, Settings, LogOut, Shield, Menu, X, ChevronRight } from 'lucide-react'
+import { LayoutDashboard, User, Settings, LogOut, Shield, Menu, X, ChevronRight, MessageSquare } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ThemeToggle from '../ui/ThemeToggle'
 import { useTranslation } from 'react-i18next'
@@ -51,6 +51,7 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
     const navItems = [
         { icon: LayoutDashboard, label: t('dashboard.title', 'Dashboard'), path: '/dashboard' },
         { icon: User, label: t('profile.title', 'Perfil'), path: '/profile' },
+        { icon: MessageSquare, label: t('dashboard.reviews'), path: '/reviews' },
         ...(isAdmin ? [{ icon: Shield, label: 'Admin', path: '/admin' }] : []),
     ]
 

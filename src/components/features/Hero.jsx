@@ -20,7 +20,7 @@ const Hero = () => {
 
 
       {/* Content */}
-      <div className="w-full relative z-20 flex flex-col lg:flex-row items-start lg:items-end justify-between h-full pt-[100px] pb-[40px] lg:pt-[120px] lg:pb-[135px] px-6 md:px-[60px] gap-8 lg:gap-0">
+      <div className="w-full relative z-20 flex flex-col lg:flex-row items-start lg:items-end justify-between h-full pt-[100px] pb-[120px] lg:pt-[120px] lg:pb-[135px] px-6 md:px-[60px] gap-8 lg:gap-0">
 
         {/* Left Side: Title */}
         <div className="w-full lg:w-1/2 flex flex-col items-start text-left">
@@ -63,12 +63,12 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row gap-4 items-start sm:items-center w-full sm:w-auto"
+            className="flex flex-row gap-4 items-center w-full sm:w-auto"
           >
             <AnimatedButton
               href={getLocalizedPath("/reserva")}
               variant="blur"
-              className="w-full sm:w-auto justify-center"
+              className="flex-1 sm:flex-none sm:w-auto justify-center !px-4 sm:!px-8"
             >
               {t('hero.cta_booking')}
             </AnimatedButton>
@@ -76,7 +76,7 @@ const Hero = () => {
             <AnimatedButton
               href={getLocalizedPath("/precios")}
               variant="blur"
-              className="w-full sm:w-auto justify-center"
+              className="flex-1 sm:flex-none sm:w-auto justify-center !px-4 sm:!px-8"
               onClick={(e) => {
                 const section = document.querySelector('#precios');
                 if (section) section.scrollIntoView({ behavior: 'smooth' });

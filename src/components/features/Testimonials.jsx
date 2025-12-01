@@ -1,37 +1,43 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Star, Quote } from 'lucide-react'
-
-const testimonials = [
-    {
-        id: 1,
-        name: "Carlos Rodríguez",
-        role: "Dueño de BMW M4",
-        content: "Increíble atención al detalle. El tratamiento cerámico dejó mi coche mejor que cuando salió del concesionario. Totalmente recomendado.",
-        rating: 5,
-        image: "https://i.pravatar.cc/150?u=1"
-    },
-    {
-        id: 2,
-        name: "Ana Martínez",
-        role: "Dueña de Porsche Macan",
-        content: "El servicio de recogida y entrega es un plus enorme. La limpieza interior fue impecable, eliminaron manchas que pensé que eran permanentes.",
-        rating: 5,
-        image: "https://i.pravatar.cc/150?u=2"
-    },
-    {
-        id: 3,
-        name: "David Valencia",
-        role: "Dueño de Tesla Model 3",
-        content: "Profesionales de verdad. Me explicaron todo el proceso y los productos que usarían. El resultado final superó mis expectativas.",
-        rating: 5,
-        image: "https://i.pravatar.cc/150?u=3"
-    }
-]
+import { supabase } from '../../lib/supabase'
 
 const Testimonials = () => {
+    const [testimonials, setTestimonials] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('testimonials')
+                    .select('*')
+                    .eq('is_public', true)
+                    .order('created_at', { ascending: false })
+                    .limit(3)
+
+                if (error) throw error
+
+                if (data) {
+                    setTestimonials(data)
+                }
+            } catch (error) {
+                console.log('Error fetching testimonials:', error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchTestimonials()
+    }, [])
+
+    if (!loading && testimonials.length === 0) {
+        return null
+    }
+
     return (
-        <section className="py-24 px-4 md:px-8 bg-[#050505] relative">
+        <section className="py-24 px-4 md:px-8 bg-[#050505] relative overflow-hidden">
             {/* Background Elements */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                 <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[100px]" />
@@ -45,7 +51,7 @@ const Testimonials = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-accent text-sm font-bold tracking-widest uppercase mb-4 block"
                     >
-                        Testimonios
+                        Reseñas
                     </motion.span>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
@@ -64,31 +70,33 @@ const Testimonials = () => {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-colors relative group"
+                            className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-colors relative group backdrop-blur-sm"
                         >
                             <div className="absolute top-8 right-8 text-white/10 group-hover:text-accent/20 transition-colors">
                                 <Quote size={40} />
                             </div>
 
                             <div className="flex gap-1 mb-6">
-                                {[...Array(testimonial.rating)].map((_, i) => (
+                                {[...Array(testimonial.rating || 5)].map((_, i) => (
                                     <Star key={i} size={16} className="text-yellow-500 fill-yellow-500" />
                                 ))}
                             </div>
 
-                            <p className="text-white/80 mb-8 leading-relaxed">
+                            <p className="text-white/80 mb-8 leading-relaxed min-h-[80px] break-words line-clamp-6">
                                 "{testimonial.content}"
                             </p>
 
                             <div className="flex items-center gap-4">
                                 <img
-                                    src={testimonial.image}
+                                    src={testimonial.avatar_url || testimonial.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.name)}&background=random`}
                                     alt={testimonial.name}
-                                    className="w-12 h-12 rounded-full border-2 border-white/10"
+                                    className="w-12 h-12 rounded-full border-2 border-white/10 object-cover"
                                 />
                                 <div>
-                                    <h4 className="text-white font-bold">{testimonial.name}</h4>
-                                    <p className="text-white/40 text-sm">{testimonial.role}</p>
+                                    <h4 className="text-white font-bold">
+                                        {testimonial.name.split(' ')[0].charAt(0).toUpperCase() + testimonial.name.split(' ')[0].slice(1).toLowerCase()}
+                                    </h4>
+                                    <p className="text-white/40 text-sm">{testimonial.role || testimonial.vehicle}</p>
                                 </div>
                             </div>
                         </motion.div>

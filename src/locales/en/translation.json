@@ -259,7 +259,46 @@
         "delete_vehicle_confirm": "Are you sure you want to delete vehicle {{plate}}? This action cannot be undone.",
         "edit_vehicle_title": "Edit Vehicle",
         "updating": "Updating...",
-        "update_vehicle": "Update Vehicle"
+        "update_vehicle": "Update Vehicle",
+        "reviews": "My Reviews",
+        "rate_service_page": {
+            "seo_title": "Rate Service | TaToClean",
+            "title_part1": "How was your",
+            "title_part2": "Service?",
+            "subtitle": "Your opinion helps us improve and always offer you the best.",
+            "general_rating": "General Rating",
+            "comment_label_5": "What did you like the most?",
+            "comment_label_bad": "We apologize. Please tell us what did not meet your expectations.",
+            "comment_label_default": "Tell us about your experience (Optional)",
+            "comment_placeholder_5": "I loved the service!",
+            "comment_placeholder_default": "Tell us more...",
+            "public_toggle": "Allow my review to be public on the home page",
+            "submit_button": "Submit Rating",
+            "submitting": "Submitting...",
+            "success_message": "Thanks for your rating!",
+            "error_message": "Error submitting rating",
+            "booking_not_found": "Booking not found",
+            "already_rated": "This booking has already been rated",
+            "load_error": "Error loading booking",
+            "select_rating_error": "Please select a rating"
+        },
+        "user_reviews_page": {
+            "seo_title": "My Reviews | TaToClean",
+            "title": "My Reviews",
+            "subtitle": "History of your ratings and comments",
+            "no_reviews": "You haven't written any reviews yet.",
+            "public": "Public",
+            "private": "Private",
+            "delete_confirm": "Are you sure you want to delete this review?",
+            "delete_success": "Review deleted successfully",
+            "delete_error": "Error deleting review",
+            "load_error": "Error loading your reviews",
+            "tooltips": {
+                "hide": "Hide",
+                "make_public": "Make public",
+                "delete": "Delete review"
+            }
+        }
     },
     "profile": {
         "title": "My Profile",

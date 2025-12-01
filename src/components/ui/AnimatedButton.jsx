@@ -11,7 +11,7 @@ const AnimatedButton = ({
     disabled = false,
     state = null
 }) => {
-    const baseClasses = "inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold uppercase tracking-wider text-sm transition-all duration-300 text-arrow-wrapper select-none group relative"
+    const baseClasses = "inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold uppercase tracking-wider text-sm transition-all duration-300 text-arrow-wrapper select-none group/btn relative"
 
     const variants = {
         primary: "bg-white text-black hover:bg-[#0046b8] hover:text-white",
@@ -27,16 +27,14 @@ const AnimatedButton = ({
     const combinedClasses = `${baseClasses} ${variants[variant] || variants.primary} ${disabledClasses} ${className}`
 
     const content = (
-        <>
-            <span className="absolute left-6 top-1/2 -translate-y-1/2">
-                <span className="text-arrow-icon-wrapper">
-                    <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-                        <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </span>
+        <div className="relative overflow-hidden">
+            <span className="block transition-transform duration-300 group-hover/btn:-translate-y-full">
+                {children}
             </span>
-            <span className="text-arrow-text select-none">{children}</span>
-        </>
+            <span className="absolute top-0 left-0 w-full block transition-transform duration-300 translate-y-full group-hover/btn:translate-y-0">
+                {children}
+            </span>
+        </div>
     )
 
     if (href && !disabled) {

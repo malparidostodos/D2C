@@ -16,7 +16,7 @@
         "title_part2": "Automotriz",
         "title_part3": "Premium",
         "subtitle": "Transformamos tu vehículo con atención meticulosa al detalle y productos de clase mundial.",
-        "cta_booking": "Reserva tu cita",
+        "cta_booking": "Agendar",
         "cta_services": "Ver Servicios"
     },
     "booking": {
@@ -258,7 +258,68 @@
         "delete_vehicle_confirm": "¿Estás seguro de eliminar el vehículo {{plate}}? Esta acción no se puede deshacer.",
         "edit_vehicle_title": "Editar Vehículo",
         "updating": "Actualizando...",
-        "update_vehicle": "Actualizar Vehículo"
+        "update_vehicle": "Actualizar Vehículo",
+        "rate_service": "Calificar Servicio",
+        "reviews": "Mis Reseñas",
+        "no_reviews": "No has escrito ninguna reseña todavía.",
+        "delete_review_confirm": "¿Estás seguro de que quieres eliminar esta reseña?",
+        "review_deleted": "Reseña eliminada correctamente",
+        "public": "Pública",
+        "private": "Privada",
+        "rate_service_page": {
+            "seo_title": "Calificar Servicio | TaToClean",
+            "title_part1": "¿Cómo estuvo tu",
+            "title_part2": "Servicio?",
+            "subtitle": "Tu opinión nos ayuda a mejorar y ofrecerte siempre lo mejor.",
+            "general_rating": "Calificación General",
+            "comment_label_5": "¿Qué fue lo que más te gustó?",
+            "comment_label_bad": "Te pedimos disculpas. Por favor cuéntanos qué no cumplió con tus expectativas.",
+            "comment_label_default": "Cuéntanos tu experiencia (Opcional)",
+            "comment_placeholder_5": "¡Me encantó el servicio!",
+            "comment_placeholder_default": "Cuéntanos más...",
+            "public_toggle": "Permitir que mi reseña sea pública en la página de inicio",
+            "submit_button": "Enviar Calificación",
+            "submitting": "Enviando...",
+            "success_message": "¡Gracias por tu calificación!",
+            "error_message": "Error al enviar la calificación",
+            "booking_not_found": "Reserva no encontrada",
+            "already_rated": "Esta reserva ya ha sido calificada",
+            "load_error": "Error al cargar la reserva",
+            "select_rating_error": "Por favor selecciona una calificación"
+        },
+        "user_reviews_page": {
+            "seo_title": "Mis Reseñas | TaToClean",
+            "title": "Mis Reseñas",
+            "subtitle": "Historial de tus calificaciones y comentarios",
+            "no_reviews": "No has escrito ninguna reseña todavía.",
+            "public": "Pública",
+            "private": "Privada",
+            "delete_confirm": "¿Estás seguro de que quieres eliminar esta reseña?",
+            "delete_success": "Reseña eliminada correctamente",
+            "delete_error": "Error al eliminar la reseña",
+            "load_error": "Error al cargar tus reseñas",
+            "delete_tooltip": "Eliminar reseña"
+        }
+    },
+    "admin": {
+        "reviews": "Reseñas",
+        "bookings": "Reservas",
+        "search_placeholder": "Buscar reseñas...",
+        "total": "Total",
+        "user": "Usuario",
+        "rating": "Calificación",
+        "comment": "Comentario",
+        "status": "Estado",
+        "actions": "Acciones",
+        "visible": "Visible",
+        "hidden": "Oculta",
+        "toggle_visibility_error": "Error al actualizar visibilidad",
+        "delete_review_error": "Error al eliminar reseña",
+        "tooltips": {
+            "hide": "Ocultar",
+            "make_public": "Hacer pública",
+            "delete": "Eliminar"
+        }
     },
     "profile": {
         "title": "Mi Perfil",
@@ -321,7 +382,7 @@
                 "title": "Certificaciones Internacionales"
             }
         },
-        "cta": "Reserva tu cita"
+        "cta": "Agendar"
     },
     "contact_section": {
         "address": {

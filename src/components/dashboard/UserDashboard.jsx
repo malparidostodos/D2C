@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabase'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings, Edit2, Shield, Sun, Moon, ChevronDown } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
-import Tooltip from '../ui/Tooltip'
+
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -520,47 +520,36 @@ const UserDashboard = () => {
                                             onClick={() => setSelectedVehicle(vehicle)}
                                             className={`group cursor-pointer ${isDarkMode ? 'bg-[#111] border-white/10 hover:bg-white/5 hover:border-white/20' : 'bg-white border-gray-200 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/5'} border rounded-3xl p-5 transition-all duration-300 relative overflow-hidden`}
                                         >
-                                            <div className="flex items-center gap-4">
-                                                {/* Imagen pequeña */}
-                                                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center p-1 ${isDarkMode ? 'bg-white/5' : 'bg-gray-50'}`}>
-                                                    <img
-                                                        src={getVehicleImage(vehicle.vehicle_type)}
-                                                        alt={vehicle.vehicle_type}
-                                                        className="w-full h-full object-contain"
-                                                    />
-                                                </div>
-
-                                                {/* Info */}
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex items-center gap-2 mb-0.5">
-                                                        <h3 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} tracking-tight truncate`}>
-                                                            {vehicle.plate}
-                                                        </h3>
-                                                        {vehicle.is_primary && (
-                                                            <span className={`flex-shrink-0 ${isDarkMode ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'} text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase`}>
-                                                                {t('dashboard.primary_short', 'P')}
-                                                            </span>
-                                                        )}
-                                                    </div>
-
-                                                    {(vehicle.brand || vehicle.model) ? (
-                                                        <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-500'} text-sm capitalize truncate`}>
-                                                            {vehicle.brand} {vehicle.model}
-                                                        </p>
-                                                    ) : (
-                                                        <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-400'} text-xs italic`}>
-                                                            {t('dashboard.no_details')}
-                                                        </p>
-                                                    )}
-                                                </div>
-
-                                                {/* Chevron indicando click */}
-                                                <div className={`opacity-0 group-hover:opacity-100 transition-opacity ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`}>
-                                                    <Edit2 size={16} />
-                                                </div>
+                                            <div className="flex justify-between items-start mb-2">
+                                                <h3 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                    {vehicle.plate}
+                                                </h3>
+                                                {vehicle.is_primary && (
+                                                    <span className={`flex-shrink-0 ${isDarkMode ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'} text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase`}>
+                                                        {t('dashboard.primary_short', 'P')}
+                                                    </span>
+                                                )}
                                             </div>
+
+                                            {(vehicle.brand || vehicle.model) ? (
+                                                <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-500'} text-sm capitalize truncate`}>
+                                                    {vehicle.brand} {vehicle.model}
+                                                </p>
+                                            ) : (
+                                                <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-400'} text-xs italic`}>
+                                                    {t('dashboard.no_details')}
+                                                </p>
+                                            )}
+
+
+                                            {/* Chevron indicando click */}
+                                            <div className={`opacity-0 group-hover:opacity-100 transition-opacity ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`}>
+                                                <Edit2 size={16} />
+                                            </div>
+
                                         </motion.div>
-                                    ))}
+                                    ))
+                                    }
 
                                     {/* Botón "Añadir" como tarjeta compacta al final */}
                                     <motion.button
@@ -674,11 +663,12 @@ const UserDashboard = () => {
                                             <div className="flex justify-between items-start mb-2">
                                                 <div>
                                                     <h4 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} font-bold text-sm transition-colors`}>{booking.service?.name}</h4>
-                                                    <Tooltip content={`${new Date(booking.booking_date + 'T00:00:00').toLocaleDateString()} • ${booking.booking_time}`} position="top">
-                                                        <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-xs transition-colors cursor-help`}>
-                                                            {new Date(booking.booking_date + 'T00:00:00').toLocaleDateString(i18n.language === 'es' ? 'es-CO' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                                        </p>
-                                                    </Tooltip>
+                                                    <p
+                                                        className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-xs transition-colors cursor-help`}
+                                                        title={`${new Date(booking.booking_date + 'T00:00:00').toLocaleDateString()} • ${booking.booking_time}`}
+                                                    >
+                                                        {new Date(booking.booking_date + 'T00:00:00').toLocaleDateString(i18n.language === 'es' ? 'es-CO' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                    </p>
                                                 </div>
                                                 <span className={`text-[10px] font-bold px-2 py-1 rounded-full border ${getStatusColor(getEffectiveStatus(booking))}`}>
                                                     {getStatusText(getEffectiveStatus(booking))}
@@ -702,6 +692,16 @@ const UserDashboard = () => {
                                                             {t('dashboard.cancel_booking')}
                                                         </button>
                                                     )}
+                                                    {getEffectiveStatus(booking) === 'completed' && !booking.is_rated && (
+                                                        <button
+                                                            onClick={() => navigate(`/rate-service/${booking.id}`)}
+                                                            className={`px-3 py-1 rounded-lg text-xs font-medium border transition-colors ${isDarkMode
+                                                                ? 'border-accent/30 text-accent hover:bg-accent/10'
+                                                                : 'border-blue-200 text-blue-600 hover:bg-blue-50'}`}
+                                                        >
+                                                            {t('dashboard.rate_service', 'Calificar')}
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -719,9 +719,9 @@ const UserDashboard = () => {
                         </motion.section>
                     </div>
                 </div>
-            </div >
+            </div>
             {/* Modals */}
-            < AnimatePresence >
+            <AnimatePresence>
                 <AddVehicleModal
                     isOpen={showAddVehicle || showEditVehicleModal}
                     onClose={() => {

@@ -13,6 +13,7 @@ import Contact from './components/pages/Contact'
 import CustomScrollbar from './components/ui/CustomScrollbar'
 import SmoothScroll, { useSmoothScroll } from './components/ui/SmoothScroll'
 import BookingPage from './components/pages/BookingPage'
+import RateService from './components/dashboard/RateService'
 
 import LoginPage from './components/auth/LoginPage'
 
@@ -25,6 +26,7 @@ import ProfilePage from './components/dashboard/ProfilePage'
 import AdminDashboard from './components/dashboard/AdminDashboard'
 import Gallery from './components/pages/Gallery'
 import Testimonials from './components/features/Testimonials'
+import UserReviews from './components/dashboard/UserReviews'
 
 import LanguageWrapper from './components/layout/LanguageWrapper'
 import DashboardLayout from './components/layout/DashboardLayout'
@@ -125,6 +127,7 @@ const AppRoutes = ({ t }) => {
       <Route path="contacto" element={<ScrollToSection sectionId="#contacto" title={t('header.contact')} />} />
       <Route path="reserva" element={<BookingPage />} />
 
+
       {/* Public Only Routes (Redirect to Dashboard if logged in) */}
       <Route element={<PublicRoute />}>
         <Route path="login" element={<LoginPage />} />
@@ -139,6 +142,8 @@ const AppRoutes = ({ t }) => {
         <Route path="dashboard" element={<UserDashboard />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="admin" element={<AdminDashboard />} />
+        <Route path="rate-service/:bookingId" element={<RateService />} />
+        <Route path="reviews" element={<UserReviews />} />
       </Route>
 
       {/* Legal Routes */}
