@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
-import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings, Edit2, Shield, Sun, Moon } from 'lucide-react'
+import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings, Edit2, Shield, Sun, Moon, ChevronDown } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
@@ -40,6 +40,9 @@ const UserDashboard = () => {
     const [showEditVehicleModal, setShowEditVehicleModal] = useState(false)
     const [vehicleToEdit, setVehicleToEdit] = useState(null)
     const [selectedVehicle, setSelectedVehicle] = useState(null) // Para el modal de detalles
+    const [statusFilter, setStatusFilter] = useState('all')
+    const [vehicleFilter, setVehicleFilter] = useState('all')
+    const [isVehicleDropdownOpen, setIsVehicleDropdownOpen] = useState(false)
 
     const getLocalizedPath = (path) => {
         const currentLang = i18n.language
@@ -322,6 +325,51 @@ const UserDashboard = () => {
         }).format(amount)
     }
 
+    const filteredBookings = bookings.filter(booking => {
+        const effectiveStatus = getEffectiveStatus(booking)
+        const matchesStatus = statusFilter === 'all'
+            ? true
+            : statusFilter === 'active'
+                ? ['pending', 'confirmed', 'in_progress'].includes(effectiveStatus)
+                : effectiveStatus === statusFilter
+
+        const matchesVehicle = vehicleFilter === 'all' || booking.vehicle_plate === vehicleFilter
+
+        return matchesStatus && matchesVehicle
+    }).sort((a, b) => {
+        const statusA = getEffectiveStatus(a)
+        const statusB = getEffectiveStatus(b)
+
+        const getPriority = (s) => {
+            switch (s) {
+                case 'in_progress': return 1
+                case 'confirmed': return 2
+                case 'pending': return 3
+                case 'completed': return 4
+                case 'cancelled': return 5
+                default: return 6
+            }
+        }
+
+        const priorityA = getPriority(statusA)
+        const priorityB = getPriority(statusB)
+
+        if (priorityA !== priorityB) {
+            return priorityA - priorityB
+        }
+
+        // Same status, sort by date
+        const dateA = new Date(`${a.booking_date}T${a.booking_time}`)
+        const dateB = new Date(`${b.booking_date}T${b.booking_time}`)
+
+        // For active/upcoming, sort ascending (soonest first)
+        // For history (completed/cancelled), sort descending (most recent first)
+        if (['in_progress', 'confirmed', 'pending'].includes(statusA)) {
+            return dateA - dateB
+        }
+        return dateB - dateA
+    })
+
     if (loading) {
         return <DashboardSkeleton isDarkMode={isDarkMode} />
     }
@@ -349,20 +397,20 @@ const UserDashboard = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
+                        transition={{ delay: 0 }}
                         className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-6 relative overflow-hidden group transition-colors`}
                     >
                         <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-10 group-hover:opacity-20 text-white' : 'opacity-5 group-hover:opacity-10 text-gray-900'}`}>
                             <Car size={80} strokeWidth={2.5} />
                         </div>
-                        <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm font-medium mb-1 transition-colors`}>{t('dashboard.total_vehicles', 'Total VehÃ­culos')}</p>
+                        <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm font-medium mb-1 transition-colors`}>{t('dashboard.total_vehicles', 'Total Vehículos')}</p>
                         <h3 className={`text-4xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>{vehicles.length}</h3>
                     </motion.div>
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0 }}
                         className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-6 relative overflow-hidden group transition-colors`}
                     >
                         <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-10 group-hover:opacity-20 text-white' : 'opacity-5 group-hover:opacity-10 text-gray-900'}`}>
@@ -377,7 +425,7 @@ const UserDashboard = () => {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
+                            transition={{ delay: 0 }}
                             className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-6 relative overflow-hidden group transition-colors`}
                         >
                             <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-10 group-hover:opacity-20 text-white' : 'opacity-5 group-hover:opacity-10 text-gray-900'}`}>
@@ -397,7 +445,7 @@ const UserDashboard = () => {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
+                            transition={{ delay: 0 }}
                             className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-6 relative overflow-hidden group transition-colors`}
                         >
                             <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-10 group-hover:opacity-20 text-white' : 'opacity-5 group-hover:opacity-10 text-gray-900'}`}>
@@ -412,8 +460,8 @@ const UserDashboard = () => {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className={`${isDarkMode ? 'bg-gradient-to-br from-accent/20 to-accent/5 border-accent/20 hover:border-accent/40' : 'bg-gradient-to-br from-blue-600 to-blue-700 hover:shadow-xl hover:shadow-blue-600/20'} border rounded-3xl p-6 relative overflow-hidden group cursor-pointer transition-all`}
+                            transition={{ delay: 0 }}
+                            className={`${isDarkMode ? 'bg-gradient-to-br from-accent/20 to-accent/5 border-accent/20 hover:border-accent/40' : 'bg-gradient-to-br from-blue-600 to-blue-700 hover:shadow-xl hover:shadow-blue-600/20'} border rounded-3xl p-6 relative overflow-hidden group cursor-pointer transition-colors`}
                             onClick={() => navigate(getLocalizedPath('/reserva'))}
                         >
                             <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-20 group-hover:opacity-30' : 'opacity-20 group-hover:opacity-30 text-white'}`}>
@@ -535,19 +583,90 @@ const UserDashboard = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
+                            className="h-full flex flex-col"
                         >
-                            <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-6 flex items-center gap-2 transition-colors`}>
-                                <Clock className={isDarkMode ? 'text-accent' : 'text-blue-600'} size={24} strokeWidth={2.5} />
-                                {t('dashboard.service_history')}
-                            </h2>
+                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
+                                <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} flex items-center gap-2 transition-colors`}>
+                                    <Clock className={isDarkMode ? 'text-accent' : 'text-blue-600'} size={24} strokeWidth={2.5} />
+                                    {t('dashboard.service_history')}
+                                </h2>
 
-                            {bookings.length === 0 ? (
-                                <div className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-8 text-center transition-colors`}>
-                                    <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm transition-colors`}>{t('dashboard.no_bookings')}</p>
+                                {/* Filters */}
+                                <div className="flex flex-col items-end gap-3">
+                                    {/* Custom Vehicle Dropdown */}
+                                    <div className="relative">
+                                        <button
+                                            onClick={() => setIsVehicleDropdownOpen(!isVehicleDropdownOpen)}
+                                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium border transition-all ${isDarkMode ? 'bg-[#1a1a1a] border-white/10 text-white hover:border-white/30' : 'bg-white border-gray-200 text-gray-700 hover:border-blue-300 shadow-sm'}`}
+                                        >
+                                            <span>{vehicleFilter === 'all' ? t('dashboard.all_vehicles') : vehicleFilter}</span>
+                                            <ChevronDown size={16} className={`transition-transform ${isVehicleDropdownOpen ? 'rotate-180' : ''}`} />
+                                        </button>
+
+                                        <AnimatePresence>
+                                            {isVehicleDropdownOpen && (
+                                                <>
+                                                    <div className="fixed inset-0 z-40" onClick={() => setIsVehicleDropdownOpen(false)} />
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: 5, scale: 0.95 }}
+                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                        exit={{ opacity: 0, y: 5, scale: 0.95 }}
+                                                        className={`absolute right-0 top-full mt-2 w-56 z-50 rounded-xl border shadow-xl overflow-hidden ${isDarkMode ? 'bg-[#1a1a1a] border-white/10' : 'bg-white border-gray-100'}`}
+                                                    >
+                                                        <button
+                                                            onClick={() => { setVehicleFilter('all'); setIsVehicleDropdownOpen(false) }}
+                                                            className={`w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center gap-2 ${vehicleFilter === 'all' ? (isDarkMode ? 'bg-white/10 text-white' : 'bg-blue-50 text-blue-600') : (isDarkMode ? 'text-white/60 hover:bg-white/5 hover:text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900')}`}
+                                                        >
+                                                            <Car size={14} />
+                                                            {t('dashboard.all_vehicles')}
+                                                        </button>
+                                                        {vehicles.map(v => (
+                                                            <button
+                                                                key={v.id}
+                                                                onClick={() => { setVehicleFilter(v.plate); setIsVehicleDropdownOpen(false) }}
+                                                                className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${vehicleFilter === v.plate ? (isDarkMode ? 'bg-white/10 text-white' : 'bg-blue-50 text-blue-600') : (isDarkMode ? 'text-white/60 hover:bg-white/5 hover:text-white' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900')}`}
+                                                            >
+                                                                {v.plate}
+                                                            </button>
+                                                        ))}
+                                                    </motion.div>
+                                                </>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+
+                                    {/* Segmented Control */}
+                                    <div className={`flex p-1 rounded-xl border ${isDarkMode ? 'bg-[#1a1a1a] border-white/10' : 'bg-gray-100/50 border-gray-200'}`}>
+                                        {[
+                                            { id: 'all', label: t('dashboard.filter_all') },
+                                            { id: 'active', label: t('dashboard.filter_active') },
+                                            { id: 'completed', label: t('dashboard.filter_completed') }
+                                        ].map(filter => (
+                                            <button
+                                                key={filter.id}
+                                                onClick={() => setStatusFilter(filter.id)}
+                                                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${statusFilter === filter.id
+                                                    ? (isDarkMode ? 'bg-white text-black shadow-lg shadow-white/10' : 'bg-white text-blue-600 shadow-md shadow-blue-900/5')
+                                                    : (isDarkMode ? 'text-white/40 hover:text-white' : 'text-gray-500 hover:text-gray-900')
+                                                    }`}
+                                            >
+                                                {filter.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {filteredBookings.length === 0 ? (
+                                <div className={`flex-1 flex flex-col items-center justify-center ${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-12 text-center border-dashed transition-colors min-h-[300px]`}>
+                                    <div className={`w-16 h-16 ${isDarkMode ? 'bg-white/5' : 'bg-white shadow-sm'} rounded-full flex items-center justify-center mb-4 transition-colors`}>
+                                        <Calendar size={32} strokeWidth={2.5} className={isDarkMode ? 'text-white/40' : 'text-gray-400'} />
+                                    </div>
+                                    <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-500'} font-medium transition-colors`}>{t('dashboard.no_bookings')}</p>
                                 </div>
                             ) : (
                                 <div className="space-y-3">
-                                    {bookings.slice(0, showAllHistory ? undefined : 5).map((booking) => (
+                                    {filteredBookings.slice(0, showAllHistory ? undefined : 5).map((booking) => (
                                         <div
                                             key={booking.id}
                                             className={`${isDarkMode ? 'bg-[#111] border-white/10 hover:bg-white/5' : 'bg-gray-50 border-gray-200 hover:bg-white hover:shadow-md'} border rounded-2xl p-4 transition-all group`}
@@ -555,7 +674,11 @@ const UserDashboard = () => {
                                             <div className="flex justify-between items-start mb-2">
                                                 <div>
                                                     <h4 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} font-bold text-sm transition-colors`}>{booking.service?.name}</h4>
-                                                    <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-xs transition-colors`}>{new Date(booking.booking_date + 'T00:00:00').toLocaleDateString('es-CO', { dateStyle: 'medium' })} • {booking.booking_time}</p>
+                                                    <Tooltip content={`${new Date(booking.booking_date + 'T00:00:00').toLocaleDateString()} • ${booking.booking_time}`} position="top">
+                                                        <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-xs transition-colors cursor-help`}>
+                                                            {new Date(booking.booking_date + 'T00:00:00').toLocaleDateString(i18n.language === 'es' ? 'es-CO' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                        </p>
+                                                    </Tooltip>
                                                 </div>
                                                 <span className={`text-[10px] font-bold px-2 py-1 rounded-full border ${getStatusColor(getEffectiveStatus(booking))}`}>
                                                     {getStatusText(getEffectiveStatus(booking))}
@@ -583,7 +706,7 @@ const UserDashboard = () => {
                                             </div>
                                         </div>
                                     ))}
-                                    {bookings.length > 5 && (
+                                    {filteredBookings.length > 5 && (
                                         <button
                                             onClick={() => setShowAllHistory(!showAllHistory)}
                                             className={`w-full py-3 text-center ${isDarkMode ? 'text-white/40 hover:text-white' : 'text-gray-500 hover:text-gray-900'} text-sm transition-colors`}
@@ -596,9 +719,9 @@ const UserDashboard = () => {
                         </motion.section>
                     </div>
                 </div>
-            </div>
+            </div >
             {/* Modals */}
-            <AnimatePresence>
+            < AnimatePresence >
                 <AddVehicleModal
                     isOpen={showAddVehicle || showEditVehicleModal}
                     onClose={() => {
@@ -649,7 +772,7 @@ const UserDashboard = () => {
                     bookings={bookings}
                     isDarkMode={isDarkMode}
                 />
-            </AnimatePresence>
+            </AnimatePresence >
         </div >
     )
 }
