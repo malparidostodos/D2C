@@ -5,12 +5,14 @@ import { z } from 'zod'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
-import { User, Mail, Lock, ArrowLeft, Check, AlertCircle, Edit2 } from 'lucide-react'
+import { User, Mail, Lock, ArrowLeft, Check, AlertCircle, Edit2, Phone, ChevronDown } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
 
 
 import SEO from '../ui/SEO'
+import ProfileSkeleton from './ProfileSkeleton'
+import Tooltip from '../ui/Tooltip'
 
 const ProfilePage = () => {
     const { t, i18n } = useTranslation()
@@ -25,6 +27,11 @@ const ProfilePage = () => {
 
     const emailSchema = z.object({
         email: z.string().email(t('common.invalid_email', "Invalid email"))
+    })
+
+    const phoneSchema = z.object({
+        phone: z.string().min(7, t('common.required', "Required")),
+        countryCode: z.string()
     })
 
     const passwordSchema = z.object({
@@ -44,6 +51,13 @@ const ProfilePage = () => {
         resolver: zodResolver(emailSchema)
     })
 
+    const { register: registerPhone, handleSubmit: handleSubmitPhone, setValue: setValuePhone, watch: watchPhone, formState: { errors: errorsPhone, isSubmitting: isSubmittingPhone } } = useForm({
+        resolver: zodResolver(phoneSchema),
+        defaultValues: {
+            countryCode: '+57'
+        }
+    })
+
     const { register: registerPassword, handleSubmit: handleSubmitPassword, reset: resetPassword, formState: { errors: errorsPassword, isSubmitting: isSubmittingPassword } } = useForm({
         resolver: zodResolver(passwordSchema)
     })
@@ -53,6 +67,18 @@ const ProfilePage = () => {
     const [message, setMessage] = useState({ type: '', text: '' })
     const [isEditingName, setIsEditingName] = useState(false)
     const [isEditingEmail, setIsEditingEmail] = useState(false)
+    const [isEditingPhone, setIsEditingPhone] = useState(false)
+    const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false)
+
+    const countryCodes = [
+        { code: '+57', country: 'CO', flag: 'https://flagcdn.com/w40/co.png' },
+        { code: '+1', country: 'US', flag: 'https://flagcdn.com/w40/us.png' },
+        { code: '+52', country: 'MX', flag: 'https://flagcdn.com/w40/mx.png' },
+        { code: '+34', country: 'ES', flag: 'https://flagcdn.com/w40/es.png' },
+        { code: '+54', country: 'AR', flag: 'https://flagcdn.com/w40/ar.png' },
+        { code: '+51', country: 'PE', flag: 'https://flagcdn.com/w40/pe.png' },
+        { code: '+56', country: 'CL', flag: 'https://flagcdn.com/w40/cl.png' },
+    ]
 
     const getLocalizedPath = (path) => {
         const currentLang = i18n.language
@@ -72,6 +98,11 @@ const ProfilePage = () => {
         setUser(session.user)
         setValueName('fullName', session.user.user_metadata?.full_name || '')
         setValueEmail('email', session.user.email || '')
+
+        const phone = session.user.user_metadata?.phone || ''
+        const countryCode = session.user.user_metadata?.countryCode || '+57'
+        setValuePhone('phone', phone)
+        setValuePhone('countryCode', countryCode)
 
         // Check if admin
         const { data: adminStatus } = await supabase.rpc('is_admin')
@@ -118,6 +149,21 @@ const ProfilePage = () => {
         }
     }
 
+    const onUpdatePhone = async (data) => {
+        const { phone, countryCode } = data
+
+        const { error } = await supabase.auth.updateUser({
+            data: { phone, countryCode }
+        })
+
+        if (error) {
+            showMessage('error', error.message)
+        } else {
+            showMessage('success', t('profile.phone_updated'))
+            setIsEditingPhone(false)
+        }
+    }
+
     const onUpdatePassword = async (data) => {
         const { newPassword } = data
 
@@ -133,12 +179,9 @@ const ProfilePage = () => {
         }
     }
 
+
     if (loading) {
-        return (
-            <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-[#050505]' : 'bg-gray-50'}`}>
-                <div className={`text-xl animate-pulse ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('common.loading')}</div>
-            </div>
-        )
+        return <ProfileSkeleton isDarkMode={isDarkMode} />
     }
 
     return (
@@ -240,32 +283,36 @@ const ProfilePage = () => {
                                         {!isAdmin ? (
                                             <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                                 {isEditingName ? (
-                                                    <button
-                                                        type="submit"
-                                                        disabled={isSubmittingName}
-                                                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                                                        title={t('common.save')}
-                                                    >
-                                                        <Check size={18} />
-                                                    </button>
+                                                    <Tooltip content={t('common.save')} position="top">
+                                                        <button
+                                                            type="submit"
+                                                            disabled={isSubmittingName}
+                                                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                                        >
+                                                            <Check size={18} />
+                                                        </button>
+                                                    </Tooltip>
                                                 ) : (
-                                                    <button
-                                                        type="button"
-                                                        onClick={(e) => {
-                                                            e.preventDefault()
-                                                            setIsEditingName(true)
-                                                        }}
-                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                                        title={t('common.edit')}
-                                                    >
-                                                        <Edit2 size={18} />
-                                                    </button>
+                                                    <Tooltip content={t('common.edit')} position="top">
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.preventDefault()
+                                                                setIsEditingName(true)
+                                                            }}
+                                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                        >
+                                                            <Edit2 size={18} />
+                                                        </button>
+                                                    </Tooltip>
                                                 )}
                                             </div>
                                         ) : (
-                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" title="Edición bloqueada para administradores">
-                                                <Lock size={18} />
-                                            </div>
+                                            <Tooltip content={t('profile.edit_locked')} position="top">
+                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                                    <Lock size={18} />
+                                                </div>
+                                            </Tooltip>
                                         )}
                                     </div>
                                     {errorsName.fullName && <p className="text-red-500 text-sm pl-1">{errorsName.fullName.message}</p>}
@@ -286,36 +333,139 @@ const ProfilePage = () => {
                                         {!isAdmin ? (
                                             <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                                 {isEditingEmail ? (
-                                                    <button
-                                                        type="submit"
-                                                        disabled={isSubmittingEmail}
-                                                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                                                        title={t('common.save')}
-                                                    >
-                                                        <Check size={18} />
-                                                    </button>
+                                                    <Tooltip content={t('common.save')} position="top">
+                                                        <button
+                                                            type="submit"
+                                                            disabled={isSubmittingEmail}
+                                                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                                        >
+                                                            <Check size={18} />
+                                                        </button>
+                                                    </Tooltip>
                                                 ) : (
-                                                    <button
-                                                        type="button"
-                                                        onClick={(e) => {
-                                                            e.preventDefault()
-                                                            setIsEditingEmail(true)
-                                                        }}
-                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                                        title={t('common.edit')}
-                                                    >
-                                                        <Edit2 size={18} />
-                                                    </button>
+                                                    <Tooltip content={t('common.edit')} position="top">
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.preventDefault()
+                                                                setIsEditingEmail(true)
+                                                            }}
+                                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                        >
+                                                            <Edit2 size={18} />
+                                                        </button>
+                                                    </Tooltip>
                                                 )}
                                             </div>
                                         ) : (
-                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" title="Edición bloqueada para administradores">
-                                                <Lock size={18} />
-                                            </div>
+                                            <Tooltip content={t('profile.edit_locked')} position="top">
+                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                                    <Lock size={18} />
+                                                </div>
+                                            </Tooltip>
                                         )}
                                     </div>
                                     {errorsEmail.email && <p className="text-red-500 text-sm pl-1">{errorsEmail.email.message}</p>}
                                     {!isAdmin && <p className="text-xs text-gray-500">{t('profile.email_note')}</p>}
+                                </form>
+
+                                {/* Phone Form */}
+                                <form onSubmit={handleSubmitPhone(onUpdatePhone)} className="space-y-2">
+                                    <label className={`text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('profile.phone_number')}</label>
+                                    <div className="flex gap-2">
+                                        {/* Country Code Selector */}
+                                        <div className="relative z-50">
+                                            <button
+                                                type="button"
+                                                onClick={() => isEditingPhone && setIsCountryDropdownOpen(!isCountryDropdownOpen)}
+                                                disabled={!isEditingPhone}
+                                                className={`flex items-center gap-2 w-[110px] ${isDarkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-white border-gray-200 text-gray-900'} border rounded-xl py-3.5 pl-3 pr-2 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${!isEditingPhone ? (isDarkMode ? 'bg-white/5 text-gray-400' : 'bg-gray-50 text-gray-500 cursor-default') : 'cursor-pointer'}`}
+                                            >
+                                                <img
+                                                    src={countryCodes.find(c => c.code === watchPhone('countryCode'))?.flag}
+                                                    alt="Flag"
+                                                    className="w-6 h-4 object-cover rounded-sm"
+                                                />
+                                                <span className="text-sm font-medium">{watchPhone('countryCode')}</span>
+                                                <ChevronDown size={14} className={`ml-auto transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} />
+                                            </button>
+
+                                            {/* Dropdown */}
+                                            <AnimatePresence>
+                                                {isCountryDropdownOpen && (
+                                                    <>
+                                                        <div
+                                                            className="fixed inset-0 z-40"
+                                                            onClick={() => setIsCountryDropdownOpen(false)}
+                                                        />
+                                                        <motion.div
+                                                            initial={{ opacity: 0, y: 10 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            exit={{ opacity: 0, y: 10 }}
+                                                            onWheel={(e) => e.stopPropagation()}
+                                                            onTouchMove={(e) => e.stopPropagation()}
+                                                            className={`absolute bottom-full left-0 mb-2 w-full min-w-[140px] z-50 ${isDarkMode ? 'bg-[#1a1a1a] border-white/10' : 'bg-white border-gray-100'} border rounded-xl shadow-xl max-h-60 overflow-y-auto custom-scrollbar overscroll-contain`}
+                                                        >
+                                                            {countryCodes.map((c) => (
+                                                                <button
+                                                                    key={c.code}
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        setValuePhone('countryCode', c.code)
+                                                                        setIsCountryDropdownOpen(false)
+                                                                    }}
+                                                                    className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors ${isDarkMode ? 'hover:bg-white/10 text-gray-200 hover:text-white' : 'hover:bg-gray-100 text-gray-700 hover:text-gray-900'} ${watchPhone('countryCode') === c.code ? (isDarkMode ? 'bg-white/10' : 'bg-blue-50 text-blue-600') : ''}`}
+                                                                >
+                                                                    <img src={c.flag} alt={c.country} className="w-6 h-4 object-cover rounded-sm" />
+                                                                    <span>{c.code}</span>
+                                                                </button>
+                                                            ))}
+                                                        </motion.div>
+                                                    </>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+
+                                        {/* Phone Input */}
+                                        <div className="relative group flex-1">
+                                            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={20} />
+                                            <input
+                                                type="tel"
+                                                {...registerPhone('phone')}
+                                                disabled={isSubmittingPhone || !isEditingPhone}
+                                                className={`w-full ${isDarkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-white border-gray-200 text-gray-900'} border rounded-xl py-3.5 pl-12 pr-12 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all ${errorsPhone.phone ? 'border-red-500' : ''} ${!isEditingPhone ? (isDarkMode ? 'bg-white/5 text-gray-400' : 'bg-gray-50 text-gray-500') : ''}`}
+                                                placeholder={t('profile.phone_placeholder')}
+                                            />
+                                            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                                                {isEditingPhone ? (
+                                                    <Tooltip content={t('common.save')} position="top">
+                                                        <button
+                                                            type="submit"
+                                                            disabled={isSubmittingPhone}
+                                                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                                        >
+                                                            <Check size={18} />
+                                                        </button>
+                                                    </Tooltip>
+                                                ) : (
+                                                    <Tooltip content={t('common.edit')} position="top">
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.preventDefault()
+                                                                setIsEditingPhone(true)
+                                                            }}
+                                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                        >
+                                                            <Edit2 size={18} />
+                                                        </button>
+                                                    </Tooltip>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {errorsPhone.phone && <p className="text-red-500 text-sm pl-1">{errorsPhone.phone.message}</p>}
+                                    <p className="text-xs text-gray-500">{t('profile.phone_note')}</p>
                                 </form>
                             </div>
 

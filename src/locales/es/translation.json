@@ -22,6 +22,7 @@
     "booking": {
         "seo_title": "Reservar | Ta' To' Clean",
         "seo_description": "Agenda tu cita para lavado premium, detailing o recubrimiento cerámico. Transforma tu vehículo hoy.",
+        "invalid_plate": "Placa inválida",
         "vehicle_types": {
             "car": {
                 "name": "Automóvil",
@@ -187,6 +188,8 @@
         "no_vehicles": "No tienes vehículos registrados",
         "add_vehicle_hint": "Agrega un vehículo para ver el historial de reservas",
         "delete_error": "Error al eliminar vehículo",
+        "delete_failed_count": "No se pudo eliminar. Verifique si tiene reservas activas.",
+        "delete_success": "Vehículo eliminado correctamente",
         "service_history": "Historial de Servicios",
         "new_booking": "Nueva Reserva",
         "no_bookings": "No tienes reservas",
@@ -201,7 +204,22 @@
         "cancel_success": "Reserva cancelada correctamente",
         "cancel_error": "Error al cancelar la reserva",
         "primary": "Principal",
+        "primary_short": "P",
+        "no_details": "Sin detalles",
+        "last_service_title": "Último Servicio Realizado",
+        "view_full_history": "Ver historial completo",
+        "no_service_history": "No hay servicios registrados",
+        "next_maintenance_title": "Próximo mantenimiento sugerido:",
+        "maintenance_objective": "Objetivo",
+        "no_maintenance_scheduled": "Programar primer servicio para ver sugerencias",
+        "edit_vehicle_button": "Editar Vehículo",
+        "save_changes": "Guardar Cambios",
+        "book_new_service": "Reservar nuevo servicio",
         "remove": "Eliminar vehículo",
+        "nickname_placeholder": "APODO",
+        "plate_label": "PLACA",
+        "brand_label": "Marca",
+        "model_label": "Modelo",
         "vehicle_types": {
             "car": "Automóvil",
             "suv": "SUV / Camioneta",
@@ -251,7 +269,12 @@
         "updating": "Actualizando...",
         "name_updated": "Nombre actualizado correctamente",
         "email_updated": "Correo actualizado correctamente",
-        "password_updated": "Contraseña actualizada correctamente"
+        "password_updated": "Contraseña actualizada correctamente",
+        "phone_number": "Número de Teléfono",
+        "phone_placeholder": "300 123 4567",
+        "phone_updated": "Teléfono actualizado correctamente",
+        "phone_note": "Usado para contactarte sobre tus reservas.",
+        "edit_locked": "Edición bloqueada para administradores"
     },
     "benefits": {
         "why_choose_us": "¿Por qué elegirnos?",
@@ -463,6 +486,8 @@
             "S",
             "D"
         ],
+        "save": "Guardar",
+        "edit": "Editar",
         "cancel": "Cancelar",
         "delete": "Eliminar",
         "required": "Requerido",

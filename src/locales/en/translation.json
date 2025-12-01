@@ -22,6 +22,7 @@
     "booking": {
         "seo_title": "Book Appointment | Ta' To' Clean",
         "seo_description": "Schedule your appointment for premium wash, detailing, or ceramic coating. Transform your vehicle today.",
+        "invalid_plate": "Invalid plate",
         "vehicle_types": {
             "car": {
                 "name": "Car",
@@ -188,6 +189,8 @@
         "no_vehicles": "You have no registered vehicles",
         "add_vehicle_hint": "Add a vehicle to view booking history",
         "delete_error": "Error deleting vehicle",
+        "delete_failed_count": "Could not delete. Check for active bookings.",
+        "delete_success": "Vehicle deleted successfully",
         "service_history": "Service History",
         "new_booking": "New Booking",
         "no_bookings": "You have no bookings",
@@ -202,7 +205,22 @@
         "cancel_success": "Booking cancelled successfully",
         "cancel_error": "Error cancelling booking",
         "primary": "Primary",
+        "primary_short": "P",
+        "no_details": "No details",
+        "last_service_title": "Last Service Performed",
+        "view_full_history": "View full history",
+        "no_service_history": "No service history",
+        "next_maintenance_title": "Suggested next maintenance:",
+        "maintenance_objective": "Objective",
+        "no_maintenance_scheduled": "Book first service to see suggestions",
+        "edit_vehicle_button": "Edit Vehicle",
+        "save_changes": "Save Changes",
+        "book_new_service": "Book new service",
         "remove": "Remove vehicle",
+        "nickname_placeholder": "NICKNAME",
+        "plate_label": "PLATE",
+        "brand_label": "Brand",
+        "model_label": "Model",
         "vehicle_types": {
             "car": "Car",
             "suv": "SUV / Truck",
@@ -252,7 +270,12 @@
         "updating": "Updating...",
         "name_updated": "Name updated successfully",
         "email_updated": "Email updated successfully",
-        "password_updated": "Password updated successfully"
+        "password_updated": "Password updated successfully",
+        "phone_number": "Phone Number",
+        "phone_placeholder": "300 123 4567",
+        "phone_updated": "Phone number updated successfully",
+        "phone_note": "Used to contact you about your bookings.",
+        "edit_locked": "Editing locked for administrators"
     },
     "benefits": {
         "why_choose_us": "Why choose us?",
@@ -447,6 +470,8 @@
         "add_button": "Add Vehicle"
     },
     "common": {
+        "save": "Save",
+        "edit": "Edit",
         "loading": "Loading...",
         "months": [
             "January",

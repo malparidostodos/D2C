@@ -15,6 +15,7 @@ import { z } from 'zod'
 
 import SEO from '../ui/SEO'
 import DashboardSkeleton from './DashboardSkeleton'
+import VehicleDetailsModal from './VehicleDetailsModal'
 
 const UserDashboard = () => {
     const { t, i18n } = useTranslation()
@@ -38,6 +39,7 @@ const UserDashboard = () => {
 
     const [showEditVehicleModal, setShowEditVehicleModal] = useState(false)
     const [vehicleToEdit, setVehicleToEdit] = useState(null)
+    const [selectedVehicle, setSelectedVehicle] = useState(null) // Para el modal de detalles
 
     const getLocalizedPath = (path) => {
         const currentLang = i18n.language
@@ -133,35 +135,93 @@ const UserDashboard = () => {
     const handleEditVehicle = (vehicle) => {
         setVehicleToEdit(vehicle)
         setShowEditVehicleModal(true)
+        setSelectedVehicle(null) // Cerrar modal de detalles si está abierto
     }
 
-    const handleDeleteVehicle = (vehicleId, plate) => {
-        setVehicleToDelete({ id: vehicleId, plate })
+    const handleUpdateVehicle = async (updatedVehicle) => {
+        const { error } = await supabase
+            .from('user_vehicles')
+            .update({
+                plate: updatedVehicle.plate,
+                brand: updatedVehicle.brand,
+                model: updatedVehicle.model,
+                nickname: updatedVehicle.nickname
+            })
+            .eq('id', updatedVehicle.id)
+
+        if (error) {
+            toast.error(t('dashboard.update_error', 'Error al actualizar vehículo') + ': ' + error.message)
+            return false
+        } else {
+            toast.success(t('dashboard.update_success', 'Vehículo actualizado correctamente'))
+            queryClient.invalidateQueries(['vehicles'])
+            // Actualizar el vehículo seleccionado para reflejar los cambios en el modal inmediatamente
+            setSelectedVehicle(updatedVehicle)
+            return true
+        }
+    }
+
+    const handleDeleteVehicle = (vehicleOrId, plate) => {
+        if (vehicleOrId && typeof vehicleOrId === 'object') {
+            setVehicleToDelete({ id: vehicleOrId.id, plate: vehicleOrId.plate })
+        } else {
+            setVehicleToDelete({ id: vehicleOrId, plate })
+        }
         setShowDeleteModal(true)
+        setSelectedVehicle(null) // Cerrar modal de detalles si está abierto
     }
 
     const confirmDeleteVehicle = async () => {
         if (!vehicleToDelete) return
 
-        const { error } = await supabase
+        // 1. Desvincular reservas asociadas
+        // Anonymizamos el email para cumplir con la restricción NOT NULL
+        // y usamos user_id: null para desvincular de la cuenta.
+        const anonymizedEmail = `deleted_${Date.now()}_${user.email}`
+
+        const { error: bookingError, count: bookingCount } = await supabase
+            .from('bookings')
+            .update({
+                client_email: anonymizedEmail,
+                user_id: null
+            })
+            .eq('vehicle_plate', vehicleToDelete.plate)
+            .ilike('client_email', user.email)
+            .select('id', { count: 'exact' })
+
+        if (bookingError) {
+            console.error('Error unlinking associated bookings:', bookingError)
+            toast.error('Error al desvincular reservas: ' + bookingError.message)
+            setShowDeleteModal(false)
+            return
+        }
+
+        if (bookingCount > 0) {
+            // Opcional: Notificar éxito de desvinculación
+            // toast.success(`Se desvincularon ${bookingCount} reservas`)
+        }
+
+        // 2. Eliminar el vehículo de la tabla user_vehicles
+        const { error, count } = await supabase
             .from('user_vehicles')
-            .delete()
+            .delete({ count: 'exact' })
             .eq('id', vehicleToDelete.id)
 
         if (error) {
             toast.error(t('dashboard.delete_error') + ': ' + error.message)
+        } else if (count === 0) {
+            toast.error(t('dashboard.delete_error') + ': ' + t('dashboard.delete_failed_count', 'No se pudo eliminar. Verifique si tiene reservas activas.'))
         } else {
-            toast.success(t('dashboard.delete_success') || 'VehÃ­culo eliminado correctamente')
+            toast.success(t('dashboard.delete_success') || 'Vehículo eliminado correctamente')
             queryClient.invalidateQueries(['vehicles'])
+            queryClient.invalidateQueries(['bookings'])
         }
         setShowDeleteModal(false)
         setVehicleToDelete(null)
     }
 
-    const handleCancelBooking = (bookingId) => {
-        setBookingToCancel(bookingId)
-        setShowCancelModal(true)
-    }
+
+
 
     const confirmCancelBooking = async () => {
         if (!bookingToCancel) return
@@ -339,70 +399,71 @@ const UserDashboard = () => {
                                         onClick={() => setShowAddVehicle(true)}
                                         className={`px-6 py-3 rounded-full ${isDarkMode ? 'bg-white text-black hover:bg-white/90' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20'} font-bold transition-all`}
                                     >
-                                        {t('dashboard.add_first_vehicle', 'AÃ±adir Primer VehÃ­culo')}
+                                        {t('dashboard.add_first_vehicle', 'Añadir Primer Vehículo')}
                                     </button>
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     {vehicles.map((vehicle) => (
-                                        <div
+                                        <motion.div
                                             key={vehicle.id}
-                                            className={`group ${isDarkMode ? 'bg-[#111] border-white/10 hover:border-white/20' : 'bg-gray-50 border-gray-200 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/5'} border rounded-3xl p-6 transition-all duration-300 relative overflow-hidden`}
+                                            whileHover={{ scale: 1.02, y: -2 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            onClick={() => setSelectedVehicle(vehicle)}
+                                            className={`group cursor-pointer ${isDarkMode ? 'bg-[#111] border-white/10 hover:bg-white/5 hover:border-white/20' : 'bg-white border-gray-200 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/5'} border rounded-3xl p-5 transition-all duration-300 relative overflow-hidden`}
                                         >
-                                            {/* Background Gradient */}
-                                            <div className={`absolute inset-0 bg-gradient-to-br ${isDarkMode ? 'from-white/5' : 'from-blue-50/50'} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                                            <div className="relative z-10">
-                                                <div className="flex justify-between items-start mb-4">
-                                                    <div>
-                                                        {vehicle.nickname && (
-                                                            <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-500'} text-xs font-medium uppercase tracking-wider mb-1 transition-colors`}>{vehicle.nickname}</p>
-                                                        )}
-                                                        <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} tracking-tight transition-colors`}>{vehicle.plate}</h3>
-                                                        {(vehicle.brand || vehicle.model) && (
-                                                            <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm capitalize transition-colors`}>
-                                                                {vehicle.brand} {vehicle.model}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        {vehicle.is_primary && (
-                                                            <span className={`${isDarkMode ? 'bg-accent/20 text-accent' : 'bg-blue-100 text-blue-700'} text-[10px] font-bold px-2 py-1 rounded-full uppercase transition-colors`}>
-                                                                {t('dashboard.primary')}
-                                                            </span>
-                                                        )}
-                                                        <button
-                                                            onClick={() => handleEditVehicle(vehicle)}
-                                                            className={`p-2 ${isDarkMode ? 'hover:bg-white/10 hover:text-white text-white/20' : 'hover:bg-white hover:text-blue-600 text-gray-400 hover:shadow-sm'} rounded-full transition-colors`}
-                                                            title={t('dashboard.edit_vehicle_title', 'Editar VehÃ­culo')}
-                                                        >
-                                                            <Edit2 size={16} />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeleteVehicle(vehicle.id, vehicle.plate)}
-                                                            className={`p-2 ${isDarkMode ? 'hover:bg-red-500/20 hover:text-red-400 text-white/20' : 'hover:bg-red-50 hover:text-red-500 text-gray-400'} rounded-full transition-colors`}
-                                                        >
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex items-center justify-between mt-8">
+                                            <div className="flex items-center gap-4">
+                                                {/* Imagen pequeña */}
+                                                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center p-1 ${isDarkMode ? 'bg-white/5' : 'bg-gray-50'}`}>
                                                     <img
                                                         src={getVehicleImage(vehicle.vehicle_type)}
                                                         alt={vehicle.vehicle_type}
-                                                        className={`w-32 h-20 object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 ${!isDarkMode && 'mix-blend-multiply'}`}
+                                                        className="w-full h-full object-contain"
                                                     />
-                                                    <button
-                                                        onClick={() => navigate(getLocalizedPath('/reserva'), { state: { selectedVehicle: vehicle } })}
-                                                        className={`px-5 py-2.5 rounded-full ${isDarkMode ? 'bg-white text-black hover:bg-white/90 shadow-white/10' : 'bg-gray-900 text-white hover:bg-black shadow-gray-900/20'} text-sm font-bold hover:scale-105 transition-all shadow-lg`}
-                                                    >
-                                                        {t('dashboard.book_now')}
-                                                    </button>
+                                                </div>
+
+                                                {/* Info */}
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center gap-2 mb-0.5">
+                                                        <h3 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} tracking-tight truncate`}>
+                                                            {vehicle.plate}
+                                                        </h3>
+                                                        {vehicle.is_primary && (
+                                                            <span className={`flex-shrink-0 ${isDarkMode ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'} text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase`}>
+                                                                {t('dashboard.primary_short', 'P')}
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    {(vehicle.brand || vehicle.model) ? (
+                                                        <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-500'} text-sm capitalize truncate`}>
+                                                            {vehicle.brand} {vehicle.model}
+                                                        </p>
+                                                    ) : (
+                                                        <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-400'} text-xs italic`}>
+                                                            {t('dashboard.no_details')}
+                                                        </p>
+                                                    )}
+                                                </div>
+
+                                                {/* Chevron indicando click */}
+                                                <div className={`opacity-0 group-hover:opacity-100 transition-opacity ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`}>
+                                                    <Edit2 size={16} />
                                                 </div>
                                             </div>
-                                        </div>
+                                        </motion.div>
                                     ))}
+
+                                    {/* Botón "Añadir" como tarjeta compacta al final */}
+                                    <motion.button
+                                        whileHover={{ scale: 1.02, y: -2 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={() => setShowAddVehicle(true)}
+                                        className={`flex items-center justify-center gap-3 p-5 rounded-3xl border-2 border-dashed transition-all ${isDarkMode ? 'border-white/10 hover:border-white/30 hover:bg-white/5 text-white/40 hover:text-white' : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-400 hover:text-blue-600'}`}
+                                    >
+                                        <Plus size={20} />
+                                        <span className="font-medium">{t('dashboard.add_vehicle')}</span>
+                                    </motion.button>
                                 </div>
                             )}
                         </motion.section>
@@ -492,6 +553,7 @@ const UserDashboard = () => {
                         queryClient.invalidateQueries(['vehicles'])
                     }}
                     vehicleToEdit={vehicleToEdit}
+                    isDarkMode={isDarkMode}
                 />
 
                 {/* Modal ConfirmaciÃ³n Cancelar */}
@@ -513,6 +575,19 @@ const UserDashboard = () => {
                     onClose={() => setShowDeleteModal(false)}
                     onConfirm={confirmDeleteVehicle}
                     plate={vehicleToDelete?.plate}
+                    isDarkMode={isDarkMode}
+                />
+
+                <VehicleDetailsModal
+                    isOpen={!!selectedVehicle}
+                    onClose={() => setSelectedVehicle(null)}
+                    vehicle={selectedVehicle}
+                    onEdit={handleEditVehicle}
+                    onUpdate={handleUpdateVehicle}
+                    onDelete={(v) => handleDeleteVehicle(v.id, v.plate)}
+                    onBook={(v) => navigate(getLocalizedPath('/reserva'), { state: { selectedVehicle: v } })}
+                    bookings={bookings}
+                    isDarkMode={isDarkMode}
                 />
             </AnimatePresence>
         </div >
@@ -524,11 +599,15 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, cancelT
     if (!isOpen) return null
 
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={onClose}
+        >
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
+                onClick={(e) => e.stopPropagation()}
                 className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full text-center"
             >
                 <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -574,7 +653,9 @@ const addVehicleSchema = z.object({
     }
 })
 
-const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
+
+
+const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit, isDarkMode }) => {
     const { t } = useTranslation()
     const { register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(addVehicleSchema),
@@ -689,30 +770,34 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
     if (!isOpen) return null
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={onClose}
+        >
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full"
+                onClick={(e) => e.stopPropagation()}
+                className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-white border-gray-200'} border rounded-3xl p-6 md:p-8 max-w-md w-full`}
             >
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold text-white">
-                        {vehicleToEdit ? t('dashboard.edit_vehicle_title', 'Editar VehÃ­culo') : t('dashboard.add_vehicle_modal.title')}
+                    <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {vehicleToEdit ? t('dashboard.edit_vehicle_title', 'Editar Vehículo') : t('dashboard.add_vehicle_modal.title')}
                     </h2>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                        className={`p-2 rounded-full transition-colors ${isDarkMode ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
                     >
-                        <X size={20} className="text-white" />
+                        <X size={20} className={isDarkMode ? 'text-white' : 'text-gray-500'} />
                     </button>
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* ... form fields ... */}
-                    {/* Tipo de vehÃ­culo */}
+                    {/* Tipo de vehículo */}
                     <div>
-                        <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.type_label')}</label>
+                        <label className={`block text-sm mb-2 ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('dashboard.add_vehicle_modal.type_label')}</label>
                         <div className="grid grid-cols-3 gap-2">
                             {vehicleTypes.map((type) => {
                                 return (
@@ -725,8 +810,8 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
                                             // setValue('plate', '') 
                                         }}
                                         className={`p-3 rounded-xl border-2 flex flex-col items-center gap-2 transition-all ${vehicleType === type.id
-                                            ? 'bg-white text-black border-white'
-                                            : 'bg-white/5 text-white border-white/10 hover:bg-white/10'
+                                            ? (isDarkMode ? 'bg-white text-black border-white' : 'bg-black text-white border-black')
+                                            : (isDarkMode ? 'bg-white/5 text-white border-white/10 hover:bg-white/10' : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100')
                                             }`}
                                     >
                                         <img src={type.image} alt={type.name} className="w-12 h-8 object-contain" />
@@ -739,7 +824,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
 
                     {/* Placa */}
                     <div>
-                        <label className="block text-white/60 text-sm mb-2">
+                        <label className={`block text-sm mb-2 ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
                             {t('dashboard.add_vehicle_modal.plate_label')}
                             <span className="text-xs ml-2">
                                 ({vehicleType === 'motorcycle' ? 'AAA-00 o AAA-00A' : 'AAA-000'})
@@ -749,7 +834,12 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
                             type="text"
                             {...register('plate')}
                             onChange={(e) => setValue('plate', formatPlate(e.target.value))}
-                            className={`w-full bg-white/5 border rounded-xl p-3 text-white focus:outline-none transition-colors uppercase ${errors.plate ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
+                            className={`w-full border rounded-xl p-3 focus:outline-none transition-colors uppercase 
+                                ${isDarkMode ? 'bg-white/5 text-white' : 'bg-gray-50 text-gray-900'}
+                                ${errors.plate
+                                    ? 'border-red-500 focus:border-red-500'
+                                    : (isDarkMode ? 'border-white/10 focus:border-white/50' : 'border-gray-200 focus:border-gray-400')
+                                }`}
                             placeholder={vehicleType === 'motorcycle' ? 'ABC-12D' : 'ABC-123'}
                             maxLength={7}
                         />
@@ -760,11 +850,15 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
 
                     {/* Nickname */}
                     <div>
-                        <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.nickname_label')}</label>
+                        <label className={`block text-sm mb-2 ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('dashboard.add_vehicle_modal.nickname_label')}</label>
                         <input
                             type="text"
                             {...register('nickname')}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-white/50 transition-colors"
+                            className={`w-full border rounded-xl p-3 focus:outline-none transition-colors 
+                                ${isDarkMode
+                                    ? 'bg-white/5 border-white/10 text-white focus:border-white/50'
+                                    : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-gray-400'
+                                }`}
                             placeholder={t('dashboard.add_vehicle_modal.nickname_placeholder')}
                         />
                     </div>
@@ -772,20 +866,28 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
                     {/* Marca y Modelo */}
                     <div className="grid grid-cols-2 gap-3">
                         <div>
-                            <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.brand_label')}</label>
+                            <label className={`block text-sm mb-2 ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('dashboard.add_vehicle_modal.brand_label')}</label>
                             <input
                                 type="text"
                                 {...register('brand')}
-                                className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-white/50 transition-colors"
+                                className={`w-full border rounded-xl p-3 focus:outline-none transition-colors 
+                                    ${isDarkMode
+                                        ? 'bg-white/5 border-white/10 text-white focus:border-white/50'
+                                        : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-gray-400'
+                                    }`}
                                 placeholder="Toyota"
                             />
                         </div>
                         <div>
-                            <label className="block text-white/60 text-sm mb-2">{t('dashboard.add_vehicle_modal.model_label')}</label>
+                            <label className={`block text-sm mb-2 ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('dashboard.add_vehicle_modal.model_label')}</label>
                             <input
                                 type="text"
                                 {...register('model')}
-                                className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-white/50 transition-colors"
+                                className={`w-full border rounded-xl p-3 focus:outline-none transition-colors 
+                                    ${isDarkMode
+                                        ? 'bg-white/5 border-white/10 text-white focus:border-white/50'
+                                        : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-gray-400'
+                                    }`}
                                 placeholder="Corolla"
                             />
                         </div>
@@ -798,11 +900,15 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        className={`w-full font-bold py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed
+                            ${isDarkMode
+                                ? 'bg-white text-black hover:bg-gray-100'
+                                : 'bg-black text-white hover:bg-gray-800'
+                            }`}
                     >
                         {isSubmitting
                             ? (vehicleToEdit ? t('dashboard.updating', 'Actualizando...') : t('dashboard.add_vehicle_modal.adding'))
-                            : (vehicleToEdit ? t('dashboard.update_vehicle', 'Actualizar VehÃ­culo') : t('dashboard.add_vehicle_modal.add_button'))}
+                            : (vehicleToEdit ? t('dashboard.update_vehicle', 'Actualizar Vehículo') : t('dashboard.add_vehicle_modal.add_button'))}
                     </button>
                 </form>
             </motion.div>
@@ -810,33 +916,37 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit }) => {
     )
 }
 
-// Modal para confirmar eliminaciÃ³n
-const DeleteVehicleModal = ({ isOpen, onClose, onConfirm, plate }) => {
+// Modal para confirmar eliminación
+const DeleteVehicleModal = ({ isOpen, onClose, onConfirm, plate, isDarkMode }) => {
     const { t } = useTranslation()
 
     if (!isOpen) return null
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            onClick={onClose}
+        >
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full text-center"
+                onClick={(e) => e.stopPropagation()}
+                className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-white border-gray-200'} border rounded-3xl p-6 md:p-8 max-w-md w-full text-center`}
             >
-                <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 ${isDarkMode ? 'bg-red-500/10' : 'bg-red-50'}`}>
                     <AlertCircle size={32} className="text-red-500" />
                 </div>
 
-                <h2 className="text-2xl font-bold text-white mb-2">{t('dashboard.delete_vehicle_title')}</h2>
-                <p className="text-white/60 mb-8">
+                <h2 className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('dashboard.delete_vehicle_title')}</h2>
+                <p className={`mb-8 ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
                     {t('dashboard.delete_vehicle_confirm', { plate })}
                 </p>
 
                 <div className="flex gap-3">
                     <button
                         onClick={onClose}
-                        className="flex-1 px-4 py-3 rounded-xl bg-white/5 text-white font-medium hover:bg-white/10 transition-colors"
+                        className={`flex-1 px-4 py-3 rounded-xl font-medium transition-colors ${isDarkMode ? 'bg-white/5 text-white hover:bg-white/10' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                     >
                         {t('common.cancel')}
                     </button>

@@ -210,7 +210,7 @@ const AdminDashboard = () => {
                     <StatCard
                         title="Completadas"
                         value={stats.completedBookings}
-                        icon={<CheckCircle className="text-purple-500" />}
+                        icon={<CheckCircle className="text-green-500" />}
                         isDarkMode={isDarkMode}
                     />
                 </motion.div>
