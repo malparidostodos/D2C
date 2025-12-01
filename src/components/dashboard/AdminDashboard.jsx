@@ -5,7 +5,7 @@ import { useNavigate, useOutletContext } from 'react-router-dom'
 import {
     Calendar, Clock, CheckCircle, XCircle, AlertCircle,
     Search, Filter, ChevronDown, MoreHorizontal,
-    DollarSign, Users, TrendingUp, Car, ArrowLeft
+    DollarSign, Users, TrendingUp, Car, ArrowLeft, ArrowUpDown
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import StatusDropdown from './StatusDropdown'
@@ -127,6 +127,9 @@ const AdminDashboard = () => {
         }
     }
 
+    const [priceSort, setPriceSort] = useState('none') // 'none', 'asc', 'desc'
+    const [dateSort, setDateSort] = useState('none') // 'none', 'asc', 'desc'
+
     const filteredBookings = bookings.filter(booking => {
         const matchesFilter = filter === 'all' || booking.status === filter
 
@@ -139,7 +142,72 @@ const AdminDashboard = () => {
             booking.id?.toLowerCase().includes(searchTerm.toLowerCase())
 
         return matchesFilter && matchesSearch
+    }).sort((a, b) => {
+        // 1. Date Sort (Highest Priority if active)
+        if (dateSort !== 'none') {
+            const dateA = new Date(`${a.booking_date}T${a.booking_time}`)
+            const dateB = new Date(`${b.booking_date}T${b.booking_time}`)
+            return dateSort === 'asc' ? dateA - dateB : dateB - dateA
+        }
+
+        // 2. Price Sort (High Priority if active)
+        if (priceSort !== 'none') {
+            const priceA = a.total_price || 0
+            const priceB = b.total_price || 0
+            return priceSort === 'asc' ? priceA - priceB : priceB - priceA
+        }
+
+        // 3. Default Priority Sort
+        const getPriority = (s) => {
+            switch (s) {
+                case 'pending': return 1
+                case 'confirmed': return 2
+                case 'in_progress': return 3
+                case 'completed': return 4
+                case 'cancelled': return 5
+                default: return 6
+            }
+        }
+
+        const priorityA = getPriority(a.status)
+        const priorityB = getPriority(b.status)
+
+        if (priorityA !== priorityB) {
+            return priorityA - priorityB
+        }
+
+        // 4. Default Date Sort (Secondary to Priority)
+        const dateA = new Date(`${a.booking_date}T${a.booking_time}`)
+        const dateB = new Date(`${b.booking_date}T${b.booking_time}`)
+
+        if (['pending', 'confirmed', 'in_progress'].includes(a.status)) {
+            return dateA - dateB
+        }
+        return dateB - dateA
     })
+
+    const togglePriceSort = () => {
+        setPriceSort(current => {
+            if (current === 'none') return 'desc'
+            if (current === 'desc') return 'asc'
+            return 'none'
+        })
+        setDateSort('none') // Reset date sort when price sort is active
+    }
+
+    const toggleDateSort = () => {
+        setDateSort(current => {
+            if (current === 'none') return 'desc'
+            if (current === 'desc') return 'asc'
+            return 'none'
+        })
+        setPriceSort('none') // Reset price sort when date sort is active
+    }
+
+    const toggleStatusSort = () => {
+        setPriceSort('none')
+        setDateSort('none')
+    }
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -314,9 +382,33 @@ const AdminDashboard = () => {
                                     <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Cliente</th>
                                     <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Vehículo</th>
                                     <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Servicio</th>
-                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Fecha</th>
-                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Estado</th>
-                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Precio</th>
+                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
+                                        <button
+                                            onClick={toggleDateSort}
+                                            className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
+                                        >
+                                            Fecha
+                                            <ArrowUpDown size={14} className={dateSort !== 'none' ? 'text-blue-500' : ''} />
+                                        </button>
+                                    </th>
+                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
+                                        <button
+                                            onClick={toggleStatusSort}
+                                            className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
+                                        >
+                                            Estado
+                                            <ArrowUpDown size={14} className={priceSort === 'none' && dateSort === 'none' ? 'text-blue-500' : ''} />
+                                        </button>
+                                    </th>
+                                    <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
+                                        <button
+                                            onClick={togglePriceSort}
+                                            className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
+                                        >
+                                            Precio
+                                            <ArrowUpDown size={14} className={priceSort !== 'none' ? 'text-blue-500' : ''} />
+                                        </button>
+                                    </th>
                                     <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Acciones</th>
                                 </tr>
                             </thead>
