@@ -223,6 +223,11 @@ const UserDashboard = () => {
 
 
 
+    const handleCancelBooking = (bookingId) => {
+        setBookingToCancel(bookingId)
+        setShowCancelModal(true)
+    }
+
     const confirmCancelBooking = async () => {
         if (!bookingToCancel) return
 
@@ -300,6 +305,23 @@ const UserDashboard = () => {
 
     const nextBooking = activeBookings.length > 0 ? activeBookings[activeBookings.length - 1] : null
 
+    // Calculate total spend
+    const totalSpend = bookings
+        .filter(b => b.status === 'completed')
+        .reduce((acc, curr) => {
+            const price = curr.service?.price || 0
+            return acc + (typeof price === 'string' ? parseFloat(price) : price)
+        }, 0)
+
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(amount)
+    }
+
     if (loading) {
         return <DashboardSkeleton isDarkMode={isDarkMode} />
     }
@@ -350,21 +372,59 @@ const UserDashboard = () => {
                         <h3 className={`text-4xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>{activeBookings.length}</h3>
                     </motion.div>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className={`${isDarkMode ? 'bg-gradient-to-br from-accent/20 to-accent/5 border-accent/20 hover:border-accent/40' : 'bg-gradient-to-br from-blue-600 to-blue-700 hover:shadow-xl hover:shadow-blue-600/20'} border rounded-3xl p-6 relative overflow-hidden group cursor-pointer transition-all`}
-                        onClick={() => navigate(getLocalizedPath('/reserva'))}
-                    >
-                        <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-20 group-hover:opacity-30' : 'opacity-20 group-hover:opacity-30 text-white'}`}>
-                            <Plus size={80} />
-                        </div>
-                        <div className="h-full flex flex-col justify-center relative z-10">
-                            <h3 className="text-2xl font-bold text-white mb-1">{t('dashboard.new_booking')}</h3>
-                            <p className={`${isDarkMode ? 'text-white/60' : 'text-blue-100'} text-sm transition-colors`}>{t('dashboard.book_now_hint', 'Agenda tu prÃ³xima cita')}</p>
-                        </div>
-                    </motion.div>
+                    {/* Third Card: Next Appointment OR Total Spend OR New Booking */}
+                    {nextBooking ? (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-6 relative overflow-hidden group transition-colors`}
+                        >
+                            <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-10 group-hover:opacity-20 text-white' : 'opacity-5 group-hover:opacity-10 text-gray-900'}`}>
+                                <Clock size={80} strokeWidth={2.5} />
+                            </div>
+                            <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm font-medium mb-1 transition-colors`}>{t('dashboard.next_appointment')}</p>
+                            <div className="relative z-10">
+                                <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors mb-1`}>
+                                    {new Date(nextBooking.booking_date).toLocaleDateString(i18n.language === 'es' ? 'es-CO' : 'en-US', { day: 'numeric', month: 'short' })}
+                                </h3>
+                                <p className={`text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-600'}`}>
+                                    {nextBooking.booking_time.slice(0, 5)} - {nextBooking.vehicle_plate}
+                                </p>
+                            </div>
+                        </motion.div>
+                    ) : totalSpend > 0 ? (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-gray-50 border-gray-200'} border rounded-3xl p-6 relative overflow-hidden group transition-colors`}
+                        >
+                            <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-10 group-hover:opacity-20 text-white' : 'opacity-5 group-hover:opacity-10 text-gray-900'}`}>
+                                <Shield size={80} strokeWidth={2.5} />
+                            </div>
+                            <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm font-medium mb-1 transition-colors`}>{t('dashboard.total_spend')}</p>
+                            <h3 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>
+                                {formatCurrency(totalSpend)}
+                            </h3>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className={`${isDarkMode ? 'bg-gradient-to-br from-accent/20 to-accent/5 border-accent/20 hover:border-accent/40' : 'bg-gradient-to-br from-blue-600 to-blue-700 hover:shadow-xl hover:shadow-blue-600/20'} border rounded-3xl p-6 relative overflow-hidden group cursor-pointer transition-all`}
+                            onClick={() => navigate(getLocalizedPath('/reserva'))}
+                        >
+                            <div className={`absolute top-0 right-0 p-4 transition-opacity ${isDarkMode ? 'opacity-20 group-hover:opacity-30' : 'opacity-20 group-hover:opacity-30 text-white'}`}>
+                                <Plus size={80} />
+                            </div>
+                            <div className="h-full flex flex-col justify-center relative z-10">
+                                <h3 className="text-2xl font-bold text-white mb-1">{t('dashboard.new_booking')}</h3>
+                                <p className={`${isDarkMode ? 'text-white/60' : 'text-blue-100'} text-sm transition-colors`}>{t('dashboard.book_now_hint')}</p>
+                            </div>
+                        </motion.div>
+                    )}
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
