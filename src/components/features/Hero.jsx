@@ -4,6 +4,8 @@ import { ArrowRight } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
 
+import LiquidBackground from '../ui/LiquidBackground'
+
 const Hero = () => {
   const containerRef = useRef(null)
   const { t, i18n } = useTranslation()
@@ -15,6 +17,7 @@ const Hero = () => {
 
   return (
     <section ref={containerRef} id="inicio" className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+      <LiquidBackground />
       {/* Logo - Top Left */}
 
 
