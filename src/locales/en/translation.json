@@ -171,9 +171,13 @@
         "redirecting_login": "Redirecting to login...",
         "redirecting_login_message": "Redirecting to login...",
         "password_length": "Password must be at least 6 characters",
-        "passwords_mismatch": "Passwords don't match"
+        "passwords_mismatch": "Passwords don't match",
+        "logout": "Log Out",
+        "logout_success": "Successfully logged out",
+        "logout_error": "Error logging out"
     },
     "dashboard": {
+        "seo_title": "My Dashboard | TaToClean",
         "title": "My Account",
         "welcome": "Welcome",
         "subtitle": "Manage your vehicles and bookings here",
@@ -260,6 +264,10 @@
         "edit_vehicle_title": "Edit Vehicle",
         "updating": "Updating...",
         "update_vehicle": "Update Vehicle",
+        "rate_service": "Rate",
+        "update_error": "Error updating vehicle",
+        "update_success": "Vehicle updated successfully",
+        "unlink_bookings_error": "Error unlinking bookings",
         "reviews": "My Reviews",
         "rate_service_page": {
             "seo_title": "Rate Service | TaToClean",
@@ -280,7 +288,9 @@
             "booking_not_found": "Booking not found",
             "already_rated": "This booking has already been rated",
             "load_error": "Error loading booking",
-            "select_rating_error": "Please select a rating"
+            "select_rating_error": "Please select a rating",
+            "default_client_name": "Client",
+            "owner_of": "Owner of"
         },
         "user_reviews_page": {
             "seo_title": "My Reviews | TaToClean",
@@ -293,11 +303,61 @@
             "delete_success": "Review deleted successfully",
             "delete_error": "Error deleting review",
             "load_error": "Error loading your reviews",
-            "tooltips": {
-                "hide": "Hide",
-                "make_public": "Make public",
-                "delete": "Delete review"
-            }
+            "delete_tooltip": "Delete review"
+        }
+    },
+    "admin": {
+        "title": "Admin Dashboard",
+        "subtitle": "Manage your bookings and clients",
+        "update_button": "Update",
+        "reviews": "Reviews",
+        "bookings": "Bookings",
+        "search_placeholder": "Search reviews...",
+        "bookings_search_placeholder": "Search by name, email or plate...",
+        "total": "Total",
+        "user": "User",
+        "rating": "Rating",
+        "comment": "Comment",
+        "status": "Status",
+        "actions": "Actions",
+        "visible": "Visible",
+        "hidden": "Hidden",
+        "public": "Public",
+        "toggle_visibility_error": "Error updating visibility",
+        "delete_review_error": "Error deleting review",
+        "stats": {
+            "total_revenue": "Total Revenue",
+            "total_bookings": "Total Bookings",
+            "pending_bookings": "Pending",
+            "completed_bookings": "Completed"
+        },
+        "table": {
+            "client": "Client",
+            "vehicle": "Vehicle",
+            "service": "Service",
+            "date": "Date",
+            "status": "Status",
+            "price": "Price",
+            "actions": "Actions"
+        },
+        "filters": {
+            "all": "All"
+        },
+        "messages": {
+            "loading_bookings": "Loading bookings...",
+            "no_bookings_found": "No bookings found",
+            "status_updated": "Status updated successfully",
+            "status_update_error": "Error updating status",
+            "load_reviews_error": "Error loading reviews",
+            "review_now_visible": "Review now visible",
+            "review_now_hidden": "Review now hidden",
+            "review_deleted": "Review deleted",
+            "delete_review_confirm": "Delete this review permanently?"
+        },
+        "tooltips": {
+            "hide": "Hide",
+            "make_public": "Make public",
+            "delete": "Delete"
         }
     },
     "profile": {
@@ -545,7 +605,9 @@
         "cancel": "Cancel",
         "delete": "Delete",
         "required": "Required",
-        "invalid_email": "Invalid email"
+        "invalid_email": "Invalid email",
+        "language": "Language",
+        "theme": "Theme"
     },
     "pricing": {
         "exclusive_plans": "Exclusive Plans",

@@ -121,11 +121,11 @@ const AdminDashboard = () => {
             calculateStats(bookings.map(b =>
                 b.id === bookingId ? { ...b, status: newStatus } : b
             ))
-            toast.success('Estado actualizado correctamente')
+            toast.success(t('admin.messages.status_updated'))
 
         } catch (error) {
             console.error('Error updating status:', error)
-            toast.error('Error al actualizar el estado')
+            toast.error(t('admin.messages.status_update_error'))
         }
     }
 
@@ -241,14 +241,14 @@ const AdminDashboard = () => {
                     className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4"
                 >
                     <div>
-                        <h1 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Panel de Administración</h1>
-                        <p className={isDarkMode ? 'text-white/60' : 'text-gray-500'}>Gestiona tus reservas y clientes</p>
+                        <h1 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('admin.title')}</h1>
+                        <p className={isDarkMode ? 'text-white/60' : 'text-gray-500'}>{t('admin.subtitle')}</p>
                     </div>
                     <button
                         onClick={fetchBookings}
                         className={`w-full md:w-auto px-4 py-2 rounded-lg transition-colors ${isDarkMode ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-900'}`}
                     >
-                        Actualizar
+                        {t('admin.update_button')}
                     </button>
                 </motion.div>
 
@@ -260,25 +260,25 @@ const AdminDashboard = () => {
                     className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
                 >
                     <StatCard
-                        title="Ingresos Totales"
+                        title={t('admin.stats.total_revenue')}
                         value={`$${stats.totalRevenue.toLocaleString()}`}
                         icon={<DollarSign className="text-green-500" />}
                         isDarkMode={isDarkMode}
                     />
                     <StatCard
-                        title="Reservas Totales"
+                        title={t('admin.stats.total_bookings')}
                         value={stats.totalBookings}
                         icon={<Calendar className="text-blue-500" />}
                         isDarkMode={isDarkMode}
                     />
                     <StatCard
-                        title="Pendientes"
+                        title={t('admin.stats.pending_bookings')}
                         value={stats.pendingBookings}
                         icon={<Clock className="text-yellow-500" />}
                         isDarkMode={isDarkMode}
                     />
                     <StatCard
-                        title="Completadas"
+                        title={t('admin.stats.completed_bookings')}
                         value={stats.completedBookings}
                         icon={<CheckCircle className="text-green-500" />}
                         isDarkMode={isDarkMode}
@@ -290,13 +290,13 @@ const AdminDashboard = () => {
                     <button
                         onClick={() => setActiveTab('bookings')}
                         className={`pb-4 px-2 font-medium transition-colors relative ${activeTab === 'bookings'
-                                ? (isDarkMode ? 'text-white' : 'text-gray-900')
-                                : (isDarkMode ? 'text-white/40 hover:text-white/60' : 'text-gray-500 hover:text-gray-700')
+                            ? (isDarkMode ? 'text-white' : 'text-gray-900')
+                            : (isDarkMode ? 'text-white/40 hover:text-white/60' : 'text-gray-500 hover:text-gray-700')
                             }`}
                     >
                         <div className="flex items-center gap-2">
                             <Calendar size={18} />
-                            Reservas
+                            {t('admin.bookings')}
                         </div>
                         {activeTab === 'bookings' && (
                             <motion.div
@@ -308,13 +308,13 @@ const AdminDashboard = () => {
                     <button
                         onClick={() => setActiveTab('reviews')}
                         className={`pb-4 px-2 font-medium transition-colors relative ${activeTab === 'reviews'
-                                ? (isDarkMode ? 'text-white' : 'text-gray-900')
-                                : (isDarkMode ? 'text-white/40 hover:text-white/60' : 'text-gray-500 hover:text-gray-700')
+                            ? (isDarkMode ? 'text-white' : 'text-gray-900')
+                            : (isDarkMode ? 'text-white/40 hover:text-white/60' : 'text-gray-500 hover:text-gray-700')
                             }`}
                     >
                         <div className="flex items-center gap-2">
                             <MessageSquare size={18} />
-                            Reseñas
+                            {t('admin.reviews')}
                         </div>
                         {activeTab === 'reviews' && (
                             <motion.div
@@ -340,7 +340,7 @@ const AdminDashboard = () => {
                                 <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`} size={20} />
                                 <input
                                     type="text"
-                                    placeholder="Buscar por nombre, email o placa..."
+                                    placeholder={t('admin.bookings_search_placeholder')}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     className={`w-full rounded-xl pl-10 pr-4 py-3 focus:outline-none border ${isDarkMode
@@ -359,7 +359,7 @@ const AdminDashboard = () => {
                                             : (isDarkMode ? 'bg-white/5 text-white/60 hover:bg-white/10' : 'bg-gray-100 text-gray-600 hover:bg-gray-200')
                                             }`}
                                     >
-                                        {status === 'all' ? 'Todos' : t(`dashboard.status.${status}`, status)}
+                                        {status === 'all' ? t('admin.filters.all') : t(`dashboard.status.${status}`, status)}
                                     </button>
                                 ))}
                             </div>
@@ -376,9 +376,9 @@ const AdminDashboard = () => {
                             {/* Mobile View (Cards) */}
                             <div className="md:hidden space-y-4">
                                 {loading ? (
-                                    <div className={`text-center py-8 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Cargando reservas...</div>
+                                    <div className={`text-center py-8 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{t('admin.messages.loading_bookings')}</div>
                                 ) : filteredBookings.length === 0 ? (
-                                    <div className={`text-center py-8 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>No se encontraron reservas</div>
+                                    <div className={`text-center py-8 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{t('admin.messages.no_bookings_found')}</div>
                                 ) : (
                                     filteredBookings.map((booking) => (
                                         <div key={booking.id} className={`border rounded-xl p-5 space-y-4 ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200 shadow-sm'}`}>
@@ -394,19 +394,19 @@ const AdminDashboard = () => {
 
                                             <div className="grid grid-cols-2 gap-4 text-sm">
                                                 <div>
-                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Servicio</p>
+                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{t('admin.table.service')}</p>
                                                     <p className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.service_name || booking.service?.name || 'Servicio'}</p>
                                                 </div>
                                                 <div>
-                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Fecha</p>
+                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{t('admin.table.date')}</p>
                                                     <p className={isDarkMode ? 'text-white' : 'text-gray-900'}>{booking.booking_date} {booking.booking_time}</p>
                                                 </div>
                                                 <div>
-                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Precio</p>
+                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{t('admin.table.price')}</p>
                                                     <p className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>${booking.total_price?.toLocaleString()}</p>
                                                 </div>
                                                 <div>
-                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>Estado</p>
+                                                    <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{t('admin.table.status')}</p>
                                                     <StatusDropdown
                                                         currentStatus={booking.status}
                                                         onStatusChange={(newStatus) => handleStatusChange(booking.id, newStatus)}
@@ -425,15 +425,15 @@ const AdminDashboard = () => {
                                 <table className="w-full text-left">
                                     <thead>
                                         <tr className={`border-b ${isDarkMode ? 'border-white/10 bg-white/5' : 'border-gray-200 bg-gray-50'}`}>
-                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Cliente</th>
-                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Vehículo</th>
-                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Servicio</th>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('admin.table.client')}</th>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('admin.table.vehicle')}</th>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('admin.table.service')}</th>
                                             <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
                                                 <button
                                                     onClick={toggleDateSort}
                                                     className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
                                                 >
-                                                    Fecha
+                                                    {t('admin.table.date')}
                                                     <ArrowUpDown size={14} className={dateSort !== 'none' ? 'text-blue-500' : ''} />
                                                 </button>
                                             </th>
@@ -442,7 +442,7 @@ const AdminDashboard = () => {
                                                     onClick={toggleStatusSort}
                                                     className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
                                                 >
-                                                    Estado
+                                                    {t('admin.table.status')}
                                                     <ArrowUpDown size={14} className={priceSort === 'none' && dateSort === 'none' ? 'text-blue-500' : ''} />
                                                 </button>
                                             </th>
@@ -451,24 +451,24 @@ const AdminDashboard = () => {
                                                     onClick={togglePriceSort}
                                                     className={`flex items-center gap-1 transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}
                                                 >
-                                                    Precio
+                                                    {t('admin.table.price')}
                                                     <ArrowUpDown size={14} className={priceSort !== 'none' ? 'text-blue-500' : ''} />
                                                 </button>
                                             </th>
-                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Acciones</th>
+                                            <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('admin.table.actions')}</th>
                                         </tr>
                                     </thead>
                                     <tbody className={`divide-y ${isDarkMode ? 'divide-white/5' : 'divide-gray-200'}`}>
                                         {loading ? (
                                             <tr>
                                                 <td colSpan="7" className={`p-8 text-center ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>
-                                                    Cargando reservas...
+                                                    {t('admin.messages.loading_bookings')}
                                                 </td>
                                             </tr>
                                         ) : filteredBookings.length === 0 ? (
                                             <tr>
                                                 <td colSpan="7" className={`p-8 text-center ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>
-                                                    No se encontraron reservas
+                                                    {t('admin.messages.no_bookings_found')}
                                                 </td>
                                             </tr>
                                         ) : (

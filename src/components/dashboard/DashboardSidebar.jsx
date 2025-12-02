@@ -166,7 +166,7 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                         <div className={`relative ${effectiveCollapsed ? '' : ''}`}>
                             <button
                                 onClick={() => setLangOpen(!langOpen)}
-                                className={`flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/10 !text-white hover:!bg-white/20 transition-all duration-300 rounded-xl ${effectiveCollapsed ? 'w-10 h-10 p-0' : 'px-3 py-2'}`}
+                                className={`group relative flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/10 !text-white hover:!bg-white/20 transition-all duration-300 rounded-xl ${effectiveCollapsed ? 'w-10 h-10 p-0' : 'px-3 py-2'}`}
                             >
                                 <span className="_icon">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
@@ -185,6 +185,11 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                                             </svg>
                                         </span>
                                     </>
+                                )}
+                                {effectiveCollapsed && (
+                                    <div className="absolute left-full ml-6 px-3 py-2 bg-white text-black text-sm font-medium rounded-md opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap z-50 shadow-xl pointer-events-none">
+                                        {t('common.language')}
+                                    </div>
                                 )}
                             </button>
 
@@ -234,7 +239,7 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
 
                     <button
                         onClick={handleLogout}
-                        className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-300 group ${effectiveCollapsed ? 'justify-center' : ''}`}
+                        className={`relative w-full flex items-center px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-300 group ${effectiveCollapsed ? 'justify-center' : 'gap-3'}`}
                     >
                         <LogOut size={20} className="group-hover:scale-110 transition-transform min-w-[20px]" />
                         <span className={`font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${effectiveCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>

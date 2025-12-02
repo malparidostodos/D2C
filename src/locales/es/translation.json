@@ -170,9 +170,13 @@
         "password_updated_title": "¡Contraseña actualizada!",
         "redirecting_login": "Redirigiendo al inicio de sesión...",
         "password_length": "La contraseña debe tener al menos 6 caracteres",
-        "passwords_mismatch": "Las contraseñas no coinciden"
+        "passwords_mismatch": "Las contraseñas no coinciden",
+        "logout": "Cerrar Sesión",
+        "logout_success": "Sesión cerrada exitosamente",
+        "logout_error": "Error al cerrar sesión"
     },
     "dashboard": {
+        "seo_title": "Mi Dashboard | TaToClean",
         "title": "Mi Cuenta",
         "welcome": "Bienvenido",
         "subtitle": "Gestiona tus vehículos y reservas desde aquí",
@@ -259,7 +263,10 @@
         "edit_vehicle_title": "Editar Vehículo",
         "updating": "Actualizando...",
         "update_vehicle": "Actualizar Vehículo",
-        "rate_service": "Calificar Servicio",
+        "rate_service": "Calificar",
+        "update_error": "Error al actualizar vehículo",
+        "update_success": "Vehículo actualizado correctamente",
+        "unlink_bookings_error": "Error al desvincular reservas",
         "reviews": "Mis Reseñas",
         "no_reviews": "No has escrito ninguna reseña todavía.",
         "delete_review_confirm": "¿Estás seguro de que quieres eliminar esta reseña?",
@@ -285,7 +292,9 @@
             "booking_not_found": "Reserva no encontrada",
             "already_rated": "Esta reserva ya ha sido calificada",
             "load_error": "Error al cargar la reserva",
-            "select_rating_error": "Por favor selecciona una calificación"
+            "select_rating_error": "Por favor selecciona una calificación",
+            "default_client_name": "Cliente",
+            "owner_of": "Dueño de"
         },
         "user_reviews_page": {
             "seo_title": "Mis Reseñas | TaToClean",
@@ -302,9 +311,13 @@
         }
     },
     "admin": {
+        "title": "Panel de Administración",
+        "subtitle": "Gestiona tus reservas y clientes",
+        "update_button": "Actualizar",
         "reviews": "Reseñas",
         "bookings": "Reservas",
         "search_placeholder": "Buscar reseñas...",
+        "bookings_search_placeholder": "Buscar por nombre, email o placa...",
         "total": "Total",
         "user": "Usuario",
         "rating": "Calificación",
@@ -313,8 +326,38 @@
         "actions": "Acciones",
         "visible": "Visible",
         "hidden": "Oculta",
+        "public": "Pública",
         "toggle_visibility_error": "Error al actualizar visibilidad",
         "delete_review_error": "Error al eliminar reseña",
+        "stats": {
+            "total_revenue": "Ingresos Totales",
+            "total_bookings": "Reservas Totales",
+            "pending_bookings": "Pendientes",
+            "completed_bookings": "Completadas"
+        },
+        "table": {
+            "client": "Cliente",
+            "vehicle": "Vehículo",
+            "service": "Servicio",
+            "date": "Fecha",
+            "status": "Estado",
+            "price": "Precio",
+            "actions": "Acciones"
+        },
+        "filters": {
+            "all": "Todos"
+        },
+        "messages": {
+            "loading_bookings": "Cargando reservas...",
+            "no_bookings_found": "No se encontraron reservas",
+            "status_updated": "Estado actualizado correctamente",
+            "status_update_error": "Error al actualizar el estado",
+            "load_reviews_error": "Error al cargar reseñas",
+            "review_now_visible": "Reseña ahora visible",
+            "review_now_hidden": "Reseña ahora oculta",
+            "review_deleted": "Reseña eliminada",
+            "delete_review_confirm": "¿Eliminar esta reseña permanentemente?"
+        },
         "tooltips": {
             "hide": "Ocultar",
             "make_public": "Hacer pública",
@@ -559,7 +602,9 @@
         "cancel": "Cancelar",
         "delete": "Eliminar",
         "required": "Requerido",
-        "invalid_email": "Correo inválido"
+        "invalid_email": "Correo inválido",
+        "language": "Idioma",
+        "theme": "Tema"
     },
     "pricing": {
         "exclusive_plans": "Planes Exclusivos",

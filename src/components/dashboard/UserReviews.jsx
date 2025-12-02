@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
 import { useOutletContext } from 'react-router-dom'
-import { Star, Calendar, MessageSquare, Trash2, Loader2 } from 'lucide-react'
+import { Star, Calendar, MessageSquare, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import SEO from '../ui/SEO'
+import Tooltip from '../ui/Tooltip'
+import UserReviewsSkeleton from './UserReviewsSkeleton'
 
 const UserReviews = () => {
     const { t } = useTranslation()
@@ -67,11 +69,7 @@ const UserReviews = () => {
     }
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-[50vh]">
-                <Loader2 className={`animate-spin ${isDarkMode ? 'text-white' : 'text-gray-900'}`} size={32} />
-            </div>
-        )
+        return <UserReviewsSkeleton isDarkMode={isDarkMode} />
     }
 
     return (
@@ -140,16 +138,17 @@ const UserReviews = () => {
                                         {review.is_public ? t('dashboard.user_reviews_page.public') : t('dashboard.user_reviews_page.private')}
                                     </span>
 
-                                    <button
-                                        onClick={() => handleDelete(review.id)}
-                                        className={`p-2 rounded-full transition-colors ${isDarkMode
-                                            ? 'hover:bg-red-500/20 text-white/40 hover:text-red-400'
-                                            : 'hover:bg-red-50 text-gray-400 hover:text-red-500'
-                                            }`}
-                                        title={t('dashboard.user_reviews_page.delete_tooltip')}
-                                    >
-                                        <Trash2 size={18} />
-                                    </button>
+                                    <Tooltip content={t('dashboard.user_reviews_page.delete_tooltip')}>
+                                        <button
+                                            onClick={() => handleDelete(review.id)}
+                                            className={`p-2 rounded-full transition-colors ${isDarkMode
+                                                ? 'hover:bg-red-500/20 text-white/40 hover:text-red-400'
+                                                : 'hover:bg-red-50 text-gray-400 hover:text-red-500'
+                                                }`}
+                                        >
+                                            <Trash2 size={18} />
+                                        </button>
+                                    </Tooltip>
                                 </div>
                             </motion.div>
                         ))}

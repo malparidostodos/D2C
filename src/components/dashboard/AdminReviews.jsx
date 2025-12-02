@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
 import { Star, Trash2, Eye, EyeOff, Search, Loader2 } from 'lucide-react'
+import Tooltip from '../ui/Tooltip'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
@@ -34,7 +35,7 @@ const AdminReviews = ({ isDarkMode }) => {
             setReviews(data || [])
         } catch (error) {
             console.error('Error fetching reviews:', error)
-            toast.error('Error al cargar reseñas')
+            toast.error(t('admin.messages.load_reviews_error'))
         } finally {
             setLoading(false)
         }
@@ -52,14 +53,14 @@ const AdminReviews = ({ isDarkMode }) => {
             setReviews(reviews.map(r =>
                 r.id === id ? { ...r, is_public: !currentStatus } : r
             ))
-            toast.success(`Reseña ahora ${!currentStatus ? 'visible' : 'oculta'}`)
+            toast.success(!currentStatus ? t('admin.messages.review_now_visible') : t('admin.messages.review_now_hidden'))
         } catch (error) {
-            toast.error('Error al actualizar visibilidad')
+            toast.error(t('admin.toggle_visibility_error'))
         }
     }
 
     const handleDelete = async (id) => {
-        if (!confirm('¿Eliminar esta reseña permanentemente?')) return
+        if (!confirm(t('admin.messages.delete_review_confirm'))) return
 
         try {
             const { error } = await supabase
@@ -70,9 +71,9 @@ const AdminReviews = ({ isDarkMode }) => {
             if (error) throw error
 
             setReviews(reviews.filter(r => r.id !== id))
-            toast.success('Reseña eliminada')
+            toast.success(t('admin.messages.review_deleted'))
         } catch (error) {
-            toast.error('Error al eliminar reseña')
+            toast.error(t('admin.delete_review_error'))
         }
     }
 
@@ -92,7 +93,7 @@ const AdminReviews = ({ isDarkMode }) => {
                     <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`} size={20} />
                     <input
                         type="text"
-                        placeholder="Buscar reseñas..."
+                        placeholder={t('admin.search_placeholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className={`w-full rounded-xl pl-10 pr-4 py-3 focus:outline-none border ${isDarkMode
@@ -102,7 +103,7 @@ const AdminReviews = ({ isDarkMode }) => {
                     />
                 </div>
                 <div className={`px-4 py-2 rounded-lg ${isDarkMode ? 'bg-white/5 text-white/60' : 'bg-gray-100 text-gray-600'}`}>
-                    Total: {filteredReviews.length}
+                    {t('admin.total')}: {filteredReviews.length}
                 </div>
             </div>
 
@@ -112,11 +113,11 @@ const AdminReviews = ({ isDarkMode }) => {
                     <table className="w-full text-left">
                         <thead>
                             <tr className={`border-b ${isDarkMode ? 'border-white/10 bg-white/5' : 'border-gray-200 bg-gray-50'}`}>
-                                <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Usuario</th>
-                                <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Calificación</th>
-                                <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Comentario</th>
-                                <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Estado</th>
-                                <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>Acciones</th>
+                                <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('admin.user')}</th>
+                                <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('admin.rating')}</th>
+                                <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('admin.comment')}</th>
+                                <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('admin.status')}</th>
+                                <th className={`p-4 font-medium text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>{t('admin.actions')}</th>
                             </tr>
                         </thead>
                         <tbody className={`divide-y ${isDarkMode ? 'divide-white/5' : 'divide-gray-200'}`}>
@@ -142,32 +143,34 @@ const AdminReviews = ({ isDarkMode }) => {
                                             ? 'bg-green-500/10 text-green-500'
                                             : 'bg-yellow-500/10 text-yellow-500'
                                             }`}>
-                                            {review.is_public ? 'Pública' : 'Oculta'}
+                                            {review.is_public ? t('admin.public') : t('admin.hidden')}
                                         </span>
                                     </td>
                                     <td className="p-4">
                                         <div className="flex items-center gap-2">
-                                            <button
-                                                onClick={() => handleToggleVisibility(review.id, review.is_public)}
-                                                className={`p-2 rounded-full transition-colors ${review.is_public
-                                                    ? 'bg-green-500/10 text-green-500 hover:bg-green-500/20'
-                                                    : 'bg-gray-500/10 text-gray-500 hover:bg-gray-500/20'
-                                                    }`}
-                                                title={review.is_public ? t('admin.tooltips.hide') : t('admin.tooltips.make_public')}
-                                            >
-                                                {review.is_public ? <Eye size={18} /> : <EyeOff size={18} />}
-                                            </button>
+                                            <Tooltip content={review.is_public ? t('admin.tooltips.hide') : t('admin.tooltips.make_public')}>
+                                                <button
+                                                    onClick={() => handleToggleVisibility(review.id, review.is_public)}
+                                                    className={`p-2 rounded-full transition-colors ${review.is_public
+                                                        ? 'bg-green-500/10 text-green-500 hover:bg-green-500/20'
+                                                        : 'bg-gray-500/10 text-gray-500 hover:bg-gray-500/20'
+                                                        }`}
+                                                >
+                                                    {review.is_public ? <Eye size={18} /> : <EyeOff size={18} />}
+                                                </button>
+                                            </Tooltip>
 
-                                            <button
-                                                onClick={() => handleDelete(review.id)}
-                                                className={`p-2 rounded-full transition-colors ${isDarkMode
-                                                    ? 'hover:bg-red-500/20 text-white/40 hover:text-red-400'
-                                                    : 'hover:bg-red-50 text-gray-400 hover:text-red-500'
-                                                    }`}
-                                                title={t('admin.tooltips.delete')}
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
+                                            <Tooltip content={t('admin.tooltips.delete')}>
+                                                <button
+                                                    onClick={() => handleDelete(review.id)}
+                                                    className={`p-2 rounded-full transition-colors ${isDarkMode
+                                                        ? 'hover:bg-red-500/20 text-white/40 hover:text-red-400'
+                                                        : 'hover:bg-red-50 text-gray-400 hover:text-red-500'
+                                                        }`}
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </Tooltip>
                                         </div>
                                     </td>
                                 </tr>

@@ -7,6 +7,7 @@ import { supabase } from '../../lib/supabase'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 import { User, Mail, Lock, ArrowLeft, Check, AlertCircle, Edit2, Phone, ChevronDown } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
+import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
 
 
@@ -283,32 +284,36 @@ const ProfilePage = () => {
                                         {!isAdmin ? (
                                             <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                                 {isEditingName ? (
-                                                    <button
-                                                        type="submit"
-                                                        disabled={isSubmittingName}
-                                                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                                                        title={t('common.save')}
-                                                    >
-                                                        <Check size={18} />
-                                                    </button>
+                                                    <Tooltip content={t('common.save')}>
+                                                        <button
+                                                            type="submit"
+                                                            disabled={isSubmittingName}
+                                                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                                        >
+                                                            <Check size={18} />
+                                                        </button>
+                                                    </Tooltip>
                                                 ) : (
-                                                    <button
-                                                        type="button"
-                                                        onClick={(e) => {
-                                                            e.preventDefault()
-                                                            setIsEditingName(true)
-                                                        }}
-                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                                        title={t('common.edit')}
-                                                    >
-                                                        <Edit2 size={18} />
-                                                    </button>
+                                                    <Tooltip content={t('common.edit')}>
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.preventDefault()
+                                                                setIsEditingName(true)
+                                                            }}
+                                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                        >
+                                                            <Edit2 size={18} />
+                                                        </button>
+                                                    </Tooltip>
                                                 )}
                                             </div>
                                         ) : (
-                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" title={t('profile.edit_locked')}>
-                                                <Lock size={18} />
-                                            </div>
+                                            <Tooltip content={t('profile.edit_locked')}>
+                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                                    <Lock size={18} />
+                                                </div>
+                                            </Tooltip>
                                         )}
                                     </div>
                                     {errorsName.fullName && <p className="text-red-500 text-sm pl-1">{errorsName.fullName.message}</p>}
@@ -329,32 +334,36 @@ const ProfilePage = () => {
                                         {!isAdmin ? (
                                             <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                                 {isEditingEmail ? (
-                                                    <button
-                                                        type="submit"
-                                                        disabled={isSubmittingEmail}
-                                                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                                                        title={t('common.save')}
-                                                    >
-                                                        <Check size={18} />
-                                                    </button>
+                                                    <Tooltip content={t('common.save')}>
+                                                        <button
+                                                            type="submit"
+                                                            disabled={isSubmittingEmail}
+                                                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                                        >
+                                                            <Check size={18} />
+                                                        </button>
+                                                    </Tooltip>
                                                 ) : (
-                                                    <button
-                                                        type="button"
-                                                        onClick={(e) => {
-                                                            e.preventDefault()
-                                                            setIsEditingEmail(true)
-                                                        }}
-                                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                                        title={t('common.edit')}
-                                                    >
-                                                        <Edit2 size={18} />
-                                                    </button>
+                                                    <Tooltip content={t('common.edit')}>
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.preventDefault()
+                                                                setIsEditingEmail(true)
+                                                            }}
+                                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                        >
+                                                            <Edit2 size={18} />
+                                                        </button>
+                                                    </Tooltip>
                                                 )}
                                             </div>
                                         ) : (
-                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" title={t('profile.edit_locked')}>
-                                                <Lock size={18} />
-                                            </div>
+                                            <Tooltip content={t('profile.edit_locked')}>
+                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                                    <Lock size={18} />
+                                                </div>
+                                            </Tooltip>
                                         )}
                                     </div>
                                     {errorsEmail.email && <p className="text-red-500 text-sm pl-1">{errorsEmail.email.message}</p>}
@@ -431,26 +440,28 @@ const ProfilePage = () => {
                                             <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                                 <div className="absolute right-2 top-1/2 -translate-y-1/2">
                                                     {isEditingPhone ? (
-                                                        <button
-                                                            type="submit"
-                                                            disabled={isSubmittingPhone}
-                                                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                                                            title={t('common.save')}
-                                                        >
-                                                            <Check size={18} />
-                                                        </button>
+                                                        <Tooltip content={t('common.save')}>
+                                                            <button
+                                                                type="submit"
+                                                                disabled={isSubmittingPhone}
+                                                                className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                                            >
+                                                                <Check size={18} />
+                                                            </button>
+                                                        </Tooltip>
                                                     ) : (
-                                                        <button
-                                                            type="button"
-                                                            onClick={(e) => {
-                                                                e.preventDefault()
-                                                                setIsEditingPhone(true)
-                                                            }}
-                                                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                                            title={t('common.edit')}
-                                                        >
-                                                            <Edit2 size={18} />
-                                                        </button>
+                                                        <Tooltip content={t('common.edit')}>
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault()
+                                                                    setIsEditingPhone(true)
+                                                                }}
+                                                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                            >
+                                                                <Edit2 size={18} />
+                                                            </button>
+                                                        </Tooltip>
                                                     )}
                                                 </div>
                                             </div>

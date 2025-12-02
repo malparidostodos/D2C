@@ -194,7 +194,7 @@ const UserDashboard = () => {
 
         if (bookingError) {
             console.error('Error unlinking associated bookings:', bookingError)
-            toast.error('Error al desvincular reservas: ' + bookingError.message)
+            toast.error(t('dashboard.unlink_bookings_error') + ': ' + bookingError.message)
             setShowDeleteModal(false)
             return
         }

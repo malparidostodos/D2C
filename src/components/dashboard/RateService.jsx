@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Star, Car, Calendar, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { Star, Car, Calendar, CheckCircle, AlertCircle } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import AnimatedButton from '../ui/AnimatedButton'
 import SEO from '../ui/SEO'
+import RateServiceSkeleton from './RateServiceSkeleton'
 
 const RateService = () => {
     const { bookingId } = useParams()
@@ -84,12 +85,12 @@ const RateService = () => {
         justSubmitted.current = true
 
         try {
-            const rawName = booking.client_name ? booking.client_name.split(' ')[0] : 'Cliente'
+            const rawName = booking.client_name ? booking.client_name.split(' ')[0] : t('dashboard.rate_service_page.default_client_name')
             const name = rawName.charAt(0).toUpperCase() + rawName.slice(1).toLowerCase()
 
             let role = ''
             if (vehicle && (vehicle.brand || vehicle.model)) {
-                role = `Dueño de ${vehicle.brand || ''} ${vehicle.model || ''}`.trim()
+                role = `${t('dashboard.rate_service_page.owner_of')} ${vehicle.brand || ''} ${vehicle.model || ''}`.trim()
             }
 
             // 1. Insert testimonial
@@ -127,11 +128,7 @@ const RateService = () => {
     }
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center h-full min-h-[50vh]">
-                <Loader2 className="animate-spin text-accent" size={40} />
-            </div>
-        )
+        return <RateServiceSkeleton isDarkMode={isDarkMode} />
     }
 
     return (
