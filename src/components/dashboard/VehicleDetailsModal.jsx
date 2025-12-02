@@ -113,24 +113,24 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 onClick={(e) => e.stopPropagation()}
-                className={`${isDarkMode ? 'bg-[#111] border border-white/10' : 'bg-white'} rounded-[2.5rem] p-6 md:p-8 max-w-4xl w-full overflow-hidden shadow-2xl relative`}
+                className={`${isDarkMode ? 'bg-[#111] border border-white/10' : 'bg-white'} rounded-[2.5rem] p-5 md:p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative scrollbar-hide`}
             >
                 <button
                     onClick={onClose}
-                    className={`absolute top-6 right-6 p-2 rounded-full ${isDarkMode ? 'hover:bg-white/10 text-white/40 hover:text-white' : 'hover:bg-gray-100 text-gray-400 hover:text-gray-900'} transition-colors z-10`}
+                    className={`absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full ${isDarkMode ? 'hover:bg-white/10 text-white/40 hover:text-white' : 'hover:bg-gray-100 text-gray-400 hover:text-gray-900'} transition-colors z-10`}
                 >
                     <X size={24} />
                 </button>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
                     {/* Left Column: Vehicle Card */}
-                    <div className={`relative rounded-[2rem] p-8 ${isDarkMode ? 'bg-white/5 border border-white/10' : 'bg-white shadow-xl shadow-blue-900/5 border border-gray-100'} flex flex-col items-center text-center`}>
+                    <div className={`relative rounded-[2rem] p-5 md:p-8 ${isDarkMode ? 'bg-white/5 border border-white/10' : 'bg-white shadow-xl shadow-blue-900/5 border border-gray-100'} flex flex-col items-center text-center`}>
 
-                        {/* Delete Button (Only visible when not editing) */}
+                        {/* Delete Button (Only visible when not editing) - Moved to Left */}
                         {!isEditing && (
                             <button
                                 onClick={() => onDelete(vehicle)}
-                                className={`absolute top-6 right-6 p-2 rounded-xl transition-colors ${isDarkMode ? 'text-red-400 hover:bg-red-500/10' : 'text-red-500 hover:bg-red-50'}`}
+                                className={`absolute top-4 left-4 md:top-6 md:left-6 p-2 rounded-xl transition-colors ${isDarkMode ? 'text-red-400 hover:bg-red-500/10' : 'text-red-500 hover:bg-red-50'}`}
                                 title={t('common.delete')}
                             >
                                 <Trash2 size={20} />
@@ -138,7 +138,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                         )}
 
                         {/* Nickname */}
-                        <div className="mb-6 w-full">
+                        <div className="mb-4 w-full pt-4">
                             {isEditing ? (
                                 <input
                                     type="text"
@@ -155,12 +155,12 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                             )}
                         </div>
 
-                        {/* Image */}
-                        <div className="w-full aspect-[4/3] flex items-center justify-center mb-6">
+                        {/* Image - Reduced size */}
+                        <div className="w-full h-32 md:h-48 flex items-center justify-center mb-4">
                             <img
                                 src={getVehicleImage(vehicle.vehicle_type)}
                                 alt={vehicle.vehicle_type}
-                                className="w-full h-full object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+                                className="h-full w-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
                             />
                         </div>
 
@@ -225,16 +225,16 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                     </div>
 
                     {/* Right Column: History & Actions */}
-                    <div className="flex flex-col justify-between py-4">
-                        <div className="space-y-10">
+                    <div className="flex flex-col justify-between py-2 md:py-4">
+                        <div className="space-y-8 md:space-y-10">
                             {/* Last Service */}
                             <div>
-                                <h3 className={`text-2xl font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                <h3 className={`text-xl md:text-2xl font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                     {t('dashboard.last_service_title', 'Último Servicio Realizado')}
                                 </h3>
                                 {lastBooking ? (
                                     <div>
-                                        <p className={`text-lg ${isDarkMode ? 'text-white/80' : 'text-gray-600'} mb-2`}>
+                                        <p className={`text-base md:text-lg ${isDarkMode ? 'text-white/80' : 'text-gray-600'} mb-2`}>
                                             {lastBooking.service?.name} ({new Date(lastBooking.booking_date).toLocaleDateString()})
                                         </p>
                                         <button className={`flex items-center gap-1 text-sm font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} hover:underline`}>
@@ -272,13 +272,13 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                         </div>
 
                         {/* Actions */}
-                        <div className="flex gap-4 mt-8 md:mt-0">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 md:mt-0">
                             {isEditing ? (
                                 <>
                                     <button
                                         onClick={handleCancel}
                                         disabled={isLoading}
-                                        className={`flex-1 py-4 rounded-2xl font-bold text-center transition-colors ${isDarkMode
+                                        className={`flex-1 py-3 md:py-4 rounded-2xl font-bold text-center transition-colors ${isDarkMode
                                             ? 'bg-white/10 text-white hover:bg-white/20'
                                             : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                             }`}
@@ -288,7 +288,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                     <button
                                         onClick={handleSave}
                                         disabled={isLoading || !!errors.plate || !formData.plate}
-                                        className="flex-1 py-4 rounded-2xl font-bold text-center bg-green-600 text-white hover:bg-green-700 transition-colors shadow-lg shadow-green-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="flex-1 py-3 md:py-4 rounded-2xl font-bold text-center bg-green-600 text-white hover:bg-green-700 transition-colors shadow-lg shadow-green-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {isLoading ? (
                                             <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
@@ -304,7 +304,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                 <>
                                     <button
                                         onClick={() => setIsEditing(true)}
-                                        className={`flex-1 py-4 rounded-2xl font-bold text-center transition-colors ${isDarkMode
+                                        className={`flex-1 py-3 md:py-4 rounded-2xl font-bold text-center transition-colors ${isDarkMode
                                             ? 'bg-white/10 text-white hover:bg-white/20'
                                             : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                             }`}
@@ -313,7 +313,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                     </button>
                                     <button
                                         onClick={() => onBook(vehicle)}
-                                        className="flex-1 py-4 rounded-2xl font-bold text-center bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
+                                        className="flex-1 py-3 md:py-4 rounded-2xl font-bold text-center bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
                                     >
                                         {t('dashboard.book_new_service', 'Reservar nuevo servicio')}
                                     </button>

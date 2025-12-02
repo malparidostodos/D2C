@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
 import { Home, ChevronDown, ArrowUpRight, User, ArrowRight } from 'lucide-react';
@@ -22,7 +22,11 @@ const Header = ({ theme = 'default' }) => {
 
     const [user, setUser] = useState(null);
     const { t, i18n } = useTranslation();
+    const location = useLocation();
     const currentLang = i18n.language?.startsWith('en') ? 'EN' : 'ES';
+
+    const isHomePage = location.pathname === '/' || location.pathname === '/en' || location.pathname === '/en/';
+    const showAuthButton = !isHomePage || activeSection !== '#inicio';
 
     const languages = [
         { code: 'ES', label: 'Español' },
@@ -116,22 +120,21 @@ const Header = ({ theme = 'default' }) => {
                             )}
                         </div>
 
-                        {/* Mobile Login (Navbar) */}
                         <div className="md:hidden flex items-center">
                             {user ? (
                                 <Link
                                     to={getLocalizedPath("/dashboard")}
-                                    className="_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 !bg-white/10 !backdrop-blur-md !border !border-white/20 !text-white"
+                                    className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${theme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
                                 >
                                     <User size={16} />
                                     <span className="font-medium text-xs">{t('dashboard.title')}</span>
                                 </Link>
                             ) : (
                                 <Link
-                                    to={getLocalizedPath("/login")}
+                                    to={getLocalizedPath(showAuthButton ? "/login" : "/signup")}
                                     className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${theme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
                                 >
-                                    <span className="font-medium text-xs">{t('header.login')}</span>
+                                    <span className="font-medium text-xs">{showAuthButton ? t('header.login') : t('header.signup')}</span>
                                 </Link>
                             )}
                         </div>
@@ -390,14 +393,23 @@ const Header = ({ theme = 'default' }) => {
                                 )}
                             </div>
 
-                            {/* Register Button (Mobile Menu) */}
-                            {!user && (
+                            {/* Login/Dashboard Button (Mobile Menu) */}
+                            {!user ? (
                                 <Link
-                                    to={getLocalizedPath("/signup")}
+                                    to={getLocalizedPath("/login")}
                                     onClick={handleMenuClose}
                                     className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm"
                                 >
-                                    {t('header.signup')}
+                                    {t('header.login')}
+                                </Link>
+                            ) : (
+                                <Link
+                                    to={getLocalizedPath("/dashboard")}
+                                    onClick={handleMenuClose}
+                                    className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm gap-2"
+                                >
+                                    <User size={16} />
+                                    {t('dashboard.title')}
                                 </Link>
                             )}
                         </div>

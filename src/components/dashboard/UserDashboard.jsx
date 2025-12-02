@@ -16,6 +16,7 @@ import { z } from 'zod'
 import SEO from '../ui/SEO'
 import DashboardSkeleton from './DashboardSkeleton'
 import VehicleDetailsModal from './VehicleDetailsModal'
+import ConfirmationModal from '../ui/ConfirmationModal'
 
 const UserDashboard = () => {
     const { t, i18n } = useTranslation()
@@ -516,9 +517,10 @@ const UserDashboard = () => {
                                         <motion.div
                                             key={vehicle.id}
                                             whileHover={{ scale: 1.02, y: -2 }}
+                                            transition={{ duration: 0.2 }}
                                             whileTap={{ scale: 0.98 }}
                                             onClick={() => setSelectedVehicle(vehicle)}
-                                            className={`group cursor-pointer ${isDarkMode ? 'bg-[#111] border-white/10 hover:bg-white/5 hover:border-white/20' : 'bg-white border-gray-200 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/5'} border rounded-3xl p-5 transition-all duration-300 relative overflow-hidden`}
+                                            className={`group cursor-pointer ${isDarkMode ? 'bg-[#111] border-white/10 hover:bg-white/5 hover:border-white/20' : 'bg-white border-gray-200 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-500/5'} border rounded-3xl p-5 transition-all duration-200 relative overflow-hidden`}
                                         >
                                             <div className="flex items-center gap-4">
                                                 {/* Imagen pequeña */}
@@ -555,7 +557,7 @@ const UserDashboard = () => {
                                                 </div>
 
                                                 {/* Chevron indicando click */}
-                                                <div className={`opacity-0 group-hover:opacity-100 transition-opacity ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`}>
+                                                <div className={`opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`}>
                                                     <Edit2 size={16} />
                                                 </div>
                                             </div>
@@ -565,9 +567,10 @@ const UserDashboard = () => {
                                     {/* Botón "Añadir" como tarjeta compacta al final */}
                                     <motion.button
                                         whileHover={{ scale: 1.02, y: -2 }}
+                                        transition={{ duration: 0.2 }}
                                         whileTap={{ scale: 0.98 }}
                                         onClick={() => setShowAddVehicle(true)}
-                                        className={`flex items-center justify-center gap-3 p-5 rounded-3xl border-2 border-dashed transition-all ${isDarkMode ? 'border-white/10 hover:border-white/30 hover:bg-white/5 text-white/40 hover:text-white' : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-400 hover:text-blue-600'}`}
+                                        className={`flex items-center justify-center gap-3 p-5 rounded-3xl border-2 border-dashed transition-all duration-200 ${isDarkMode ? 'border-white/10 hover:border-white/30 hover:bg-white/5 text-white/40 hover:text-white' : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-400 hover:text-blue-600'}`}
                                     >
                                         <Plus size={20} />
                                         <span className="font-medium">{t('dashboard.add_vehicle')}</span>
@@ -721,7 +724,7 @@ const UserDashboard = () => {
                 </div>
             </div >
             {/* Modals */}
-            < AnimatePresence >
+            <AnimatePresence>
                 <AddVehicleModal
                     isOpen={showAddVehicle || showEditVehicleModal}
                     onClose={() => {
@@ -739,7 +742,6 @@ const UserDashboard = () => {
                     isDarkMode={isDarkMode}
                 />
 
-                {/* Modal ConfirmaciÃ³n Cancelar */}
                 <ConfirmationModal
                     isOpen={showCancelModal}
                     onClose={() => {
@@ -751,6 +753,8 @@ const UserDashboard = () => {
                     message={t('dashboard.cancel_confirm_message')}
                     cancelText={t('dashboard.keep_booking')}
                     confirmText={t('dashboard.confirm_cancel')}
+                    isDarkMode={isDarkMode}
+                    variant="danger"
                 />
 
                 <DeleteVehicleModal
@@ -772,54 +776,12 @@ const UserDashboard = () => {
                     bookings={bookings}
                     isDarkMode={isDarkMode}
                 />
-            </AnimatePresence >
-        </div >
-    )
-}
-
-// Modal de ConfirmaciÃ³n GenÃ©rico
-const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, cancelText, confirmText }) => {
-    if (!isOpen) return null
-
-    return (
-        <div
-            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            onClick={onClose}
-        >
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                onClick={(e) => e.stopPropagation()}
-                className="bg-[#111] border border-white/10 rounded-3xl p-6 md:p-8 max-w-md w-full text-center"
-            >
-                <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <X size={32} className="text-red-500" />
-                </div>
-
-                <h2 className="text-2xl font-bold text-white mb-4">{title}</h2>
-                <p className="text-white/60 mb-8">{message}</p>
-
-                <div className="flex gap-3">
-                    <button
-                        onClick={onClose}
-                        className="flex-1 px-4 py-3 rounded-xl bg-white/5 text-white hover:bg-white/10 transition-colors font-medium"
-                    >
-                        {cancelText}
-                    </button>
-                    <button
-                        onClick={onConfirm}
-                        className="flex-1 px-4 py-3 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors font-bold"
-                    >
-                        {confirmText}
-                    </button>
-                </div>
-            </motion.div>
+            </AnimatePresence>
         </div>
     )
 }
 
-// Modal para agregar vehÃ­culo
+// Modal para agregar vehículo
 const addVehicleSchema = z.object({
     vehicleType: z.string(),
     plate: z.string().min(1, "Plate is required"),
@@ -835,8 +797,6 @@ const addVehicleSchema = z.object({
         })
     }
 })
-
-
 
 const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit, isDarkMode }) => {
     const { t } = useTranslation()
@@ -888,9 +848,9 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit, isDarkMode
 
         const { data: { user } } = await supabase.auth.getUser()
 
-        // Si estamos editando y la placa cambiÃ³, verificar duplicados
+        // Si estamos editando y la placa cambió, verificar duplicados
         if (!vehicleToEdit || (vehicleToEdit && vehicleToEdit.plate !== formData.plate)) {
-            // ðŸ”’ VALIDACIÃ“N DE SEGURIDAD: Verificar si la placa ya tiene reservas
+            // 🔒 VALIDACIÓN DE SEGURIDAD: Verificar si la placa ya tiene reservas
             const { data: existingBookings } = await supabase
                 .from('bookings')
                 .select('client_email')
@@ -910,7 +870,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit, isDarkMode
         let errorResult = null
 
         if (vehicleToEdit) {
-            // Actualizar vehÃ­culo existente
+            // Actualizar vehículo existente
             const { error: updateError } = await supabase
                 .from('user_vehicles')
                 .update({
@@ -924,7 +884,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit, isDarkMode
 
             errorResult = updateError
         } else {
-            // Insertar nuevo vehÃ­culo
+            // Insertar nuevo vehículo
             const { error: insertError } = await supabase
                 .from('user_vehicles')
                 .insert([{
@@ -959,7 +919,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit, isDarkMode
         >
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 onClick={(e) => e.stopPropagation()}
                 className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-white border-gray-200'} border rounded-3xl p-6 md:p-8 max-w-md w-full`}

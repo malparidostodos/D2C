@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import SEO from '../ui/SEO'
 import Tooltip from '../ui/Tooltip'
+import ConfirmationModal from '../ui/ConfirmationModal'
 import UserReviewsSkeleton from './UserReviewsSkeleton'
 
 const UserReviews = () => {
@@ -49,22 +50,33 @@ const UserReviews = () => {
         }
     }
 
-    const handleDelete = async (id) => {
-        if (!confirm(t('dashboard.user_reviews_page.delete_confirm'))) return
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [reviewToDelete, setReviewToDelete] = useState(null)
+
+    const confirmDelete = (id) => {
+        setReviewToDelete(id)
+        setDeleteModalOpen(true)
+    }
+
+    const handleDelete = async () => {
+        if (!reviewToDelete) return
 
         try {
             const { error } = await supabase
                 .from('testimonials')
                 .delete()
-                .eq('id', id)
+                .eq('id', reviewToDelete)
 
             if (error) throw error
 
-            setReviews(reviews.filter(r => r.id !== id))
+            setReviews(reviews.filter(r => r.id !== reviewToDelete))
             toast.success(t('dashboard.user_reviews_page.delete_success'))
         } catch (error) {
             console.error('Error deleting review:', error)
             toast.error(t('dashboard.user_reviews_page.delete_error'))
+        } finally {
+            setDeleteModalOpen(false)
+            setReviewToDelete(null)
         }
     }
 
@@ -140,7 +152,7 @@ const UserReviews = () => {
 
                                     <Tooltip content={t('dashboard.user_reviews_page.delete_tooltip')}>
                                         <button
-                                            onClick={() => handleDelete(review.id)}
+                                            onClick={() => confirmDelete(review.id)}
                                             className={`p-2 rounded-full transition-colors ${isDarkMode
                                                 ? 'hover:bg-red-500/20 text-white/40 hover:text-red-400'
                                                 : 'hover:bg-red-50 text-gray-400 hover:text-red-500'
@@ -154,6 +166,18 @@ const UserReviews = () => {
                         ))}
                     </div>
                 )}
+
+                <ConfirmationModal
+                    isOpen={deleteModalOpen}
+                    onClose={() => setDeleteModalOpen(false)}
+                    onConfirm={handleDelete}
+                    title={t('dashboard.user_reviews_page.delete_tooltip')}
+                    message={t('dashboard.user_reviews_page.delete_confirm')}
+                    confirmText={t('common.delete')}
+                    cancelText={t('common.cancel')}
+                    isDarkMode={isDarkMode}
+                    variant="danger"
+                />
             </div>
         </div>
     )
