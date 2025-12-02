@@ -29,6 +29,7 @@ const AdminDashboard = () => {
     }, [])
     const [filter, setFilter] = useState('all')
     const [searchTerm, setSearchTerm] = useState('')
+    const [isSearchFocused, setIsSearchFocused] = useState(false)
     const [stats, setStats] = useState({
         totalBookings: 0,
         totalRevenue: 0,
@@ -338,12 +339,20 @@ const AdminDashboard = () => {
                         >
                             <div className="relative flex-1">
                                 <Search className={`absolute left-3 top-1/2 -translate-y-1/2 ${isDarkMode ? 'text-white/40' : 'text-gray-400'}`} size={20} />
+
+                                {/* Focus Indicator Line */}
+                                <div
+                                    className={`absolute left-11 top-1/2 -translate-y-1/2 w-[2px] h-5 bg-blue-500 pointer-events-none transition-opacity duration-200 ${isSearchFocused && searchTerm === '' ? 'opacity-100 animate-pulse' : 'opacity-0'}`}
+                                />
+
                                 <input
                                     type="text"
                                     placeholder={t('admin.bookings_search_placeholder')}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className={`w-full rounded-xl pl-10 pr-4 py-3 focus:outline-none border ${isDarkMode
+                                    onFocus={() => setIsSearchFocused(true)}
+                                    onBlur={() => setIsSearchFocused(false)}
+                                    className={`w-full rounded-xl pl-12 pr-4 py-3 focus:outline-none border ${isDarkMode
                                         ? 'bg-white/5 border-white/10 text-white focus:border-white/30'
                                         : 'bg-white border-gray-200 text-gray-900 focus:border-gray-300 shadow-sm'
                                         }`}

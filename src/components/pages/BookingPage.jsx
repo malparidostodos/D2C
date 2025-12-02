@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle, Plus } from 'lucide-react'
+import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle, Plus, Copy, Eye, EyeOff } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
+import AccountCreatedModal from '../booking/AccountCreatedModal'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import VehiclePlateSelector from '../ui/VehiclePlateSelector'
@@ -176,6 +177,7 @@ const BookingPage = () => {
     const [loadingVehicles, setLoadingVehicles] = useState(true)
     const [useExistingVehicle, setUseExistingVehicle] = useState(false) // Si selecciona vehículo existente
     const [newUserCredentials, setNewUserCredentials] = useState(null) // Credenciales de usuario nuevo creado automáticamente
+    const [showAccountModal, setShowAccountModal] = useState(false)
 
     const getLocalizedPath = (path) => {
         const prefix = i18n.language === 'en' ? '/en' : ''
@@ -642,6 +644,10 @@ const BookingPage = () => {
                     // console.log('User account created successfully:', signUpData.user?.id)
                     // Guardar credenciales para mostrar en la confirmación
                     setNewUserCredentials({ email, password })
+                    // Pequeño delay para que la animación de confirmación termine antes de mostrar el modal
+                    setTimeout(() => {
+                        setShowAccountModal(true)
+                    }, 1500)
                     newlyCreatedUser = signUpData.user
 
                     // Iniciar sesión automáticamente con las credenciales creadas
@@ -656,6 +662,7 @@ const BookingPage = () => {
                             console.error('Error signing in after account creation:', signInError)
                         } else {
                             // console.log('User signed in successfully after account creation')
+                            setIsAuthenticated(true)
                         }
                     } catch (signInErr) {
                         console.error('Exception during auto sign-in:', signInErr)
@@ -771,6 +778,11 @@ const BookingPage = () => {
         setIsConfirmed(true)
     }
 
+    const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text)
+        toast.success(t('booking.password_copied'))
+    }
+
     const variants = {
         enter: (direction) => ({
             x: direction > 0 ? 1000 : -1000,
@@ -808,53 +820,57 @@ const BookingPage = () => {
                         {t('booking.confirmed_title')}
                     </h2>
                     <p className="text-white/60 mb-8 text-lg">
-                        {t('booking.confirmed_message')} <span className="text-white font-medium">{formData.clientInfo.email}</span>.
+                        {t('booking.confirmed_message')} <span className="text-white font-medium">{formData.clientInfo.email}</span>. {t('booking.confirmed_message_suffix')}
                     </p>
 
-                    <div className="bg-white/5 rounded-2xl p-6 mb-8 text-left space-y-4">
-                        <div className="flex justify-between">
-                            <span className="text-white/40">{t('booking.steps.date')}</span>
-                            <span className="text-white font-medium capitalize">{formatDateLong(formData.date)}</span>
+                    {/* Booking Details Card - Lighter background, subtle border */}
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8 text-left space-y-6">
+                        <div className="flex justify-between items-center">
+                            <span className="text-white/40 uppercase text-xs tracking-wider">{t('booking.steps.date')}</span>
+                            <span className="text-white font-bold text-xl capitalize">{formatDateLong(formData.date)}</span>
                         </div>
-                        <div className="flex justify-between">
-                            <span className="text-white/40">{t('booking.time_label')}</span>
-                            <span className="text-white font-medium">{formData.time}</span>
+                        <div className="flex justify-between items-center">
+                            <span className="text-white/40 uppercase text-xs tracking-wider">{t('booking.time_label')}</span>
+                            <span className="text-white font-bold text-xl">{formData.time}</span>
                         </div>
-                        <div className="flex justify-between">
-                            <span className="text-white/40">{t('booking.service')}</span>
-                            <span className="text-white font-medium">{formData.service?.name}</span>
+                        <div className="flex justify-between items-center">
+                            <span className="text-white/40 uppercase text-xs tracking-wider">{t('booking.service')}</span>
+                            <span className="text-white font-medium text-lg">{formData.service?.name}</span>
                         </div>
                     </div>
 
-                    {/* Mostrar credenciales si se creó una nueva cuenta */}
-                    {newUserCredentials && (
-                        <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6 mb-8 text-left">
-                            <h3 className="text-xl font-bold text-blue-400 mb-3 flex items-center gap-2">
-                                <User size={20} />
-                                {t('booking.account_created_title')}
-                            </h3>
-                            <p className="text-white/80 text-sm mb-4">
-                                {t('booking.account_created_message')}
-                            </p>
-                            <div className="bg-white/5 rounded-xl p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <span className="text-white/40 text-sm block mb-1">{t('booking.credentials_email')}</span>
-                                    <span className="text-white font-mono font-bold text-lg break-all">{newUserCredentials.email}</span>
-                                </div>
-                                <div>
-                                    <span className="text-white/40 text-sm block mb-1">{t('booking.credentials_password')}</span>
-                                    <span className="text-white font-mono font-bold text-lg">{newUserCredentials.password}</span>
-                                </div>
-                            </div>
-                            <p className="text-white/60 text-xs mt-4">
-                                {t('booking.credentials_save_reminder')}
-                            </p>
-                        </div>
-                    )}
+                    <AccountCreatedModal
+                        isOpen={showAccountModal}
+                        onClose={() => setShowAccountModal(false)}
+                        credentials={newUserCredentials}
+                    />
 
-                    <AnimatedButton onClick={() => navigate(getLocalizedPath('/'))} variant="white">
-                        {t('booking.back_home')}
-                    </AnimatedButton>
+                    <div className="flex flex-col-reverse md:flex-row items-center justify-center gap-4 mt-8">
+                        <button
+                            onClick={() => navigate(getLocalizedPath('/'))}
+                            className="px-8 py-4 rounded-full border border-white/20 text-white hover:bg-white/5 transition-colors font-medium w-full md:w-auto"
+                        >
+                            {t('booking.back_home')}
+                        </button>
+
+                        {isAuthenticated ? (
+                            <AnimatedButton
+                                onClick={() => navigate(getLocalizedPath('/dashboard'))}
+                                variant="accent"
+                                className="w-full md:w-auto px-10 py-4 text-lg shadow-lg shadow-blue-500/20"
+                            >
+                                {t('booking.go_to_dashboard')}
+                            </AnimatedButton>
+                        ) : (
+                            <AnimatedButton
+                                onClick={() => navigate(getLocalizedPath('/login'))}
+                                variant="accent"
+                                className="w-full md:w-auto px-10 py-4 text-lg shadow-lg shadow-blue-500/20"
+                            >
+                                {t('auth.login_button')}
+                            </AnimatedButton>
+                        )}
+                    </div>
                 </motion.div>
             </main>
         )
@@ -1123,9 +1139,6 @@ const BookingPage = () => {
                                 >
                                     <div className="flex justify-between items-start mb-4">
                                         <h3 className="text-xl font-bold text-white">{service.name}</h3>
-                                        <span className="text-lg font-semibold text-white/80">
-                                            ${(service.price * (formData.vehicleType?.priceMultiplier || 1)).toLocaleString()}
-                                        </span>
                                     </div>
                                     <p className="text-white/60 text-sm mb-4">{service.description}</p>
                                     <ul className="space-y-2">
@@ -1513,11 +1526,21 @@ const BookingPage = () => {
                                 </button>
                             </div>
 
-                            <div className="flex items-center justify-between pt-2">
-                                <p className="text-white/60">{t('booking.total')}</p>
-                                <p className="text-3xl font-bold text-white">
-                                    ${(formData.service.price * formData.vehicleType.priceMultiplier).toLocaleString()}
-                                </p>
+                            <div className="pt-4 space-y-3">
+                                <div className="flex items-center justify-between text-white/60 text-sm">
+                                    <span>{t('booking.base_price')} ({formData.service.name})</span>
+                                    <span>${formData.service.price.toLocaleString()}</span>
+                                </div>
+                                <div className="flex items-center justify-between text-white/60 text-sm">
+                                    <span>{t('booking.multiplier')} ({formData.vehicleType.name})</span>
+                                    <span>x{formData.vehicleType.priceMultiplier}</span>
+                                </div>
+                                <div className="flex items-center justify-between pt-3 border-t border-white/10">
+                                    <p className="text-white/60">{t('booking.total')}</p>
+                                    <p className="text-3xl font-bold text-white">
+                                        ${(formData.service.price * formData.vehicleType.priceMultiplier).toLocaleString()}
+                                    </p>
+                                </div>
                             </div>
                         </div>
 

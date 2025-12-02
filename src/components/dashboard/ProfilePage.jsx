@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
-import { User, Mail, Lock, ArrowLeft, Check, AlertCircle, Edit2, Phone, ChevronDown } from 'lucide-react'
+import { User, Mail, Lock, ArrowLeft, Check, AlertCircle, Edit2, Phone, ChevronDown, Shield } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 
 import SEO from '../ui/SEO'
 import ProfileSkeleton from './ProfileSkeleton'
+import ConfirmationModal from '../ui/ConfirmationModal'
 
 
 const ProfilePage = () => {
@@ -70,6 +71,9 @@ const ProfilePage = () => {
     const [isEditingEmail, setIsEditingEmail] = useState(false)
     const [isEditingPhone, setIsEditingPhone] = useState(false)
     const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false)
+    const [cookieConsent, setCookieConsent] = useState(false)
+    const [showSuspendModal, setShowSuspendModal] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
 
     const countryCodes = [
         { code: '+57', country: 'CO', flag: 'https://flagcdn.com/w40/co.png' },
@@ -88,6 +92,8 @@ const ProfilePage = () => {
 
     useEffect(() => {
         checkUser()
+        const consent = localStorage.getItem('cookie_consent')
+        setCookieConsent(consent === 'accepted')
     }, [])
 
     const checkUser = async () => {
@@ -178,6 +184,30 @@ const ProfilePage = () => {
             showMessage('success', t('profile.password_updated'))
             resetPassword()
         }
+    }
+
+    const handleSaveCookiePreferences = () => {
+        localStorage.setItem('cookie_consent', cookieConsent ? 'accepted' : 'declined')
+        showMessage('success', t('profile.preferences_saved'))
+    }
+
+    const handleSuspendAccount = async () => {
+        // Aquí iría la lógica real de suspensión (ej: llamada a Supabase)
+        // Por ahora simulamos éxito
+        setShowSuspendModal(false)
+        showMessage('success', t('profile.account_suspended'))
+        // Opcional: cerrar sesión
+        // await supabase.auth.signOut()
+        // navigate(getLocalizedPath('/'))
+    }
+
+    const handleDeleteAccount = async () => {
+        // Aquí iría la lógica real de eliminación (ej: llamada a Supabase)
+        // Por ahora simulamos éxito
+        setShowDeleteModal(false)
+        showMessage('success', t('profile.account_deleted'))
+        // await supabase.auth.signOut()
+        // navigate(getLocalizedPath('/'))
     }
 
 
@@ -515,6 +545,123 @@ const ProfilePage = () => {
                                 </form>
                             </div>
                         </motion.div>
+
+                        {/* Settings Section */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+                            className="mt-12 pt-12 border-t border-gray-200 dark:border-white/10"
+                        >
+                            <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-8`}>
+                                {t('profile.settings')}
+                            </h3>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-12">
+                                {/* Cookie Preferences */}
+                                <div className="space-y-6">
+                                    <h4 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} flex items-center gap-2`}>
+                                        <Shield size={20} className="text-blue-500" />
+                                        {t('profile.cookies')}
+                                    </h4>
+
+                                    <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-200'}`}>
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div>
+                                                <span className={`font-medium block ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                    {t('profile.marketing_cookies')}
+                                                </span>
+                                                <p className="text-sm text-gray-500 mt-1">
+                                                    {t('profile.marketing_cookies_desc')}
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => setCookieConsent(!cookieConsent)}
+                                                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${cookieConsent ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}
+                                            >
+                                                <span
+                                                    aria-hidden="true"
+                                                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${cookieConsent ? 'translate-x-5' : 'translate-x-0'}`}
+                                                />
+                                            </button>
+                                        </div>
+                                        <button
+                                            onClick={handleSaveCookiePreferences}
+                                            className="w-full py-3 rounded-xl bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-medium hover:bg-gray-50 dark:hover:bg-white/20 transition-colors"
+                                        >
+                                            {t('profile.save_preferences')}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Danger Zone */}
+                                <div className="space-y-6">
+                                    <h4 className={`text-lg font-semibold text-red-500 flex items-center gap-2`}>
+                                        <AlertCircle size={20} />
+                                        {t('profile.danger_zone')}
+                                    </h4>
+
+                                    <div className={`p-6 rounded-2xl border ${isDarkMode ? 'border-red-900/30 bg-red-900/10' : 'border-red-200 bg-red-50'} space-y-4`}>
+                                        <div className={`flex items-center justify-between p-4 rounded-xl border ${isDarkMode ? 'bg-black/20 border-red-900/20' : 'bg-white border-red-100'}`}>
+                                            <div>
+                                                <span className={`font-medium block ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                    {t('profile.suspend_account')}
+                                                </span>
+                                                <p className="text-sm text-gray-500 mt-1 max-w-xs">
+                                                    {t('profile.suspend_account_desc')}
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => setShowSuspendModal(true)}
+                                                className={`px-4 py-2 text-sm font-medium text-red-600 rounded-lg transition-colors ${isDarkMode ? 'hover:bg-red-900/20' : 'hover:bg-red-50'}`}
+                                            >
+                                                {t('profile.suspend_account')}
+                                            </button>
+                                        </div>
+
+                                        <div className={`flex items-center justify-between p-4 rounded-xl border ${isDarkMode ? 'bg-black/20 border-red-900/20' : 'bg-white border-red-100'}`}>
+                                            <div>
+                                                <span className={`font-medium block ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                    {t('profile.delete_account')}
+                                                </span>
+                                                <p className="text-sm text-gray-500 mt-1 max-w-xs">
+                                                    {t('profile.delete_account_desc')}
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={() => setShowDeleteModal(true)}
+                                                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors shadow-lg shadow-red-600/20"
+                                            >
+                                                {t('profile.delete_account')}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* Modals */}
+                        <ConfirmationModal
+                            isOpen={showSuspendModal}
+                            onClose={() => setShowSuspendModal(false)}
+                            onConfirm={handleSuspendAccount}
+                            title={t('profile.suspend_confirm_title')}
+                            message={t('profile.suspend_confirm_message')}
+                            confirmText={t('profile.suspend_account')}
+                            cancelText={t('common.cancel')}
+                            variant="warning"
+                        />
+
+                        <ConfirmationModal
+                            isOpen={showDeleteModal}
+                            onClose={() => setShowDeleteModal(false)}
+                            onConfirm={handleDeleteAccount}
+                            title={t('profile.delete_confirm_title')}
+                            message={t('profile.delete_confirm_message')}
+                            confirmText={t('profile.delete_account')}
+                            cancelText={t('common.cancel')}
+                            variant="danger"
+                        />
 
                     </div>
                 </motion.div>

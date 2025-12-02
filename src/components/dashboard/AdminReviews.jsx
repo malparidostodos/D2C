@@ -220,7 +220,7 @@ const AdminReviews = ({ isDarkMode }) => {
 
                         {/* Focus Indicator Line */}
                         <div
-                            className={`absolute left-10 top-1/2 -translate-y-1/2 w-[1px] h-5 bg-blue-500 transition-opacity duration-200 ${isSearchFocused ? 'opacity-100' : 'opacity-0'}`}
+                            className={`absolute left-11 top-1/2 -translate-y-1/2 w-[2px] h-5 bg-blue-500 pointer-events-none transition-opacity duration-200 ${isSearchFocused && searchTerm === '' ? 'opacity-100 animate-pulse' : 'opacity-0'}`}
                         />
 
                         <input
