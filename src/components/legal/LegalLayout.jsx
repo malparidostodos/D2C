@@ -81,11 +81,11 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
 
             {/* Main Content Area - Card */}
             <div className="flex-grow px-2 sm:px-4 pb-12">
-                <div className="max-w-[98%] mx-auto bg-white rounded-[2.5rem] shadow-2xl min-h-[600px]">
+                <div className="max-w-[98%] mx-auto bg-white rounded-[2.5rem] shadow-2xl min-h-[600px] overflow-hidden">
                     <div className={sections && sections.length > 0 ? "lg:grid lg:grid-cols-12" : "lg:grid lg:grid-cols-12"}>
 
                         {/* Sidebar Navigation - Policy Links */}
-                        <aside className="lg:col-span-3 bg-white border-b lg:border-b-0 lg:border-r border-gray-100 py-12 px-8 rounded-l-[2.5rem]">
+                        <aside className="lg:col-span-3 bg-white border-b lg:border-b-0 lg:border-r border-gray-100 py-12 px-8 lg:rounded-l-[2.5rem]">
                             <nav className="space-y-2 lg:sticky lg:top-8">
                                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-6 px-4">
                                     {t('legal.menu_title')}
