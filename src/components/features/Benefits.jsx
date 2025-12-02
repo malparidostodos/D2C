@@ -1,6 +1,6 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { Shield, Star, Zap, Clock, Award, Sparkles } from 'lucide-react'
+import React, { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { Shield, Star, Zap, Sparkles, Calendar, ShieldCheck, Smile } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 const BenefitCard = ({ benefit }) => {
@@ -36,67 +36,88 @@ const BenefitCard = ({ benefit }) => {
 
 const Benefits = () => {
   const { t } = useTranslation()
+  const containerRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  })
 
-  const benefits = [
-    {
-      id: '0',
-      title: t('benefits.items.premium_quality.title'),
-      description: t('benefits.items.premium_quality.description'),
-      icon: Star,
-      className: 'md:col-span-2',
-      image: 'https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-    {
-      id: '1',
-      title: t('benefits.items.lasting_protection.title'),
-      description: t('benefits.items.lasting_protection.description'),
-      icon: Shield,
-      className: 'md:col-span-1',
-      image: 'https://images.pexels.com/photos/6872596/pexels-photo-6872596.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-    {
-      id: '2',
-      title: t('benefits.items.advanced_technology.title'),
-      description: t('benefits.items.advanced_technology.description'),
-      icon: Zap,
-      className: 'md:col-span-1',
-      image: 'https://images.pexels.com/photos/4489734/pexels-photo-4489734.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-    {
-      id: '3',
-      title: t('benefits.items.attention_to_detail.title'),
-      description: t('benefits.items.attention_to_detail.description'),
-      icon: Sparkles,
-      className: 'md:col-span-2',
-      image: 'https://images.pexels.com/photos/627678/pexels-photo-627678.jpeg?auto=compress&cs=tinysrgb&w=800'
-    },
-  ]
+  // Animation Ranges
+  // 0.0 - 0.3: Title visible, then fades out
+  // 0.2 - 0.4: Item 1 fades in (OVERLAP START)
+  // 0.45 - 0.65: Item 2 fades in
+  // 0.7 - 0.9: Item 3 fades in
+  // 0.9 - 1.0: All visible (short locked state)
+
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const titleScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.9])
+  const titleFilter = useTransform(scrollYProgress, [0, 0.3], ["blur(0px)", "blur(10px)"])
+
+  const item1Opacity = useTransform(scrollYProgress, [0.2, 0.4], [0, 1])
+  const item1Y = useTransform(scrollYProgress, [0.2, 0.4], ["100vh", "0vh"])
+
+  const item2Opacity = useTransform(scrollYProgress, [0.45, 0.65], [0, 1])
+  const item2Y = useTransform(scrollYProgress, [0.45, 0.65], ["100vh", "0vh"])
+
+  const item3Opacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1])
+  const item3Y = useTransform(scrollYProgress, [0.7, 0.9], ["100vh", "0vh"])
 
   return (
-    <section id="beneficios" className="py-16 md:py-32 bg-background relative">
-      <div className="container px-4 md:px-6">
-        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-20">
+    <section ref={containerRef} id="beneficios" className="relative bg-white h-[300vh]">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center">
+
+        {/* Title Layer */}
+        <motion.div
+          style={{ opacity: titleOpacity, scale: titleScale, filter: titleFilter }}
+          className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
+        >
+          <h2 className="text-6xl md:text-8xl lg:text-9xl font-display font-bold text-[#0046b8] leading-tight tracking-tight whitespace-nowrap px-4">
+            {t('benefits.why_choose_us')}
+          </h2>
+        </motion.div>
+
+        {/* Items Stack Layer */}
+        <div className="relative z-20 flex flex-col gap-8 md:gap-12 items-center justify-center w-full max-w-4xl px-4">
+          {/* Item 1 */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            style={{ opacity: item1Opacity, y: item1Y }}
+            className="flex items-center gap-6 md:gap-8 w-full justify-center"
           >
-            <span className="text-accent font-medium tracking-widest uppercase text-xs md:text-sm">{t('benefits.why_choose_us')}</span>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold text-white mt-4 mb-4 md:mb-6 justify-center">
-              {t('benefits.title')}
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
+              <Calendar size={40} className="md:w-12 md:h-12" />
+            </div>
+            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight">
+              Reserva
             </h2>
-            <p className="text-white/60 text-base md:text-lg leading-relaxed">
-              {t('benefits.subtitle')}
-            </p>
+          </motion.div>
+
+          {/* Item 2 */}
+          <motion.div
+            style={{ opacity: item2Opacity, y: item2Y }}
+            className="flex items-center gap-6 md:gap-8 w-full justify-center"
+          >
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
+              <ShieldCheck size={40} className="md:w-12 md:h-12" />
+            </div>
+            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight">
+              Confía
+            </h2>
+          </motion.div>
+
+          {/* Item 3 */}
+          <motion.div
+            style={{ opacity: item3Opacity, y: item3Y }}
+            className="flex items-center gap-6 md:gap-8 w-full justify-center"
+          >
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
+              <Smile size={40} className="md:w-12 md:h-12" />
+            </div>
+            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight">
+              Disfruta
+            </h2>
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-[300px]">
-          {benefits.map((benefit) => (
-            <BenefitCard key={benefit.id} benefit={benefit} />
-          ))}
-        </div>
       </div>
     </section>
   )

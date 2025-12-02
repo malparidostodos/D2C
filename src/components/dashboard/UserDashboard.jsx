@@ -722,7 +722,8 @@ const UserDashboard = () => {
                         </motion.section>
                     </div>
                 </div>
-            </div >
+            </div>
+
             {/* Modals */}
             <AnimatePresence>
                 <AddVehicleModal
