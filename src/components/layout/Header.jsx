@@ -129,7 +129,7 @@ const Header = ({ theme = 'default' }) => {
                             ) : (
                                 <Link
                                     to={getLocalizedPath("/login")}
-                                    className="_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 !bg-[#0046b8] !text-white hover:!bg-[#00358a]"
+                                    className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${theme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
                                 >
                                     <span className="font-medium text-xs">{t('header.login')}</span>
                                 </Link>
