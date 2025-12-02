@@ -8,6 +8,9 @@ const LiquidBackground = () => {
     const cameraRef = useRef(null)
     const meshRef = useRef(null)
     const animationFrameRef = useRef(null)
+    const hoverRef = useRef(1.0)
+    const currentHoverRef = useRef(1.0)
+    const lastMousePosRef = useRef({ x: -1000, y: -1000 })
 
     useEffect(() => {
         const width = window.innerWidth
@@ -54,6 +57,7 @@ const LiquidBackground = () => {
       uniform float uTime;
       uniform vec2 uResolution;
       uniform vec2 uMouse;
+      uniform float uHover;
       varying vec2 vUv;
 
       // Simplex 2D noise
@@ -112,7 +116,13 @@ const LiquidBackground = () => {
         vec2 mouse = uMouse / uResolution;
         mouse.x *= aspect;
         float dist = distance(pos, mouse);
-        float interaction = smoothstep(0.1, 0.0, dist);
+        
+        // Make the interaction shape irregular/liquid
+        float noiseShape = snoise(pos * 10.0 + uTime * 2.0) * 0.05;
+        float interaction = smoothstep(0.1 + noiseShape, 0.0, dist);
+        
+        // Apply hover fade
+        interaction *= uHover;
         
         float t = uTime * 0.2;
         
@@ -155,7 +165,8 @@ const LiquidBackground = () => {
             uniforms: {
                 uTime: { value: 0 },
                 uResolution: { value: new THREE.Vector2(width, height) },
-                uMouse: { value: new THREE.Vector2(0, 0) }
+                uMouse: { value: new THREE.Vector2(0, 0) },
+                uHover: { value: 1.0 }
             }
         })
 
@@ -165,8 +176,34 @@ const LiquidBackground = () => {
 
         const animate = () => {
             animationFrameRef.current = requestAnimationFrame(animate)
-            if (material.uniforms) {
+            if (material.uniforms && containerRef.current) {
                 material.uniforms.uTime.value += 0.01
+
+                // Check bounds continuously (handles scroll)
+                const rect = containerRef.current.getBoundingClientRect()
+                const mouseX = lastMousePosRef.current.x
+                const mouseY = lastMousePosRef.current.y
+
+                // Calculate relative position
+                const relX = mouseX - rect.left
+                const relY = mouseY - rect.top
+
+                const isInside = relX >= 0 && relX <= rect.width && relY >= 0 && relY <= rect.height
+
+                if (isInside) {
+                    material.uniforms.uMouse.value.set(relX, rect.height - relY)
+                    // Restore hover if not explicitly set to 0 by interactive elements
+                    if (hoverRef.current !== 0.0) {
+                        currentHoverRef.current += (1.0 - currentHoverRef.current) * 0.1
+                    } else {
+                        currentHoverRef.current += (0.0 - currentHoverRef.current) * 0.1
+                    }
+                } else {
+                    // Fade out if outside
+                    currentHoverRef.current += (0.0 - currentHoverRef.current) * 0.1
+                }
+
+                material.uniforms.uHover.value = currentHoverRef.current
             }
             renderer.render(scene, camera)
         }
@@ -182,18 +219,32 @@ const LiquidBackground = () => {
         }
 
         const handleMouseMove = (e) => {
-            if (material.uniforms) {
-                // Invert Y coordinate for shader
-                material.uniforms.uMouse.value.set(e.clientX, window.innerHeight - e.clientY)
-            }
+            // Store viewport position
+            lastMousePosRef.current = { x: e.clientX, y: e.clientY }
+
+            // Check interactive elements
+            const isInteractive = e.target.closest('a, button, input, textarea, select')
+            hoverRef.current = isInteractive ? 0.0 : 1.0
+        }
+
+        const handleMouseLeave = () => {
+            hoverRef.current = 0.0
+        }
+
+        const handleMouseEnter = () => {
+            hoverRef.current = 1.0
         }
 
         window.addEventListener('resize', handleResize)
         window.addEventListener('mousemove', handleMouseMove)
+        document.body.addEventListener('mouseleave', handleMouseLeave)
+        document.body.addEventListener('mouseenter', handleMouseEnter)
 
         return () => {
             window.removeEventListener('resize', handleResize)
             window.removeEventListener('mousemove', handleMouseMove)
+            document.body.removeEventListener('mouseleave', handleMouseLeave)
+            document.body.removeEventListener('mouseenter', handleMouseEnter)
             if (animationFrameRef.current) {
                 cancelAnimationFrame(animationFrameRef.current)
             }
