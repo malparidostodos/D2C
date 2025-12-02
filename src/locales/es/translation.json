@@ -419,7 +419,8 @@
         "phone_placeholder": "300 123 4567",
         "phone_updated": "Teléfono actualizado correctamente",
         "phone_note": "Usado para contactarte sobre tus reservas.",
-        "edit_locked": "Edición bloqueada para administradores"
+        "edit_locked": "Edición bloqueada para administradores",
+        "action_locked": "Acción no permitida para administradores"
     },
     "benefits": {
         "why_choose_us": "¿Por qué elegirnos?",

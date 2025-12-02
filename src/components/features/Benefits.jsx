@@ -49,18 +49,18 @@ const Benefits = () => {
   // 0.7 - 0.9: Item 3 fades in
   // 0.9 - 1.0: All visible (short locked state)
 
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
-  const titleScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.9])
-  const titleFilter = useTransform(scrollYProgress, [0, 0.3], ["blur(0px)", "blur(10px)"])
+  const titleOpacity = useTransform(scrollYProgress, [0.3, 0.4], [1, 0])
+  const titleScale = useTransform(scrollYProgress, [0, 0.4], [1, 0.7])
+  const titleFilter = useTransform(scrollYProgress, [0.3, 0.4], ["blur(0px)", "blur(10px)"])
 
-  const item1Opacity = useTransform(scrollYProgress, [0.2, 0.4], [0, 1])
-  const item1Y = useTransform(scrollYProgress, [0.2, 0.4], ["100vh", "0vh"])
+  const item1Opacity = useTransform(scrollYProgress, [0.2, 0.5], [0, 1])
+  const item1Y = useTransform(scrollYProgress, [0.2, 0.5], ["100vh", "0vh"])
 
-  const item2Opacity = useTransform(scrollYProgress, [0.45, 0.65], [0, 1])
-  const item2Y = useTransform(scrollYProgress, [0.45, 0.65], ["100vh", "0vh"])
+  const item2Opacity = useTransform(scrollYProgress, [0.45, 0.75], [0, 1])
+  const item2Y = useTransform(scrollYProgress, [0.45, 0.75], ["100vh", "0vh"])
 
-  const item3Opacity = useTransform(scrollYProgress, [0.7, 0.9], [0, 1])
-  const item3Y = useTransform(scrollYProgress, [0.7, 0.9], ["100vh", "0vh"])
+  const item3Opacity = useTransform(scrollYProgress, [0.7, 1.0], [0, 1])
+  const item3Y = useTransform(scrollYProgress, [0.7, 1.0], ["100vh", "0vh"])
 
   return (
     <section ref={containerRef} id="beneficios" className="relative bg-white h-[300vh]">

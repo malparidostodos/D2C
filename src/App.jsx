@@ -167,7 +167,7 @@ const App = () => {
       <Toaster position="top-right" theme="dark" richColors />
       <div
         style={{
-          backgroundImage: "url('/images/BG2.jpg')",
+          backgroundImage: "url('/images/BG3.jpg')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',

@@ -628,12 +628,24 @@ const ProfilePage = () => {
                                                     {t('profile.suspend_account_desc')}
                                                 </p>
                                             </div>
-                                            <button
-                                                onClick={() => setShowSuspendModal(true)}
-                                                className={`px-4 py-2 text-sm font-medium text-red-600 rounded-lg transition-colors ${isDarkMode ? 'hover:bg-red-900/20' : 'hover:bg-red-50'}`}
-                                            >
-                                                {t('profile.suspend_account')}
-                                            </button>
+                                            {isAdmin ? (
+                                                <Tooltip content={t('profile.action_locked')}>
+                                                    <button
+                                                        disabled
+                                                        className={`px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed flex items-center gap-2 ${isDarkMode ? 'bg-white/5 text-white/30' : ''}`}
+                                                    >
+                                                        <Lock size={14} />
+                                                        {t('profile.suspend_account')}
+                                                    </button>
+                                                </Tooltip>
+                                            ) : (
+                                                <button
+                                                    onClick={() => setShowSuspendModal(true)}
+                                                    className={`px-4 py-2 text-sm font-medium text-red-600 rounded-lg transition-colors ${isDarkMode ? 'hover:bg-red-900/20' : 'hover:bg-red-50'}`}
+                                                >
+                                                    {t('profile.suspend_account')}
+                                                </button>
+                                            )}
                                         </div>
 
                                         <div className={`flex items-center justify-between p-4 rounded-xl border ${isDarkMode ? 'bg-black/20 border-red-900/20' : 'bg-white border-red-100'}`}>
@@ -645,12 +657,24 @@ const ProfilePage = () => {
                                                     {t('profile.delete_account_desc')}
                                                 </p>
                                             </div>
-                                            <button
-                                                onClick={() => setShowDeleteModal(true)}
-                                                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors shadow-lg shadow-red-600/20"
-                                            >
-                                                {t('profile.delete_account')}
-                                            </button>
+                                            {isAdmin ? (
+                                                <Tooltip content={t('profile.action_locked')}>
+                                                    <button
+                                                        disabled
+                                                        className={`px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed flex items-center gap-2 ${isDarkMode ? 'bg-white/5 text-white/30' : ''}`}
+                                                    >
+                                                        <Lock size={14} />
+                                                        {t('profile.delete_account')}
+                                                    </button>
+                                                </Tooltip>
+                                            ) : (
+                                                <button
+                                                    onClick={() => setShowDeleteModal(true)}
+                                                    className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors shadow-lg shadow-red-600/20"
+                                                >
+                                                    {t('profile.delete_account')}
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

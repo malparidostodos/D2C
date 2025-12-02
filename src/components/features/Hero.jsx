@@ -30,7 +30,7 @@ const Hero = () => {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="mb-4 lg:mb-6"
           >
-            <span className="inline-block py-1 px-3 rounded-full border border-gray-200 bg-gray-100/50 backdrop-blur-sm text-[10px] lg:text-xs font-medium tracking-widest uppercase text-black">
+            <span className="inline-block py-1 px-3 rounded-full border border-gray-200 bg-gray-100/50 backdrop-blur-sm text-[10px] lg:text-xs font-medium tracking-widest uppercase text-white">
               {t('hero.quality_guaranteed')}
             </span>
           </motion.div>
@@ -39,7 +39,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-black tracking-tight leading-[1.1]"
+            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white tracking-tight leading-[1.1]"
             style={{
               textShadow: '0 0 40px rgba(0, 0, 0, 0.1)'
             }}
