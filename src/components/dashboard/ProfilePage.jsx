@@ -9,11 +9,13 @@ import { User, Mail, Lock, ArrowLeft, Check, AlertCircle, Edit2, Phone, ChevronD
 import AnimatedButton from '../ui/AnimatedButton'
 import Tooltip from '../ui/Tooltip'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 
 import SEO from '../ui/SEO'
 import ProfileSkeleton from './ProfileSkeleton'
 import ConfirmationModal from '../ui/ConfirmationModal'
+import { manageCookies } from '../../utils/cookieManager'
 
 
 const ProfilePage = () => {
@@ -187,27 +189,42 @@ const ProfilePage = () => {
     }
 
     const handleSaveCookiePreferences = () => {
-        localStorage.setItem('cookie_consent', cookieConsent ? 'accepted' : 'declined')
-        showMessage('success', t('profile.preferences_saved'))
+        manageCookies(cookieConsent)
+        toast.success(t('profile.preferences_saved'))
     }
 
     const handleSuspendAccount = async () => {
-        // Aquí iría la lógica real de suspensión (ej: llamada a Supabase)
-        // Por ahora simulamos éxito
-        setShowSuspendModal(false)
-        showMessage('success', t('profile.account_suspended'))
-        // Opcional: cerrar sesión
-        // await supabase.auth.signOut()
-        // navigate(getLocalizedPath('/'))
+        try {
+            const { error } = await supabase.rpc('suspend_own_account')
+            if (error) throw error
+
+            setShowSuspendModal(false)
+            toast.success(t('profile.account_suspended'))
+
+            // Sign out and redirect
+            await supabase.auth.signOut()
+            navigate(getLocalizedPath('/login'))
+        } catch (error) {
+            console.error('Error suspending account:', error)
+            toast.error(error.message)
+        }
     }
 
     const handleDeleteAccount = async () => {
-        // Aquí iría la lógica real de eliminación (ej: llamada a Supabase)
-        // Por ahora simulamos éxito
-        setShowDeleteModal(false)
-        showMessage('success', t('profile.account_deleted'))
-        // await supabase.auth.signOut()
-        // navigate(getLocalizedPath('/'))
+        try {
+            const { error } = await supabase.rpc('delete_own_account')
+            if (error) throw error
+
+            setShowDeleteModal(false)
+            toast.success(t('profile.account_deleted'))
+
+            // Sign out and redirect
+            await supabase.auth.signOut()
+            navigate(getLocalizedPath('/'))
+        } catch (error) {
+            console.error('Error deleting account:', error)
+            toast.error(error.message)
+        }
     }
 
 
@@ -649,7 +666,8 @@ const ProfilePage = () => {
                             message={t('profile.suspend_confirm_message')}
                             confirmText={t('profile.suspend_account')}
                             cancelText={t('common.cancel')}
-                            variant="warning"
+                            variant="danger"
+                            isDarkMode={isDarkMode}
                         />
 
                         <ConfirmationModal
@@ -660,7 +678,8 @@ const ProfilePage = () => {
                             message={t('profile.delete_confirm_message')}
                             confirmText={t('profile.delete_account')}
                             cancelText={t('common.cancel')}
-                            variant="danger"
+                            variant="critical"
+                            isDarkMode={isDarkMode}
                         />
 
                     </div>

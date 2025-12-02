@@ -30,6 +30,13 @@ const DashboardLayout = () => {
         try {
             const { data: { user } } = await supabase.auth.getUser()
             if (user) {
+                // Check if suspended
+                if (user.user_metadata?.suspended) {
+                    await supabase.auth.signOut()
+                    navigate('/')
+                    return
+                }
+
                 const { data } = await supabase.rpc('is_admin')
                 setIsAdmin(!!data)
             }

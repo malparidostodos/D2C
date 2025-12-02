@@ -16,22 +16,19 @@ const ConfirmationModal = ({
     if (!isOpen) return null
 
     const getIcon = () => {
-        // En el modal de ejemplo usan X para cancelar reserva, aquí usamos AlertCircle o Trash2
-        // Pero el usuario quiere que se vea IGUAL.
-        // El modal de ejemplo usa X size={32} className="text-red-500"
-        return <X size={32} className={variant === 'danger' ? 'text-red-500' : 'text-blue-500'} />
+        return <X size={32} className={(variant === 'danger' || variant === 'critical') ? 'text-red-500' : 'text-blue-500'} />
     }
 
     const getIconBg = () => {
         if (isDarkMode) {
-            return variant === 'danger' ? 'bg-red-500/10' : 'bg-blue-500/10'
+            return (variant === 'danger' || variant === 'critical') ? 'bg-red-500/10' : 'bg-blue-500/10'
         }
-        return variant === 'danger' ? 'bg-red-50' : 'bg-blue-50'
+        return (variant === 'danger' || variant === 'critical') ? 'bg-red-50' : 'bg-blue-50'
     }
 
     const getConfirmButtonClass = () => {
-        if (variant === 'danger') {
-            return "bg-red-500 text-white hover:bg-red-600"
+        if (variant === 'danger' || variant === 'critical') {
+            return "bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-500/20"
         }
         return "bg-blue-600 text-white hover:bg-blue-700"
     }
@@ -45,7 +42,7 @@ const ConfirmationModal = ({
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         onClick={(e) => e.stopPropagation()}
-                        className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-white border-gray-200'} border rounded-3xl p-6 md:p-8 max-w-md w-full text-center relative shadow-2xl`}
+                        className={`${isDarkMode ? 'bg-[#111]' : 'bg-white'} ${variant === 'critical' ? 'border-2 border-red-500 shadow-[0_0_50px_-12px_rgba(239,68,68,0.5)]' : (isDarkMode ? 'border-white/10' : 'border-gray-200')} border rounded-3xl p-6 md:p-8 max-w-md w-full text-center relative shadow-2xl`}
                     >
                         {/* El modal de ejemplo NO tiene botón de cerrar (X) en la esquina superior derecha, solo botones abajo */}
 
