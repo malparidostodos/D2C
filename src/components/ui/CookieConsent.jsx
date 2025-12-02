@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cookie, X } from 'lucide-react';
+import { useMenu } from '../../hooks/useMenu.jsx';
 
 const CookieConsent = () => {
     const { t, i18n } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
     const location = useLocation();
+    const { hidden, isMenuMounted } = useMenu();
 
     useEffect(() => {
         // Don't show on cookie policy page
@@ -44,7 +46,7 @@ const CookieConsent = () => {
                     animate={{ y: 0, opacity: 1, scale: 1 }}
                     exit={{ y: 50, opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="fixed bottom-4 right-4 z-50 max-w-[400px] w-[calc(100%-2rem)]"
+                    className={`fixed right-4 z-50 max-w-[400px] w-[calc(100%-2rem)] transition-all duration-300 ${isMenuMounted && hidden ? 'bottom-4' : (isMenuMounted ? 'bottom-24 md:bottom-4' : 'bottom-4')}`}
                 >
                     <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-6 relative overflow-hidden">
                         {/* Decorative gradient blob */}

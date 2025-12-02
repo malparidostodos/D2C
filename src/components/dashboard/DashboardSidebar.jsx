@@ -102,10 +102,44 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
             setLangOpen(false);
         };
 
+        // Animation variants for mobile
+        const containerVariants = {
+            hidden: {},
+            visible: {
+                transition: {
+                    staggerChildren: 0.05,
+                    delayChildren: 0.1
+                }
+            }
+        }
+
+        const itemVariants = {
+            hidden: {
+                opacity: 0,
+                x: -20
+            },
+            visible: {
+                opacity: 1,
+                x: 0,
+                transition: {
+                    duration: 0.3,
+                    ease: [0.4, 0, 0.2, 1]
+                }
+            }
+        }
+
         return (
-            <div className="flex flex-col h-full">
+            <motion.div
+                className="flex flex-col h-full"
+                variants={isMobile ? containerVariants : undefined}
+                initial={isMobile ? "hidden" : undefined}
+                animate={isMobile ? "visible" : undefined}
+            >
                 {/* Logo Area */}
-                <div className={`${isMobile ? 'pt-8 pb-6 px-6' : 'p-6'} mb-6 flex items-center relative h-[60px] ${effectiveCollapsed ? 'justify-center' : 'justify-between'}`}>
+                <motion.div
+                    variants={isMobile ? itemVariants : undefined}
+                    className={`${isMobile ? 'pt-8 pb-6 px-6' : 'p-6'} mb-6 flex items-center relative h-[60px] ${effectiveCollapsed ? 'justify-center' : 'justify-between'}`}
+                >
                     <Link
                         to={getLocalizedPath('/')}
                         className={`text-2xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-all duration-300 flex items-center gap-2 whitespace-nowrap ${effectiveCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto delay-100'}`}
@@ -120,37 +154,41 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                     >
                         {effectiveCollapsed ? <Menu size={23} /> : <CustomMenuIcon size={23} />}
                     </button>
-                </div>
+                </motion.div>
 
                 {/* Navigation */}
                 <nav className="flex-1 px-4 space-y-2">
-                    {navItems.map((item) => {
+                    {navItems.map((item, index) => {
                         const isActive = location.pathname.includes(item.path)
                         return (
-                            <Link
+                            <motion.div
                                 key={item.path}
-                                to={getLocalizedPath(item.path)}
-                                onClick={() => setIsMobileOpen(false)}
-                                className={`relative flex items-center px-4 py-3 rounded-xl transition-all duration-300 group ${isActive
-                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-                                    : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                                    } ${effectiveCollapsed ? 'justify-center' : 'gap-3'}`}
+                                variants={isMobile ? itemVariants : undefined}
                             >
-                                <item.icon size={20} className={`min-w-[20px] ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-white transition-colors'}`} />
-                                <span className={`font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${effectiveCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
-                                    {item.label}
-                                </span>
-                                {!effectiveCollapsed && isActive && (
-                                    <ChevronRight size={16} className="ml-auto opacity-50 transition-opacity duration-300 delay-150" />
-                                )}
-
-                                {/* Custom Tooltip */}
-                                {effectiveCollapsed && (
-                                    <div className="absolute left-full ml-6 px-3 py-2 bg-white text-black text-sm font-medium rounded-md opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap z-50 shadow-xl pointer-events-none">
+                                <Link
+                                    to={getLocalizedPath(item.path)}
+                                    onClick={() => setIsMobileOpen(false)}
+                                    className={`relative flex items-center px-4 py-3 rounded-xl transition-all duration-300 group ${isActive
+                                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                                        : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                                        } ${effectiveCollapsed ? 'justify-center' : 'gap-3'}`}
+                                >
+                                    <item.icon size={20} className={`min-w-[20px] ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-white transition-colors'}`} />
+                                    <span className={`font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${effectiveCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
                                         {item.label}
-                                    </div>
-                                )}
-                            </Link>
+                                    </span>
+                                    {!effectiveCollapsed && isActive && (
+                                        <ChevronRight size={16} className="ml-auto opacity-50 transition-opacity duration-300 delay-150" />
+                                    )}
+
+                                    {/* Custom Tooltip */}
+                                    {effectiveCollapsed && (
+                                        <div className="absolute left-full ml-6 px-3 py-2 bg-white text-black text-sm font-medium rounded-md opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 whitespace-nowrap z-50 shadow-xl pointer-events-none">
+                                            {item.label}
+                                        </div>
+                                    )}
+                                </Link>
+                            </motion.div>
                         )
                     })}
                 </nav>
@@ -158,7 +196,10 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                 {/* Bottom Actions */}
                 <div className="p-4 mt-auto space-y-4 border-t border-white/5">
                     {/* Language Selector (Navbar Style with Label) */}
-                    <div className={`flex items-center ${effectiveCollapsed ? 'justify-center' : 'justify-between'} px-4 py-2`}>
+                    <motion.div
+                        variants={isMobile ? itemVariants : undefined}
+                        className={`flex items-center ${effectiveCollapsed ? 'justify-center' : 'justify-between'} px-4 py-2`}
+                    >
                         <span className={`text-sm text-gray-400 font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${effectiveCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
                             {t('common.language', 'Idioma')}
                         </span>
@@ -226,18 +267,22 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                                 )}
                             </AnimatePresence>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    <div className={`flex items-center ${effectiveCollapsed ? 'justify-center' : 'justify-between'} px-4 py-2`}>
+                    <motion.div
+                        variants={isMobile ? itemVariants : undefined}
+                        className={`flex items-center ${effectiveCollapsed ? 'justify-center' : 'justify-between'} px-4 py-2`}
+                    >
                         <span className={`text-sm text-gray-400 font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${effectiveCollapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto delay-150'}`}>
                             {t('common.theme', 'Tema')}
                         </span>
                         <div className={`${effectiveCollapsed ? 'scale-75' : ''} transition-transform duration-300`}>
                             <ThemeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
                         </div>
-                    </div>
+                    </motion.div>
 
-                    <button
+                    <motion.button
+                        variants={isMobile ? itemVariants : undefined}
                         onClick={handleLogout}
                         className={`relative w-full flex items-center px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-300 group ${effectiveCollapsed ? 'justify-center' : 'gap-3'}`}
                     >
@@ -252,9 +297,9 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                                 {t('auth.logout', 'Cerrar Sesión')}
                             </div>
                         )}
-                    </button>
+                    </motion.button>
                 </div>
-            </div>
+            </motion.div>
         )
     }
 
@@ -276,29 +321,86 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
             </aside>
 
             {/* Mobile Drawer */}
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
                 {isMobileOpen && (
                     <>
+                        {/* Enhanced Overlay with progressive blur */}
                         <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
+                            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                            animate={{
+                                opacity: 1,
+                                backdropFilter: "blur(8px)",
+                                transition: {
+                                    duration: 0.3,
+                                    ease: [0.4, 0, 0.2, 1]
+                                }
+                            }}
+                            exit={{
+                                opacity: 0,
+                                backdropFilter: "blur(0px)",
+                                transition: {
+                                    duration: 0.25,
+                                    ease: [0.4, 0, 1, 1]
+                                }
+                            }}
                             onClick={() => setIsMobileOpen(false)}
-                            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 lg:hidden"
+                            className="fixed inset-0 bg-black/60 z-50 lg:hidden"
+                            style={{ WebkitBackdropFilter: "blur(8px)" }}
                         />
+
+                        {/* Enhanced Sidebar with smooth slide and fade */}
                         <motion.div
-                            initial={{ x: -300 }}
-                            animate={{ x: 0 }}
-                            exit={{ x: -300 }}
-                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="fixed left-0 top-0 w-72 h-screen bg-[#050505] border-r border-white/10 z-50 lg:hidden"
+                            initial={{
+                                x: -320,
+                                opacity: 0
+                            }}
+                            animate={{
+                                x: 0,
+                                opacity: 1,
+                                transition: {
+                                    type: "spring",
+                                    damping: 30,
+                                    stiffness: 300,
+                                    mass: 0.8,
+                                    opacity: {
+                                        duration: 0.25,
+                                        ease: [0, 0, 0.2, 1]
+                                    }
+                                }
+                            }}
+                            exit={{
+                                x: -320,
+                                opacity: 0,
+                                transition: {
+                                    type: "spring",
+                                    damping: 35,
+                                    stiffness: 400,
+                                    mass: 0.6,
+                                    opacity: {
+                                        duration: 0.2,
+                                        ease: [0.4, 0, 1, 1]
+                                    }
+                                }
+                            }}
+                            className="fixed left-0 top-0 w-72 h-screen bg-[#050505] border-r border-white/10 z-50 lg:hidden shadow-2xl"
                         >
-                            <button
+                            <motion.button
+                                initial={{ opacity: 0, rotate: -90 }}
+                                animate={{
+                                    opacity: 1,
+                                    rotate: 0,
+                                    transition: { delay: 0.15, duration: 0.2 }
+                                }}
+                                exit={{
+                                    opacity: 0,
+                                    rotate: 90,
+                                    transition: { duration: 0.15 }
+                                }}
                                 onClick={() => setIsMobileOpen(false)}
                                 className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white transition-colors z-10 cursor-pointer"
                             >
                                 <X size={24} />
-                            </button>
+                            </motion.button>
                             <SidebarContent isMobile={true} />
                         </motion.div>
                     </>

@@ -4,15 +4,21 @@ import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
 import { Home, ChevronDown, ArrowUpRight, User, ArrowRight } from 'lucide-react';
 import '../JetonHeader.css'; // Import the strict CSS
-import { useMenu } from '../../hooks/useMenu';
+import { useMenu } from '../../hooks/useMenu.jsx';
 
 const Header = ({ theme = 'default' }) => {
     const {
         hidden, setHidden, menuOpen, setMenuOpen, menuClosing, menuEntering,
         servicesOpen, setServicesOpen, activeSection, setHoverLock,
         hoveredService, setHoveredService, langOpen, setLangOpen, langRef,
-        handleNavClick, handleLanguageChange, handleMenuClose, getLocalizedPath
+        handleNavClick, handleLanguageChange, handleMenuClose, getLocalizedPath,
+        setIsMenuMounted
     } = useMenu();
+
+    useEffect(() => {
+        setIsMenuMounted(true);
+        return () => setIsMenuMounted(false);
+    }, [setIsMenuMounted]);
 
     const [user, setUser] = useState(null);
     const { t, i18n } = useTranslation();
@@ -64,7 +70,7 @@ const Header = ({ theme = 'default' }) => {
                     <div className="lang-cta-wrapper">
                         {/* Language Selector (Updated Structure) */}
                         {/* Language Selector (Interactive) */}
-                        <div ref={langRef} className="_dropdown _language-select md:flex" aria-expanded={langOpen} role="button">
+                        <div ref={langRef} className="_dropdown _language-select hidden md:flex" aria-expanded={langOpen} role="button">
                             <button
                                 className="_dropdown-button w-full flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/50 !text-white hover:!bg-white/30 transition-all duration-300 rounded-full px-4 py-2"
                                 onClick={() => setLangOpen(!langOpen)}
@@ -107,6 +113,26 @@ const Header = ({ theme = 'default' }) => {
                                         </div>
                                     ))}
                                 </div>
+                            )}
+                        </div>
+
+                        {/* Mobile Login (Navbar) */}
+                        <div className="md:hidden flex items-center">
+                            {user ? (
+                                <Link
+                                    to={getLocalizedPath("/dashboard")}
+                                    className="_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 !bg-white/10 !backdrop-blur-md !border !border-white/20 !text-white"
+                                >
+                                    <User size={16} />
+                                    <span className="font-medium text-xs">{t('dashboard.title')}</span>
+                                </Link>
+                            ) : (
+                                <Link
+                                    to={getLocalizedPath("/login")}
+                                    className="_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 !bg-[#0046b8] !text-white hover:!bg-[#00358a]"
+                                >
+                                    <span className="font-medium text-xs">{t('header.login')}</span>
+                                </Link>
                             )}
                         </div>
 
@@ -314,38 +340,62 @@ const Header = ({ theme = 'default' }) => {
                     >
                         {/* Top Bar - appears first (at top) */}
                         <div
-                            className="relative z-50 flex items-center justify-center px-6 pt-8 pb-6 gap-2"
+                            className="relative z-50 flex items-center justify-center px-6 pt-8 pb-6 gap-4"
                             style={{
                                 opacity: menuEntering ? 0 : 1,
                                 animation: menuClosing ? 'fadeOutDown 200ms ease-out 200ms forwards' : 'none',
                                 transition: menuClosing ? 'none' : 'opacity 300ms ease-out 500ms'
                             }}
                         >
-                            {/* Login Button */}
-                            {!user && (
-                                <Link
-                                    to={getLocalizedPath("/login")}
-                                    onClick={handleMenuClose}
-                                    className="_button !bg-white/10 !backdrop-blur-md !border !border-white/50 !text-white hover:!bg-white/30 transition-all duration-300 !h-[48px] !px-6 !rounded-[16px] flex items-center justify-center font-medium text-base"
+                            {/* Language Selector in Menu (Full Dropdown) */}
+                            <div className="_dropdown _language-select flex" aria-expanded={langOpen} role="button">
+                                <button
+                                    className="_dropdown-button flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/50 !text-white hover:!bg-white/30 transition-all duration-300 rounded-full px-4 py-2"
+                                    onClick={(e) => { e.stopPropagation(); setLangOpen(!langOpen); }}
                                 >
-                                    {t('header.login')}
-                                </Link>
-                            )}
+                                    <div data-button-background=""></div>
+                                    <span className="_icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                            <path d="M12 22C17.5228 22 22 17.5229 22 12C22 6.47716 17.5228 2 12 2C6.47715 2 2 6.47716 2 12C2 17.5229 6.47715 22 12 22Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                                            <path d="M3 9H21" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                                            <path d="M3 15H21" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                                            <path d="M12 2C14.5013 4.73836 15.9228 8.29204 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29204 9.49872 4.73836 12 2V2Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                    <span>{currentLang}</span>
+                                    <span className={`_icon chevron ${langOpen ? 'rotate-180' : ''}`} style={{ transition: 'transform 0.2s' }}>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fillRule="evenodd" clipRule="evenodd" d="M12 13.9393L6.53033 8.46967L5.46967 9.53033L10.409 14.4697C11.2877 15.3483 12.7123 15.3484 13.591 14.4697L18.5303 9.53033L17.4697 8.46967L12 13.9393Z" data-mode="fill" fill="currentColor"></path>
+                                        </svg>
+                                    </span>
+                                </button>
 
-                            {/* Signup/Dashboard Button */}
-                            {user ? (
-                                <Link
-                                    to={getLocalizedPath("/dashboard")}
-                                    onClick={handleMenuClose}
-                                    className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-[16px] flex items-center justify-center font-medium text-base"
-                                >
-                                    {t('dashboard.title')}
-                                </Link>
-                            ) : (
+                                {langOpen && (
+                                    <div className="_language-dropdown-menu !top-full !mt-2">
+                                        {languages.map((lang) => (
+                                            <div
+                                                key={lang.code}
+                                                className={`_lang-item ${currentLang === lang.code ? 'active' : ''}`}
+                                                onClick={() => handleLanguageChange(lang.code)}
+                                            >
+                                                <span>{lang.label}</span>
+                                                {currentLang === lang.code && (
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Register Button (Mobile Menu) */}
+                            {!user && (
                                 <Link
                                     to={getLocalizedPath("/signup")}
                                     onClick={handleMenuClose}
-                                    className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-[16px] flex items-center justify-center font-medium text-base"
+                                    className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm"
                                 >
                                     {t('header.signup')}
                                 </Link>

@@ -671,7 +671,9 @@
             "links_title": "Descargo de Responsabilidad de Enlaces Externos",
             "links_text": "El sitio puede contener enlaces a otros sitios web o contenido que pertenece o se origina de terceros. Dichos enlaces externos no son investigados, monitoreados o verificados por nosotros en cuanto a precisión, adecuación, validez, confiabilidad, disponibilidad o completitud.",
             "advice_title": "Asesoramiento Profesional",
-            "advice_text": "La información en nuestro sitio web es solo para fines informáticos generales. No debe considerarse como asesoramiento profesional. Siempre busca el consejo de un profesional calificado con cualquier pregunta que puedas tener."
+            "advice_text": "La información en nuestro sitio web es solo para fines informáticos generales. No debe considerarse como asesoramiento profesional. Siempre busca el consejo de un profesional calificado con cualquier pregunta que puedas tener.",
+            "personal_items_title": "Objetos Personales",
+            "personal_items_text": "No nos hacemos responsables por la pérdida de objetos personales dejados en el vehículo. Por favor retire sus pertenencias antes del servicio."
         },
         "cookie": {
             "subtitle": "Nuestro sitio web utiliza cookies para distinguirle de otros usuarios de nuestro sitio web.",
@@ -717,7 +719,7 @@
             "contact_title": "11. Información de Contacto",
             "subtitle": "Por favor, revise nuestra política de privacidad, para entender completamente cómo manejamos sus interacciones con este sitio web.",
             "intro_text": "Ta' To' Clean está comprometido a salvaguardar tus datos personales. Esta Política de Privacidad describe cómo recopilamos, usamos, almacenamos y protegemos tu información cuando accedes a nuestro sitio web, programas servicios o interactúas con nosotros. Esta política cumple con la ley colombiana de protección de datos (Ley 1581 de 2012, Decreto 1377 de 2013).",
-            "collection_text": "Recopilamos información que nos proporcionas directamente cuando: Creas una cuenta. Reservas un servicio. Te comunicas con nosotros para soporte.",
+            "collection_text": "Recopilamos información que nos proporcionas directamente cuando: Creas una cuenta. Reservas un servicio. Te comunicas con nosotros para soporte. Nota: Se crea automáticamente una cuenta de usuario para gestionar su historial de servicios y reservas al realizar su primera reserva.",
             "collection_personal_text": "Nombre completo, Correo electrónico, Número de teléfono, Dirección (cuando se requiera para servicios a domicilio).",
             "collection_vehicle_text": "Placa del vehículo, Marca y modelo (opcional), Apodo asignado por el usuario.",
             "collection_technical_text": "Dirección IP, Tipo de navegador, Datos de cookies (consulta nuestra Política de Cookies).",
@@ -748,7 +750,7 @@
             "liability_title": "5. Limitación de Responsabilidad",
             "liability_text": "Ta' To' Clean no será responsable de daños indirectos, incidentales, especiales, consecuenciales o punitivos, incluyendo sin limitación, pérdida de beneficios, datos, uso, buena voluntad u otras pérdidas intangibles.",
             "cancellation_title": "6. Política de Cancelación",
-            "cancellation_text": "Puedes cancelar tu reserva hasta 24 horas antes del horario programado para un reembolso completo. Las cancelaciones tardías pueden estar sujetas a una tarifa.",
+            "cancellation_text": "Puedes cancelar tu reserva hasta 24 horas antes del horario programado sin penalidad alguna. Las cancelaciones tardías pueden estar sujetas a una tarifa.",
             "ip_title": "7. Propiedad Intelectual",
             "ip_text": "Todo el contenido de este sitio web (texto, gráficos, logos) es propiedad de Ta' To' Clean y está protegido por leyes de propiedad intelectual. No puedes usar nuestro contenido sin permiso explícito.",
             "changes_title": "8. Cambios a los Términos",
@@ -761,5 +763,437 @@
         "decline": "Rechazar",
         "manage": "Gestionar",
         "learn_more": "Leer más"
+    },
+    "faq": {
+        "title": "Preguntas Frecuentes",
+        "subtitle": "Encuentra respuestas a las dudas más comunes sobre nuestros servicios y plataforma.",
+        "sections": {
+            "booking": "Reservas y Servicios",
+            "account": "Cuenta de Usuario",
+            "vehicles": "Gestión de Vehículos",
+            "payments": "Pagos y Precios",
+            "dashboard": "Dashboard del Usuario",
+            "reviews": "Reseñas y Calificaciones",
+            "technical": "Problemas Técnicos",
+            "privacy": "Privacidad y Datos",
+            "admin": "Administración (Admin)",
+            "language": "Idioma y Navegación",
+            "support": "Soporte y Contacto",
+            "others": "Otros",
+            "specific_technical": "Preguntas Específicas Técnicas",
+            "tips": "Consejos y Mejores Prácticas"
+        },
+        "search_placeholder": "Buscar respuestas...",
+        "view_articles": "Ver artículos",
+        "in_category": "En:",
+        "search_results": "Resultados de búsqueda para",
+        "no_results_title": "No se encontraron resultados",
+        "no_results_desc": "Intenta ajustar tus términos de búsqueda",
+        "questions": {
+            "booking": [
+                {
+                    "question": "¿Cómo hago una reserva?",
+                    "answer": "Ve a la página de reservas haciendo clic en \"Reservar\" o \"Agendar Cita\".\nSelecciona tu vehículo (existente o añade uno nuevo).\nElige el servicio que deseas.\nCompleta tus datos de contacto.\nSelecciona la fecha y hora disponible.\nConfirma tu reserva."
+                },
+                {
+                    "question": "¿Necesito tener una cuenta para reservar?",
+                    "answer": "No es obligatorio. Si reservas sin cuenta, se creará automáticamente una cuenta para ti usando tu email y la placa de tu vehículo como contraseña. Te recomendamos cambiar la contraseña después de iniciar sesión."
+                },
+                {
+                    "question": "¿Qué tipos de servicios ofrecen?",
+                    "answer": "Lavado Básico: Limpieza exterior e interior básica.\nLavado Premium: Detallado profundo con cera de carnauba.\nCeramic Coating: Protección cerámica de larga duración con garantía de 2 años.\nDetailing Interior: Restauración completa del interior con vapor y desinfección.\nCorrección de Pintura: Restauración del brillo y eliminación de defectos."
+                },
+                {
+                    "question": "¿Cuánto tiempo antes debo reservar?",
+                    "answer": "Puedes reservar con anticipación, pero el mismo día no está disponible después de las 5:00 PM (17:00 horas). Te recomendamos reservar con al menos 24 horas de anticipación."
+                },
+                {
+                    "question": "¿Qué pasa si no hay horarios disponibles?",
+                    "answer": "Si todos los horarios del día están ocupados, intenta seleccionar otra fecha. Los días completos aparecen tachados en el calendario."
+                },
+                {
+                    "question": "¿Puedo cancelar mi reserva?",
+                    "answer": "Sí. Puedes cancelar tu reserva desde tu dashboard hasta 24 horas antes del horario programado para un reembolso completo."
+                },
+                {
+                    "question": "¿Cuánto tardan en confirmar mi reserva?",
+                    "answer": "Recibirás una confirmación inmediata por email después de completar el proceso de reserva. El estado cambiará de \"Pendiente\" a \"Confirmada\" cuando el equipo revise tu solicitud."
+                },
+                {
+                    "question": "¿Qué vehículos aceptan?",
+                    "answer": "Aceptamos:\nAutomóviles: Sedán, Hatchback, Coupé.\nSUV/Camionetas: SUV, 4x4, Pick-up.\nMotocicletas: Todo tipo de motos."
+                },
+                {
+                    "question": "¿Los precios varían según el tipo de vehículo?",
+                    "answer": "Sí. Los SUV y camionetas tienen un multiplicador de precio de 1.2x, mientras que las motocicletas tienen un multiplicador de 0.8x sobre el precio base."
+                }
+            ],
+            "account": [
+                {
+                    "question": "¿Cómo creo una cuenta?",
+                    "answer": "Puedes crear una cuenta de dos maneras:\nManualmente: Haz clic en \"Registrarse\" y completa el formulario.\nAutomáticamente: Al hacer una reserva sin estar autenticado, se crea una cuenta automáticamente."
+                },
+                {
+                    "question": "¿Olvidé mi contraseña, qué hago?",
+                    "answer": "Ve a la página de inicio de sesión.\nHaz clic en \"¿Olvidaste tu contraseña?\".\nIngresa tu email.\nRecibirás un enlace para restablecer tu contraseña."
+                },
+                {
+                    "question": "¿Cómo cambio mi contraseña?",
+                    "answer": "Inicia sesión en tu cuenta.\nVe a \"Perfil\" desde el sidebar.\nEn la sección \"Cambiar Contraseña\", ingresa tu nueva contraseña.\nHaz clic en \"Actualizar Contraseña\"."
+                },
+                {
+                    "question": "¿Si hice una reserva sin cuenta, obtuve credenciales?",
+                    "answer": "Sí. Cuando haces una reserva sin estar autenticado, recibes por email:\nUsuario: Tu correo electrónico.\nContraseña temporal: Tu placa de vehículo (sin guiones).\nTe recomendamos cambiar esta contraseña después de iniciar sesión por primera vez."
+                },
+                {
+                    "question": "¿Puedo cambiar mi correo electrónico?",
+                    "answer": "Sí, desde tu perfil puedes actualizar tu correo electrónico. Ten en cuenta que esto afectará tu inicio de sesión."
+                },
+                {
+                    "question": "¿Puedo actualizar mi nombre o teléfono?",
+                    "answer": "Sí, en la página de perfil puedes actualizar:\nNombre completo.\nNúmero de teléfono.\nCorreo electrónico."
+                },
+                {
+                    "question": "¿Qué pasa si soy redirigido al dashboard cuando intento ir al login?",
+                    "answer": "Si ya has iniciado sesión, serás redirigido automáticamente a tu dashboard cuando intentes acceder a las páginas de autenticación (login, signup, forgot-password)."
+                }
+            ],
+            "vehicles": [
+                {
+                    "question": "¿Cómo añado un vehículo?",
+                    "answer": "Desde tu dashboard:\nHaz clic en el botón \"Agregar Vehículo\" (ícono +).\nSelecciona el tipo de vehículo.\nIngresa la placa (obligatorio).\nOpcionalmente añade marca, modelo y apodo.\nHaz clic en \"Agregar Vehículo\"."
+                },
+                {
+                    "question": "¿Puedo editar la información de mi vehículo?",
+                    "answer": "Sí. Haz clic en la tarjeta del vehículo en tu dashboard para abrir los detalles, luego haz clic en el botón \"Editar\" para modificar la información."
+                },
+                {
+                    "question": "¿Puedo eliminar un vehículo?",
+                    "answer": "Sí, pero ten en cuenta que esto desvinculará todas las reservas asociadas a ese vehículo. Estas reservas no se eliminarán, pero ya no aparecerán en tu historial."
+                },
+                {
+                    "question": "¿Qué formato debe tener la placa?",
+                    "answer": "Dependiendo del tipo de vehículo:\nAutomóvil/SUV: Formato ABC123 o ABC-123.\nMotocicleta: Formato ABC12D o ABC-12D."
+                },
+                {
+                    "question": "¿Me dice que la placa ya está registrada, qué hago?",
+                    "answer": "Esto significa que:\nSi tienes cuenta: Ya tienes ese vehículo en tu lista.\nSin cuenta: Otro usuario ya tiene ese vehículo registrado.\nSi crees que es un error, contacta con soporte."
+                },
+                {
+                    "question": "¿Puedo tener varios vehículos registrados?",
+                    "answer": "Sí, no hay límite. Puedes añadir todos los vehículos que desees."
+                },
+                {
+                    "question": "¿Qué es el vehículo \"Principal\"?",
+                    "answer": "El vehículo marcado como \"Principal\" (badge \"P\") es tu vehículo predeterminado y aparecerá primero en la lista."
+                },
+                {
+                    "question": "¿Puedo ver el historial de servicios de cada vehículo?",
+                    "answer": "Sí. Al hacer clic en un vehículo se abre un modal con:\nDetalles del vehículo.\nÚltimo servicio realizado.\nPróximo mantenimiento sugerido.\nHistorial completo de servicios para ese vehículo."
+                }
+            ],
+            "payments": [
+                {
+                    "question": "¿Cuándo se realiza el pago?",
+                    "answer": "El pago se procesa al momento del servicio, no al hacer la reserva. Aceptamos múltiples métodos de pago en sitio."
+                },
+                {
+                    "question": "¿Cómo se calculan los precios?",
+                    "answer": "El precio final es:\nPrecio del servicio × Multiplicador del tipo de vehículo.\nEjemplos:\nLavado Premium ($120,000) para automóvil = $120,000.\nLavado Premium ($120,000) para SUV = $144,000 (×1.2).\nLavado Premium ($120,000) para moto = $96,000 (×0.8)."
+                },
+                {
+                    "question": "¿Los precios incluyen impuestos?",
+                    "answer": "Sí, todos los precios mostrados incluyen impuestos aplicables."
+                },
+                {
+                    "question": "¿Hay descuentos por múltiples servicios?",
+                    "answer": "Actualmente no hay descuentos automáticos, pero puedes contactar con el equipo para paquetes personalizados."
+                },
+                {
+                    "question": "¿Puedo ver mi gasto total?",
+                    "answer": "Sí, en tu dashboard hay una tarjeta que muestra tu \"Gasto Total\" sumando todos los servicios completados."
+                }
+            ],
+            "dashboard": [
+                {
+                    "question": "¿Qué puedo hacer en mi dashboard?",
+                    "answer": "Ver estadísticas (vehículos totales, reservas activas, próxima cita).\nGestionar tus vehículos (añadir, editar, eliminar).\nVer historial de servicios.\nFiltrar reservas por estado y vehículo.\nCancelar reservas activas.\nAcceder a tu perfil.\nVer tus reseñas."
+                },
+                {
+                    "question": "¿Qué significan los diferentes estados de reserva?",
+                    "answer": "Pendiente: Reserva creada, esperando confirmación.\nConfirmada: Reserva confirmada por el equipo.\nEn Proceso: El servicio está siendo realizado.\nCompletada: Servicio finalizado.\nCancelada: Reserva cancelada."
+                },
+                {
+                    "question": "¿Por qué mi reserva aparece como \"Completada\" automáticamente?",
+                    "answer": "El sistema actualiza automáticamente reservas pendientes o confirmadas a \"Completadas\" cuando la fecha y hora de la reserva ya pasó."
+                },
+                {
+                    "question": "¿Puedo filtrar mis reservas?",
+                    "answer": "Sí, puedes filtrar por:\nEstado: Todos, Activas, Completadas.\nVehículo: Todos o un vehículo específico."
+                },
+                {
+                    "question": "¿Cómo veo el historial completo?",
+                    "answer": "Por defecto se muestran las últimas 5 reservas. Haz clic en \"Ver todo el historial\" para expandir la lista completa."
+                },
+                {
+                    "question": "¿Puedo reservar directamente desde un vehículo?",
+                    "answer": "Sí. En el modal de detalles del vehículo, haz clic en \"Reservar nuevo servicio\" para ir directamente a la página de reservas con ese vehículo pre-seleccionado."
+                }
+            ],
+            "reviews": [
+                {
+                    "question": "¿Cómo calificar un servicio?",
+                    "answer": "Después de que tu reserva esté completada:\nVe a tu dashboard.\nHaz clic en \"Calificar\" en la reserva completada.\nSelecciona las estrellas (1-5).\nEscribe un comentario (opcional).\nDecide si quieres que sea pública.\nHaz clic en \"Enviar Calificación\"."
+                },
+                {
+                    "question": "¿Puedo hacer que mi reseña sea pública?",
+                    "answer": "Sí. Al calificar un servicio, hay un toggle que dice \"Permitir que mi reseña sea pública en la página de inicio\". Si lo activas, tu reseña aparecerá en la sección de testimonios."
+                },
+                {
+                    "question": "¿Puedo editar o eliminar mi reseña?",
+                    "answer": "Actualmente solo puedes eliminar reseñas desde la página \"Mis Reseñas\" en el dashboard. No hay opción de edición, tendrías que eliminarla y crear una nueva."
+                },
+                {
+                    "question": "¿Dónde veo todas mis reseñas?",
+                    "answer": "En el sidebar del dashboard, haz clic en \"Mis Reseñas\" para ver todas las calificaciones que has hecho."
+                },
+                {
+                    "question": "¿Puedo volver a calificar el mismo servicio?",
+                    "answer": "No, cada reserva solo puede ser calificada una vez."
+                },
+                {
+                    "question": "¿Qué pasa con mis reseñas si elimino un vehículo?",
+                    "answer": "Las reseñas se mantienen, ya que están vinculadas a la reserva, no al vehículo en sí."
+                }
+            ],
+            "technical": [
+                {
+                    "question": "No recibí el email de confirmación",
+                    "answer": "Verifica:\nCarpeta de spam: Revisa tu bandeja de correo no deseado.\nEmail correcto: Asegúrate de haber ingresado el email correctamente.\nServidor de email: A veces puede haber retrasos de hasta 5 minutos.\nSi no lo recibes, contacta con soporte."
+                },
+                {
+                    "question": "El calendario no muestra días disponibles",
+                    "answer": "Esto puede pasar si:\nTodos los horarios del mes están ocupados.\nHay un error al cargar la disponibilidad.\nTu conexión a internet está fallando.\nIntenta recargar la página o seleccionar otro mes."
+                },
+                {
+                    "question": "No puedo seleccionar una hora en el calendario",
+                    "answer": "Verifica que:\nHayas seleccionado primero una fecha.\nLa hora no esté ya reservada (aparecen deshabilitadas).\nNo sea un horario pasado."
+                },
+                {
+                    "question": "El tema oscuro no se guarda",
+                    "answer": "El tema se guarda en el almacenamiento local de tu navegador. Si usas modo incógnito o borras cookies regularmente, no se guardará."
+                },
+                {
+                    "question": "La página no carga correctamente en móvil",
+                    "answer": "El sitio es totalmente responsive. Si tienes problemas:\nActualiza la página.\nLimpia el caché del navegador.\nPrueba con otro navegador."
+                },
+                {
+                    "question": "No veo mis vehículos en la página de reservas",
+                    "answer": "Asegúrate de:\nEstar autenticado.\nHaber añadido al menos un vehículo desde el dashboard.\nRecargar la página."
+                },
+                {
+                    "question": "El botón \"Siguiente\" no funciona en el formulario de reserva",
+                    "answer": "Esto significa que hay campos obligatorios sin completar o con errores de validación. Revisa:\nFormato de placa correcto.\nEmail válido.\nTodos los campos requeridos completados."
+                }
+            ],
+            "privacy": [
+                {
+                    "question": "¿Qué datos personales recopilan?",
+                    "answer": "Recopilamos:\nInformación personal: Nombre, email, teléfono.\nInformación del vehículo: Placa, marca, modelo.\nInformación técnica: Dirección IP, tipo de navegador.\nVer la Política de Privacidad completa para más detalles."
+                },
+                {
+                    "question": "¿Cómo protegen mis datos?",
+                    "answer": "Almacenamiento seguro en Supabase con encriptación.\nPolíticas de Row-Level Security (RLS) en la base de datos.\nAutenticación segura.\nNo compartimos datos con terceros sin consentimiento."
+                },
+                {
+                    "question": "¿Puedo solicitar la eliminación de mis datos?",
+                    "answer": "Sí. Puedes solicitar la eliminación de tu cuenta y todos los datos asociados contactando con soporte en privacy@tatotoclean.com."
+                },
+                {
+                    "question": "¿Usan cookies?",
+                    "answer": "Sí. Usamos cookies para:\nFuncionamiento esencial del sitio.\nRecordar preferencias (idioma, tema).\nAnálisis de rendimiento.\nVer la Política de Cookies completa."
+                },
+                {
+                    "question": "¿Puedo gestionar las cookies?",
+                    "answer": "Sí, puedes aceptar o rechazar cookies no esenciales desde el banner de cookies. Las cookies estrictamente necesarias no se pueden deshabilitar."
+                },
+                {
+                    "question": "¿Mis datos son visibles para otros usuarios?",
+                    "answer": "No. Tus datos personales solo son visibles para ti y los administradores del sitio."
+                },
+                {
+                    "question": "¿Venden mi información a terceros?",
+                    "answer": "No. No vendemos, intercambiamos ni transferimos tu información personal a terceros, excepto proveedores de servicios necesarios (como Supabase para almacenamiento) o cuando lo requiera la ley."
+                }
+            ],
+            "admin": [
+                {
+                    "question": "¿Cómo accedo al panel de administración?",
+                    "answer": "Solo usuarios con permisos de administrador pueden acceder. Si no eres admin y intentas acceder a /admin, serás redirigido automáticamente."
+                },
+                {
+                    "question": "¿Qué puedo hacer como administrador?",
+                    "answer": "Ver todas las reservas de todos los usuarios.\nCambiar el estado de las reservas.\nVer estadísticas globales (ingresos, reservas totales).\nGestionar reseñas (ocultar/mostrar, eliminar).\nFiltrar y buscar reservas.\nOrdenar por precio, fecha o estado."
+                },
+                {
+                    "question": "¿Cómo cambiar el estado de una reserva?",
+                    "answer": "Haz clic en el dropdown del estado en la columna \"Acciones\" y selecciona el nuevo estado. El cambio se guarda inmediatamente."
+                },
+                {
+                    "question": "¿Puedo ver el email de confirmación que recibió el cliente?",
+                    "answer": "No directamente desde el panel, pero puedes verificar que se haya enviado revisando los logs de las Edge Functions en Supabase."
+                },
+                {
+                    "question": "¿Cómo oculto o muestro reseñas?",
+                    "answer": "En la pestaña \"Reseñas\" del admin:\nBusca la reseña.\nHaz clic en el botón de ojo (ocultar) o el ojo con línea (mostrar).\nEl cambio se aplica inmediatamente."
+                },
+                {
+                    "question": "¿Cómo elimino una reseña?",
+                    "answer": "En la pestaña \"Reseñas\":\nHaz clic en el botón de eliminar (ícono de basura).\nConfirma la acción.\nLa reseña se eliminará permanentemente."
+                },
+                {
+                    "question": "¿Las estadísticas se actualizan en tiempo real?",
+                    "answer": "Sí. El panel de admin usa Realtime de Supabase, por lo que las estadísticas y reservas se actualizan automáticamente cuando hay cambios."
+                }
+            ],
+            "language": [
+                {
+                    "question": "¿En qué idiomas está disponible el sitio?",
+                    "answer": "El sitio está disponible en:\nEspañol (por defecto).\nEnglish."
+                },
+                {
+                    "question": "¿Cómo cambio el idioma?",
+                    "answer": "Haz clic en el selector de idioma en el encabezado (ES/EN). El cambio se aplica inmediatamente."
+                },
+                {
+                    "question": "¿Se guarda mi preferencia de idioma?",
+                    "answer": "Sí, se guarda en el almacenamiento local del navegador. Además, la URL cambia para reflejar el idioma (e.g., /en/inicio para inglés)."
+                },
+                {
+                    "question": "¿Todas las páginas están traducidas?",
+                    "answer": "Sí, todas las páginas, formularios, mensajes de error y notificaciones están completamente traducidos al español e inglés."
+                },
+                {
+                    "question": "¿Puedo cambiar entre tema claro y oscuro?",
+                    "answer": "Sí. Desde el dashboard, haz clic en el botón de toggle del tema en el sidebar para cambiar entre modo claro y oscuro."
+                },
+                {
+                    "question": "¿El tema se sincroniza entre dispositivos?",
+                    "answer": "No, el tema se guarda localmente en cada navegador. Si usas otro dispositivo o navegador, tendrás que configurarlo nuevamente."
+                },
+                {
+                    "question": "¿Cómo navego entre secciones de la página principal?",
+                    "answer": "Usa el menú de navegación en el header. Al hacer clic en una sección, la página hará scroll suave hacia esa sección."
+                },
+                {
+                    "question": "¿Qué es el \"smooth scroll\"?",
+                    "answer": "Es el desplazamiento suave que se aplica al navegar entre secciones de la página, proporcionando una experiencia más fluida."
+                }
+            ],
+            "support": [
+                {
+                    "question": "¿Cómo contacto con soporte?",
+                    "answer": "Puedes contactarnos a través de:\nEmail general: info@tatotoclean.com\nEmail de privacidad: privacy@tatotoclean.com\nSección de contacto: En la página principal, ve a la sección \"Contacto\"."
+                },
+                {
+                    "question": "¿Cuál es la ubicación física?",
+                    "answer": "Dirección: Carrera 15#57-11, Dosquebradas, Risaralda, Colombia."
+                },
+                {
+                    "question": "¿Hay un horario de atención?",
+                    "answer": "Los horarios de reserva disponibles son de 8:00 AM a 5:00 PM. Para consultas de soporte, responderemos en horario laboral."
+                },
+                {
+                    "question": "¿Hay WhatsApp para contacto?",
+                    "answer": "Esto no está especificado en el sistema actual, pero puedes verificar en la sección de contacto o el footer del sitio."
+                }
+            ],
+            "others": [
+                {
+                    "question": "¿Qué navegadores son compatibles?",
+                    "answer": "El sitio funciona en todos los navegadores modernos:\nChrome, Firefox, Safari, Edge, Opera."
+                },
+                {
+                    "question": "¿Es responsive el sitio?",
+                    "answer": "Sí, el sitio está completamente optimizado para móviles, tablets y escritorio."
+                },
+                {
+                    "question": "¿Puedo acceder desde mi teléfono?",
+                    "answer": "Absolutamente. El diseño es mobile-first y funciona perfectamente en dispositivos móviles."
+                },
+                {
+                    "question": "¿Hay una aplicación móvil?",
+                    "answer": "Actualmente no, pero el sitio web está optimizado para móviles y proporciona una experiencia similar a una app."
+                },
+                {
+                    "question": "¿Cómo reporto un bug?",
+                    "answer": "Si encuentras un problema:\nToma una captura de pantalla si es posible.\nAnota qué estabas haciendo cuando ocurrió.\nEnvía esta información a info@tatotoclean.com."
+                },
+                {
+                    "question": "¿Hay un programa de fidelidad o membresías?",
+                    "answer": "El sitio menciona \"Membresías\" en el menú, pero actualmente solo muestra los planes de servicio (Básico, Premium, Elite)."
+                },
+                {
+                    "question": "¿Ofrecen servicio a domicilio?",
+                    "answer": "Esto no está claramente especificado en el sistema. Contacta con el equipo para confirmar si hay disponibilidad de servicio a domicilio."
+                },
+                {
+                    "question": "¿Cuánto tiempo toma cada servicio?",
+                    "answer": "El tiempo estimado para cada servicio no está especificado en el sistema actual. Se recomienda preguntar al momento de reservar."
+                },
+                {
+                    "question": "¿Qué pasa si llego tarde a mi cita?",
+                    "answer": "La política de retrasos no está especificada. Se recomienda contactar con anticipación si sabes que vas a llegar tarde."
+                },
+                {
+                    "question": "¿Puedo cambiar la fecha/hora de mi reserva?",
+                    "answer": "Actualmente no hay función de \"editar reserva\". Tendrías que cancelar y crear una nueva reserva."
+                }
+            ],
+            "specific_technical": [
+                {
+                    "question": "¿Qué pasa si veo el error \"Row-Level Security policy violation\"?",
+                    "answer": "Esto es un error interno de permisos de base de datos. Usualmente se resuelve:\nCerrando sesión y volviendo a iniciar sesión.\nLimpiando el caché.\nSi persiste, contactar con soporte."
+                },
+                {
+                    "question": "¿Por qué dice \"Esta placa ya está registrada\"?",
+                    "answer": "Significa que ya existe un vehículo con esa placa:\nEn tu lista de vehículos (si estás autenticado).\nO registrado por otro usuario."
+                },
+                {
+                    "question": "¿Puedo usar la misma placa para múltiples cuentas?",
+                    "answer": "No. Cada placa solo puede estar registrada una vez en el sistema globalmente."
+                },
+                {
+                    "question": "¿Qué es el \"automatic account creation\"?",
+                    "answer": "Cuando haces una reserva sin estar registrado, el sistema automáticamente crea una cuenta usando:\nTu email como usuario.\nLa placa del vehículo como contraseña temporal.\nRecibes estas credenciales por email para que puedas acceder a tu dashboard después."
+                },
+                {
+                    "question": "¿Cómo funciona la sincronización de datos?",
+                    "answer": "El sistema usa:\nRealtime de Supabase para actualizaciones en vivo.\nReact Query para caché optimizado de datos.\nEdge Functions para envío de emails."
+                },
+                {
+                    "question": "¿Qué pasa con mis reservas si elimino mi vehículo?",
+                    "answer": "Las reservas no se eliminan, pero se \"desvinculan\" de tu cuenta. El sistema actualiza el email asociado a esas reservas a un estado anónimo."
+                }
+            ],
+            "tips": [
+                {
+                    "question": "Recomendaciones para usuarios nuevos",
+                    "answer": "Crea una cuenta antes de hacer tu primera reserva.\nAñade todos tus vehículos al dashboard.\nRevisa bien el calendario de disponibilidad.\nGuarda tus credenciales en un lugar seguro.\nCambia la contraseña temporal lo antes posible."
+                },
+                {
+                    "question": "Para una mejor experiencia de reserva",
+                    "answer": "Reserva con al menos 24 horas de anticipación.\nCompleta todos los campos opcionales (marca, modelo) para mejor servicio.\nActiva notificaciones de email.\nRevisa tu email de confirmación.\nCalifica el servicio después de completado."
+                },
+                {
+                    "question": "Gestión de vehículos",
+                    "answer": "Usa apodos descriptivos para tus vehículos.\nMantén actualizada la información de marca y modelo.\nMarca tu vehículo principal para acceso rápido.\nRevisa el historial regularmente."
+                },
+                {
+                    "question": "Seguridad de la cuenta",
+                    "answer": "Usa una contraseña segura (al menos 6 caracteres).\nNo compartas tus credenciales.\nCierra sesión en dispositivos compartidos.\nVerifica siempre la URL del sitio."
+                }
+            ]
+        }
     }
 }

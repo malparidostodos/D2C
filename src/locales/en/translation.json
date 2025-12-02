@@ -674,7 +674,9 @@
             "links_title": "External Links Disclaimer",
             "links_text": "The Site may contain links to other websites or content belonging to or originating from third parties. Such external links are not investigated, monitored, or checked for accuracy, adequacy, validity, reliability, availability, or completeness by us.",
             "advice_title": "Professional Advice",
-            "advice_text": "The information on our website is for general informational purposes only. It should not be considered professional advice. Always seek the advice of a qualified professional with any questions you may have."
+            "advice_text": "The information on our website is for general informational purposes only. It should not be considered professional advice. Always seek the advice of a qualified professional with any questions you may have.",
+            "personal_items_title": "Personal Items",
+            "personal_items_text": "We are not responsible for the loss of personal items left in the vehicle. Please remove your belongings before service."
         },
         "cookie": {
             "subtitle": "Please review our privacy policy, to fully understand how we handle your interactions with this website.",
@@ -720,7 +722,7 @@
             "contact_title": "11. Contact Information",
             "subtitle": "Please review our privacy policy, to fully understand how we handle your interactions with this website.",
             "intro_text": "Ta' To' Clean is committed to safeguarding your personal data. This Privacy Policy describes how we collect, use, store, and protect your information when you access our website, use our services, or interact with us. This policy complies with Colombian data protection law (Law 1581 of 2012, Decree 1377 of 2013).",
-            "collection_text": "We collect information that you provide directly to us when: You create an account. You book a service. You contact us for support.",
+            "collection_text": "We collect information that you provide directly to us when: You create an account. You book a service. You contact us for support. Note: A user account is automatically created to manage your service history and bookings upon making your first reservation.",
             "collection_personal_text": "Full name, Email address, Phone number, Address (when required for mobile services).",
             "collection_vehicle_text": "Vehicle plate, Brand and model (optional), User-assigned nickname.",
             "collection_technical_text": "IP address, Browser type, Cookie data (see our Cookie Policy).",
@@ -750,7 +752,7 @@
             "liability_title": "5. Limitation of Liability",
             "liability_text": "Ta' To' Clean shall not be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.",
             "cancellation_title": "6. Cancellation Policy",
-            "cancellation_text": "You may cancel your booking up to 24 hours before the scheduled time for a full refund. Late cancellations may be subject to a fee.",
+            "cancellation_text": "You may cancel your booking up to 24 hours before the scheduled time without any penalty. Late cancellations may be subject to a fee.",
             "ip_title": "7. Intellectual Property",
             "ip_text": "All content on this website (text, graphics, logos) is owned by Ta' To' Clean and protected by intellectual property laws. You may not use our content without explicit permission.",
             "changes_title": "8. Changes to Terms",
@@ -763,5 +765,437 @@
         "decline": "Decline",
         "manage": "Manage",
         "learn_more": "Learn more"
+    },
+    "faq": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Find answers to the most common questions about our services and platform.",
+        "sections": {
+            "booking": "Booking & Services",
+            "account": "User Account",
+            "vehicles": "Vehicle Management",
+            "payments": "Payments & Pricing",
+            "dashboard": "User Dashboard",
+            "reviews": "Reviews & Ratings",
+            "technical": "Technical Issues",
+            "privacy": "Privacy & Data",
+            "admin": "Administration (Admin)",
+            "language": "Language & Navigation",
+            "support": "Support & Contact",
+            "others": "Others",
+            "specific_technical": "Specific Technical Questions",
+            "tips": "Tips & Best Practices"
+        },
+        "search_placeholder": "Search for answers...",
+        "view_articles": "View Articles",
+        "in_category": "In:",
+        "search_results": "Search Results for",
+        "no_results_title": "No results found",
+        "no_results_desc": "Try adjusting your search terms",
+        "questions": {
+            "booking": [
+                {
+                    "question": "How do I make a reservation?",
+                    "answer": "Go to the booking page by clicking 'Book' or 'Schedule Appointment'.\nSelect your vehicle (existing or add a new one).\nChoose the service you want.\nComplete your contact details.\nSelect the available date and time.\nConfirm your reservation."
+                },
+                {
+                    "question": "Do I need an account to book?",
+                    "answer": "It is not mandatory. If you book without an account, one will be automatically created for you using your email and your vehicle plate as the password. We recommend changing the password after logging in."
+                },
+                {
+                    "question": "What types of services do you offer?",
+                    "answer": "Basic Wash: Basic exterior and interior cleaning.\nPremium Wash: Deep detailing with carnauba wax.\nCeramic Coating: Long-lasting ceramic protection with 2-year warranty.\nInterior Detailing: Complete interior restoration with steam and disinfection.\nPaint Correction: Gloss restoration and defect removal."
+                },
+                {
+                    "question": "How far in advance should I book?",
+                    "answer": "You can book in advance, but same-day booking is not available after 5:00 PM. We recommend booking at least 24 hours in advance."
+                },
+                {
+                    "question": "What if there are no available slots?",
+                    "answer": "If all slots for the day are taken, try selecting another date. Full days appear crossed out on the calendar."
+                },
+                {
+                    "question": "Can I cancel my reservation?",
+                    "answer": "Yes. You can cancel your reservation from your dashboard up to 24 hours before the scheduled time for a full refund."
+                },
+                {
+                    "question": "How long does it take to confirm my reservation?",
+                    "answer": "You will receive an immediate confirmation email after completing the booking process. The status will change from 'Pending' to 'Confirmed' when the team reviews your request."
+                },
+                {
+                    "question": "What vehicles do you accept?",
+                    "answer": "We accept:\nCars: Sedan, Hatchback, Coupe.\nSUVs/Trucks: SUV, 4x4, Pick-up.\nMotorcycles: All types of bikes."
+                },
+                {
+                    "question": "Do prices vary by vehicle type?",
+                    "answer": "Yes. SUVs and trucks have a 1.2x price multiplier, while motorcycles have a 0.8x multiplier on the base price."
+                }
+            ],
+            "account": [
+                {
+                    "question": "How do I create an account?",
+                    "answer": "You can create an account in two ways:\nManually: Click 'Sign Up' and complete the form.\nAutomatically: When making a reservation without being authenticated, an account is automatically created."
+                },
+                {
+                    "question": "I forgot my password, what do I do?",
+                    "answer": "Go to the login page.\nClick 'Forgot your password?'.\nEnter your email.\nYou will receive a link to reset your password."
+                },
+                {
+                    "question": "How do I change my password?",
+                    "answer": "Log in to your account.\nGo to 'Profile' from the sidebar.\nIn the 'Change Password' section, enter your new password.\nClick 'Update Password'."
+                },
+                {
+                    "question": "If I booked without an account, did I get credentials?",
+                    "answer": "Yes. When you book without being authenticated, you receive via email:\nUser: Your email address.\nTemporary password: Your vehicle plate (without hyphens).\nWe recommend changing this password after logging in for the first time."
+                },
+                {
+                    "question": "Can I change my email?",
+                    "answer": "Yes, you can update your email from your profile. Note that this will affect your login."
+                },
+                {
+                    "question": "Can I update my name or phone?",
+                    "answer": "Yes, on the profile page you can update:\nFull Name.\nPhone Number.\nEmail Address."
+                },
+                {
+                    "question": "What if I am redirected to the dashboard when trying to go to login?",
+                    "answer": "If you are already logged in, you will be automatically redirected to your dashboard when trying to access authentication pages (login, signup, forgot-password)."
+                }
+            ],
+            "vehicles": [
+                {
+                    "question": "How do I add a vehicle?",
+                    "answer": "From your dashboard:\nClick the 'Add Vehicle' button (+ icon).\nSelect the vehicle type.\nEnter the plate (mandatory).\nOptionally add brand, model, and nickname.\nClick 'Add Vehicle'."
+                },
+                {
+                    "question": "Can I edit my vehicle information?",
+                    "answer": "Yes. Click on the vehicle card in your dashboard to open details, then click the 'Edit' button to modify the information."
+                },
+                {
+                    "question": "Can I delete a vehicle?",
+                    "answer": "Yes, but note that this will unlink all reservations associated with that vehicle. These reservations will not be deleted but will no longer appear in your history."
+                },
+                {
+                    "question": "What format should the plate have?",
+                    "answer": "Depending on the vehicle type:\nCar/SUV: Format ABC123 or ABC-123.\nMotorcycle: Format ABC12D or ABC-12D."
+                },
+                {
+                    "question": "It says the plate is already registered, what do I do?",
+                    "answer": "This means that:\nIf you have an account: You already have that vehicle in your list.\nWithout account: Another user already has that vehicle registered.\nIf you think this is an error, contact support."
+                },
+                {
+                    "question": "Can I have multiple vehicles registered?",
+                    "answer": "Yes, there is no limit. You can add as many vehicles as you wish."
+                },
+                {
+                    "question": "What is the 'Primary' vehicle?",
+                    "answer": "The vehicle marked as 'Primary' ('P' badge) is your default vehicle and will appear first in the list."
+                },
+                {
+                    "question": "Can I see the service history of each vehicle?",
+                    "answer": "Yes. Clicking on a vehicle opens a modal with:\nVehicle details.\nLast service performed.\nSuggested next maintenance.\nFull service history for that vehicle."
+                }
+            ],
+            "payments": [
+                {
+                    "question": "When is payment made?",
+                    "answer": "Payment is processed at the time of service, not when booking. We accept multiple payment methods on site."
+                },
+                {
+                    "question": "How are prices calculated?",
+                    "answer": "The final price is:\nService Price × Vehicle Type Multiplier.\nExamples:\nPremium Wash ($120,000) for car = $120,000.\nPremium Wash ($120,000) for SUV = $144,000 (×1.2).\nPremium Wash ($120,000) for motorcycle = $96,000 (×0.8)."
+                },
+                {
+                    "question": "Do prices include taxes?",
+                    "answer": "Yes, all displayed prices include applicable taxes."
+                },
+                {
+                    "question": "Are there discounts for multiple services?",
+                    "answer": "Currently there are no automatic discounts, but you can contact the team for personalized packages."
+                },
+                {
+                    "question": "Can I see my total spend?",
+                    "answer": "Yes, in your dashboard there is a card showing your 'Total Spend' summing all completed services."
+                }
+            ],
+            "dashboard": [
+                {
+                    "question": "What can I do in my dashboard?",
+                    "answer": "View statistics (total vehicles, active bookings, next appointment).\nManage your vehicles (add, edit, delete).\nView service history.\nFilter bookings by status and vehicle.\nCancel active bookings.\nAccess your profile.\nView your reviews."
+                },
+                {
+                    "question": "What do the different booking statuses mean?",
+                    "answer": "Pending: Booking created, awaiting confirmation.\nConfirmed: Booking confirmed by the team.\nIn Progress: Service is being performed.\nCompleted: Service finished.\nCancelled: Booking cancelled."
+                },
+                {
+                    "question": "Why does my booking appear as 'Completed' automatically?",
+                    "answer": "The system automatically updates pending or confirmed bookings to 'Completed' when the booking date and time has passed."
+                },
+                {
+                    "question": "Can I filter my bookings?",
+                    "answer": "Yes, you can filter by:\nStatus: All, Active, Completed.\nVehicle: All or a specific vehicle."
+                },
+                {
+                    "question": "How do I see the full history?",
+                    "answer": "By default, the last 5 bookings are shown. Click 'View full history' to expand the complete list."
+                },
+                {
+                    "question": "Can I book directly from a vehicle?",
+                    "answer": "Yes. In the vehicle details modal, click 'Book new service' to go directly to the booking page with that vehicle pre-selected."
+                }
+            ],
+            "reviews": [
+                {
+                    "question": "How to rate a service?",
+                    "answer": "After your booking is completed:\nGo to your dashboard.\nClick 'Rate' on the completed booking.\nSelect stars (1-5).\nWrite a comment (optional).\nDecide if you want it to be public.\nClick 'Submit Rating'."
+                },
+                {
+                    "question": "Can I make my review public?",
+                    "answer": "Yes. When rating a service, there is a toggle that says 'Allow my review to be public on the home page'. If you activate it, your review will appear in the testimonials section."
+                },
+                {
+                    "question": "Can I edit or delete my review?",
+                    "answer": "Currently you can only delete reviews from the 'My Reviews' page in the dashboard. There is no edit option, you would have to delete it and create a new one."
+                },
+                {
+                    "question": "Where do I see all my reviews?",
+                    "answer": "In the dashboard sidebar, click 'My Reviews' to see all the ratings you have made."
+                },
+                {
+                    "question": "Can I rate the same service again?",
+                    "answer": "No, each booking can only be rated once."
+                },
+                {
+                    "question": "What happens to my reviews if I delete a vehicle?",
+                    "answer": "Reviews are maintained, as they are linked to the booking, not the vehicle itself."
+                }
+            ],
+            "technical": [
+                {
+                    "question": "I didn't receive the confirmation email",
+                    "answer": "Check:\nSpam folder: Check your junk mail.\nCorrect email: Make sure you entered the email correctly.\nEmail server: Sometimes there can be delays of up to 5 minutes.\nIf you don't receive it, contact support."
+                },
+                {
+                    "question": "The calendar shows no available days",
+                    "answer": "This can happen if:\nAll slots for the month are taken.\nThere is an error loading availability.\nYour internet connection is failing.\nTry reloading the page or selecting another month."
+                },
+                {
+                    "question": "I can't select a time on the calendar",
+                    "answer": "Check that:\nYou have selected a date first.\nThe time is not already booked (appears disabled).\nIt is not a past time."
+                },
+                {
+                    "question": "Dark theme is not saved",
+                    "answer": "The theme is saved in your browser's local storage. If you use incognito mode or clear cookies regularly, it will not be saved."
+                },
+                {
+                    "question": "Page doesn't load correctly on mobile",
+                    "answer": "The site is fully responsive. If you have problems:\nRefresh the page.\nClear browser cache.\nTry another browser."
+                },
+                {
+                    "question": "I don't see my vehicles on the booking page",
+                    "answer": "Make sure to:\nBe authenticated.\nHave added at least one vehicle from the dashboard.\nReload the page."
+                },
+                {
+                    "question": "The 'Next' button doesn't work on the booking form",
+                    "answer": "This means there are mandatory fields incomplete or with validation errors. Check:\nCorrect plate format.\nValid email.\nAll required fields completed."
+                }
+            ],
+            "privacy": [
+                {
+                    "question": "What personal data do you collect?",
+                    "answer": "We collect:\nPersonal information: Name, email, phone.\nVehicle information: Plate, brand, model.\nTechnical information: IP address, browser type.\nSee the full Privacy Policy for more details."
+                },
+                {
+                    "question": "How do you protect my data?",
+                    "answer": "Secure storage in Supabase with encryption.\nRow-Level Security (RLS) policies in the database.\nSecure authentication.\nWe do not share data with third parties without consent."
+                },
+                {
+                    "question": "Can I request deletion of my data?",
+                    "answer": "Yes. You can request the deletion of your account and all associated data by contacting support at privacy@tatotoclean.com."
+                },
+                {
+                    "question": "Do you use cookies?",
+                    "answer": "Yes. We use cookies for:\nEssential site operation.\nRemembering preferences (language, theme).\nPerformance analysis.\nSee the full Cookie Policy."
+                },
+                {
+                    "question": "Can I manage cookies?",
+                    "answer": "Yes, you can accept or reject non-essential cookies from the cookie banner. Strictly necessary cookies cannot be disabled."
+                },
+                {
+                    "question": "Is my data visible to other users?",
+                    "answer": "No. Your personal data is only visible to you and site administrators."
+                },
+                {
+                    "question": "Do you sell my information to third parties?",
+                    "answer": "No. We do not sell, trade, or transfer your personal information to third parties, except necessary service providers (like Supabase for storage) or when required by law."
+                }
+            ],
+            "admin": [
+                {
+                    "question": "How do I access the admin panel?",
+                    "answer": "Only users with administrator permissions can access. If you are not admin and try to access /admin, you will be automatically redirected."
+                },
+                {
+                    "question": "What can I do as an administrator?",
+                    "answer": "View all bookings from all users.\nChange booking status.\nView global statistics (revenue, total bookings).\nManage reviews (hide/show, delete).\nFilter and search bookings.\nSort by price, date, or status."
+                },
+                {
+                    "question": "How to change the status of a booking?",
+                    "answer": "Click the status dropdown in the 'Actions' column and select the new status. The change is saved immediately."
+                },
+                {
+                    "question": "Can I see the confirmation email the client received?",
+                    "answer": "Not directly from the panel, but you can verify it was sent by checking Edge Functions logs in Supabase."
+                },
+                {
+                    "question": "How do I hide or show reviews?",
+                    "answer": "In the 'Reviews' tab of the admin:\nFind the review.\nClick the eye button (hide) or eye with line (show).\nThe change applies immediately."
+                },
+                {
+                    "question": "How do I delete a review?",
+                    "answer": "In the 'Reviews' tab:\nClick the delete button (trash icon).\nConfirm the action.\nThe review will be permanently deleted."
+                },
+                {
+                    "question": "Are statistics updated in real-time?",
+                    "answer": "Yes. The admin panel uses Supabase Realtime, so statistics and bookings update automatically when there are changes."
+                }
+            ],
+            "language": [
+                {
+                    "question": "What languages is the site available in?",
+                    "answer": "The site is available in:\nSpanish (default).\nEnglish."
+                },
+                {
+                    "question": "How do I change the language?",
+                    "answer": "Click the language selector in the header (ES/EN). The change applies immediately."
+                },
+                {
+                    "question": "Is my language preference saved?",
+                    "answer": "Yes, it is saved in the browser's local storage. Also, the URL changes to reflect the language (e.g., /en/home for English)."
+                },
+                {
+                    "question": "Are all pages translated?",
+                    "answer": "Yes, all pages, forms, error messages, and notifications are fully translated into Spanish and English."
+                },
+                {
+                    "question": "Can I switch between light and dark theme?",
+                    "answer": "Yes. From the dashboard, click the theme toggle button in the sidebar to switch between light and dark mode."
+                },
+                {
+                    "question": "Does the theme sync between devices?",
+                    "answer": "No, the theme is saved locally in each browser. If you use another device or browser, you will have to configure it again."
+                },
+                {
+                    "question": "How do I navigate between sections of the main page?",
+                    "answer": "Use the navigation menu in the header. Clicking a section will smooth scroll to that section."
+                },
+                {
+                    "question": "What is 'smooth scroll'?",
+                    "answer": "It is the smooth scrolling applied when navigating between sections of the page, providing a more fluid experience."
+                }
+            ],
+            "support": [
+                {
+                    "question": "How do I contact support?",
+                    "answer": "You can contact us via:\nGeneral email: info@tatotoclean.com\nPrivacy email: privacy@tatotoclean.com\nContact section: On the main page, go to the 'Contact' section."
+                },
+                {
+                    "question": "What is the physical location?",
+                    "answer": "Address: Carrera 15#57-11, Dosquebradas, Risaralda, Colombia."
+                },
+                {
+                    "question": "Is there a schedule?",
+                    "answer": "Available booking hours are 8:00 AM to 5:00 PM. For support inquiries, we will respond during business hours."
+                },
+                {
+                    "question": "Is there WhatsApp for contact?",
+                    "answer": "This is not specified in the current system, but you can check in the contact section or site footer."
+                }
+            ],
+            "others": [
+                {
+                    "question": "What browsers are compatible?",
+                    "answer": "The site works in all modern browsers:\nChrome, Firefox, Safari, Edge, Opera."
+                },
+                {
+                    "question": "Is the site responsive?",
+                    "answer": "Yes, the site is fully optimized for mobile, tablet, and desktop."
+                },
+                {
+                    "question": "Can I access from my phone?",
+                    "answer": "Absolutely. The design is mobile-first and works perfectly on mobile devices."
+                },
+                {
+                    "question": "Is there a mobile app?",
+                    "answer": "Currently no, but the website is optimized for mobile and provides an app-like experience."
+                },
+                {
+                    "question": "How do I report a bug?",
+                    "answer": "If you find a problem:\nTake a screenshot if possible.\nNote what you were doing when it happened.\nSend this information to info@tatotoclean.com."
+                },
+                {
+                    "question": "Is there a loyalty program or memberships?",
+                    "answer": "The site mentions 'Memberships' in the menu, but currently only shows service plans (Basic, Premium, Elite)."
+                },
+                {
+                    "question": "Do you offer mobile service?",
+                    "answer": "This is not clearly specified in the system. Contact the team to confirm if mobile service is available."
+                },
+                {
+                    "question": "How long does each service take?",
+                    "answer": "The estimated time for each service is not specified in the current system. It is recommended to ask when booking."
+                },
+                {
+                    "question": "What if I arrive late to my appointment?",
+                    "answer": "The lateness policy is not specified. It is recommended to contact in advance if you know you will be late."
+                },
+                {
+                    "question": "Can I change the date/time of my reservation?",
+                    "answer": "Currently there is no 'edit booking' function. You would have to cancel and create a new reservation."
+                }
+            ],
+            "specific_technical": [
+                {
+                    "question": "What if I see the error 'Row-Level Security policy violation'?",
+                    "answer": "This is an internal database permission error. It is usually resolved by:\nLogging out and logging back in.\nClearing cache.\nIf it persists, contact support."
+                },
+                {
+                    "question": "Why does it say 'This plate is already registered'?",
+                    "answer": "It means a vehicle with that plate already exists:\nIn your vehicle list (if authenticated).\nOr registered by another user."
+                },
+                {
+                    "question": "Can I use the same plate for multiple accounts?",
+                    "answer": "No. Each plate can only be registered once in the system globally."
+                },
+                {
+                    "question": "What is 'automatic account creation'?",
+                    "answer": "When you make a reservation without being registered, the system automatically creates an account using:\nYour email as username.\nThe vehicle plate as temporary password.\nYou receive these credentials by email so you can access your dashboard later."
+                },
+                {
+                    "question": "How does data synchronization work?",
+                    "answer": "The system uses:\nSupabase Realtime for live updates.\nReact Query for optimized data caching.\nEdge Functions for email sending."
+                },
+                {
+                    "question": "What happens to my bookings if I delete my vehicle?",
+                    "answer": "Bookings are not deleted, but are 'unlinked' from your account. The system updates the email associated with those bookings to an anonymous state."
+                }
+            ],
+            "tips": [
+                {
+                    "question": "Recommendations for new users",
+                    "answer": "Create an account before making your first reservation.\nAdd all your vehicles to the dashboard.\nCheck the availability calendar well.\nSave your credentials in a safe place.\nChange the temporary password as soon as possible."
+                },
+                {
+                    "question": "For a better booking experience",
+                    "answer": "Book at least 24 hours in advance.\nComplete all optional fields (brand, model) for better service.\nEnable email notifications.\nCheck your confirmation email.\nRate the service after completion."
+                },
+                {
+                    "question": "Vehicle management",
+                    "answer": "Use descriptive nicknames for your vehicles.\nKeep brand and model information updated.\nMark your primary vehicle for quick access.\nCheck history regularly."
+                },
+                {
+                    "question": "Account security",
+                    "answer": "Use a secure password (at least 6 characters).\nDo not share your credentials.\nLog out on shared devices.\nAlways verify the site URL."
+                }
+            ]
+        }
     }
 }

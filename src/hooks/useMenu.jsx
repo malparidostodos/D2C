@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSmoothScroll } from '../components/ui/SmoothScroll';
 
-export const useMenu = () => {
+const MenuContext = createContext();
+
+export const MenuProvider = ({ children }) => {
     const [hidden, setHidden] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const [menuClosing, setMenuClosing] = useState(false);
@@ -13,6 +15,7 @@ export const useMenu = () => {
     const [hoverLock, setHoverLock] = useState(false);
     const [hoveredService, setHoveredService] = useState(null);
     const [langOpen, setLangOpen] = useState(false);
+    const [isMenuMounted, setIsMenuMounted] = useState(false);
 
     const { t, i18n } = useTranslation();
     const lastScrollY = useRef(0);
@@ -301,7 +304,7 @@ export const useMenu = () => {
         }
     }, [menuOpen]);
 
-    return {
+    const value = {
         hidden,
         setHidden,
         menuOpen,
@@ -318,9 +321,25 @@ export const useMenu = () => {
         langOpen,
         setLangOpen,
         langRef,
+        isMenuMounted,
+        setIsMenuMounted,
         handleNavClick,
         handleLanguageChange,
         handleMenuClose,
         getLocalizedPath
     };
+
+    return (
+        <MenuContext.Provider value={value}>
+            {children}
+        </MenuContext.Provider>
+    );
+};
+
+export const useMenu = () => {
+    const context = useContext(MenuContext);
+    if (!context) {
+        throw new Error('useMenu must be used within a MenuProvider');
+    }
+    return context;
 };

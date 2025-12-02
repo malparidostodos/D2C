@@ -12,6 +12,7 @@ import Roadmap from './components/features/Roadmap'
 import Contact from './components/pages/Contact'
 import CustomScrollbar from './components/ui/CustomScrollbar'
 import SmoothScroll, { useSmoothScroll } from './components/ui/SmoothScroll'
+import { MenuProvider } from './hooks/useMenu.jsx'
 import BookingPage from './components/pages/BookingPage'
 import RateService from './components/dashboard/RateService'
 
@@ -36,6 +37,7 @@ import CookiePolicy from './components/legal/CookiePolicy'
 import PrivacyPolicy from './components/legal/PrivacyPolicy'
 import TermsConditions from './components/legal/TermsConditions'
 import Disclaimers from './components/legal/Disclaimers'
+import FAQ from './components/pages/FAQ'
 
 import SEO from './components/ui/SEO'
 
@@ -151,6 +153,7 @@ const AppRoutes = ({ t }) => {
       <Route path="privacy-policy" element={<PrivacyPolicy />} />
       <Route path="terms-conditions" element={<TermsConditions />} />
       <Route path="disclaimers" element={<Disclaimers />} />
+      <Route path="faq" element={<FAQ />} />
 
       <Route path="*" element={<RedirectToHome />} />
     </>
@@ -173,17 +176,19 @@ const App = () => {
         }}
       >
         <BrowserRouter>
-          <Routes>
-            {/* English Routes */}
-            <Route path="/en" element={<LanguageWrapper language="en" />}>
-              {AppRoutes({ t })}
-            </Route>
+          <MenuProvider>
+            <Routes>
+              {/* English Routes */}
+              <Route path="/en" element={<LanguageWrapper language="en" />}>
+                {AppRoutes({ t })}
+              </Route>
 
-            {/* Default (Spanish) Routes */}
-            <Route path="/" element={<LanguageWrapper language="es" />}>
-              {AppRoutes({ t })}
-            </Route>
-          </Routes>
+              {/* Default (Spanish) Routes */}
+              <Route path="/" element={<LanguageWrapper language="es" />}>
+                {AppRoutes({ t })}
+              </Route>
+            </Routes>
+          </MenuProvider>
         </BrowserRouter>
       </div>
     </SmoothScroll>

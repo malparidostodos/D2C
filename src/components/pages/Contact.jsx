@@ -4,11 +4,15 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 const Contact = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const formRef = useRef(null)
+
+  const getRoute = (path) => {
+    return i18n.language === 'en' ? `/en${path}` : path
+  }
 
   const validateEmail = (emailValue) => {
     if (!emailValue) {
@@ -74,15 +78,15 @@ const Contact = () => {
   return (
     <section id="contacto" className="bg-white min-h-screen flex flex-col text-[#0046b8] text-[clamp(0.875rem,1vw,2rem)]">
       <div
-        className="relative w-full flex flex-col flex-1"
+        className="relative w-full flex flex-col flex-1 justify-end"
         style={{
           paddingLeft: 'var(--base-padding-x)',
           paddingRight: 'var(--base-padding-x)',
-          paddingTop: 'calc(var(--vh, 1vh) * 50)',
+          paddingTop: 'var(--base-padding-y)',
           paddingBottom: 'var(--base-padding-y)',
         }}
       >
-        <div className="grid grid-cols-6 md:grid-cols-12 gap-[2vw] flex-1 rounded-3xl p-8 md:p-12">
+        <div className="grid grid-cols-6 md:grid-cols-12 gap-[2vw] rounded-3xl p-8 md:p-12">
           {/* Información de contacto */}
           <div className="col-span-6 md:col-span-12 w-full">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-[2vw] text-[0.875em] md:text-[1.25em] leading-[1.4] w-full">
@@ -133,15 +137,15 @@ const Contact = () => {
 
               {/* Legal */}
               <div className="col-span-1 flex flex-col gap-4">
-                <Link to="/privacy-policy" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.privacy_policy')}</Link>
-                <Link to="/terms-conditions" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.terms_conditions')}</Link>
-                <Link to="/cookie-policy" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.cookie_policy')}</Link>
-                <Link to="/disclaimers" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.disclaimers.title')}</Link>
+                <Link to={getRoute("/privacy-policy")} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.privacy_policy')}</Link>
+                <Link to={getRoute("/terms-conditions")} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.terms_conditions')}</Link>
+                <Link to={getRoute("/cookie-policy")} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.cookie_policy')}</Link>
+                <Link to={getRoute("/disclaimers")} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.disclaimers.title')}</Link>
               </div>
 
               {/* Ayuda */}
               <div className="col-span-1 flex flex-col gap-4">
-                <a href="#faq" className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('contact_section.footer.help.faq')}</a>
+                <Link to={getRoute("/faq")} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('contact_section.footer.help.faq')}</Link>
               </div>
             </div>
           </div>
