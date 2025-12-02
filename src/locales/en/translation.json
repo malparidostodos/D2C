@@ -341,7 +341,18 @@
             "actions": "Actions"
         },
         "filters": {
-            "all": "All"
+            "all": "All",
+            "sort_by": "Sort by",
+            "sort_options": {
+                "recent": "Most Recent",
+                "rating_asc": "Rating: Low to High",
+                "rating_desc": "Rating: High to Low",
+                "oldest": "Oldest"
+            },
+            "filter_date": "Filter by Date",
+            "start_date": "Start Date",
+            "end_date": "End Date",
+            "clear_filters": "Clear Filters"
         },
         "messages": {
             "loading_bookings": "Loading bookings...",

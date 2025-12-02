@@ -345,7 +345,18 @@
             "actions": "Acciones"
         },
         "filters": {
-            "all": "Todos"
+            "all": "Todos",
+            "sort_by": "Ordenar por",
+            "sort_options": {
+                "recent": "Más Recientes",
+                "rating_asc": "Calificación: Baja a Alta",
+                "rating_desc": "Calificación: Alta a Baja",
+                "oldest": "Más Antiguos"
+            },
+            "filter_date": "Filtrar por Fecha",
+            "start_date": "Fecha Inicio",
+            "end_date": "Fecha Fin",
+            "clear_filters": "Limpiar Filtros"
         },
         "messages": {
             "loading_bookings": "Cargando reservas...",
