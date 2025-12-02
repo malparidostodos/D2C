@@ -53,6 +53,7 @@ const LiquidBackground = () => {
         const fragmentShader = `
       uniform float uTime;
       uniform vec2 uResolution;
+      uniform vec2 uMouse;
       varying vec2 vUv;
 
       // Simplex 2D noise
@@ -107,18 +108,24 @@ const LiquidBackground = () => {
         vec2 pos = uv;
         pos.x *= aspect;
 
+        // Mouse interaction
+        vec2 mouse = uMouse / uResolution;
+        mouse.x *= aspect;
+        float dist = distance(pos, mouse);
+        float interaction = smoothstep(0.1, 0.0, dist);
+        
         float t = uTime * 0.2;
         
-        // Create wave-like distortion
+        // Create wave-like distortion with mouse influence
         vec2 q = vec2(0.);
-        q.x = fbm(pos + 0.00 * t);
-        q.y = fbm(pos + vec2(1.0));
+        q.x = fbm(pos + 0.00 * t + interaction * 0.2);
+        q.y = fbm(pos + vec2(1.0) - interaction * 0.2);
 
         vec2 r = vec2(0.);
         r.x = fbm(pos + 1.0 * q + vec2(1.7, 9.2) + 0.15 * t);
         r.y = fbm(pos + 1.0 * q + vec2(8.3, 2.8) + 0.126 * t);
 
-        float f = fbm(pos + r);
+        float f = fbm(pos + r + interaction * 0.5);
 
         // Colors based on the FBM value
         vec3 deepBlue = vec3(0.0, 0.1, 0.4);
@@ -133,6 +140,9 @@ const LiquidBackground = () => {
         // Add "foam" or crests
         float foam = smoothstep(0.8, 1.0, f * 1.5);
         color += vec3(foam * 0.3);
+        
+        // Add extra highlight on mouse interaction
+        color += vec3(interaction * 0.2);
 
         gl_FragColor = vec4(color, 1.0);
       }
@@ -144,7 +154,8 @@ const LiquidBackground = () => {
             fragmentShader,
             uniforms: {
                 uTime: { value: 0 },
-                uResolution: { value: new THREE.Vector2(width, height) }
+                uResolution: { value: new THREE.Vector2(width, height) },
+                uMouse: { value: new THREE.Vector2(0, 0) }
             }
         })
 
@@ -169,10 +180,20 @@ const LiquidBackground = () => {
                 material.uniforms.uResolution.value.set(newWidth, newHeight)
             }
         }
+
+        const handleMouseMove = (e) => {
+            if (material.uniforms) {
+                // Invert Y coordinate for shader
+                material.uniforms.uMouse.value.set(e.clientX, window.innerHeight - e.clientY)
+            }
+        }
+
         window.addEventListener('resize', handleResize)
+        window.addEventListener('mousemove', handleMouseMove)
 
         return () => {
             window.removeEventListener('resize', handleResize)
+            window.removeEventListener('mousemove', handleMouseMove)
             if (animationFrameRef.current) {
                 cancelAnimationFrame(animationFrameRef.current)
             }
