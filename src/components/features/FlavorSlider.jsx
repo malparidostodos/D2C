@@ -23,14 +23,15 @@ const FlavorSlider = () => {
                     trigger: ".flavor-section",
                     start: "2% top",
                     end: `+=${scrollAmount + 1500}px`,
-                    scrub: true,
+                    scrub: 1,
                     pin: true,
+                    anticipatePin: 1,
                 },
             });
 
             tl.to(".flavor-section", {
                 x: `-${scrollAmount + 1500}px`,
-                ease: "power1.inOut",
+                ease: "none", // Changed to none for linear scrubbing which usually feels better with scrub: 1
             });
         }
 

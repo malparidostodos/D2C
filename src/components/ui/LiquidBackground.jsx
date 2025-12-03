@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import { useMenu } from '../../hooks/useMenu'
 
 const LiquidBackground = () => {
     const containerRef = useRef(null)
@@ -11,6 +12,40 @@ const LiquidBackground = () => {
     const hoverRef = useRef(1.0)
     const currentHoverRef = useRef(1.0)
     const lastMousePosRef = useRef({ x: -1000, y: -1000 })
+    const isVisibleRef = useRef(true)
+    const isRunningRef = useRef(false)
+
+    // Access menu state to pause animation when menu is open
+    const { menuOpen } = useMenu()
+    const isMenuOpenRef = useRef(menuOpen)
+
+    // We need to share the animate function or trigger it. 
+    // Let's use a ref to hold the animate function.
+    const animateRef = useRef(null)
+
+    // Sync ref with state and handle restart with delay
+    useEffect(() => {
+        let timeoutId
+
+        if (menuOpen) {
+            // Pause immediately when opening
+            isMenuOpenRef.current = true
+        } else {
+            // Wait for curtain animation (600ms) + buffer before resuming
+            timeoutId = setTimeout(() => {
+                isMenuOpenRef.current = false
+
+                // Restart animation if visible and not running
+                if (isVisibleRef.current && !isRunningRef.current && animateRef.current) {
+                    animateRef.current()
+                }
+            }, 800)
+        }
+
+        return () => {
+            if (timeoutId) clearTimeout(timeoutId)
+        }
+    }, [menuOpen])
 
     useEffect(() => {
         const width = window.innerWidth
@@ -175,7 +210,14 @@ const LiquidBackground = () => {
         meshRef.current = mesh
 
         const animate = () => {
-            animationFrameRef.current = requestAnimationFrame(animate)
+            // Only request next frame if visible AND menu is closed
+            if (isVisibleRef.current && !isMenuOpenRef.current) {
+                isRunningRef.current = true
+                animationFrameRef.current = requestAnimationFrame(animate)
+            } else {
+                isRunningRef.current = false
+            }
+
             if (material.uniforms && containerRef.current) {
                 material.uniforms.uTime.value += 0.01
 
@@ -207,7 +249,39 @@ const LiquidBackground = () => {
             }
             renderer.render(scene, camera)
         }
-        animate()
+
+        // Store animate function in ref for external access
+        animateRef.current = animate
+
+        // Intersection Observer to pause/resume animation
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const wasVisible = isVisibleRef.current
+                    isVisibleRef.current = entry.isIntersecting
+
+                    // If becoming visible and wasn't running, restart loop
+                    // But only if menu is NOT open
+                    if (entry.isIntersecting && !isRunningRef.current && !isMenuOpenRef.current) {
+                        animate()
+                    }
+                    // If becoming hidden, the loop will stop automatically at next frame due to isVisibleRef check
+                })
+            },
+            {
+                threshold: 0,
+                rootMargin: '100px' // Start slightly before it enters viewport
+            }
+        )
+
+        if (containerRef.current) {
+            observer.observe(containerRef.current)
+        }
+
+        // Start initial animation (if menu is not open)
+        if (!isMenuOpenRef.current) {
+            animate()
+        }
 
         const handleResize = () => {
             const newWidth = window.innerWidth
@@ -241,6 +315,7 @@ const LiquidBackground = () => {
         document.body.addEventListener('mouseenter', handleMouseEnter)
 
         return () => {
+            observer.disconnect()
             window.removeEventListener('resize', handleResize)
             window.removeEventListener('mousemove', handleMouseMove)
             document.body.removeEventListener('mouseleave', handleMouseLeave)

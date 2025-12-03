@@ -28,6 +28,9 @@ const Header = ({ theme = 'default' }) => {
     const isHomePage = location.pathname === '/' || location.pathname === '/en' || location.pathname === '/en/';
     const showAuthButton = !isHomePage || activeSection !== '#inicio';
 
+    // Force white theme on Home section (Inicio)
+    const effectiveTheme = (isHomePage && activeSection === '#inicio') ? 'white' : theme;
+
     const languages = [
         { code: 'ES', label: 'Español' },
         { code: 'EN', label: 'English' },
@@ -67,8 +70,8 @@ const Header = ({ theme = 'default' }) => {
             <div className="_navbar">
                 <div className="nav-container">
                     {/* Logo */}
-                    <Link to={getLocalizedPath('/')} className={`text-3xl font-display font-bold tracking-tighter ${theme === 'white' ? 'text-white' : 'text-black'}`}>
-                        Ta' <span className="text-accent">To'</span> Clean
+                    <Link to={getLocalizedPath('/')} className={`text-3xl font-display font-bold tracking-tighter ${effectiveTheme === 'white' ? 'text-white' : 'text-black'}`}>
+                        Ta' <span className={effectiveTheme === 'white' ? 'text-white' : 'text-accent'}>To'</span> Clean
                     </Link>
 
                     <div className="lang-cta-wrapper">
@@ -124,7 +127,7 @@ const Header = ({ theme = 'default' }) => {
                             {user ? (
                                 <Link
                                     to={getLocalizedPath("/dashboard")}
-                                    className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${theme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
+                                    className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${effectiveTheme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
                                 >
                                     <User size={16} />
                                     <span className="font-medium text-xs">{t('dashboard.title')}</span>
@@ -132,7 +135,7 @@ const Header = ({ theme = 'default' }) => {
                             ) : (
                                 <Link
                                     to={getLocalizedPath(showAuthButton ? "/login" : "/signup")}
-                                    className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${theme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
+                                    className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${effectiveTheme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
                                 >
                                     <span className="font-medium text-xs">{showAuthButton ? t('header.login') : t('header.signup')}</span>
                                 </Link>
@@ -144,7 +147,7 @@ const Header = ({ theme = 'default' }) => {
                             {user ? (
                                 <Link
                                     to={getLocalizedPath("/dashboard")}
-                                    className={`_button transition-all duration-300 flex items-center gap-2 ${theme === 'white' ? '!bg-white !text-[#0046b8]' : '!bg-[#0046b8] !text-white'}`}
+                                    className={`_button transition-all duration-300 flex items-center gap-2 ${effectiveTheme === 'white' ? '!bg-white !text-[#0046b8]' : '!bg-[#0046b8] !text-white'}`}
                                     data-variant="ghost"
                                 >
                                     <User size={18} />
@@ -158,7 +161,7 @@ const Header = ({ theme = 'default' }) => {
                                 </Link>
                             ) : (
                                 <>
-                                    <Link to={getLocalizedPath("/login")} className={`_button ${theme === 'white' ? '!bg-transparent !text-white border border-white/40 hover:!bg-white/10' : ''}`} data-variant="ghost">
+                                    <Link to={getLocalizedPath("/login")} className={`_button ${effectiveTheme === 'white' ? '!bg-transparent !text-white border border-white/40 hover:!bg-white/10' : ''}`} data-variant="ghost">
                                         <span className="staggered-wrapper">
                                             {t('header.login').split("").map((char, i) => (
                                                 <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
@@ -329,7 +332,8 @@ const Header = ({ theme = 'default' }) => {
                         className="absolute inset-0 bg-[#0046b8]"
                         style={{
                             transform: menuClosing ? 'translateY(-100%)' : (menuEntering ? 'translateY(100%)' : 'translateY(0)'),
-                            transition: 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)'
+                            transition: 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)',
+                            willChange: 'transform'
                         }}
                     />
 
@@ -338,7 +342,8 @@ const Header = ({ theme = 'default' }) => {
                         className="absolute inset-0 z-10 flex flex-col h-full"
                         style={{
                             transform: menuClosing ? 'translateY(-100%)' : (menuEntering ? 'translateY(100%)' : 'translateY(0)'),
-                            transition: 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)'
+                            transition: 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)',
+                            willChange: 'transform'
                         }}
                     >
                         {/* Top Bar - appears first (at top) */}
