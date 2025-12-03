@@ -443,6 +443,11 @@
                 "title": "Atención al Detalle",
                 "description": "Nos obsesionamos con cada rincón de tu vehículo, donde otros no miran."
             }
+        },
+        "steps": {
+            "book": "Reserva",
+            "trust": "Confía",
+            "enjoy": "Disfruta"
         }
     },
     "collaboration": {

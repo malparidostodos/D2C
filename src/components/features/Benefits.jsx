@@ -71,7 +71,7 @@ const Benefits = () => {
           style={{ opacity: titleOpacity, scale: titleScale, filter: titleFilter }}
           className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
         >
-          <h2 className="text-6xl md:text-8xl lg:text-9xl font-display font-bold text-[#0046b8] leading-tight tracking-tight whitespace-nowrap px-4">
+          <h2 className="text-4xl md:text-8xl lg:text-9xl font-display font-bold text-[#0046b8] leading-tight tracking-tight text-center px-4 select-none">
             {t('benefits.why_choose_us')}
           </h2>
         </motion.div>
@@ -86,8 +86,8 @@ const Benefits = () => {
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
               <Calendar size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight">
-              Reserva
+            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight select-none">
+              {t('benefits.steps.book')}
             </h2>
           </motion.div>
 
@@ -99,8 +99,8 @@ const Benefits = () => {
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
               <ShieldCheck size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight">
-              Confía
+            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight select-none">
+              {t('benefits.steps.trust')}
             </h2>
           </motion.div>
 
@@ -112,8 +112,8 @@ const Benefits = () => {
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
               <Smile size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight">
-              Disfruta
+            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight select-none">
+              {t('benefits.steps.enjoy')}
             </h2>
           </motion.div>
         </div>

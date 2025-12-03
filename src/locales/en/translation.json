@@ -439,6 +439,11 @@
                 "title": "Attention to Detail",
                 "description": "We obsess over every corner of your vehicle, where others don't look."
             }
+        },
+        "steps": {
+            "book": "Book",
+            "trust": "Trust",
+            "enjoy": "Enjoy"
         }
     },
     "collaboration": {
