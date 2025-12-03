@@ -27,7 +27,7 @@ const Collaboration = () => {
   }
 
   return (
-    <section id="colaboracion" className="py-16 md:py-24 bg-background relative">
+    <section id="colaboracion" className="min-h-screen flex items-center py-16 md:py-24 bg-[#0046b8] relative z-20 -mt-[100vh]">
       <div className="container px-5">
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>

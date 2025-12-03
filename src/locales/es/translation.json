@@ -442,6 +442,10 @@
             "attention_to_detail": {
                 "title": "Atención al Detalle",
                 "description": "Nos obsesionamos con cada rincón de tu vehículo, donde otros no miran."
+            },
+            "personalized_service": {
+                "title": "Servicio Personalizado",
+                "description": "Tratamientos a la medida de las necesidades específicas de tu vehículo."
             }
         },
         "steps": {

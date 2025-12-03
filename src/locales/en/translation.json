@@ -438,6 +438,10 @@
             "attention_to_detail": {
                 "title": "Attention to Detail",
                 "description": "We obsess over every corner of your vehicle, where others don't look."
+            },
+            "personalized_service": {
+                "title": "Personalized Service",
+                "description": "Treatments tailored to the specific needs of your vehicle."
             }
         },
         "steps": {

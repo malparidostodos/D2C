@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Shield, Star, Zap, Sparkles, Calendar, ShieldCheck, Smile } from 'lucide-react'
+import { Shield, Star, Zap, Sparkles, Calendar, ShieldCheck, Smile, Scan, UserCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 const BenefitCard = ({ benefit }) => {
@@ -42,28 +42,31 @@ const Benefits = () => {
     offset: ["start start", "end end"]
   })
 
-  // Animation Ranges
-  // 0.0 - 0.3: Title visible, then fades out
-  // 0.2 - 0.4: Item 1 fades in (OVERLAP START)
-  // 0.45 - 0.65: Item 2 fades in
-  // 0.7 - 0.9: Item 3 fades in
-  // 0.9 - 1.0: All visible (short locked state)
+  // Animation Ranges for 5 items
+  // Animation Ranges for 5 items
+  // Distributed from 0.10 to 0.75 to leave 25% buffer
 
-  const titleOpacity = useTransform(scrollYProgress, [0.25, 0.35], [1, 0])
-  const titleScale = useTransform(scrollYProgress, [0, 0.35], [1, 0.7])
-  const titleFilter = useTransform(scrollYProgress, [0.25, 0.35], ["blur(0px)", "blur(10px)"])
+  const titleOpacity = useTransform(scrollYProgress, [0.10, 0.20], [1, 0])
+  const titleScale = useTransform(scrollYProgress, [0, 0.20], [1, 0.7])
+  const titleFilter = useTransform(scrollYProgress, [0.10, 0.20], ["blur(0px)", "blur(10px)"])
 
-  const item1Opacity = useTransform(scrollYProgress, [0.2, 0.45], [0, 1])
-  const item1Y = useTransform(scrollYProgress, [0.2, 0.45], ["100vh", "0vh"])
+  const item1Opacity = useTransform(scrollYProgress, [0.15, 0.30], [0, 1])
+  const item1Y = useTransform(scrollYProgress, [0.15, 0.30], ["100vh", "0vh"])
 
-  const item2Opacity = useTransform(scrollYProgress, [0.4, 0.65], [0, 1])
-  const item2Y = useTransform(scrollYProgress, [0.4, 0.65], ["100vh", "0vh"])
+  const item2Opacity = useTransform(scrollYProgress, [0.25, 0.40], [0, 1])
+  const item2Y = useTransform(scrollYProgress, [0.25, 0.40], ["100vh", "0vh"])
 
-  const item3Opacity = useTransform(scrollYProgress, [0.6, 0.85], [0, 1])
-  const item3Y = useTransform(scrollYProgress, [0.6, 0.85], ["100vh", "0vh"])
+  const item3Opacity = useTransform(scrollYProgress, [0.35, 0.50], [0, 1])
+  const item3Y = useTransform(scrollYProgress, [0.35, 0.50], ["100vh", "0vh"])
+
+  const item4Opacity = useTransform(scrollYProgress, [0.45, 0.60], [0, 1])
+  const item4Y = useTransform(scrollYProgress, [0.45, 0.60], ["100vh", "0vh"])
+
+  const item5Opacity = useTransform(scrollYProgress, [0.55, 0.75], [0, 1])
+  const item5Y = useTransform(scrollYProgress, [0.55, 0.75], ["100vh", "0vh"])
 
   return (
-    <section ref={containerRef} id="beneficios" className="relative bg-white h-[350vh]">
+    <section ref={containerRef} id="beneficios" className="relative bg-white h-[500vh] md:h-[800vh]">
       <div className="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center">
 
         {/* Title Layer */}
@@ -84,10 +87,10 @@ const Benefits = () => {
             className="flex items-center gap-6 md:gap-8 w-full justify-center"
           >
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
-              <Calendar size={40} className="md:w-12 md:h-12" />
+              <Sparkles size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight select-none">
-              {t('benefits.steps.book')}
+            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-bold text-[#0046b8] tracking-tight select-none text-center">
+              {t('benefits.items.premium_quality.title')}
             </h2>
           </motion.div>
 
@@ -97,10 +100,10 @@ const Benefits = () => {
             className="flex items-center gap-6 md:gap-8 w-full justify-center"
           >
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
-              <ShieldCheck size={40} className="md:w-12 md:h-12" />
+              <Zap size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight select-none">
-              {t('benefits.steps.trust')}
+            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-bold text-[#0046b8] tracking-tight select-none text-center">
+              {t('benefits.items.advanced_technology.title')}
             </h2>
           </motion.div>
 
@@ -110,10 +113,36 @@ const Benefits = () => {
             className="flex items-center gap-6 md:gap-8 w-full justify-center"
           >
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
-              <Smile size={40} className="md:w-12 md:h-12" />
+              <Shield size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-5xl md:text-7xl font-display font-bold text-[#0046b8] tracking-tight select-none">
-              {t('benefits.steps.enjoy')}
+            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-bold text-[#0046b8] tracking-tight select-none text-center">
+              {t('benefits.items.lasting_protection.title')}
+            </h2>
+          </motion.div>
+
+          {/* Item 4 */}
+          <motion.div
+            style={{ opacity: item4Opacity, y: item4Y }}
+            className="flex items-center gap-6 md:gap-8 w-full justify-center"
+          >
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
+              <Scan size={40} className="md:w-12 md:h-12" />
+            </div>
+            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-bold text-[#0046b8] tracking-tight select-none text-center">
+              {t('benefits.items.attention_to_detail.title')}
+            </h2>
+          </motion.div>
+
+          {/* Item 5 */}
+          <motion.div
+            style={{ opacity: item5Opacity, y: item5Y }}
+            className="flex items-center gap-6 md:gap-8 w-full justify-center"
+          >
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
+              <UserCheck size={40} className="md:w-12 md:h-12" />
+            </div>
+            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-bold text-[#0046b8] tracking-tight select-none text-center">
+              {t('benefits.items.personalized_service.title')}
             </h2>
           </motion.div>
         </div>
