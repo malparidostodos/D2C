@@ -14,6 +14,7 @@ import CustomScrollbar from './components/ui/CustomScrollbar'
 import SmoothScroll, { useSmoothScroll } from './components/ui/SmoothScroll'
 import { MenuProvider } from './hooks/useMenu.jsx'
 import BookingPage from './components/pages/BookingPage'
+import ServicesPage from './components/pages/ServicesPage'
 import RateService from './components/dashboard/RateService'
 
 import LoginPage from './components/auth/LoginPage'
@@ -53,7 +54,8 @@ const Home = () => {
         <Benefits />
         <Collaboration />
 
-        <FlavorSection />
+        <Collaboration />
+
         <Gallery />
         <Roadmap />
         <Testimonials />
@@ -127,6 +129,7 @@ const AppRoutes = ({ t }) => {
       <Route path="roadmap" element={<ScrollToSection sectionId="#roadmap" title={t('header.process')} />} />
       <Route path="membresias" element={<ScrollToSection sectionId="#membresias" title={t('header.memberships')} />} />
       <Route path="contacto" element={<ScrollToSection sectionId="#contacto" title={t('header.contact')} />} />
+      <Route path="services" element={<ServicesPage />} />
       <Route path="reserva" element={<BookingPage />} />
 
 

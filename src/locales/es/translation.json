@@ -10,6 +10,33 @@
         "login": "Iniciar sesión",
         "signup": "Registrarse"
     },
+    "services_page": {
+        "title": "Detalle de Servicios",
+        "breadcrumb_home": "Inicio",
+        "breadcrumb_current": "Detalle de Servicios",
+        "description_title": "Excelencia en cada detalle",
+        "description": "Utilizamos técnicas avanzadas y productos de nanotecnología para devolverle a tu auto el brillo de concesionario, protegiéndolo contra los elementos.",
+        "quote": "Nuestros servicios están diseñados para adaptarse a las necesidades específicas de tu vehículo, ya sea una renovación rápida o un detallado profundo completo. Nos enfocamos en la precisión y la calidad para asegurar que cada superficie se vea y se sienta perfecta.",
+        "features": {
+            "certified_team": "Personal altamente capacitado",
+            "premium_products": "Productos Premium",
+            "satisfaction_guarantee": "Garantía de Satisfacción"
+        },
+        "sidebar": {
+            "all_services": "Explora nuestros servicios",
+            "call_us": "Llámanos:",
+            "book_now": "Agendar Cita Ahora",
+            "whatsapp": "Cotizar por WhatsApp",
+            "services_list": [
+                "Detailing Completo",
+                "Soporte Video Sync",
+                "Limpieza Profunda Interior",
+                "Detailing de Rines y Llantas",
+                "Corrección de Pintura y Pulido",
+                "Limpieza de Motor"
+            ]
+        }
+    },
     "hero": {
         "quality_guaranteed": "Calidad Garantizada",
         "title_part1": "Cuidado",
@@ -523,52 +550,87 @@
         "from": "Desde",
         "book": "Reservar",
         "services": {
-            "premium_wash": {
-                "name": "Lavado Premium",
-                "description": "Detallado profundo con cera",
+            "exterior_detailing": {
+                "name": "Detailing Exterior",
+                "description": "Restauración y protección de la pintura para un brillo inigualable.",
                 "features": [
-                    "Todo lo del Básico",
+                    "Lavado detallado",
                     "Descontaminación",
-                    "Cera de Carnauba",
-                    "Hidratación de Plásticos"
-                ]
-            },
-            "ceramic_coating": {
-                "name": "Coating Cerámico",
-                "description": "Protección cerámica de larga duración",
-                "features": [
-                    "Corrección de Pintura",
-                    "Recubrimiento 9H",
-                    "Garantía 2 años"
-                ]
-            },
-            "paint_correction": {
-                "name": "Corrección Pintura",
-                "description": "Restauración del brillo y eliminación de defectos",
-                "features": [
-                    "Pulido en múltiples etapas",
-                    "Eliminación de swirls",
-                    "Acabado espejo"
+                    "Cera protectora",
+                    "Brillo intenso"
                 ]
             },
             "interior_detailing": {
                 "name": "Detailing Interior",
-                "description": "Restauración completa del interior",
+                "description": "Limpieza profunda y desinfección de cada rincón de tu cabina.",
                 "features": [
-                    "Limpieza de Tapicería",
+                    "Limpieza de tapicería",
                     "Vapor",
-                    "Desinfección",
-                    "Hidratación de Cuero"
+                    "Hidratación de plásticos",
+                    "Eliminación de olores"
                 ]
             },
-            "basic_wash": {
-                "name": "Lavado Básico",
-                "description": "Limpieza exterior e interior básica",
+            "engine_cleaning": {
+                "name": "Limpieza de Motor",
+                "description": "Limpieza segura y detallada del corazón de tu vehículo.",
                 "features": [
-                    "Lavado Exterior",
-                    "Aspirado",
-                    "Limpieza de Tablero"
+                    "Desengrasado seguro",
+                    "Protección de plásticos",
+                    "Acabado satinado",
+                    "Inspección visual"
                 ]
+            },
+            "paint_correction": {
+                "name": "Corrección de Pintura",
+                "description": "Eliminación de swirls y arañazos para un acabado espejo.",
+                "features": [
+                    "Pulido multi-etapa",
+                    "Eliminación de rayas",
+                    "Restauración de brillo",
+                    "Acabado profesional"
+                ]
+            },
+            "wheel_tire_detailing": {
+                "name": "Rines y Llantas",
+                "description": "Limpieza y protección para tus ruedas.",
+                "features": [
+                    "Limpieza profunda de rines",
+                    "Descontaminación férrica",
+                    "Brillo de llantas",
+                    "Protección cerámica"
+                ]
+            },
+            "premium_car_wash": {
+                "name": "Lavado Premium",
+                "description": "Lavado suave y detallado para mantener tu vehículo impecable.",
+                "features": [
+                    "Lavado a mano",
+                    "Secado con aire",
+                    "Aspirado básico",
+                    "Limpieza de vidrios"
+                ]
+            }
+        },
+        "process": {
+            "title": "Nuestro Proceso",
+            "subtitle": "Cómo Funciona - Simple, Transparente, Sin Complicaciones",
+            "steps": {
+                "1": {
+                    "title": "Reserva tu Servicio",
+                    "description": "Elige tu paquete de detailing y programa la hora que mejor te convenga."
+                },
+                "2": {
+                    "title": "Llegamos o Nos Visitas",
+                    "description": "Dependiendo de tu preferencia, trae tu vehículo o deja que nuestro equipo móvil vaya a ti."
+                },
+                "3": {
+                    "title": "Detallamos tu Auto",
+                    "description": "Nuestros profesionales trabajan dentro y fuera usando productos premium."
+                },
+                "4": {
+                    "title": "Disfruta tu Viaje",
+                    "description": "Conduce un vehículo impecable y protegido que se ve y se siente como nuevo."
+                }
             }
         }
     },

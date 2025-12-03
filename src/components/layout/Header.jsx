@@ -37,7 +37,7 @@ const Header = ({ theme = 'default' }) => {
     ];
 
     const servicesDropdown = [
-        { name: t('header.pricing'), path: '/precios', id: '#precios' },
+        { name: t('header.pricing'), path: '/services', id: 'services', image: `/images/services-preview-${currentLang.toLowerCase()}.png` },
         { name: t('header.process'), path: '/roadmap', id: '#roadmap' },
         { name: t('header.memberships'), path: '/membresias', id: '#membresias' },
     ];
@@ -188,11 +188,12 @@ const Header = ({ theme = 'default' }) => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
 
             {/* Main Menu Structure (Bottom Pill) */}
-            <div
-                className={`_menu !z-[10000]`}
+            < div
+                className={`_menu !z-[10000]`
+                }
                 style={{ transform: hidden ? 'translateY(250%)' : 'translateY(0)', transition: 'transform 0.35s ease-in-out' }}
             >
                 <div
@@ -258,9 +259,24 @@ const Header = ({ theme = 'default' }) => {
 
                             {/* Preview Image */}
                             <div className={`menu-preview ${hoveredService ? 'active' : ''}`}>
-                                {hoveredService === '#precios' && (
-                                    <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-lg">
-                                        {t('header.pricing')}
+                                {hoveredService === 'services' && (
+                                    <div className="w-full h-full relative">
+                                        <img
+                                            src={servicesDropdown.find(s => s.id === 'services')?.image}
+                                            alt={t('header.pricing')}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                                e.target.nextSibling.style.display = 'flex';
+                                            }}
+                                        />
+                                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center text-white font-bold text-lg" style={{ display: 'none' }}>
+                                            {t('header.pricing')}
+                                        </div>
+                                        {/* Fallback if image fails or while loading */}
+                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-lg" style={{ display: 'none' }}>
+                                            {t('header.pricing')}
+                                        </div>
                                     </div>
                                 )}
                                 {hoveredService === '#roadmap' && (
@@ -322,207 +338,209 @@ const Header = ({ theme = 'default' }) => {
                     </button>
 
                 </div>
-            </div>
+            </div >
 
             {/* Mobile menu overlay */}
-            {menuOpen && (
-                <div className="fixed inset-0 z-[9999] overflow-hidden pointer-events-auto">
-                    {/* Blue Background Layer - slides up from bottom */}
-                    <div
-                        className="absolute inset-0 bg-[#0046b8]"
-                        style={{
-                            transform: menuClosing ? 'translateY(-100%)' : (menuEntering ? 'translateY(100%)' : 'translateY(0)'),
-                            transition: 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)',
-                            willChange: 'transform'
-                        }}
-                    />
-
-                    {/* Content Layer - slides with background */}
-                    <div
-                        className="absolute inset-0 z-10 flex flex-col h-full"
-                        style={{
-                            transform: menuClosing ? 'translateY(-100%)' : (menuEntering ? 'translateY(100%)' : 'translateY(0)'),
-                            transition: 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)',
-                            willChange: 'transform'
-                        }}
-                    >
-                        {/* Top Bar - appears first (at top) */}
+            {
+                menuOpen && (
+                    <div className="fixed inset-0 z-[9999] overflow-hidden pointer-events-auto">
+                        {/* Blue Background Layer - slides up from bottom */}
                         <div
-                            className="relative z-50 flex items-center justify-center px-6 pt-8 pb-6 gap-4"
+                            className="absolute inset-0 bg-[#0046b8]"
                             style={{
-                                opacity: menuEntering ? 0 : 1,
-                                animation: menuClosing ? 'fadeOutDown 200ms ease-out 200ms forwards' : 'none',
-                                transition: menuClosing ? 'none' : 'opacity 300ms ease-out 500ms'
+                                transform: menuClosing ? 'translateY(-100%)' : (menuEntering ? 'translateY(100%)' : 'translateY(0)'),
+                                transition: 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)',
+                                willChange: 'transform'
+                            }}
+                        />
+
+                        {/* Content Layer - slides with background */}
+                        <div
+                            className="absolute inset-0 z-10 flex flex-col h-full"
+                            style={{
+                                transform: menuClosing ? 'translateY(-100%)' : (menuEntering ? 'translateY(100%)' : 'translateY(0)'),
+                                transition: 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)',
+                                willChange: 'transform'
                             }}
                         >
-                            {/* Language Selector in Menu (Full Dropdown) */}
-                            <div className="_dropdown _language-select flex" aria-expanded={langOpen} role="button">
-                                <button
-                                    className="_dropdown-button flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/50 !text-white hover:!bg-white/30 transition-all duration-300 rounded-full px-4 py-2"
-                                    onClick={(e) => { e.stopPropagation(); setLangOpen(!langOpen); }}
-                                >
-                                    <div data-button-background=""></div>
-                                    <span className="_icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
-                                            <path d="M12 22C17.5228 22 22 17.5229 22 12C22 6.47716 17.5228 2 12 2C6.47715 2 2 6.47716 2 12C2 17.5229 6.47715 22 12 22Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                            <path d="M3 9H21" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                            <path d="M3 15H21" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                            <path d="M12 2C14.5013 4.73836 15.9228 8.29204 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29204 9.49872 4.73836 12 2V2Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                        </svg>
-                                    </span>
-                                    <span>{currentLang}</span>
-                                    <span className={`_icon chevron ${langOpen ? 'rotate-180' : ''}`} style={{ transition: 'transform 0.2s' }}>
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path fillRule="evenodd" clipRule="evenodd" d="M12 13.9393L6.53033 8.46967L5.46967 9.53033L10.409 14.4697C11.2877 15.3483 12.7123 15.3484 13.591 14.4697L18.5303 9.53033L17.4697 8.46967L12 13.9393Z" data-mode="fill" fill="currentColor"></path>
-                                        </svg>
-                                    </span>
-                                </button>
+                            {/* Top Bar - appears first (at top) */}
+                            <div
+                                className="relative z-50 flex items-center justify-center px-6 pt-8 pb-6 gap-4"
+                                style={{
+                                    opacity: menuEntering ? 0 : 1,
+                                    animation: menuClosing ? 'fadeOutDown 200ms ease-out 200ms forwards' : 'none',
+                                    transition: menuClosing ? 'none' : 'opacity 300ms ease-out 500ms'
+                                }}
+                            >
+                                {/* Language Selector in Menu (Full Dropdown) */}
+                                <div className="_dropdown _language-select flex" aria-expanded={langOpen} role="button">
+                                    <button
+                                        className="_dropdown-button flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/50 !text-white hover:!bg-white/30 transition-all duration-300 rounded-full px-4 py-2"
+                                        onClick={(e) => { e.stopPropagation(); setLangOpen(!langOpen); }}
+                                    >
+                                        <div data-button-background=""></div>
+                                        <span className="_icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                                <path d="M12 22C17.5228 22 22 17.5229 22 12C22 6.47716 17.5228 2 12 2C6.47715 2 2 6.47716 2 12C2 17.5229 6.47715 22 12 22Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                                                <path d="M3 9H21" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                                                <path d="M3 15H21" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                                                <path d="M12 2C14.5013 4.73836 15.9228 8.29204 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29204 9.49872 4.73836 12 2V2Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
+                                            </svg>
+                                        </span>
+                                        <span>{currentLang}</span>
+                                        <span className={`_icon chevron ${langOpen ? 'rotate-180' : ''}`} style={{ transition: 'transform 0.2s' }}>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fillRule="evenodd" clipRule="evenodd" d="M12 13.9393L6.53033 8.46967L5.46967 9.53033L10.409 14.4697C11.2877 15.3483 12.7123 15.3484 13.591 14.4697L18.5303 9.53033L17.4697 8.46967L12 13.9393Z" data-mode="fill" fill="currentColor"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
 
-                                {langOpen && (
-                                    <div className="_language-dropdown-menu !top-full !mt-2">
-                                        {languages.map((lang) => (
-                                            <div
-                                                key={lang.code}
-                                                className={`_lang-item ${currentLang === lang.code ? 'active' : ''}`}
-                                                onClick={() => handleLanguageChange(lang.code)}
-                                            >
-                                                <span>{lang.label}</span>
-                                                {currentLang === lang.code && (
-                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                                    </svg>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
+                                    {langOpen && (
+                                        <div className="_language-dropdown-menu !top-full !mt-2">
+                                            {languages.map((lang) => (
+                                                <div
+                                                    key={lang.code}
+                                                    className={`_lang-item ${currentLang === lang.code ? 'active' : ''}`}
+                                                    onClick={() => handleLanguageChange(lang.code)}
+                                                >
+                                                    <span>{lang.label}</span>
+                                                    {currentLang === lang.code && (
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                            <polyline points="20 6 9 17 4 12"></polyline>
+                                                        </svg>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Login/Dashboard Button (Mobile Menu) */}
+                                {!user ? (
+                                    <Link
+                                        to={getLocalizedPath("/login")}
+                                        onClick={handleMenuClose}
+                                        className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm"
+                                    >
+                                        {t('header.login')}
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        to={getLocalizedPath("/dashboard")}
+                                        onClick={handleMenuClose}
+                                        className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm gap-2"
+                                    >
+                                        <User size={16} />
+                                        {t('dashboard.title')}
+                                    </Link>
                                 )}
                             </div>
 
-                            {/* Login/Dashboard Button (Mobile Menu) */}
-                            {!user ? (
-                                <Link
-                                    to={getLocalizedPath("/login")}
-                                    onClick={handleMenuClose}
-                                    className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm"
+                            {/* Scrollable List */}
+                            <div className="flex-1 overflow-y-auto px-4 pb-32 space-y-6">
+
+                                {/* Homepage Item */}
+                                <a
+                                    href={getLocalizedPath("/inicio")}
+                                    onClick={(e) => { handleNavClick(e, '#inicio', '/inicio'); handleMenuClose(); }}
+                                    className={`flex items-center justify-between p-4 rounded-2xl transition-colors group ${activeSection === '#inicio' ? 'bg-white/10' : 'hover:bg-white/5'
+                                        }`}
+                                    style={{
+                                        opacity: menuEntering ? 0 : 1,
+                                        animation: menuClosing ? 'fadeOutDown 200ms ease-out 150ms forwards' : 'none',
+                                        transition: menuClosing ? 'none' : 'opacity 300ms ease-out 540ms'
+                                    }}
                                 >
-                                    {t('header.login')}
-                                </Link>
-                            ) : (
-                                <Link
-                                    to={getLocalizedPath("/dashboard")}
-                                    onClick={handleMenuClose}
-                                    className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm gap-2"
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
+                                            <Home size={20} />
+                                        </div>
+                                        <span className="text-xl font-bold text-white">{t('header.home')}</span>
+                                    </div>
+                                    <div className={`w-2 h-2 rounded-full bg-white transition-opacity ${activeSection === '#inicio' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
+                                </a>
+
+                                {/* Personal Section */}
+                                <div style={{
+                                    opacity: menuEntering ? 0 : 1,
+                                    animation: menuClosing ? 'fadeOutDown 200ms ease-out 100ms forwards' : 'none',
+                                    transition: menuClosing ? 'none' : 'opacity 300ms ease-out 580ms'
+                                }}>
+                                    <h3 className="text-white/60 text-sm font-medium mb-4 px-2">{t('header.personal')}</h3>
+                                    <div className="space-y-2">
+                                        {/* Precios */}
+                                        <a
+                                            href={getLocalizedPath("/services")}
+                                            onClick={(e) => { handleNavClick(e, 'services', '/services'); handleMenuClose(); }}
+                                            className={`flex items-center gap-4 p-2 rounded-xl transition-colors ${activeSection === 'services' ? 'bg-white/10' : 'hover:bg-white/10'}`}
+                                        >
+                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-lg">
+                                                <span className="font-bold text-lg">$</span>
+                                            </div>
+                                            <span className="text-lg font-bold text-white">{t('header.pricing')}</span>
+                                        </a>
+
+                                        {/* Proceso */}
+                                        <a
+                                            href={getLocalizedPath("/roadmap")}
+                                            onClick={(e) => { handleNavClick(e, '#roadmap', '/roadmap'); handleMenuClose(); }}
+                                            className={`flex items-center gap-4 p-2 rounded-xl transition-colors ${activeSection === '#roadmap' ? 'bg-white/10' : 'hover:bg-white/10'}`}
+                                        >
+                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white shadow-lg">
+                                                <ArrowRight size={24} />
+                                            </div>
+                                            <span className="text-lg font-bold text-white">{t('header.process')}</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* Business Link (Membership) */}
+                                <a
+                                    href={getLocalizedPath("/membresias")}
+                                    onClick={(e) => { handleNavClick(e, '#membresias', '/membresias'); handleMenuClose(); }}
+                                    className={`flex items-center justify-between p-4 rounded-2xl transition-colors ${activeSection === '#membresias' ? 'bg-white/15' : 'hover:bg-white/10'
+                                        }`}
+                                    style={{
+                                        opacity: menuEntering ? 0 : 1,
+                                        animation: menuClosing ? 'fadeOutDown 200ms ease-out 50ms forwards' : 'none',
+                                        transition: menuClosing ? 'none' : 'opacity 300ms ease-out 620ms'
+                                    }}
                                 >
-                                    <User size={16} />
-                                    {t('dashboard.title')}
-                                </Link>
-                            )}
-                        </div>
-
-                        {/* Scrollable List */}
-                        <div className="flex-1 overflow-y-auto px-4 pb-32 space-y-6">
-
-                            {/* Homepage Item */}
-                            <a
-                                href={getLocalizedPath("/inicio")}
-                                onClick={(e) => { handleNavClick(e, '#inicio', '/inicio'); handleMenuClose(); }}
-                                className={`flex items-center justify-between p-4 rounded-2xl transition-colors group ${activeSection === '#inicio' ? 'bg-white/10' : 'hover:bg-white/5'
-                                    }`}
-                                style={{
-                                    opacity: menuEntering ? 0 : 1,
-                                    animation: menuClosing ? 'fadeOutDown 200ms ease-out 150ms forwards' : 'none',
-                                    transition: menuClosing ? 'none' : 'opacity 300ms ease-out 540ms'
-                                }}
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
-                                        <Home size={20} />
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded bg-white/20 flex items-center justify-center text-white font-bold">
+                                            M
+                                        </div>
+                                        <span className="text-lg font-bold text-white">{t('header.memberships')}</span>
                                     </div>
-                                    <span className="text-xl font-bold text-white">{t('header.home')}</span>
-                                </div>
-                                <div className={`w-2 h-2 rounded-full bg-white transition-opacity ${activeSection === '#inicio' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
-                            </a>
+                                    <ArrowUpRight size={20} className="text-white" />
+                                </a>
 
-                            {/* Personal Section */}
-                            <div style={{
-                                opacity: menuEntering ? 0 : 1,
-                                animation: menuClosing ? 'fadeOutDown 200ms ease-out 100ms forwards' : 'none',
-                                transition: menuClosing ? 'none' : 'opacity 300ms ease-out 580ms'
-                            }}>
-                                <h3 className="text-white/60 text-sm font-medium mb-4 px-2">{t('header.personal')}</h3>
-                                <div className="space-y-2">
-                                    {/* Precios */}
-                                    <a
-                                        href={getLocalizedPath("/precios")}
-                                        onClick={(e) => { handleNavClick(e, '#precios', '/precios'); handleMenuClose(); }}
-                                        className={`flex items-center gap-4 p-2 rounded-xl transition-colors ${activeSection === '#precios' ? 'bg-white/10' : 'hover:bg-white/10'}`}
-                                    >
-                                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-lg">
-                                            <span className="font-bold text-lg">$</span>
-                                        </div>
-                                        <span className="text-lg font-bold text-white">{t('header.pricing')}</span>
-                                    </a>
-
-                                    {/* Proceso */}
-                                    <a
-                                        href={getLocalizedPath("/roadmap")}
-                                        onClick={(e) => { handleNavClick(e, '#roadmap', '/roadmap'); handleMenuClose(); }}
-                                        className={`flex items-center gap-4 p-2 rounded-xl transition-colors ${activeSection === '#roadmap' ? 'bg-white/10' : 'hover:bg-white/10'}`}
-                                    >
-                                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white shadow-lg">
-                                            <ArrowRight size={24} />
-                                        </div>
-                                        <span className="text-lg font-bold text-white">{t('header.process')}</span>
-                                    </a>
-                                </div>
-                            </div>
-
-                            {/* Business Link (Membership) */}
-                            <a
-                                href={getLocalizedPath("/membresias")}
-                                onClick={(e) => { handleNavClick(e, '#membresias', '/membresias'); handleMenuClose(); }}
-                                className={`flex items-center justify-between p-4 rounded-2xl transition-colors ${activeSection === '#membresias' ? 'bg-white/15' : 'hover:bg-white/10'
-                                    }`}
-                                style={{
+                                {/* Company Section */}
+                                <div style={{
                                     opacity: menuEntering ? 0 : 1,
-                                    animation: menuClosing ? 'fadeOutDown 200ms ease-out 50ms forwards' : 'none',
-                                    transition: menuClosing ? 'none' : 'opacity 300ms ease-out 620ms'
-                                }}
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="w-8 h-8 rounded bg-white/20 flex items-center justify-center text-white font-bold">
-                                        M
+                                    animation: menuClosing ? 'fadeOutDown 200ms ease-out forwards' : 'none',
+                                    transition: menuClosing ? 'none' : 'opacity 300ms ease-out 660ms'
+                                }}>
+                                    <h3 className="text-white/60 text-sm font-medium mb-4 px-2">{t('header.contact')}</h3>
+                                    <div className="space-y-2">
+                                        <a
+                                            href={getLocalizedPath("/contacto")}
+                                            onClick={(e) => { handleNavClick(e, '#contacto', '/contacto'); handleMenuClose(); }}
+                                            className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
+                                        >
+                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white shadow-lg">
+                                                <User size={24} />
+                                            </div>
+                                            <span className="text-lg font-bold text-white">{t('header.lets_talk')}</span>
+                                        </a>
                                     </div>
-                                    <span className="text-lg font-bold text-white">{t('header.memberships')}</span>
                                 </div>
-                                <ArrowUpRight size={20} className="text-white" />
-                            </a>
 
-                            {/* Company Section */}
-                            <div style={{
-                                opacity: menuEntering ? 0 : 1,
-                                animation: menuClosing ? 'fadeOutDown 200ms ease-out forwards' : 'none',
-                                transition: menuClosing ? 'none' : 'opacity 300ms ease-out 660ms'
-                            }}>
-                                <h3 className="text-white/60 text-sm font-medium mb-4 px-2">{t('header.contact')}</h3>
-                                <div className="space-y-2">
-                                    <a
-                                        href={getLocalizedPath("/contacto")}
-                                        onClick={(e) => { handleNavClick(e, '#contacto', '/contacto'); handleMenuClose(); }}
-                                        className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
-                                    >
-                                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white shadow-lg">
-                                            <User size={24} />
-                                        </div>
-                                        <span className="text-lg font-bold text-white">{t('header.lets_talk')}</span>
-                                    </a>
-                                </div>
                             </div>
-
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
         </>
     );
 };

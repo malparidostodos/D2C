@@ -203,6 +203,13 @@ export const MenuProvider = ({ children }) => {
 
         const localizedPath = getLocalizedPath(path);
 
+        // If it's not a hash link (section), just navigate
+        if (!id.startsWith('#')) {
+            navigate(localizedPath);
+            window.scrollTo(0, 0);
+            return;
+        }
+
         const scrollToElement = () => {
             if (id === '#contacto') {
                 // Scroll to bottom of page for contacto section

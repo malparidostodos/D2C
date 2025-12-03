@@ -6,10 +6,10 @@
 :root {
   /* Variables para Liquid Glass */
   --lg-bg-color: rgba(255, 255, 255, 0.25);
-  --lg-highlight: rgba(255, 255, 255, 0.75);
+  --lg-highlight: rgb(255, 255, 255);
   --lg-text: #ffffff;
 
-  --color-bg: #f0f1fa;
+  --color-bg: #ffffff;
   --color-text: #000000;
   --color-black: #000000;
   --color-text-secondary: #cbcbd2;

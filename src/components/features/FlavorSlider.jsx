@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 import AnimatedButton from "../ui/AnimatedButton";
 import { useTranslation } from 'react-i18next';
+import ProcessSteps from "./ProcessSteps";
 
 const FlavorSlider = () => {
     const { t } = useTranslation();
@@ -19,6 +20,7 @@ const FlavorSlider = () => {
 
         if (!isTablet) {
             const tl = gsap.timeline({
+                id: "flavorScroll",
                 scrollTrigger: {
                     trigger: ".flavor-section",
                     start: "2% top",
@@ -31,7 +33,7 @@ const FlavorSlider = () => {
 
             tl.to(".flavor-section", {
                 x: `-${scrollAmount + 1500}px`,
-                ease: "none", // Changed to none for linear scrubbing which usually feels better with scrub: 1
+                ease: "none",
             });
         }
 
@@ -72,10 +74,14 @@ const FlavorSlider = () => {
             'Lavado Premium': 'premium_wash',
             'Coating Cerámico': 'ceramic_coating',
             'Corrección Pintura': 'paint_correction',
-            'Detailing Interior': 'interior_detailing',
-            'Lavado Básico': 'basic_wash'
+            'Interior Detailing': 'interior_detailing',
+            'Paint Correction': 'paint_correction',
+            'Exterior Detailing': 'exterior_detailing',
+            'Engine Bay Cleaning': 'engine_cleaning',
+            'Wheel & Tire Detailing': 'wheel_tire_detailing',
+            'Premium Car Wash': 'premium_car_wash'
         };
-        const key = keyMap[flavorName] || 'basic_wash';
+        const key = keyMap[flavorName] || 'premium_car_wash';
         return {
             name: t(`flavor_slider.services.${key}.name`),
             description: t(`flavor_slider.services.${key}.description`),
@@ -85,7 +91,7 @@ const FlavorSlider = () => {
 
     return (
         <div ref={sliderRef} className="slider-wrapper w-full h-full">
-            <div className="flavors flex lg:block overflow-x-auto lg:overflow-visible snap-x snap-mandatory lg:snap-none gap-4 px-4 lg:px-0 h-full items-center">
+            <div className="flavors flex lg:flex overflow-x-auto lg:overflow-visible snap-x snap-mandatory lg:snap-none gap-4 px-4 lg:px-0 h-full items-center">
                 {flavorlists.map((flavor, index) => {
                     const translatedService = getServiceTranslation(flavor.name);
                     return (
@@ -131,10 +137,12 @@ const FlavorSlider = () => {
                                             state={{
                                                 selectedService: (() => {
                                                     const serviceMap = {
-                                                        'Lavado Premium': { id: 'premium', name: translatedService.name, price: 120000, description: translatedService.description, features: translatedService.features },
-                                                        'Coating Cerámico': { id: 'ceramic', name: translatedService.name, price: 800000, description: translatedService.description, features: translatedService.features },
-                                                        'Corrección Pintura': { id: 'ceramic', name: translatedService.name, price: 800000, description: translatedService.description, features: translatedService.features },
-                                                        'Detailing Interior': { id: 'interior', name: translatedService.name, price: 250000, description: translatedService.description, features: translatedService.features }
+                                                        'Exterior Detailing': { id: 'exterior', name: translatedService.name, price: 120000, description: translatedService.description, features: translatedService.features },
+                                                        'Interior Detailing': { id: 'interior', name: translatedService.name, price: 150000, description: translatedService.description, features: translatedService.features },
+                                                        'Engine Bay Cleaning': { id: 'engine', name: translatedService.name, price: 60000, description: translatedService.description, features: translatedService.features },
+                                                        'Paint Correction': { id: 'correction', name: translatedService.name, price: 350000, description: translatedService.description, features: translatedService.features },
+                                                        'Wheel & Tire Detailing': { id: 'wheels', name: translatedService.name, price: 80000, description: translatedService.description, features: translatedService.features },
+                                                        'Premium Car Wash': { id: 'wash', name: translatedService.name, price: 50000, description: translatedService.description, features: translatedService.features }
                                                     }
                                                     return serviceMap[flavor.name] || { id: 'basic', name: translatedService.name, price: 50000, description: translatedService.description, features: translatedService.features }
                                                 })()
@@ -148,6 +156,7 @@ const FlavorSlider = () => {
                         </div>
                     );
                 })}
+                <ProcessSteps />
             </div>
         </div>
     );

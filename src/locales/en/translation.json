@@ -10,6 +10,33 @@
         "login": "Log In",
         "signup": "Sign Up"
     },
+    "services_page": {
+        "title": "Services Detail",
+        "breadcrumb_home": "Home",
+        "breadcrumb_current": "Services Detail",
+        "description_title": "Excellence in Every Detail",
+        "description": "We use advanced techniques and nanotechnology products to restore your car's showroom shine, protecting it against the elements.",
+        "quote": "Our services are tailored to fit your vehicle's specific needs, whether it's a quick refresh or a full deep detail. We focus on precision and quality to make sure every surface looks and feels perfect.",
+        "features": {
+            "certified_team": "Highly Trained Personnel",
+            "premium_products": "Premium Products",
+            "satisfaction_guarantee": "Satisfaction Guarantee"
+        },
+        "sidebar": {
+            "all_services": "Explore Our Services",
+            "call_us": "Call us Now:",
+            "book_now": "Book Appointment Now",
+            "whatsapp": "Get a Quote via WhatsApp",
+            "services_list": [
+                "Full Car Detailing",
+                "Video Sync Support",
+                "Interior Deep Cleaning",
+                "Tire & Wheel Detailing",
+                "Paint Correction & Polishing",
+                "Engine Bay Cleaning"
+            ]
+        }
+    },
     "hero": {
         "quality_guaranteed": "Quality Guaranteed",
         "title_part1": "Premium",
@@ -519,52 +546,87 @@
         "from": "From",
         "book": "Book",
         "services": {
-            "premium_wash": {
-                "name": "Premium Wash",
-                "description": "Deep detailing with wax",
+            "exterior_detailing": {
+                "name": "Exterior Detailing",
+                "description": "Paint restoration and protection for unmatched shine.",
                 "features": [
-                    "All from Basic",
+                    "Detailed wash",
                     "Decontamination",
-                    "Carnauba Wax",
-                    "Plastic Hydration"
-                ]
-            },
-            "ceramic_coating": {
-                "name": "Ceramic Coating",
-                "description": "Long-lasting ceramic protection",
-                "features": [
-                    "Paint Correction",
-                    "9H Coating",
-                    "2 Year Warranty"
-                ]
-            },
-            "paint_correction": {
-                "name": "Paint Correction",
-                "description": "Gloss restoration and defect removal",
-                "features": [
-                    "Multi-stage polishing",
-                    "Swirl removal",
-                    "Mirror finish"
+                    "Protective wax",
+                    "Intense shine"
                 ]
             },
             "interior_detailing": {
                 "name": "Interior Detailing",
-                "description": "Complete interior restoration",
+                "description": "Deep cleaning and disinfection of every corner of your cabin.",
                 "features": [
-                    "Upholstery Cleaning",
+                    "Upholstery cleaning",
                     "Steam",
-                    "Disinfection",
-                    "Leather Hydration"
+                    "Plastic hydration",
+                    "Odor removal"
                 ]
             },
-            "basic_wash": {
-                "name": "Basic Wash",
-                "description": "Basic exterior and interior cleaning",
+            "engine_cleaning": {
+                "name": "Engine Bay Cleaning",
+                "description": "Safe and detailed cleaning of your vehicle's heart.",
                 "features": [
-                    "Exterior Wash",
-                    "Vacuuming",
-                    "Dashboard Cleaning"
+                    "Safe degreasing",
+                    "Plastic protection",
+                    "Satin finish",
+                    "Visual inspection"
                 ]
+            },
+            "paint_correction": {
+                "name": "Paint Correction",
+                "description": "Removal of swirls and scratches for a mirror finish.",
+                "features": [
+                    "Multi-stage polishing",
+                    "Scratch removal",
+                    "Shine restoration",
+                    "Professional finish"
+                ]
+            },
+            "wheel_tire_detailing": {
+                "name": "Wheel & Tire Detailing",
+                "description": "Cleaning and protection for your wheels.",
+                "features": [
+                    "Deep rim cleaning",
+                    "Iron decontamination",
+                    "Tire shine",
+                    "Ceramic protection"
+                ]
+            },
+            "premium_car_wash": {
+                "name": "Premium Car Wash",
+                "description": "Gentle and detailed wash to keep your vehicle spotless.",
+                "features": [
+                    "Hand wash",
+                    "Air drying",
+                    "Basic vacuum",
+                    "Glass cleaning"
+                ]
+            }
+        },
+        "process": {
+            "title": "Our Process",
+            "subtitle": "How It Works - Simple, Transparent, Hassle-Free",
+            "steps": {
+                "1": {
+                    "title": "Book Your Service",
+                    "description": "Choose your detailing package and schedule a time that works best for you."
+                },
+                "2": {
+                    "title": "We Arrive or You Visit",
+                    "description": "Depending on your preference, bring your vehicle to us or let our mobile team come to your location."
+                },
+                "3": {
+                    "title": "We Detail Your Car",
+                    "description": "Our trained professionals get to work—inside and out—using premium products."
+                },
+                "4": {
+                    "title": "Enjoy Your Ride",
+                    "description": "Drive away with a spotless, protected vehicle that looks and feels like new."
+                }
             }
         }
     },

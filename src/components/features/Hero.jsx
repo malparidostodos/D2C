@@ -77,13 +77,9 @@ const Hero = () => {
             </AnimatedButton>
 
             <AnimatedButton
-              href={getLocalizedPath("/precios")}
+              href={getLocalizedPath("/services")}
               variant="blur"
               className="flex-1 sm:flex-none sm:w-auto justify-center !px-4 sm:!px-8"
-              onClick={(e) => {
-                const section = document.querySelector('#precios');
-                if (section) section.scrollIntoView({ behavior: 'smooth' });
-              }}
             >
               {t('hero.cta_services')}
             </AnimatedButton>
