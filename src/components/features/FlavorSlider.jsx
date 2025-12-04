@@ -97,6 +97,7 @@ const FlavorSlider = () => {
                     return (
                         <div
                             key={flavor.name}
+                            id={`flavor-${index}`}
                             className={`relative z-30 lg:w-[50vw] w-[85vw] max-w-sm lg:max-w-none lg:h-[70vh] md:w-[60vw] md:h-[50vh] h-[450px] flex-none ${flavor.rotation} group snap-center`}
                         >
                             <div className="w-full h-full bg-[#0a0a0a] rounded-3xl p-6 md:p-8 flex flex-col justify-between border border-white/10 relative overflow-hidden shadow-2xl">

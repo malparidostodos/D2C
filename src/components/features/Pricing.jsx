@@ -40,17 +40,9 @@ const Pricing = () => {
     ]
 
     return (
-        <section id="membresias" className="py-16 md:py-32 bg-background relative overflow-hidden">
+        <section id="membresias" className="py-16 md:py-32 bg-[#0046b8] relative overflow-hidden">
             <div className="container relative z-10 px-4 md:px-6">
-                <div className="text-center mb-12 md:mb-20">
-                    <span className="text-accent font-medium tracking-widest uppercase text-xs md:text-sm">{t('pricing.exclusive_plans')}</span>
-                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold text-white mt-4 mb-4 md:mb-6">
-                        {t('pricing.memberships')}
-                    </h2>
-                    <p className="text-white/60 max-w-2xl mx-auto text-base md:text-lg font-light">
-                        {t('pricing.subtitle')}
-                    </p>
-                </div>
+
 
                 <div className="grid lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
                     {plans.map((plan, index) => (
@@ -61,31 +53,31 @@ const Pricing = () => {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                             className={`relative group p-6 md:p-8 rounded-3xl border transition-all duration-300 ${plan.highlight
-                                ? 'bg-white/10 border-white/20'
-                                : 'bg-surface border-white/5 hover:border-white/10'
+                                ? 'bg-white border-white shadow-2xl scale-105 z-10'
+                                : 'bg-white/90 border-white/50 hover:bg-white hover:border-white hover:shadow-xl'
                                 }`}
                         >
                             {plan.highlight && (
-                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-accent text-white text-xs font-bold uppercase tracking-widest rounded-full">
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#0046b8] text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-lg">
                                     {t('pricing.most_popular')}
                                 </div>
                             )}
 
-                            <div className="mb-6 md:mb-8">
-                                <h3 className="text-xl md:text-2xl font-bold text-white mb-2">{plan.name}</h3>
-                                <p className="text-white/40 text-sm">{plan.description}</p>
+                            <div className="mb-6 md:mb-8 text-center">
+                                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                                <p className="text-gray-500 text-sm">{plan.description}</p>
                             </div>
 
-                            <div className="mb-6 md:mb-8 flex items-baseline gap-1">
-                                <span className="text-3xl md:text-4xl font-light text-white">$</span>
-                                <span className="text-4xl md:text-5xl font-bold text-white tracking-tight">{plan.price}</span>
-                                <span className="text-white/40 ml-2">{plan.period}</span>
+                            <div className="mb-6 md:mb-8 flex items-baseline justify-center gap-1">
+                                <span className="text-3xl md:text-4xl font-light text-gray-900">$</span>
+                                <span className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">{plan.price}</span>
+                                <span className="text-gray-500 ml-2">{plan.period}</span>
                             </div>
 
                             <div className="space-y-4 mb-8 md:mb-10">
                                 {plan.features.map((feature, i) => (
-                                    <div key={i} className="flex items-start gap-3 text-white/70">
-                                        <div className="mt-1 p-0.5 rounded-full bg-white/10 text-white">
+                                    <div key={i} className="flex items-start justify-center gap-3 text-gray-600 text-left">
+                                        <div className="mt-1 p-0.5 rounded-full bg-green-100 text-green-600 shrink-0">
                                             <Check size={12} strokeWidth={3} />
                                         </div>
                                         <span className="text-sm leading-relaxed">{feature}</span>
@@ -95,7 +87,7 @@ const Pricing = () => {
 
                             <AnimatedButton
                                 className="w-full justify-center"
-                                variant={plan.highlight ? 'accent' : 'outline'}
+                                variant={plan.highlight ? 'primary' : 'outline'}
                                 href={getLocalizedPath("/contacto")}
                                 onClick={(e) => {
                                     const section = document.querySelector('#contacto');

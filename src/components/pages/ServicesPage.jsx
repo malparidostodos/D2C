@@ -20,6 +20,60 @@ const ServicesPage = () => {
         Wrench
     ];
 
+    const handleServiceClick = (index) => {
+        // Map sidebar index to flavor index
+        // Sidebar: 0:Detailing, 1:Video, 2:Interior, 3:Wheels, 4:Paint, 5:Engine
+        // Flavors: 0:Exterior, 1:Interior, 2:Engine, 3:Paint, 4:Wheels, 5:Wash
+
+        const map = {
+            0: 0, // Detailing Completo -> Exterior
+            1: 5, // Video Sync -> Wash (Fallback)
+            2: 1, // Interior -> Interior
+            3: 4, // Wheels -> Wheels
+            4: 3, // Paint -> Paint
+            5: 2  // Engine -> Engine
+        };
+
+        const flavorIndex = map[index];
+        const element = document.getElementById(`flavor-${flavorIndex}`);
+
+        if (element) {
+            // Check if desktop (GSAP pinned section)
+            if (window.innerWidth >= 1024) {
+                const section = document.querySelector('.flavor-section');
+                if (section) {
+                    // Calculate relative position
+                    // The horizontal scroll is mapped to vertical scroll
+                    // We need to find where the card is horizontally relative to the container start
+                    const container = document.querySelector('.flavors');
+                    const cardOffset = element.offsetLeft;
+
+                    // Scroll to the section start + horizontal offset
+                    // We add a small buffer to center it or ensure it's in view
+                    const sectionTop = section.offsetTop;
+                    // Note: This is an approximation. GSAP pinning makes exact calculation tricky without accessing the timeline.
+                    // But generally 1px vertical = 1px horizontal in this setup.
+                    window.scrollTo({
+                        top: sectionTop + cardOffset,
+                        behavior: 'smooth'
+                    });
+                }
+            } else {
+                // Mobile/Tablet - native horizontal scroll
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                // Also scroll window to the section if needed
+                const section = document.getElementById('precios');
+                if (section) {
+                    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+                    window.scrollTo({
+                        top: sectionTop - 100, // Offset for header
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#0046b8] text-white">
             <Header theme="white" />
@@ -97,7 +151,10 @@ const ServicesPage = () => {
                                     const Icon = serviceIcons[index] || Car;
                                     return (
                                         <li key={index}>
-                                            <Link to="#" className="flex items-center justify-between group p-3 rounded-xl hover:bg-blue-50 transition-all duration-300 border border-transparent hover:border-blue-100">
+                                            <button
+                                                onClick={() => handleServiceClick(index)}
+                                                className="w-full flex items-center justify-between group p-3 rounded-xl hover:bg-blue-50 transition-all duration-300 border border-transparent hover:border-blue-100 text-left"
+                                            >
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-[#0046b8] group-hover:bg-[#0046b8] group-hover:text-white transition-colors">
                                                         <Icon className="w-4 h-4" />
@@ -105,7 +162,7 @@ const ServicesPage = () => {
                                                     <span className="text-gray-600 group-hover:text-[#0046b8] transition-colors font-medium text-sm">{service}</span>
                                                 </div>
                                                 <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[#0046b8] transition-colors" />
-                                            </Link>
+                                            </button>
                                         </li>
                                     );
                                 })}

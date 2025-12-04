@@ -40,29 +40,29 @@ const Gallery = () => {
     }, [])
 
     return (
-        <section className="py-24 px-4 md:px-8 bg-[#050505] relative overflow-hidden">
+        <section className="py-24 px-4 md:px-8 bg-white relative overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-accent text-sm font-bold tracking-widest uppercase mb-4 block"
+                        className="text-[#0046b8] text-sm font-bold tracking-widest uppercase mb-4 block"
                     >
                         {t('gallery.subtitle', 'Resultados Reales')}
                     </motion.span>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-6xl font-display font-bold text-white mb-6"
+                        transition={{ duration: 0.3 }}
+                        className="text-4xl md:text-6xl font-display font-bold text-[#0046b8] mb-6 cursor-default"
                     >
-                        {t('gallery.title_before', 'Antes y')} <span className="text-accent">{t('gallery.title_after', 'Después')}</span>
+                        {t('gallery.title_before', 'Antes y')} <span className="text-[#0046b8]">{t('gallery.title_after', 'Después')}</span>
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-white/60 max-w-2xl mx-auto text-lg"
+                        transition={{ duration: 0.3 }}
+                        className="text-[#0046b8] max-w-2xl mx-auto text-lg cursor-default"
                     >
                         {t('gallery.description', 'Desliza para ver la transformación. Nuestros tratamientos devuelven la vida a tu vehículo.')}
                     </motion.p>
@@ -70,7 +70,7 @@ const Gallery = () => {
 
                 <div
                     ref={containerRef}
-                    className="relative max-w-5xl mx-auto aspect-[16/9] rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#111]"
+                    className="relative max-w-5xl mx-auto aspect-[16/9] rounded-3xl overflow-hidden border border-blue-100 shadow-2xl bg-[#0046b8]"
                 >
                     {/* Image Container */}
                     <div
@@ -87,11 +87,11 @@ const Gallery = () => {
                         }}
                     >
                         {/* After Image (Base) - Clean */}
-                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] to-black">
+                        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#0046b8] to-[#00358a]">
                             <img
                                 src="/images/vehiculos/sedan.png"
                                 alt="Después"
-                                className="w-[80%] h-[80%] object-contain drop-shadow-[0_0_30px_rgba(0,70,184,0.3)]"
+                                className="w-[80%] h-[80%] object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]"
                                 draggable="false"
                             />
                         </div>
@@ -102,7 +102,7 @@ const Gallery = () => {
                             style={{ width: `${sliderValue}%` }}
                         >
                             <div
-                                className="absolute top-0 left-0 h-full flex items-center justify-center bg-gradient-to-br from-[#2a2a2a] to-[#111]"
+                                className="absolute top-0 left-0 h-full flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] to-[#000]"
                                 style={{ width: containerWidth }}
                             >
                                 <img

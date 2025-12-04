@@ -297,6 +297,14 @@
         "updating": "Actualizando...",
         "update_vehicle": "Actualizar Vehículo",
         "rate_service": "Calificar",
+        "leave_review": "Calificar",
+        "write_review": "Escribir Reseña",
+        "your_comment": "Tu comentario",
+        "comment_placeholder": "Cuéntanos tu experiencia...",
+        "submit_review": "Enviar Reseña",
+        "review_success": "¡Gracias por tu reseña!",
+        "review_error": "Error al enviar la reseña",
+        "public_review_toggle": "Hacer pública mi reseña",
         "update_error": "Error al actualizar vehículo",
         "update_success": "Vehículo actualizado correctamente",
         "unlink_bookings_error": "Error al desvincular reservas",
@@ -1301,5 +1309,39 @@
                 }
             ]
         }
+    },
+    "process_page": {
+        "title": "Nuestro Proceso",
+        "description": "Transformamos tu vehículo con una metodología precisa y detallada, garantizando resultados de showroom.",
+        "results": {
+            "title": "Resultados Reales",
+            "description": "Desliza para ver la transformación. Nuestros tratamientos devuelven la vida a tu vehículo."
+        },
+        "method": {
+            "title": "Proceso de Transformación",
+            "subtitle": "NUESTRO MÉTODO"
+        },
+        "steps": [
+            {
+                "title": "Evaluación Inicial",
+                "description": "Inspección detallada del vehículo para identificar imperfecciones y determinar el mejor tratamiento."
+            },
+            {
+                "title": "Descontaminación",
+                "description": "Limpieza profunda química y mecánica para eliminar contaminantes adheridos a la pintura."
+            },
+            {
+                "title": "Corrección de Pintura",
+                "description": "Proceso de pulido en múltiples etapas para eliminar rayas, marcas de agua y restaurar el brillo."
+            },
+            {
+                "title": "Protección Cerámica",
+                "description": "Aplicación de recubrimiento cerámico para proteger la pintura y facilitar la limpieza futura."
+            },
+            {
+                "title": "Curado y Entrega",
+                "description": "Tiempo de curado bajo lámparas IR y revisión final antes de la entrega al cliente."
+            }
+        ]
     }
 }

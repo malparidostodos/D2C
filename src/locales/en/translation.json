@@ -298,6 +298,14 @@
         "updating": "Updating...",
         "update_vehicle": "Update Vehicle",
         "rate_service": "Rate",
+        "leave_review": "Review",
+        "write_review": "Write Review",
+        "your_comment": "Your comment",
+        "comment_placeholder": "Tell us about your experience...",
+        "submit_review": "Submit Review",
+        "review_success": "Thanks for your review!",
+        "review_error": "Error submitting review",
+        "public_review_toggle": "Make my review public",
         "update_error": "Error updating vehicle",
         "update_success": "Vehicle updated successfully",
         "unlink_bookings_error": "Error unlinking bookings",
@@ -1303,5 +1311,39 @@
                 }
             ]
         }
+    },
+    "process_page": {
+        "title": "Our Process",
+        "description": "We transform your vehicle with a precise and detailed methodology, guaranteeing showroom results.",
+        "results": {
+            "title": "Real Results",
+            "description": "Slide to see the transformation. Our treatments bring your vehicle back to life."
+        },
+        "method": {
+            "title": "Transformation Process",
+            "subtitle": "OUR METHOD"
+        },
+        "steps": [
+            {
+                "title": "Initial Evaluation",
+                "description": "Detailed inspection of the vehicle to identify imperfections and determine the best treatment."
+            },
+            {
+                "title": "Decontamination",
+                "description": "Deep chemical and mechanical cleaning to remove contaminants adhered to the paint."
+            },
+            {
+                "title": "Paint Correction",
+                "description": "Multi-stage polishing process to remove scratches, water marks, and restore shine."
+            },
+            {
+                "title": "Ceramic Protection",
+                "description": "Application of ceramic coating to protect the paint and facilitate future cleaning."
+            },
+            {
+                "title": "Curing and Delivery",
+                "description": "Curing time under IR lamps and final review before delivery to the customer."
+            }
+        ]
     }
 }

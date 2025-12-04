@@ -38,7 +38,7 @@ const Header = ({ theme = 'default' }) => {
 
     const servicesDropdown = [
         { name: t('header.pricing'), path: '/services', id: 'services', image: `/images/services-preview-${currentLang.toLowerCase()}.png` },
-        { name: t('header.process'), path: '/roadmap', id: '#roadmap' },
+        { name: t('header.process'), path: '/roadmap', id: 'roadmap' },
         { name: t('header.memberships'), path: '/membresias', id: '#membresias' },
     ];
 
@@ -279,7 +279,7 @@ const Header = ({ theme = 'default' }) => {
                                         </div>
                                     </div>
                                 )}
-                                {hoveredService === '#roadmap' && (
+                                {hoveredService === 'roadmap' && (
                                     <div className="w-full h-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
                                         {t('header.process')}
                                     </div>
@@ -483,8 +483,8 @@ const Header = ({ theme = 'default' }) => {
                                         {/* Proceso */}
                                         <a
                                             href={getLocalizedPath("/roadmap")}
-                                            onClick={(e) => { handleNavClick(e, '#roadmap', '/roadmap'); handleMenuClose(); }}
-                                            className={`flex items-center gap-4 p-2 rounded-xl transition-colors ${activeSection === '#roadmap' ? 'bg-white/10' : 'hover:bg-white/10'}`}
+                                            onClick={(e) => { handleNavClick(e, 'roadmap', '/roadmap'); handleMenuClose(); }}
+                                            className={`flex items-center gap-4 p-2 rounded-xl transition-colors ${activeSection === 'roadmap' ? 'bg-white/10' : 'hover:bg-white/10'}`}
                                         >
                                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white shadow-lg">
                                                 <ArrowRight size={24} />
