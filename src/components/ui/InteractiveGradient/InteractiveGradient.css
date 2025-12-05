@@ -1,0 +1,10 @@
+.gradient-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: auto;
+    /* Ensure it captures mouse events if needed, or none if it should pass through */
+}

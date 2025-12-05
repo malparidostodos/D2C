@@ -43,6 +43,7 @@ import Disclaimers from './components/legal/Disclaimers'
 import FAQ from './components/pages/FAQ'
 
 import SEO from './components/ui/SEO'
+import InteractiveGradient from './components/ui/InteractiveGradient/InteractiveGradient'
 
 // Componente Home con todas las secciones
 const Home = () => {
@@ -167,16 +168,8 @@ const App = () => {
   return (
     <SmoothScroll>
       <Toaster position="top-right" theme="dark" richColors />
-      <div
-        style={{
-          backgroundImage: "url('/images/BG3.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-          backgroundRepeat: 'no-repeat',
-          minHeight: '100vh'
-        }}
-      >
+      <InteractiveGradient />
+      <div className="relative z-10">
         <BrowserRouter>
           <MenuProvider>
             <Routes>

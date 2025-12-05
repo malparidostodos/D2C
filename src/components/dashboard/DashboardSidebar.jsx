@@ -169,7 +169,7 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                                     to={getLocalizedPath(item.path)}
                                     onClick={() => setIsMobileOpen(false)}
                                     className={`relative flex items-center px-4 py-3 rounded-xl transition-all duration-300 group ${isActive
-                                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                                        ? 'bg-blue-700 text-white shadow-lg shadow-blue-900/20'
                                         : 'text-gray-400 hover:bg-white/5 hover:text-white'
                                         } ${effectiveCollapsed ? 'justify-center' : 'gap-3'}`}
                                 >

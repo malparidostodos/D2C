@@ -39,7 +39,7 @@ const Header = ({ theme = 'default' }) => {
     const servicesDropdown = [
         { name: t('header.pricing'), path: '/services', id: 'services', image: `/images/services-preview-${currentLang.toLowerCase()}.png` },
         { name: t('header.process'), path: '/roadmap', id: 'roadmap' },
-        { name: t('header.memberships'), path: '/membresias', id: '#membresias' },
+        { name: t('header.memberships'), path: '/membresias', id: 'membresias' },
     ];
 
     const isServiceActive = servicesDropdown.some(item => item.id === activeSection);
