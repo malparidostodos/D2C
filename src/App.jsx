@@ -44,6 +44,7 @@ import FAQ from './components/pages/FAQ'
 
 import SEO from './components/ui/SEO'
 import InteractiveGradient from './components/ui/InteractiveGradient/InteractiveGradient'
+import FPSCounter from './components/ui/FPSCounter'
 
 // Componente Home con todas las secciones
 const Home = () => {
@@ -168,6 +169,7 @@ const App = () => {
   return (
     <SmoothScroll>
       <Toaster position="top-right" theme="dark" richColors />
+      <FPSCounter />
       <div className="relative z-10">
         <BrowserRouter>
           <InteractiveGradient />

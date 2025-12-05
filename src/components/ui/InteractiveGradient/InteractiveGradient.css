@@ -8,3 +8,9 @@
     pointer-events: auto;
     /* Ensure it captures mouse events if needed, or none if it should pass through */
 }
+
+.gradient-canvas canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}

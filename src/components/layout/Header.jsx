@@ -26,10 +26,26 @@ const Header = ({ theme = 'default' }) => {
     const currentLang = i18n.language?.startsWith('en') ? 'EN' : 'ES';
 
     const isHomePage = location.pathname === '/' || location.pathname === '/en' || location.pathname === '/en/';
-    const showAuthButton = !isHomePage || activeSection !== '#inicio';
 
-    // Force white theme on Home section (Inicio)
-    const effectiveTheme = (isHomePage && activeSection === '#inicio') ? 'white' : theme;
+    // State to delay the theme switch when leaving the home page
+    const [isHomeDelayed, setIsHomeDelayed] = useState(isHomePage);
+
+    useEffect(() => {
+        if (isHomePage) {
+            setIsHomeDelayed(true);
+        } else {
+            // Delay changing to dark theme to match the transition/curtain animation (600ms)
+            const timer = setTimeout(() => {
+                setIsHomeDelayed(false);
+            }, 600);
+            return () => clearTimeout(timer);
+        }
+    }, [isHomePage]);
+
+    const showAuthButton = !isHomeDelayed || activeSection !== '#inicio';
+
+    // Force white theme on Home section (Inicio) - NOW ALWAYS ON HOME due to blue background
+    const effectiveTheme = isHomeDelayed ? 'white' : theme;
 
     const languages = [
         { code: 'ES', label: 'Español' },
@@ -70,8 +86,8 @@ const Header = ({ theme = 'default' }) => {
             <div className="_navbar">
                 <div className="nav-container">
                     {/* Logo */}
-                    <Link to={getLocalizedPath('/')} className={`text-3xl font-display font-bold tracking-tighter ${effectiveTheme === 'white' ? 'text-white' : 'text-black'}`}>
-                        Ta' <span className={effectiveTheme === 'white' ? 'text-white' : 'text-accent'}>To'</span> Clean
+                    <Link to={getLocalizedPath('/')} className={`text-3xl font-display font-bold tracking-tighter ${effectiveTheme === 'white' ? '!text-white' : 'text-black'}`}>
+                        Ta' <span className={effectiveTheme === 'white' ? '!text-white' : 'text-accent'}>To'</span> Clean
                     </Link>
 
                     <div className="lang-cta-wrapper">

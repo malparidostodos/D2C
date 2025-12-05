@@ -206,7 +206,7 @@ export const MenuProvider = ({ children }) => {
         // If it's not a hash link (section), just navigate
         if (!id.startsWith('#')) {
             navigate(localizedPath);
-            window.scrollTo(0, 0);
+            // window.scrollTo(0, 0); // Removed to allow PageTransition to handle scroll reset
             return;
         }
 

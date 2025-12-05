@@ -31,10 +31,19 @@ const SmoothScroll = ({ children }) => {
 
         reqIdRef.current = requestAnimationFrame(raf)
 
+        // Disable native browser scroll restoration to prevent jumps
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual'
+        }
+
         return () => {
             lenisInstance.destroy()
             if (reqIdRef.current) {
                 cancelAnimationFrame(reqIdRef.current)
+            }
+            // Optional: Restore to auto if needed on unmount, but manual is usually fine for SPA
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'auto'
             }
         }
     }, [])
