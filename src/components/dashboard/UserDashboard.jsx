@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useMenu } from '../../hooks/useMenu'
 import { supabase } from '../../lib/supabase'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 import { Car, Truck, Bike, Calendar, Clock, Plus, LogOut, Trash2, Check, X, AlertCircle, Settings, Edit2, Shield, Sun, Moon, ChevronDown, Star } from 'lucide-react'
@@ -21,6 +22,7 @@ import DeleteVehicleModal from './DeleteVehicleModal'
 const UserDashboard = () => {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
+    const { navigateWithTransition } = useMenu()
     const { isDarkMode, isAdmin } = useOutletContext()
     const queryClient = useQueryClient()
     const [user, setUser] = useState(null)
@@ -87,12 +89,10 @@ const UserDashboard = () => {
         syncData()
     }, [user, queryClient])
 
-
-
     const checkUser = async () => {
         const { data: { session } } = await supabase.auth.getSession()
         if (!session) {
-            navigate(getLocalizedPath('/login'))
+            navigateWithTransition(getLocalizedPath('/login'))
             return
         }
         setUser(session.user)
@@ -137,7 +137,7 @@ const UserDashboard = () => {
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
-        navigate(getLocalizedPath('/'))
+        navigateWithTransition(getLocalizedPath('/'))
     }
 
     const handleEditVehicle = (vehicle) => {

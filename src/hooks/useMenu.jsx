@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSmoothScroll } from '../components/ui/SmoothScroll';
@@ -205,7 +206,7 @@ export const MenuProvider = ({ children }) => {
 
         // If it's not a hash link (section), just navigate
         if (!id.startsWith('#')) {
-            navigate(localizedPath);
+            navigateWithTransition(localizedPath);
             // window.scrollTo(0, 0); // Removed to allow PageTransition to handle scroll reset
             return;
         }
@@ -237,11 +238,79 @@ export const MenuProvider = ({ children }) => {
         if (!isHome) {
             // Navigate to home (localized) then scroll
             const homePath = i18n.language === 'en' ? '/en' : '/';
-            navigate(homePath);
+            navigateWithTransition(homePath);
             setTimeout(scrollToElement, 500);
         } else {
             scrollToElement();
         }
+    };
+
+    // -------------------------------------------------
+    // View Transition Navigation
+    // -------------------------------------------------
+    const navigateWithTransition = (to) => {
+        // Check for internal auth navigation (Login <-> Register <-> Forgot)
+        const authPaths = ['/login', '/signup', '/forgot-password', '/reset-password'];
+        const isAuthPath = (path) => authPaths.some(authPath => path.includes(authPath));
+
+        if (isAuthPath(location.pathname) && isAuthPath(to)) {
+            navigate(to);
+            return;
+        }
+
+        // Fallback for browsers without View Transitions
+        if (!document.startViewTransition) {
+            navigate(to);
+            return;
+        }
+
+        const transition = document.startViewTransition(() => {
+            flushSync(() => {
+                navigate(to);
+            });
+        });
+
+        transition.ready.then(() => {
+            // "Curtain Effect" Animation using WAAPI
+            // Old View: Slides up and fades out
+            document.documentElement.animate(
+                [
+                    {
+                        opacity: 1,
+                        transform: "translateY(0)",
+                    },
+                    {
+                        opacity: 1, // Keep opaque to prevent white background bleed
+                        transform: "translateY(-35%)", // Slide up
+                        filter: "brightness(0.4)", // Significantly darken
+                    },
+                ],
+                {
+                    duration: 800,
+                    easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+                    fill: "forwards",
+                    pseudoElement: "::view-transition-old(root)",
+                }
+            );
+
+            // New View: Reveals from bottom (Curtain opens up)
+            document.documentElement.animate(
+                [
+                    {
+                        clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+                    },
+                    {
+                        clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+                    },
+                ],
+                {
+                    duration: 800,
+                    easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+                    fill: "forwards",
+                    pseudoElement: "::view-transition-new(root)",
+                }
+            );
+        });
     };
 
     const handleLanguageChange = (langCode) => {
@@ -333,7 +402,8 @@ export const MenuProvider = ({ children }) => {
         handleNavClick,
         handleLanguageChange,
         handleMenuClose,
-        getLocalizedPath
+        getLocalizedPath,
+        navigateWithTransition
     };
 
     return (

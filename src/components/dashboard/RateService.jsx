@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
+import { useMenu } from '../../hooks/useMenu'
 import { motion } from 'framer-motion'
 import { Star, Car, Calendar, CheckCircle, AlertCircle } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
@@ -12,6 +13,7 @@ import RateServiceSkeleton from './RateServiceSkeleton'
 const RateService = () => {
     const { bookingId } = useParams()
     const navigate = useNavigate()
+    const { navigateWithTransition, getLocalizedPath } = useMenu()
     const { t, i18n } = useTranslation()
     const { isDarkMode } = useOutletContext() // Get theme from layout
     const [booking, setBooking] = useState(null)
@@ -37,13 +39,13 @@ const RateService = () => {
 
                 if (!data) {
                     toast.error(t('dashboard.rate_service_page.booking_not_found'))
-                    navigate('/dashboard')
+                    navigateWithTransition(getLocalizedPath('/dashboard'))
                     return
                 }
 
                 if (data.is_rated && !justSubmitted.current) {
                     toast.info(t('dashboard.rate_service_page.already_rated'))
-                    navigate('/dashboard')
+                    navigateWithTransition(getLocalizedPath('/dashboard'))
                     return
                 }
 
@@ -65,7 +67,7 @@ const RateService = () => {
             } catch (error) {
                 console.error('Error fetching booking:', error)
                 toast.error(t('dashboard.rate_service_page.load_error'))
-                navigate('/dashboard')
+                navigateWithTransition(getLocalizedPath('/dashboard'))
             } finally {
                 setLoading(false)
             }
@@ -116,7 +118,7 @@ const RateService = () => {
             if (bookingError) throw bookingError
 
             toast.success(t('dashboard.rate_service_page.success_message'))
-            navigate('/dashboard')
+            navigateWithTransition(getLocalizedPath('/dashboard'))
 
         } catch (error) {
             console.error('Error submitting review:', error)

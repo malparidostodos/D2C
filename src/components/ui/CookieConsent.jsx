@@ -9,7 +9,7 @@ const CookieConsent = () => {
     const { t, i18n } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
     const location = useLocation();
-    const { hidden, isMenuMounted } = useMenu();
+    const { hidden, isMenuMounted, navigateWithTransition } = useMenu();
 
     useEffect(() => {
         // Don't show on cookie policy page
@@ -62,12 +62,16 @@ const CookieConsent = () => {
                                 </h3>
                                 <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">
                                     {t('cookie_consent.message')}
-                                    <Link
-                                        to={i18n.language === 'en' ? '/en/cookie-policy' : '/cookie-policy'}
+                                    <a
+                                        href={i18n.language === 'en' ? '/en/cookie-policy' : '/cookie-policy'}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            navigateWithTransition(i18n.language === 'en' ? '/en/cookie-policy' : '/cookie-policy');
+                                        }}
                                         className="ml-1 text-blue-600 dark:text-blue-400 hover:underline font-medium"
                                     >
                                         {t('cookie_consent.learn_more')}
-                                    </Link>
+                                    </a>
                                 </p>
                             </div>
                         </div>

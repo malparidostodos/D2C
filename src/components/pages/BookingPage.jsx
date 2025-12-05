@@ -4,6 +4,7 @@ import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, C
 import AnimatedButton from '../ui/AnimatedButton'
 import AccountCreatedModal from '../booking/AccountCreatedModal'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useMenu } from '../../hooks/useMenu'
 import { supabase } from '../../lib/supabase'
 import VehiclePlateSelector from '../ui/VehiclePlateSelector'
 import { useTranslation } from 'react-i18next'
@@ -164,6 +165,7 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
 const BookingPage = () => {
     const location = useLocation()
     const navigate = useNavigate()
+    const { navigateWithTransition, getLocalizedPath } = useMenu()
     const [step, setStep] = useState(0)
     const [maxStep, setMaxStep] = useState(1) // Track furthest step reached
     const [direction, setDirection] = useState(0)
@@ -179,10 +181,8 @@ const BookingPage = () => {
     const [newUserCredentials, setNewUserCredentials] = useState(null) // Credenciales de usuario nuevo creado automáticamente
     const [showAccountModal, setShowAccountModal] = useState(false)
 
-    const getLocalizedPath = (path) => {
-        const prefix = i18n.language === 'en' ? '/en' : ''
-        return `${prefix}${path}`
-    }
+    // Helper removed as it's provided by useMenu now
+    // const getLocalizedPath = (path) => { ... }
 
     const [brandSearch, setBrandSearch] = useState('')
     const [showBrandList, setShowBrandList] = useState(false)
@@ -847,7 +847,7 @@ const BookingPage = () => {
 
                     <div className="flex flex-col-reverse md:flex-row items-center justify-center gap-4 mt-8">
                         <button
-                            onClick={() => navigate(getLocalizedPath('/'))}
+                            onClick={() => navigateWithTransition(getLocalizedPath('/'))}
                             className="px-8 py-4 rounded-full border border-white/20 text-white hover:bg-white/5 transition-colors font-medium w-full md:w-auto"
                         >
                             {t('booking.back_home')}
@@ -855,7 +855,7 @@ const BookingPage = () => {
 
                         {isAuthenticated ? (
                             <AnimatedButton
-                                onClick={() => navigate(getLocalizedPath('/dashboard'))}
+                                onClick={() => navigateWithTransition(getLocalizedPath('/dashboard'))}
                                 variant="accent"
                                 className="w-full md:w-auto px-10 py-4 text-lg shadow-lg shadow-blue-500/20"
                             >
@@ -863,7 +863,7 @@ const BookingPage = () => {
                             </AnimatedButton>
                         ) : (
                             <AnimatedButton
-                                onClick={() => navigate(getLocalizedPath('/login'))}
+                                onClick={() => navigateWithTransition(getLocalizedPath('/login'))}
                                 variant="accent"
                                 className="w-full md:w-auto px-10 py-4 text-lg shadow-lg shadow-blue-500/20"
                             >
@@ -883,9 +883,9 @@ const BookingPage = () => {
                 <meta name="description" content={t('booking.seo_description')} />
             </Helmet>
             <h1 className="sr-only">{t('booking.seo_title')}</h1>
-            <Link to={getLocalizedPath('/')} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
+            <a href={getLocalizedPath('/')} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath('/')) }} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
                 Ta' <span className="text-accent">To'</span> Clean
-            </Link>
+            </a>
             <div className="max-w-6xl mx-auto">
                 {/* Progress Bar - Solo mostrar si no es paso 0 */}
                 {step > 0 && (

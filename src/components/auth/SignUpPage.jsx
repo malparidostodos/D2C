@@ -14,13 +14,17 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
+import { useMenu } from '../../hooks/useMenu'
+
 const SignUpPage = () => {
     const navigate = useNavigate()
+    const { navigateWithTransition } = useMenu()
     const { t, i18n } = useTranslation()
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [showSuccessModal, setShowSuccessModal] = useState(false)
 
+    // ... (schema and forms) ...
     const signupSchema = z.object({
         name: z.string().min(1, t('auth.errors.required')),
         email: z.string().min(1, t('auth.errors.required')).email(t('auth.errors.invalid_email')),
@@ -125,12 +129,16 @@ const SignUpPage = () => {
             {/* Navbar Structure for Logo */}
             <div className="_navbar">
                 <div className="nav-container flex justify-between items-center">
-                    <Link
-                        to={getLocalizedPath('/')}
+                    <a
+                        href={getLocalizedPath('/')}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            navigateWithTransition(getLocalizedPath('/'))
+                        }}
                         className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
-                    </Link>
+                    </a>
                     <LanguageSelector />
                 </div>
             </div>
@@ -143,7 +151,7 @@ const SignUpPage = () => {
             >
                 {/* Glass Card */}
                 <div className="backdrop-blur-xl bg-black/40 border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
-                    {/* Decorative gradient blob */}
+                    {/* ... (blobs) ... */}
                     <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none" />
                     <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none" />
 
@@ -205,9 +213,16 @@ const SignUpPage = () => {
                         <div className="mt-8 text-center">
                             <p className="text-white/60 text-sm">
                                 {t('auth.already_have_account')}{' '}
-                                <Link to={getLocalizedPath('/login')} className="text-white font-medium hover:underline">
+                                <a
+                                    href={getLocalizedPath('/login')}
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        navigateWithTransition(getLocalizedPath('/login'))
+                                    }}
+                                    className="text-white font-medium hover:underline"
+                                >
                                     {t('auth.login_here')}
-                                </Link>
+                                </a>
                             </p>
                         </div>
                     </div>
@@ -219,7 +234,7 @@ const SignUpPage = () => {
                 isOpen={showSuccessModal}
                 onClose={() => {
                     setShowSuccessModal(false)
-                    navigate(getLocalizedPath('/login'))
+                    navigateWithTransition(getLocalizedPath('/login'))
                 }}
                 title={t('auth.welcome_modal_title')}
             >
@@ -231,7 +246,7 @@ const SignUpPage = () => {
                         {t('auth.welcome_modal_message')}
                     </p>
                     <button
-                        onClick={() => navigate(getLocalizedPath('/login'))}
+                        onClick={() => navigateWithTransition(getLocalizedPath('/login'))}
                         className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-100 transition-colors mt-4"
                     >
                         {t('auth.go_to_login')}

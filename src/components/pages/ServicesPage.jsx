@@ -2,12 +2,14 @@ import React from 'react';
 import Header from '../layout/Header';
 import FlavorSection from '../features/FlavorSection';
 import { Phone, Check, ChevronRight, Car, Video, Armchair, Disc, Paintbrush, Wrench, Quote, MessageCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Contact from './Contact';
+import { useMenu } from '../../hooks/useMenu';
 
 const ServicesPage = () => {
     const { t } = useTranslation();
+    const { navigateWithTransition, getLocalizedPath } = useMenu();
 
     const servicesList = t('services_page.sidebar.services_list', { returnObjects: true });
 
@@ -179,9 +181,16 @@ const ServicesPage = () => {
                                 <span className="text-white/80 font-bold uppercase tracking-wider text-sm mb-2">{t('services_page.sidebar.call_us')}</span>
                                 <a href="tel:+573009443004" className="text-2xl font-bold text-white hover:text-white/90 transition-colors mb-6 block">+57 300 944 30 04</a>
 
-                                <Link to="/reserva" className="w-full bg-white text-[#0046b8] py-3 px-6 rounded-xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 mb-3">
+                                <a
+                                    href={getLocalizedPath("/reserva")}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        navigateWithTransition(getLocalizedPath("/reserva"));
+                                    }}
+                                    className="w-full bg-white text-[#0046b8] py-3 px-6 rounded-xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 mb-3"
+                                >
                                     {t('services_page.sidebar.book_now')}
-                                </Link>
+                                </a>
                                 <a href="https://wa.me/573009443004" target="_blank" rel="noopener noreferrer" className="w-full bg-green-500 text-white py-3 px-6 rounded-xl font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2">
                                     <MessageCircle className="w-5 h-5" />
                                     {t('services_page.sidebar.whatsapp')}

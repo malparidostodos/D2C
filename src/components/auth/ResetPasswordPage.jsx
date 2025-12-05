@@ -12,9 +12,11 @@ import { useTranslation } from 'react-i18next'
 import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
+import { useMenu } from '../../hooks/useMenu'
 
 const ResetPasswordPage = () => {
     const { t, i18n } = useTranslation()
+    const { navigateWithTransition, getLocalizedPath } = useMenu()
     const navigate = useNavigate()
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -34,10 +36,8 @@ const ResetPasswordPage = () => {
         defaultValues: { password: '', confirmPassword: '' }
     })
 
-    const getLocalizedPath = (path) => {
-        const currentLang = i18n.language
-        return currentLang === 'en' ? `/en${path}` : path
-    }
+    // Helper removed as it's provided by useMenu now
+    // const getLocalizedPath = (path) => { ... }
 
     useEffect(() => {
         // Check if we have a session (which happens after clicking the email link)
@@ -68,7 +68,7 @@ const ResetPasswordPage = () => {
             setSuccess(true)
             // Navegar después de mostrar el mensaje
             setTimeout(() => {
-                navigate(getLocalizedPath('/login'))
+                navigateWithTransition(getLocalizedPath('/login'))
             }, 2000)
         } catch (error) {
             // console.error('Error updating password:', error)
@@ -84,12 +84,16 @@ const ResetPasswordPage = () => {
             {/* Navbar Structure for Logo */}
             <div className="_navbar">
                 <div className="nav-container flex justify-between items-center">
-                    <Link
-                        to={getLocalizedPath('/')}
+                    <a
+                        href={getLocalizedPath('/')}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            navigateWithTransition(getLocalizedPath('/'))
+                        }}
                         className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
-                    </Link>
+                    </a>
                     <LanguageSelector />
                 </div>
             </div>

@@ -1,8 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import * as THREE from "three";
 import { vertexShader, fluidShader, displayShader } from "./shaders.js";
 import "./InteractiveGradient.css";
+
+// Auth Colors (Purple/Indigo/Pink/Blue theme)
+const authColors = {
+    color1: "#007BFF", // Indigo 100
+    color2: "#286ea7ff", // Indigo 900
+    color3: "#9dcffdff", // Indigo 600
+    color4: "#ffffffff", // Pink 500
+};
 
 const InteractiveGradient = ({
     brushSize = 25.0,
@@ -12,7 +20,7 @@ const InteractiveGradient = ({
     trailLength = 0.8,
     stopDecay = 0.85,
     color1 = "#b8cbffff",
-    color2 = "#34436eff",
+    color2 = "#3f62a3ff",
     color3 = "#0133ff",
     color4 = "#66d1fe",
     colorIntensity = 1.0,
@@ -25,13 +33,28 @@ const InteractiveGradient = ({
     const sceneDataRef = useRef(null);
     const location = useLocation();
 
-    // Check if we are on the home page
+    // Check if we are on the home page or auth pages
     const isHomePage = location.pathname === "/" || location.pathname === "/en" || location.pathname === "/inicio";
-    const isHomePageRef = useRef(isHomePage);
+    const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].some(path => location.pathname.includes(path));
+    const shouldRender = isHomePage || isAuthPage;
+
+    const isHomePageRef = useRef(shouldRender);
+
+    // Initial scroll check (only relevant for Home, auth pages are always visible)
+    const [isScrollVisible, setIsScrollVisible] = useState(true);
+
+    const currentColors = useMemo(() => {
+        return isAuthPage ? authColors : { color1, color2, color3, color4 };
+    }, [isAuthPage, color1, color2, color3, color4]);
 
     useEffect(() => {
-        isHomePageRef.current = location.pathname === "/" || location.pathname === "/en" || location.pathname === "/inicio";
-    }, [location]);
+        isHomePageRef.current = shouldRender;
+        // Reset scroll visibility check on location change
+        if (shouldRender) {
+            // For auth pages, always visible. For home, check scroll.
+            setIsScrollVisible(isAuthPage ? true : window.scrollY <= window.innerHeight);
+        }
+    }, [location, shouldRender, isAuthPage]);
 
     const hexToRgb = (hex) => {
         const r = parseInt(hex.slice(1, 3), 16) / 255;
@@ -129,15 +152,14 @@ const InteractiveGradient = ({
         let lastMoveTime = 0;
 
         const handleMouseMove = (e) => {
-            if (!isHomePageRef.current) return; // Optimization: Skip if not on home
+            if (!isHomePageRef.current) return;
             if (!canvasRef.current) return;
 
-            // Check if hovering over interactive elements or navbar
             const target = e.target;
             const isInteractive = target.closest('button') ||
                 target.closest('a') ||
                 target.closest('._navbar') ||
-                target.closest('.interactive-hover'); // Add a class for manual exclusions if needed
+                target.closest('.interactive-hover');
 
             if (isInteractive) {
                 fluidMaterial.uniforms.iMouse.value.set(0, 0, 0, 0);
@@ -164,7 +186,6 @@ const InteractiveGradient = ({
         };
 
         const handleResize = () => {
-            if (!isHomePageRef.current) return;
             const width = window.innerWidth;
             const height = window.innerHeight;
 
@@ -200,10 +221,10 @@ const InteractiveGradient = ({
             displayMaterial.uniforms.uDistortionAmount.value = distortionAmount;
             displayMaterial.uniforms.uColorIntensity.value = colorIntensity;
             displayMaterial.uniforms.uSoftness.value = softness;
-            displayMaterial.uniforms.uColor1.value.set(...hexToRgb(color1));
-            displayMaterial.uniforms.uColor2.value.set(...hexToRgb(color2));
-            displayMaterial.uniforms.uColor3.value.set(...hexToRgb(color3));
-            displayMaterial.uniforms.uColor4.value.set(...hexToRgb(color4));
+            displayMaterial.uniforms.uColor1.value.set(...hexToRgb(currentColors.color1));
+            displayMaterial.uniforms.uColor2.value.set(...hexToRgb(currentColors.color2));
+            displayMaterial.uniforms.uColor3.value.set(...hexToRgb(currentColors.color3));
+            displayMaterial.uniforms.uColor4.value.set(...hexToRgb(currentColors.color4));
 
             fluidMaterial.uniforms.iPreviousFrame.value = previousFluidTarget.texture;
             renderer.setRenderTarget(currentFluidTarget);
@@ -219,18 +240,16 @@ const InteractiveGradient = ({
 
             frameCount++;
 
-            // Only continue animation if on home page and visible
-            if (isHomePageRef.current && isScrollVisibleRef.current) {
+            // OPTIMIZATION: Check window scroll directly
+            // Only continue animation if shouldRender (Home or Auth) AND (Auth Page OR near top of Home)
+            const shouldAnimate = isHomePageRef.current && (isAuthPage ? true : window.scrollY < window.innerHeight + 100);
+
+            if (shouldAnimate) {
                 animationRef.current = requestAnimationFrame(animate);
             } else {
-                // If stopped, we might want to clear the canvas or just leave it static?
-                // Leaving it static is fine, but stopping the loop saves resources.
-                // We need a way to restart it when returning to home.
                 animationRef.current = null;
             }
         };
-
-
 
         animationLoopRef.current = animate;
 
@@ -270,72 +289,54 @@ const InteractiveGradient = ({
             renderer.dispose();
         };
     }, [
-        brushSize,
-        brushStrength,
-        distortionAmount,
-        fluidDecay,
-        trailLength,
-        stopDecay,
-        color1,
-        color2,
-        color3,
-        color4,
         colorIntensity,
         softness,
+        currentColors // Re-init if colors change
     ]);
 
-    // Scroll visibility state
-    const [isScrollVisible, setIsScrollVisible] = useState(() => window.scrollY <= window.innerHeight);
-
-    // Scroll handler
+    // Scroll handler to update visibility state and restart animation
     useEffect(() => {
         const handleScroll = () => {
-            if (!isHomePageRef.current) return;
-            const shouldBeVisible = window.scrollY <= window.innerHeight;
-            setIsScrollVisible(shouldBeVisible);
+            if (isAuthPage) {
+                setIsScrollVisible(true);
+                return;
+            }
+            const isVisible = window.scrollY <= window.innerHeight;
+            setIsScrollVisible(isVisible);
+
+            // Restart animation if we just became visible and allowed to render
+            if (isVisible && isHomePageRef.current && !animationRef.current && animationLoopRef.current) {
+                animationLoopRef.current();
+            }
         };
+
+        // Initial check
+        handleScroll();
 
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Animation control
+    // Ensure animation restarts if we navigate back
     useEffect(() => {
-        if (isHomePage && isScrollVisible) {
-            // Resume animation if on home and visible
+        if (shouldRender && isScrollVisible) {
             if (!animationRef.current && animationLoopRef.current) {
                 animationLoopRef.current();
             }
         }
-        // Note: We don't strictly need to stop it here as valid 'opacity: 0' will hide it,
-        // but stopping the loop is good for performance. 
-        // We'll let the animate loop itself handle the "stop if not visible" check 
-        // or just let it run (it's lightweight when hidden?) 
-        // Actually, let's keep the loop efficient.
-
-    }, [isHomePage, isScrollVisible]);
-
-    // Update the ref for the animation loop to check
-    const isScrollVisibleRef = useRef(isScrollVisible);
-    useEffect(() => { isScrollVisibleRef.current = isScrollVisible; }, [isScrollVisible]);
-
-    // We need to update the animate function to check this new ref instead of the old visibleRef
-    // But since I cannot easily edit the huge 'animate' function inside the main effect without replacing the whole file,
-    // I will rely on the fact that 'opacity: 0' and 'visibility: hidden' effectively kills the GPU cost.
-    // The previous optimization in 'animate' checked 'visibleRef'. I should probably update that too if I can.
-    // Let's stick to the simplest fix first: The Style Props.
+    }, [shouldRender, isScrollVisible]);
 
     return (
         <div
             ref={canvasRef}
             className="gradient-canvas"
             style={{
-                opacity: isHomePage && isScrollVisible ? 1 : 0,
-                visibility: isHomePage && isScrollVisible ? 'visible' : 'hidden',
-                pointerEvents: isHomePage && isScrollVisible ? 'auto' : 'none',
-                transition: 'opacity 0.5s ease, visibility 0.5s',
-                // Critical Fix: Delay hiding when leaving home page so curtain has time to cover
-                transitionDelay: !isHomePage ? '0.6s' : '0s'
+                opacity: shouldRender && isScrollVisible ? 1 : 0,
+                // visibility: shouldRender && isScrollVisible ? 'visible' : 'hidden',
+                pointerEvents: shouldRender && isScrollVisible ? 'auto' : 'none',
+                transition: 'opacity 0.6s ease',
+                // Delay hiding when leaving valid pages so curtain has time to cover
+                transitionDelay: !shouldRender ? '0.6s' : '0s'
             }}
         />
     );

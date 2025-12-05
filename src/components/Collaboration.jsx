@@ -3,15 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import AnimatedButton from './ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
 
+import { useMenu } from '../hooks/useMenu'
+
 const Collaboration = () => {
-  const navigate = useNavigate()
+  const { navigateWithTransition, getLocalizedPath } = useMenu()
   const { t } = useTranslation()
 
   const scrollToSection = (e, sectionId, route) => {
     e.preventDefault()
     // Si estamos en una ruta diferente a /, navegar primero
     if (window.location.pathname !== '/') {
-      navigate('/')
+      navigateWithTransition('/')
       setTimeout(() => {
         const section = document.querySelector(sectionId)
         if (section) {

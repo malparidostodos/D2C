@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '../../lib/supabase'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
+import { useMenu } from '../../hooks/useMenu'
 import { User, Mail, Lock, ArrowLeft, Check, AlertCircle, Edit2, Phone, ChevronDown, Shield } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import Tooltip from '../ui/Tooltip'
@@ -21,6 +22,7 @@ import { manageCookies } from '../../utils/cookieManager'
 const ProfilePage = () => {
     const { t, i18n } = useTranslation()
     const navigate = useNavigate()
+    const { navigateWithTransition, getLocalizedPath } = useMenu()
     const { isDarkMode } = useOutletContext()
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -87,10 +89,8 @@ const ProfilePage = () => {
         { code: '+56', country: 'CL', flag: 'https://flagcdn.com/w40/cl.png' },
     ]
 
-    const getLocalizedPath = (path) => {
-        const currentLang = i18n.language
-        return currentLang === 'en' ? `/en${path}` : path
-    }
+    // Helper removed as it's provided by useMenu now
+    // const getLocalizedPath = (path) => { ... }
 
     useEffect(() => {
         checkUser()
@@ -203,7 +203,7 @@ const ProfilePage = () => {
 
             // Sign out and redirect
             await supabase.auth.signOut()
-            navigate(getLocalizedPath('/login'))
+            navigateWithTransition(getLocalizedPath('/login'))
         } catch (error) {
             console.error('Error suspending account:', error)
             toast.error(error.message)
@@ -220,7 +220,7 @@ const ProfilePage = () => {
 
             // Sign out and redirect
             await supabase.auth.signOut()
-            navigate(getLocalizedPath('/'))
+            navigateWithTransition(getLocalizedPath('/'))
         } catch (error) {
             console.error('Error deleting account:', error)
             toast.error(error.message)

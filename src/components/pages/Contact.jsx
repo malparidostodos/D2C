@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { useMenu } from '../../hooks/useMenu'
 
 const Contact = () => {
   const { t, i18n } = useTranslation()
+  const { navigateWithTransition, getLocalizedPath } = useMenu()
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -137,15 +139,15 @@ const Contact = () => {
 
               {/* Legal */}
               <div className="col-span-1 flex flex-col gap-4">
-                <Link to={getRoute("/privacy-policy")} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.privacy_policy')}</Link>
-                <Link to={getRoute("/terms-conditions")} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.terms_conditions')}</Link>
-                <Link to={getRoute("/cookie-policy")} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.cookie_policy')}</Link>
-                <Link to={getRoute("/disclaimers")} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.disclaimers.title')}</Link>
+                <a href={getLocalizedPath("/privacy-policy")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath("/privacy-policy")); }} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.privacy_policy')}</a>
+                <a href={getLocalizedPath("/terms-conditions")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath("/terms-conditions")); }} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.terms_conditions')}</a>
+                <a href={getLocalizedPath("/cookie-policy")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath("/cookie-policy")); }} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.cookie_policy')}</a>
+                <a href={getLocalizedPath("/disclaimers")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath("/disclaimers")); }} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('legal.disclaimers.title')}</a>
               </div>
 
               {/* Ayuda */}
               <div className="col-span-1 flex flex-col gap-4">
-                <Link to={getRoute("/faq")} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('contact_section.footer.help.faq')}</Link>
+                <a href={getLocalizedPath("/faq")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath("/faq")); }} className="text-[#0046b8] text-[1em] leading-[1.4] font-normal relative w-fit block after:block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-current after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-right hover:after:origin-left">{t('contact_section.footer.help.faq')}</a>
               </div>
             </div>
           </div>

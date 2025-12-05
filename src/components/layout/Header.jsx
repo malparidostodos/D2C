@@ -12,7 +12,7 @@ const Header = ({ theme = 'default' }) => {
         servicesOpen, setServicesOpen, activeSection, setHoverLock,
         hoveredService, setHoveredService, langOpen, setLangOpen, langRef,
         handleNavClick, handleLanguageChange, handleMenuClose, getLocalizedPath,
-        setIsMenuMounted
+        setIsMenuMounted, navigateWithTransition
     } = useMenu();
 
     useEffect(() => {
@@ -58,6 +58,23 @@ const Header = ({ theme = 'default' }) => {
         { name: t('header.memberships'), path: '/membresias', id: 'membresias' },
     ];
 
+    // Helper to handle transition navigation
+    const onTransitionLinkClick = (e, path) => {
+        e.preventDefault();
+        // Close menu if open
+        setMenuOpen(false);
+        setServicesOpen(false);
+
+        const targetPath = getLocalizedPath(path);
+        // If it's a hash link, use regular handleNavClick logic (scrolling)
+        if (path.startsWith('#') || path.includes('#')) {
+            handleNavClick(e, path.split('#')[1] ? '#' + path.split('#')[1] : null, path);
+            return;
+        }
+
+        navigateWithTransition(targetPath);
+    };
+
     const isServiceActive = servicesDropdown.some(item => item.id === activeSection);
 
     useEffect(() => {
@@ -86,9 +103,13 @@ const Header = ({ theme = 'default' }) => {
             <div className="_navbar">
                 <div className="nav-container">
                     {/* Logo */}
-                    <Link to={getLocalizedPath('/')} className={`text-3xl font-display font-bold tracking-tighter ${effectiveTheme === 'white' ? '!text-white' : 'text-black'}`}>
+                    <a
+                        href={getLocalizedPath('/')}
+                        onClick={(e) => onTransitionLinkClick(e, '/')}
+                        className={`text-3xl font-display font-bold tracking-tighter ${effectiveTheme === 'white' ? '!text-white' : 'text-black'}`}
+                    >
                         Ta' <span className={effectiveTheme === 'white' ? '!text-white' : 'text-accent'}>To'</span> Clean
-                    </Link>
+                    </a>
 
                     <div className="lang-cta-wrapper">
                         {/* Language Selector (Updated Structure) */}
@@ -141,28 +162,31 @@ const Header = ({ theme = 'default' }) => {
 
                         <div className="md:hidden flex items-center">
                             {user ? (
-                                <Link
-                                    to={getLocalizedPath("/dashboard")}
+                                <a
+                                    href={getLocalizedPath("/dashboard")}
+                                    onClick={(e) => onTransitionLinkClick(e, "/dashboard")}
                                     className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${effectiveTheme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
                                 >
                                     <User size={16} />
                                     <span className="font-medium text-xs">{t('dashboard.title')}</span>
-                                </Link>
+                                </a>
                             ) : (
-                                <Link
-                                    to={getLocalizedPath(showAuthButton ? "/login" : "/signup")}
+                                <a
+                                    href={getLocalizedPath(showAuthButton ? "/login" : "/signup")}
+                                    onClick={(e) => onTransitionLinkClick(e, showAuthButton ? "/login" : "/signup")}
                                     className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${effectiveTheme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
                                 >
                                     <span className="font-medium text-xs">{showAuthButton ? t('header.login') : t('header.signup')}</span>
-                                </Link>
+                                </a>
                             )}
                         </div>
 
                         {/* CTAs */}
                         <div className="ctas hidden md:flex">
                             {user ? (
-                                <Link
-                                    to={getLocalizedPath("/dashboard")}
+                                <a
+                                    href={getLocalizedPath("/dashboard")}
+                                    onClick={(e) => onTransitionLinkClick(e, "/dashboard")}
                                     className={`_button transition-all duration-300 flex items-center gap-2 ${effectiveTheme === 'white' ? '!bg-white !text-[#0046b8]' : '!bg-[#0046b8] !text-white'}`}
                                     data-variant="ghost"
                                 >
@@ -174,10 +198,14 @@ const Header = ({ theme = 'default' }) => {
                                             </span>
                                         ))}
                                     </span>
-                                </Link>
+                                </a>
                             ) : (
                                 <>
-                                    <Link to={getLocalizedPath("/login")} className={`_button ${effectiveTheme === 'white' ? '!bg-transparent !text-white border border-white/40 hover:!bg-white/10' : ''}`} data-variant="ghost">
+                                    <a
+                                        href={getLocalizedPath("/login")}
+                                        onClick={(e) => onTransitionLinkClick(e, "/login")}
+                                        className={`_button ${effectiveTheme === 'white' ? '!bg-transparent !text-white border border-white/40 hover:!bg-white/10' : ''}`} data-variant="ghost"
+                                    >
                                         <span className="staggered-wrapper">
                                             {t('header.login').split("").map((char, i) => (
                                                 <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
@@ -185,9 +213,10 @@ const Header = ({ theme = 'default' }) => {
                                                 </span>
                                             ))}
                                         </span>
-                                    </Link>
-                                    <Link
-                                        to={getLocalizedPath("/signup")}
+                                    </a>
+                                    <a
+                                        href={getLocalizedPath("/signup")}
+                                        onClick={(e) => onTransitionLinkClick(e, "/signup")}
                                         className="_button !bg-white !text-[#0046b8] transition-all duration-300"
                                         data-variant="ghost"
                                     >
@@ -198,7 +227,7 @@ const Header = ({ theme = 'default' }) => {
                                                 </span>
                                             ))}
                                         </span>
-                                    </Link>
+                                    </a>
                                 </>
                             )}
                         </div>
@@ -265,7 +294,7 @@ const Header = ({ theme = 'default' }) => {
                                         <a
                                             href={getLocalizedPath(item.path)}
                                             className="link"
-                                            onClick={(e) => handleNavClick(e, item.id, item.path)}
+                                            onClick={(e) => onTransitionLinkClick(e, item.path)}
                                         >
                                             <div className="label">{item.name}</div>
                                         </a>
@@ -433,22 +462,22 @@ const Header = ({ theme = 'default' }) => {
 
                                 {/* Login/Dashboard Button (Mobile Menu) */}
                                 {!user ? (
-                                    <Link
-                                        to={getLocalizedPath("/login")}
-                                        onClick={handleMenuClose}
+                                    <a
+                                        href={getLocalizedPath("/login")}
+                                        onClick={(e) => { handleMenuClose(); onTransitionLinkClick(e, "/login"); }}
                                         className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm"
                                     >
                                         {t('header.login')}
-                                    </Link>
+                                    </a>
                                 ) : (
-                                    <Link
-                                        to={getLocalizedPath("/dashboard")}
-                                        onClick={handleMenuClose}
+                                    <a
+                                        href={getLocalizedPath("/dashboard")}
+                                        onClick={(e) => { handleMenuClose(); onTransitionLinkClick(e, "/dashboard"); }}
                                         className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm gap-2"
                                     >
                                         <User size={16} />
                                         {t('dashboard.title')}
-                                    </Link>
+                                    </a>
                                 )}
                             </div>
 

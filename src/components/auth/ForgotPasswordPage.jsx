@@ -14,8 +14,11 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
+import { useMenu } from '../../hooks/useMenu'
+
 const ForgotPasswordPage = () => {
     const { t, i18n } = useTranslation()
+    const { navigateWithTransition } = useMenu()
     const [submitted, setSubmitted] = useState(false)
 
     const forgotPasswordSchema = z.object({
@@ -56,12 +59,16 @@ const ForgotPasswordPage = () => {
             {/* Navbar Structure for Logo */}
             <div className="_navbar">
                 <div className="nav-container flex justify-between items-center">
-                    <Link
-                        to={getLocalizedPath('/')}
+                    <a
+                        href={getLocalizedPath('/')}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            navigateWithTransition(getLocalizedPath('/'))
+                        }}
                         className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
-                    </Link>
+                    </a>
                     <LanguageSelector />
                 </div>
             </div>
@@ -74,7 +81,7 @@ const ForgotPasswordPage = () => {
             >
                 {/* Glass Card */}
                 <div className="backdrop-blur-xl bg-black/40 border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
-                    {/* Decorative gradient blob */}
+                    {/* ... (blobs) ... */}
                     <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none" />
                     <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none" />
 
@@ -170,9 +177,16 @@ const ForgotPasswordPage = () => {
                         <div className="mt-8 text-center">
                             <p className="text-white/60 text-sm">
                                 {t('auth.remembered_password')}{' '}
-                                <Link to={getLocalizedPath('/login')} className="text-white font-medium hover:underline">
+                                <a
+                                    href={getLocalizedPath('/login')}
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        navigateWithTransition(getLocalizedPath('/login'))
+                                    }}
+                                    className="text-white font-medium hover:underline"
+                                >
                                     {t('auth.login_here')}
-                                </Link>
+                                </a>
                             </p>
                         </div>
                     </div>

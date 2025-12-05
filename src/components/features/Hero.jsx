@@ -3,12 +3,14 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
+import { useMenu } from '../../hooks/useMenu'
 
 
 
 const Hero = () => {
   const containerRef = useRef(null)
   const { t, i18n } = useTranslation()
+  const { navigateWithTransition } = useMenu()
 
   const getLocalizedPath = (path) => {
     const prefix = i18n.language === 'en' ? '/en' : ''
@@ -70,6 +72,10 @@ const Hero = () => {
           >
             <AnimatedButton
               href={getLocalizedPath("/reserva")}
+              onClick={(e) => {
+                e.preventDefault()
+                navigateWithTransition(getLocalizedPath("/reserva"))
+              }}
               variant="blur"
               className="flex-1 sm:flex-none sm:w-auto justify-center !px-4 sm:!px-8"
             >
@@ -78,6 +84,10 @@ const Hero = () => {
 
             <AnimatedButton
               href={getLocalizedPath("/services")}
+              onClick={(e) => {
+                e.preventDefault()
+                navigateWithTransition(getLocalizedPath("/services"))
+              }}
               variant="blur"
               className="flex-1 sm:flex-none sm:w-auto justify-center !px-4 sm:!px-8"
             >

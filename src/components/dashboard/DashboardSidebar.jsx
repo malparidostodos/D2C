@@ -6,6 +6,7 @@ import ThemeToggle from '../ui/ThemeToggle'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabase'
 import { toast } from 'sonner'
+import { useMenu } from '../../hooks/useMenu'
 
 const CustomMenuIcon = ({ size = 24, className = "" }) => (
     <svg
@@ -29,6 +30,7 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
     const { t, i18n } = useTranslation()
     const location = useLocation()
     const navigate = useNavigate()
+    const { navigateWithTransition } = useMenu()
     const [isMobileOpen, setIsMobileOpen] = useState(false)
 
     const getLocalizedPath = (path) => {
@@ -41,7 +43,7 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
             const { error } = await supabase.auth.signOut()
             if (error) throw error
             toast.success(t('auth.logout_success', 'Sesión cerrada exitosamente'))
-            navigate(getLocalizedPath('/'))
+            navigateWithTransition(getLocalizedPath('/'))
         } catch (error) {
             console.error('Error logging out:', error)
             toast.error(t('auth.logout_error', 'Error al cerrar sesión'))
@@ -140,12 +142,16 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                     variants={isMobile ? itemVariants : undefined}
                     className={`${isMobile ? 'pt-8 pb-6 px-6' : 'p-6'} mb-6 flex items-center relative h-[60px] ${effectiveCollapsed ? 'justify-center' : 'justify-between'}`}
                 >
-                    <Link
-                        to={getLocalizedPath('/')}
+                    <a
+                        href={getLocalizedPath('/')}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            navigateWithTransition(getLocalizedPath('/'))
+                        }}
                         className={`text-2xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-all duration-300 flex items-center gap-2 whitespace-nowrap ${effectiveCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto delay-100'}`}
                     >
                         Ta' <span className="text-accent">To'</span> Clean
-                    </Link>
+                    </a>
 
                     {/* Desktop Toggle (Visible only on desktop) */}
                     <button

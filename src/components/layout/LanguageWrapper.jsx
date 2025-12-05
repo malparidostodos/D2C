@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate, useLocation, useOutlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import PageTransition from '../ui/PageTransition';
+
 
 import CookieConsent from '../ui/CookieConsent';
 
@@ -24,7 +24,7 @@ const LanguageWrapper = ({ language }) => {
 
     return (
         <>
-            <PageTransition>{outlet}</PageTransition>
+            {outlet}
             <CookieConsent />
         </>
     );

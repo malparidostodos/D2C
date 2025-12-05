@@ -14,16 +14,21 @@ import SEO from '../ui/SEO'
 
 import '../JetonHeader.css'
 
+import { useMenu } from '../../hooks/useMenu'
+
+const loginSchema = z.object({
+    email: z.string().email('Email inválido'),
+    password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+    rememberMe: z.boolean().optional()
+})
+
 const LoginPage = () => {
     const navigate = useNavigate()
+    const { navigateWithTransition } = useMenu()
     const { t, i18n } = useTranslation()
     const [showPassword, setShowPassword] = React.useState(false)
 
-    const loginSchema = z.object({
-        email: z.string().min(1, t('auth.errors.required')).email(t('auth.errors.invalid_email')),
-        password: z.string().min(1, t('auth.errors.required')),
-        rememberMe: z.boolean().optional()
-    })
+    // ... (rest of schema and useForm) ...
 
     const { register, handleSubmit, setValue, setError, watch, formState: { errors } } = useForm({
         resolver: zodResolver(loginSchema),
@@ -39,14 +44,7 @@ const LoginPage = () => {
         return `${prefix}${path}`
     }
 
-    // Cargar email guardado al montar el componente
-    useEffect(() => {
-        const savedEmail = localStorage.getItem('rememberedEmail')
-        if (savedEmail) {
-            setValue('email', savedEmail)
-            setValue('rememberMe', true)
-        }
-    }, [setValue])
+    // ... (useEffect) ...
 
     const onSubmit = async (data) => {
         const { email, password, rememberMe } = data
@@ -65,10 +63,56 @@ const LoginPage = () => {
             } else {
                 localStorage.removeItem('rememberedEmail')
             }
-            navigate(getLocalizedPath('/dashboard'))
+            navigateWithTransition(getLocalizedPath('/dashboard'))
         }
     }
 
+
+    // Helper to render input fields
+    const renderInput = (label, fieldName, type = "text", Icon, placeholder, isPassword = false, showPass = false, setShowPass = null) => (
+        <div className="space-y-2">
+            <label className="text-sm font-medium text-white/80 ml-1">{label}</label>
+            <div className="relative group">
+                <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${errors[fieldName] ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
+                    <Icon size={20} />
+                </div>
+                <input
+                    type={isPassword ? (showPass ? "text" : "password") : type}
+                    {...register(fieldName)}
+                    className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 ${isPassword ? 'pr-12' : 'pr-10'} text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors[fieldName]
+                        ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
+                        : 'border-white/10 focus:border-white/30 focus:bg-white/10'
+                        }`}
+                    placeholder={placeholder}
+                />
+
+                {isPassword && (
+                    <button
+                        type="button"
+                        onClick={() => setShowPass(!showPass)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors focus:outline-none z-10"
+                    >
+                        {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                )}
+
+                {errors[fieldName] && (
+                    <div className={`absolute ${isPassword ? 'right-12 pr-2' : 'right-3'} top-1/2 -translate-y-1/2 text-red-400 pointer-events-none`}>
+                        <AlertCircle size={18} />
+                    </div>
+                )}
+            </div>
+            {errors[fieldName] && (
+                <motion.p
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-red-400 text-xs ml-1 flex items-center gap-1"
+                >
+                    {errors[fieldName].message}
+                </motion.p>
+            )}
+        </div>
+    )
 
     return (
         <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
@@ -76,12 +120,16 @@ const LoginPage = () => {
             {/* Navbar Structure for Logo */}
             <div className="_navbar">
                 <div className="nav-container flex justify-between items-center">
-                    <Link
-                        to={getLocalizedPath('/')}
+                    <a
+                        href={getLocalizedPath('/')}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            navigateWithTransition(getLocalizedPath('/'))
+                        }}
                         className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
-                    </Link>
+                    </a>
                     <LanguageSelector />
                 </div>
             </div>
@@ -94,106 +142,44 @@ const LoginPage = () => {
             >
                 {/* Glass Card */}
                 <div className="backdrop-blur-xl bg-black/40 border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
-                    {/* Decorative gradient blob */}
                     <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none" />
                     <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none" />
 
                     <div className="relative z-10">
-                        <div className="text-center mb-10">
-                            <h1 className="text-3xl font-display font-bold text-white mb-2">{t('auth.welcome')}</h1>
-                            <p className="text-white/60">{t('auth.login_subtitle')}</p>
+                        <div className="text-center mb-8">
+                            <h1 className="text-3xl font-display font-bold text-white mb-2">{t('auth.login_title', 'Iniciar Sesión')}</h1>
+                            <p className="text-white/60">{t('auth.login_subtitle', 'Bienvenido de nuevo')}</p>
                         </div>
 
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-white/80 ml-1">{t('auth.email')}</label>
-                                <div className="relative group">
-                                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${errors.email ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
-                                        <Mail size={20} />
-                                    </div>
-                                    <input
-                                        type="email"
-                                        {...register('email')}
-                                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-10 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors.email
-                                            ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
-                                            : 'border-white/10 focus:border-white/30 focus:bg-white/10'
-                                            }`}
-                                        placeholder="ejemplo@correo.com"
-                                    />
-                                    {errors.email && (
-                                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 pointer-events-none">
-                                            <AlertCircle size={18} />
-                                        </div>
-                                    )}
-                                </div>
-                                {errors.email && (
-                                    <motion.p
-                                        initial={{ opacity: 0, y: -5 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="text-red-400 text-xs ml-1 flex items-center gap-1"
-                                    >
-                                        {errors.email.message}
-                                    </motion.p>
-                                )}
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-white/80 ml-1">{t('auth.password')}</label>
-                                <div className="relative group">
-                                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${errors.password ? 'text-red-400' : 'text-white/40 group-focus-within:text-white'}`}>
-                                        <Lock size={20} />
-                                    </div>
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        {...register('password')}
-                                        className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-12 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors.password
-                                            ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
-                                            : 'border-white/10 focus:border-white/30 focus:bg-white/10'
-                                            }`}
-                                        placeholder="••••••••"
-                                    />
-
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors focus:outline-none z-10"
-                                    >
-                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                    </button>
-
-                                    {errors.password && (
-                                        <div className="absolute right-12 top-1/2 -translate-y-1/2 text-red-400 pointer-events-none pr-2">
-                                            <AlertCircle size={18} />
-                                        </div>
-                                    )}
-                                </div>
-                                {errors.password && (
-                                    <motion.p
-                                        initial={{ opacity: 0, y: -5 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="text-red-400 text-xs ml-1 flex items-center gap-1"
-                                    >
-                                        {errors.password.message}
-                                    </motion.p>
-                                )}
-                            </div>
+                            {renderInput(t('auth.email'), "email", "email", Mail, t('auth.mail'))}
+                            {renderInput(t('auth.password'), "password", "password", Lock, "••••••••", true, showPassword, setShowPassword)}
 
                             <div className="flex items-center justify-between text-sm w-full gap-4">
-                                <label className="flex items-center gap-3 cursor-pointer group select-none flex-shrink-0">
-                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all duration-200 ${watch('rememberMe')
-                                        ? 'bg-blue-600 border-blue-600'
-                                        : 'border-white/30 bg-white/5 group-hover:border-white/50'
-                                        }`}>
-                                        {watch('rememberMe') && <Check size={14} className="text-white" strokeWidth={3} />}
+                                <div className="flex items-center gap-2">
+                                    <div className="relative flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            id="rememberMe"
+                                            {...register('rememberMe')}
+                                            className="peer h-4 w-4 cursor-pointer appearance-none rounded border border-white/20 bg-white/5 transition-all checked:border-blue-500 checked:bg-blue-500 hover:border-white/40"
+                                        />
+                                        <Check className="pointer-events-none absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity peer-checked:opacity-100" strokeWidth={3} />
                                     </div>
-                                    <input
-                                        type="checkbox"
-                                        className="hidden"
-                                        {...register('rememberMe')}
-                                    />
-                                    <span className="text-white/60 group-hover:text-white/80 transition-colors">{t('auth.remember_me')}</span>
-                                </label>
-                                <Link to={getLocalizedPath('/forgot-password')} className="text-white/60 hover:text-white transition-colors text-right ml-auto">{t('auth.forgot_password')}</Link>
+                                    <label htmlFor="rememberMe" className="text-white/60 cursor-pointer select-none hover:text-white transition-colors">
+                                        {t('auth.remember_me', 'Recordarme')}
+                                    </label>
+                                </div>
+                                <a
+                                    href={getLocalizedPath('/forgot-password')}
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        navigateWithTransition(getLocalizedPath('/forgot-password'))
+                                    }}
+                                    className="text-white/60 hover:text-white transition-colors text-right ml-auto"
+                                >
+                                    {t('auth.forgot_password')}
+                                </a>
                             </div>
 
                             <div className="pt-4">
@@ -209,9 +195,16 @@ const LoginPage = () => {
                         <div className="mt-8 text-center">
                             <p className="text-white/60 text-sm">
                                 {t('auth.no_account')}{' '}
-                                <Link to={getLocalizedPath('/signup')} className="text-white font-medium hover:underline">
+                                <a
+                                    href={getLocalizedPath('/signup')}
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        navigateWithTransition(getLocalizedPath('/signup'))
+                                    }}
+                                    className="text-white font-medium hover:underline"
+                                >
                                     {t('auth.register_here')}
-                                </Link>
+                                </a>
                             </p>
                         </div>
                     </div>
