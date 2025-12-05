@@ -79,7 +79,7 @@ const Header = ({ theme = 'default' }) => {
                         {/* Language Selector (Interactive) */}
                         <div ref={langRef} className="_dropdown _language-select hidden md:flex" aria-expanded={langOpen} role="button">
                             <button
-                                className="_dropdown-button w-full flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/50 !text-white hover:!bg-white/30 transition-all duration-300 rounded-full px-4 py-2"
+                                className="_dropdown-button w-full flex items-center justify-center gap-2 !bg-white/5 !backdrop-blur-xl !border !border-white/10 !shadow-[0_4px_30px_rgba(0,0,0,0.1)] !text-white hover:!bg-white/10 hover:!border-white/20 hover:!shadow-[0_8px_32px_rgba(0,0,0,0.2)] transition-all duration-300 rounded-full px-4 py-2"
                                 onClick={() => setLangOpen(!langOpen)}
                                 data-button=""
                                 data-tone="orange"

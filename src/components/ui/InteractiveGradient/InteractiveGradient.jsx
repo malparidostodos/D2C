@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import * as THREE from "three";
 import { vertexShader, fluidShader, displayShader } from "./shaders.js";
 import "./InteractiveGradient.css";
@@ -11,7 +12,7 @@ const InteractiveGradient = ({
     trailLength = 0.8,
     stopDecay = 0.85,
     color1 = "#b8cbffff",
-    color2 = "#34356eff",
+    color2 = "#34436eff",
     color3 = "#0133ff",
     color4 = "#66d1fe",
     colorIntensity = 1.0,
@@ -20,7 +21,17 @@ const InteractiveGradient = ({
     const canvasRef = useRef(null);
     const rendererRef = useRef(null);
     const animationRef = useRef(null);
+    const animationLoopRef = useRef(null);
     const sceneDataRef = useRef(null);
+    const location = useLocation();
+
+    // Check if we are on the home page
+    const isHomePage = location.pathname === "/" || location.pathname === "/en" || location.pathname === "/inicio";
+    const isHomePageRef = useRef(isHomePage);
+
+    useEffect(() => {
+        isHomePageRef.current = location.pathname === "/" || location.pathname === "/en" || location.pathname === "/inicio";
+    }, [location]);
 
     const hexToRgb = (hex) => {
         const r = parseInt(hex.slice(1, 3), 16) / 255;
@@ -119,6 +130,19 @@ const InteractiveGradient = ({
 
         const handleMouseMove = (e) => {
             if (!canvasRef.current) return;
+
+            // Check if hovering over interactive elements or navbar
+            const target = e.target;
+            const isInteractive = target.closest('button') ||
+                target.closest('a') ||
+                target.closest('._navbar') ||
+                target.closest('.interactive-hover'); // Add a class for manual exclusions if needed
+
+            if (isInteractive) {
+                fluidMaterial.uniforms.iMouse.value.set(0, 0, 0, 0);
+                return;
+            }
+
             const rect = canvasRef.current.getBoundingClientRect();
             prevMouseX = mouseX;
             prevMouseY = mouseY;
@@ -191,8 +215,21 @@ const InteractiveGradient = ({
             previousFluidTarget = temp;
 
             frameCount++;
-            animationRef.current = requestAnimationFrame(animate);
+
+            // Only continue animation if on home page
+            if (isHomePageRef.current) {
+                animationRef.current = requestAnimationFrame(animate);
+            } else {
+                // If stopped, we might want to clear the canvas or just leave it static?
+                // Leaving it static is fine, but stopping the loop saves resources.
+                // We need a way to restart it when returning to home.
+                animationRef.current = null;
+            }
         };
+
+
+
+        animationLoopRef.current = animate;
 
         sceneDataRef.current = {
             fluidTarget1,
@@ -205,7 +242,9 @@ const InteractiveGradient = ({
             handleResize,
         };
 
-        animate();
+        if (isHomePageRef.current) {
+            animate();
+        }
 
         return () => {
             if (animationRef.current) {
@@ -241,6 +280,12 @@ const InteractiveGradient = ({
         colorIntensity,
         softness,
     ]);
+
+    useEffect(() => {
+        if (isHomePage && !animationRef.current && animationLoopRef.current) {
+            animationLoopRef.current();
+        }
+    }, [isHomePage]);
 
     return <div ref={canvasRef} className="gradient-canvas" />;
 };

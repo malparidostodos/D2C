@@ -33,7 +33,7 @@ const Hero = () => {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="mb-4 lg:mb-6"
           >
-            <span className="inline-block py-1 px-3 rounded-full border border-gray-200 bg-gray-100/50 backdrop-blur-sm text-[10px] lg:text-xs font-medium tracking-widest uppercase text-white">
+            <span className="inline-block py-1 px-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] text-[10px] lg:text-xs font-medium tracking-widest uppercase text-white">
               {t('hero.quality_guaranteed')}
             </span>
           </motion.div>

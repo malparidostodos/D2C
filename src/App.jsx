@@ -168,9 +168,9 @@ const App = () => {
   return (
     <SmoothScroll>
       <Toaster position="top-right" theme="dark" richColors />
-      <InteractiveGradient />
       <div className="relative z-10">
         <BrowserRouter>
+          <InteractiveGradient />
           <MenuProvider>
             <Routes>
               {/* English Routes */}
