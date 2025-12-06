@@ -47,7 +47,7 @@ const HolographicText = ({ text = 'MEMBRESIAS' }) => {
       textElement.setAttribute('data-index', i)
       textElement.style.cssText = `
         font-size: clamp(6rem, 20vw, 20rem);
-        font-weight: 700;
+        font-weight: 600;
         font-family: 'DM Sans', sans-serif;
         color: rgba(0, 0, 0, 0.05);
         text-transform: uppercase;

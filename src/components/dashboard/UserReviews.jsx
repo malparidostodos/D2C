@@ -93,7 +93,7 @@ const UserReviews = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-8"
                 >
-                    <h1 className={`text-3xl font-display font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <h1 className={`text-3xl font-display font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                         {t('dashboard.user_reviews_page.title')}
                     </h1>
                     <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-600'}`}>
@@ -119,7 +119,7 @@ const UserReviews = () => {
                             >
                                 <div className="flex justify-between items-start mb-4">
                                     <div>
-                                        <h3 className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                        <h3 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                             {review.booking?.service?.name}
                                         </h3>
                                         <p className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>

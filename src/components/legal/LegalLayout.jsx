@@ -87,7 +87,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
                         {/* Sidebar Navigation - Policy Links */}
                         <aside className="lg:col-span-3 bg-white border-b lg:border-b-0 lg:border-r border-gray-100 py-12 px-8 lg:rounded-l-[2.5rem]">
                             <nav className="space-y-2 lg:sticky lg:top-32">
-                                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-6 px-4">
+                                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-6 px-4">
                                     {t('legal.menu_title')}
                                 </h3>
                                 {links.map((link) => {
@@ -119,7 +119,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
                             {/* Content */}
                             <main className={sections && sections.length > 0 ? "lg:col-span-9 p-8 sm:p-12 lg:p-16" : "lg:col-span-9 p-8 sm:p-12 lg:p-20 lg:rounded-r-[2.5rem]"}>
                                 <div className="max-w-none text-gray-600 
-                                    [&_h1]:text-5xl [&_h1]:font-bold [&_h1]:text-[#1A1D1F] [&_h1]:mb-8 [&_h1]:tracking-tight
+                                    [&_h1]:text-5xl [&_h1]:font-semibold [&_h1]:text-[#1A1D1F] [&_h1]:mb-8 [&_h1]:tracking-tight
                                     [&_h2]:text-4xl [&_h2]:font-semibold [&_h2]:text-[#1A1D1F] [&_h2]:mt-16 [&_h2]:mb-6 [&_h2]:tracking-tight
                                     [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:text-[#1A1D1F] [&_h3]:mt-10 [&_h3]:mb-4
                                     [&_p]:text-lg [&_p]:leading-relaxed [&_p]:text-gray-600 [&_p]:mb-6
@@ -134,7 +134,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
                             {sections && sections.length > 0 && (
                                 <aside className="hidden lg:block lg:col-span-3 bg-gray-50 border-l border-gray-100 py-12 px-6 rounded-r-[2.5rem]">
                                     <nav className="sticky top-32">
-                                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
+                                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">
                                             {t('legal.on_this_page')}
                                         </h4>
                                         <ul className="space-y-2">

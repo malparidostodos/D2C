@@ -50,7 +50,7 @@ const ConfirmationModal = ({
                             {getIcon()}
                         </div>
 
-                        <h2 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        <h2 className={`text-2xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                             {title}
                         </h2>
                         <p className={`mb-8 ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
@@ -66,7 +66,7 @@ const ConfirmationModal = ({
                             </button>
                             <button
                                 onClick={onConfirm}
-                                className={`flex-1 px-4 py-3 rounded-xl font-bold transition-colors ${getConfirmButtonClass()}`}
+                                className={`flex-1 px-4 py-3 rounded-xl font-semibold transition-colors ${getConfirmButtonClass()}`}
                             >
                                 {confirmText}
                             </button>

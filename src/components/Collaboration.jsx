@@ -104,7 +104,7 @@ const Collaboration = () => {
                 return (
                   <div
                     key={idx}
-                    className="absolute top-1/2 left-1/2 w-12 h-12 bg-white/10 border border-white/10 rounded-xl flex items-center justify-center text-xl font-bold shadow-sm select-none text-white"
+                    className="absolute top-1/2 left-1/2 w-12 h-12 bg-white/10 border border-white/10 rounded-xl flex items-center justify-center text-xl font-semibold shadow-sm select-none text-white"
                     style={{
                       transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
                     }}

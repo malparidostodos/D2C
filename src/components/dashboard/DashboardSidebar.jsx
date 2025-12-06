@@ -148,7 +148,7 @@ const DashboardSidebar = ({ isDarkMode, toggleTheme, isAdmin, isCollapsed, toggl
                             e.preventDefault()
                             navigateWithTransition(getLocalizedPath('/'))
                         }}
-                        className={`text-2xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-all duration-300 flex items-center gap-2 whitespace-nowrap ${effectiveCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto delay-100'}`}
+                        className={`text-2xl font-display font-semibold text-white tracking-tighter hover:opacity-80 transition-all duration-300 flex items-center gap-2 whitespace-nowrap ${effectiveCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100 w-auto delay-100'}`}
                     >
                         Ta' <span className="text-accent">To'</span> Clean
                     </a>

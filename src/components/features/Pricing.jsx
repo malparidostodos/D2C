@@ -58,19 +58,19 @@ const Pricing = () => {
                                 }`}
                         >
                             {plan.highlight && (
-                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#0046b8] text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-lg">
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#0046b8] text-white text-xs font-semibold uppercase tracking-widest rounded-full shadow-lg">
                                     {t('pricing.most_popular')}
                                 </div>
                             )}
 
                             <div className="mb-6 md:mb-8 text-center">
-                                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                                <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-2">{plan.name}</h3>
                                 <p className="text-gray-500 text-sm">{plan.description}</p>
                             </div>
 
                             <div className="mb-6 md:mb-8 flex items-baseline justify-center gap-1">
                                 <span className="text-3xl md:text-4xl font-light text-gray-900">$</span>
-                                <span className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">{plan.price}</span>
+                                <span className="text-4xl md:text-5xl font-semibold text-gray-900 tracking-tight">{plan.price}</span>
                                 <span className="text-gray-500 ml-2">{plan.period}</span>
                             </div>
 

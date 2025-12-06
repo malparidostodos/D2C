@@ -43,10 +43,10 @@ const ProcessSteps = () => {
     return (
         <div ref={containerRef} className="flex-none w-[100vw] lg:w-[80vw] h-full flex flex-col justify-center items-center px-4 lg:px-20 snap-center">
             <div className="text-center mb-16">
-                <h3 className="text-yellow-500 font-bold uppercase tracking-widest mb-4 text-sm md:text-base">
+                <h3 className="text-yellow-500 font-semibold uppercase tracking-widest mb-4 text-sm md:text-base">
                     {t('flavor_slider.process.title')}
                 </h3>
-                <h2 className="text-3xl md:text-5xl font-bold text-[#0046b8] max-w-4xl leading-tight">
+                <h2 className="text-3xl md:text-5xl font-semibold text-[#0046b8] max-w-4xl leading-tight">
                     {t('flavor_slider.process.subtitle')}
                 </h2>
             </div>
@@ -62,11 +62,11 @@ const ProcessSteps = () => {
 
                             {/* Number Badge */}
                             <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-black border-2 border-white rounded-full flex items-center justify-center">
-                                <span className="text-white text-xs font-bold">0{index + 1}</span>
+                                <span className="text-white text-xs font-semibold">0{index + 1}</span>
                             </div>
                         </div>
 
-                        <h3 className="text-xl font-bold text-[#0046b8] mb-4">
+                        <h3 className="text-xl font-semibold text-[#0046b8] mb-4">
                             {t(`flavor_slider.process.steps.${step.id}.title`)}
                         </h3>
                         <p className="text-[#0046b8] text-sm leading-relaxed max-w-xs">

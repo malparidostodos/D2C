@@ -12,7 +12,10 @@
         "menu": "Menu",
         "faq": "FAQ",
         "legal": "Legal",
-        "help": "Help"
+        "help": "Help",
+        "close": "Close",
+        "preview": "Preview",
+        "slogan": "Tomorrow's Cleanliness, Today.™"
     },
     "services_page": {
         "title": "Services Detail",

@@ -255,7 +255,7 @@ html::-webkit-scrollbar {
 .holographic-text-overlay {
   /* Removed absolute positioning to allow flex layout */
   font-size: clamp(6rem, 20vw, 20rem);
-  font-weight: 700;
+  font-weight: 600;
   font-family: 'Poppins', sans-serif;
   color: rgba(0, 0, 0, 0.05);
   text-transform: uppercase;
@@ -310,7 +310,7 @@ html::-webkit-scrollbar {
   }
 
   .general-title {
-    @apply 2xl:text-[8.5rem] md:text-8xl text-5xl font-bold uppercase leading-[9vw] tracking-[-.35vw];
+    @apply 2xl:text-[8.5rem] md:text-8xl text-5xl font-semibold uppercase leading-[9vw] tracking-[-.35vw];
     font-family: "Antonio", sans-serif;
   }
 }
@@ -362,7 +362,7 @@ html::-webkit-scrollbar {
   }
 
   .flavor-section .flavor-text-scroll h2 {
-    @apply uppercase 2xl:text-[8.5rem] md:text-[6.5rem] text-[3.3rem] font-bold leading-[9vw] tracking-[-.35vw];
+    @apply uppercase 2xl:text-[8.5rem] md:text-[6.5rem] text-[3.3rem] font-semibold leading-[9vw] tracking-[-.35vw];
   }
 
   .flavor-section .first-text-split h1 {

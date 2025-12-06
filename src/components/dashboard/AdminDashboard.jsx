@@ -242,7 +242,7 @@ const AdminDashboard = () => {
                     className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4"
                 >
                     <div>
-                        <h1 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('admin.title')}</h1>
+                        <h1 className={`text-3xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('admin.title')}</h1>
                         <p className={isDarkMode ? 'text-white/60' : 'text-gray-500'}>{t('admin.subtitle')}</p>
                     </div>
                     <button
@@ -393,7 +393,7 @@ const AdminDashboard = () => {
                                         <div key={booking.id} className={`border rounded-xl p-5 space-y-4 ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white border-gray-200 shadow-sm'}`}>
                                             <div className="flex justify-between items-start">
                                                 <div>
-                                                    <h3 className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{booking.client_name}</h3>
+                                                    <h3 className={`font-semibold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{booking.client_name}</h3>
                                                     <p className={`text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{booking.client_email}</p>
                                                 </div>
                                                 <span className={`px-2 py-1 rounded text-xs font-mono ${isDarkMode ? 'bg-white/10 text-white' : 'bg-gray-100 text-gray-700'}`}>
@@ -412,7 +412,7 @@ const AdminDashboard = () => {
                                                 </div>
                                                 <div>
                                                     <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{t('admin.table.price')}</p>
-                                                    <p className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>${booking.total_price?.toLocaleString()}</p>
+                                                    <p className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>${booking.total_price?.toLocaleString()}</p>
                                                 </div>
                                                 <div>
                                                     <p className={`mb-1 ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>{t('admin.table.status')}</p>
@@ -541,7 +541,7 @@ const StatCard = ({ title, value, icon, isDarkMode }) => (
                 {icon}
             </div>
         </div>
-        <p className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{value}</p>
+        <p className={`text-3xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{value}</p>
     </div>
 )
 

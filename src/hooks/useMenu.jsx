@@ -399,10 +399,8 @@ export const MenuProvider = ({ children }) => {
     // Handle menu close with animation
     const handleMenuClose = () => {
         setMenuClosing(true);
-        setTimeout(() => {
-            setMenuOpen(false);
-            setMenuClosing(false);
-        }, 450); // Wait for all items to fade out (200ms delay + 200ms animation + 50ms buffer)
+        setMenuOpen(false);
+        setMenuClosing(false);
     };
 
     // Handle menu entrance animation

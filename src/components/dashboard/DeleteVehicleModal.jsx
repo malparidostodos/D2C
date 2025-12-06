@@ -24,7 +24,7 @@ const DeleteVehicleModal = ({ isOpen, onClose, onConfirm, plate, isDarkMode }) =
                     <AlertCircle size={32} className="text-red-500" />
                 </div>
 
-                <h2 className={`text-2xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('dashboard.delete_vehicle_title')}</h2>
+                <h2 className={`text-2xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{t('dashboard.delete_vehicle_title')}</h2>
                 <p className={`mb-8 ${isDarkMode ? 'text-white/60' : 'text-gray-500'}`}>
                     {t('dashboard.delete_vehicle_confirm', { plate })}
                 </p>

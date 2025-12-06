@@ -90,7 +90,7 @@ const ResetPasswordPage = () => {
                             e.preventDefault()
                             navigateWithTransition(getLocalizedPath('/'))
                         }}
-                        className="text-3xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-opacity"
+                        className="text-3xl font-display font-semibold text-white tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
                     </a>
@@ -114,7 +114,7 @@ const ResetPasswordPage = () => {
                         {!success ? (
                             <>
                                 <div className="text-center mb-10">
-                                    <h1 className="text-3xl font-display font-bold text-white mb-2">{t('auth.new_password_title')}</h1>
+                                    <h1 className="text-3xl font-display font-semibold text-white mb-2">{t('auth.new_password_title')}</h1>
                                     <p className="text-white/60">{t('auth.new_password_subtitle')}</p>
                                 </div>
 
@@ -195,7 +195,7 @@ const ResetPasswordPage = () => {
                                         <button
                                             type="submit"
                                             disabled={loading}
-                                            className="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="w-full bg-white text-black font-semibold py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             {loading ? t('auth.updating') : t('auth.update_password_button')}
                                         </button>
@@ -223,7 +223,7 @@ const ResetPasswordPage = () => {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.3, duration: 0.4 }}
-                                    className="text-2xl font-display font-bold text-white mb-2"
+                                    className="text-2xl font-display font-semibold text-white mb-2"
                                 >
                                     {t('auth.password_updated_title')}
                                 </motion.h2>

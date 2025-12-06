@@ -22,10 +22,10 @@ const ProcessPage = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
                     {/* Left Column (60%) */}
                     <div className="lg:col-span-3 text-center lg:text-left">
-                        <span className="text-white/80 font-bold tracking-widest uppercase text-sm mb-4 block">
+                        <span className="text-white/80 font-semibold tracking-widest uppercase text-sm mb-4 block">
                             {t('process_page.hero.subtitle', 'Nuestra Metodología Certificada')}
                         </span>
-                        <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+                        <h1 className="text-5xl md:text-7xl font-semibold mb-6 tracking-tight">
                             {t('process_page.title')}
                         </h1>
                         <p className="text-white/90 text-xl leading-relaxed max-w-2xl mx-auto lg:mx-0">
@@ -38,7 +38,7 @@ const ProcessPage = () => {
                         <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 shadow-lg">
                             <Timer className="w-10 h-10 text-[#0046b8]" />
                         </div>
-                        <h3 className="text-2xl font-bold text-white text-center mb-2">
+                        <h3 className="text-2xl font-semibold text-white text-center mb-2">
                             {t('process_page.hero.cta_title', 'Resultados Reales')}
                         </h3>
                         <p className="text-white/80 text-center">
@@ -92,10 +92,10 @@ const ProcessPage = () => {
             {/* Timeline Section */}
             <div className="py-24 px-4 bg-[#0046b8] relative">
                 <div className="text-center mb-20">
-                    <span className="text-white/60 font-bold tracking-widest uppercase text-sm mb-2 block">
+                    <span className="text-white/60 font-semibold tracking-widest uppercase text-sm mb-2 block">
                         {t('process_page.method.subtitle', 'NUESTRO MÉTODO')}
                     </span>
-                    <h2 className="text-4xl md:text-5xl font-bold text-white">
+                    <h2 className="text-4xl md:text-5xl font-semibold text-white">
                         {t('process_page.method.title')}
                     </h2>
                 </div>

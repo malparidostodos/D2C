@@ -49,7 +49,7 @@ const Gallery = () => {
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-[#0046b8] text-sm font-bold tracking-widest uppercase mb-4 block"
+                        className="text-[#0046b8] text-sm font-semibold tracking-widest uppercase mb-4 block"
                     >
                         {t('gallery.subtitle', 'Resultados Reales')}
                     </motion.span>
@@ -57,7 +57,7 @@ const Gallery = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="text-4xl md:text-6xl font-display font-bold text-[#0046b8] mb-6 cursor-default"
+                        className="text-4xl md:text-6xl font-display font-semibold text-[#0046b8] mb-6 cursor-default"
                     >
                         {t('gallery.title_before', 'Antes y')} <span className="text-[#0046b8]">{t('gallery.title_after', 'Después')}</span>
                     </motion.h2>
@@ -118,10 +118,10 @@ const Gallery = () => {
                         </div>
 
                         {/* Labels - Positioned absolutely on top of everything */}
-                        <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-sm font-bold border border-white/10 z-30 pointer-events-none">
+                        <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-sm font-semibold border border-white/10 z-30 pointer-events-none">
                             {t('gallery.label_before', 'ANTES')}
                         </div>
-                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-sm font-bold border border-white/10 z-30 pointer-events-none">
+                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-sm font-semibold border border-white/10 z-30 pointer-events-none">
                             {t('gallery.label_after', 'DESPUÉS')}
                         </div>
 

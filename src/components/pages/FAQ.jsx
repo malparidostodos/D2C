@@ -117,7 +117,7 @@ const FAQ = () => {
                     >
                         <ArrowLeft className="w-6 h-6 text-gray-600" />
                     </button>
-                    <h2 className="text-3xl font-bold text-gray-900">{categoryTitle}</h2>
+                    <h2 className="text-3xl font-semibold text-gray-900">{categoryTitle}</h2>
                 </div>
             )}
 
@@ -182,7 +182,7 @@ const FAQ = () => {
                 </div>
 
                 <div className="relative z-10 max-w-4xl mx-auto">
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+                    <h1 className="text-4xl md:text-5xl font-semibold text-white mb-6 tracking-tight">
                         {t('faq.title')}
                     </h1>
                     <p className="text-blue-100 text-xl mb-10 max-w-2xl mx-auto">

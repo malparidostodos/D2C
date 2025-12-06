@@ -394,7 +394,7 @@ const UserDashboard = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="mb-8 md:mb-12"
             >
-                <h1 className={`text-3xl md:text-5xl font-display font-bold mb-2 tracking-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                <h1 className={`text-3xl md:text-5xl font-display font-semibold mb-2 tracking-tight ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                     {t('dashboard.welcome')}, <span className="capitalize">{user?.user_metadata?.full_name?.split(' ')[0]}</span>
                 </h1>
                 <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-lg`}>{t('dashboard.subtitle', 'Gestiona tus vehículos y reservas')}</p>
@@ -414,7 +414,7 @@ const UserDashboard = () => {
                             <Car size={80} strokeWidth={2.5} />
                         </div>
                         <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm font-medium mb-1 transition-colors`}>{t('dashboard.total_vehicles', 'Total Vehículos')}</p>
-                        <h3 className={`text-4xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>{vehicles.length}</h3>
+                        <h3 className={`text-4xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>{vehicles.length}</h3>
                     </motion.div>
 
                     <motion.div
@@ -427,7 +427,7 @@ const UserDashboard = () => {
                             <Calendar size={80} strokeWidth={2.5} />
                         </div>
                         <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm font-medium mb-1 transition-colors`}>{t('dashboard.active_bookings', 'Reservas Activas')}</p>
-                        <h3 className={`text-4xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>{activeBookings.length}</h3>
+                        <h3 className={`text-4xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>{activeBookings.length}</h3>
                     </motion.div>
 
                     {/* Third Card: Next Appointment OR Total Spend OR New Booking */}
@@ -443,7 +443,7 @@ const UserDashboard = () => {
                             </div>
                             <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm font-medium mb-1 transition-colors`}>{t('dashboard.next_appointment')}</p>
                             <div className="relative z-10">
-                                <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors mb-1`}>
+                                <h3 className={`text-2xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors mb-1`}>
                                     {new Date(nextBooking.booking_date).toLocaleDateString(i18n.language === 'es' ? 'es-CO' : 'en-US', { day: 'numeric', month: 'short' })}
                                 </h3>
                                 <p className={`text-sm ${isDarkMode ? 'text-white/60' : 'text-gray-600'}`}>
@@ -462,7 +462,7 @@ const UserDashboard = () => {
                                 <Shield size={80} strokeWidth={2.5} />
                             </div>
                             <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-sm font-medium mb-1 transition-colors`}>{t('dashboard.total_spend')}</p>
-                            <h3 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>
+                            <h3 className={`text-3xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} transition-colors`}>
                                 {formatCurrency(totalSpend)}
                             </h3>
                         </motion.div>
@@ -478,7 +478,7 @@ const UserDashboard = () => {
                                 <Plus size={80} />
                             </div>
                             <div className="h-full flex flex-col justify-center relative z-10">
-                                <h3 className="text-2xl font-bold text-white mb-1">{t('dashboard.new_booking')}</h3>
+                                <h3 className="text-2xl font-semibold text-white mb-1">{t('dashboard.new_booking')}</h3>
                                 <p className={`${isDarkMode ? 'text-white/60' : 'text-blue-100'} text-sm transition-colors`}>{t('dashboard.book_now_hint')}</p>
                             </div>
                         </motion.div>
@@ -494,7 +494,7 @@ const UserDashboard = () => {
                             transition={{ delay: 0.4 }}
                         >
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} flex items-center gap-2 transition-colors`}>
+                                <h2 className={`text-2xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} flex items-center gap-2 transition-colors`}>
                                     <Car className={isDarkMode ? 'text-accent' : 'text-blue-600'} size={24} strokeWidth={2.5} />
                                     {t('dashboard.my_vehicles')}
                                 </h2>
@@ -515,7 +515,7 @@ const UserDashboard = () => {
                                     <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-500'} mb-6 transition-colors`}>{t('dashboard.no_vehicles')}</p>
                                     <button
                                         onClick={() => setShowAddVehicle(true)}
-                                        className={`px-6 py-3 rounded-full ${isDarkMode ? 'bg-white text-black hover:bg-white/90' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20'} font-bold transition-all`}
+                                        className={`px-6 py-3 rounded-full ${isDarkMode ? 'bg-white text-black hover:bg-white/90' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20'} font-semibold transition-all`}
                                     >
                                         {t('dashboard.add_first_vehicle', 'Añadir Primer Vehículo')}
                                     </button>
@@ -544,11 +544,11 @@ const UserDashboard = () => {
                                                 {/* Info */}
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-2 mb-0.5">
-                                                        <h3 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} tracking-tight truncate`}>
+                                                        <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} tracking-tight truncate`}>
                                                             {vehicle.plate}
                                                         </h3>
                                                         {vehicle.is_primary && (
-                                                            <span className={`flex-shrink-0 ${isDarkMode ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'} text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase`}>
+                                                            <span className={`flex-shrink-0 ${isDarkMode ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'} text-[10px] font-semibold px-1.5 py-0.5 rounded-full uppercase`}>
                                                                 {t('dashboard.primary_short', 'P')}
                                                             </span>
                                                         )}
@@ -598,7 +598,7 @@ const UserDashboard = () => {
                             className="h-full flex flex-col"
                         >
                             <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
-                                <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} flex items-center gap-2 transition-colors`}>
+                                <h2 className={`text-2xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} flex items-center gap-2 transition-colors`}>
                                     <Clock className={isDarkMode ? 'text-accent' : 'text-blue-600'} size={24} strokeWidth={2.5} />
                                     {t('dashboard.service_history')}
                                 </h2>
@@ -685,14 +685,14 @@ const UserDashboard = () => {
                                         >
                                             <div className="flex justify-between items-start mb-2">
                                                 <div>
-                                                    <h4 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} font-bold text-sm transition-colors`}>{booking.service?.name}</h4>
+                                                    <h4 className={`${isDarkMode ? 'text-white' : 'text-gray-900'} font-semibold text-sm transition-colors`}>{booking.service?.name}</h4>
                                                     <Tooltip content={`${new Date(booking.booking_date + 'T00:00:00').toLocaleDateString()} • ${booking.booking_time}`} position="top">
                                                         <p className={`${isDarkMode ? 'text-white/40' : 'text-gray-500'} text-xs transition-colors cursor-help`}>
                                                             {new Date(booking.booking_date + 'T00:00:00').toLocaleDateString(i18n.language === 'es' ? 'es-CO' : 'en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
                                                         </p>
                                                     </Tooltip>
                                                 </div>
-                                                <span className={`text-[10px] font-bold px-2 py-1 rounded-full border ${getStatusColor(getEffectiveStatus(booking))}`}>
+                                                <span className={`text-[10px] font-semibold px-2 py-1 rounded-full border ${getStatusColor(getEffectiveStatus(booking))}`}>
                                                     {getStatusText(getEffectiveStatus(booking))}
                                                 </span>
                                             </div>
@@ -703,7 +703,7 @@ const UserDashboard = () => {
                                                     <span>{booking.vehicle_plate}</span>
                                                 </div>
                                                 <div className="flex items-center gap-3">
-                                                    <span className={`${isDarkMode ? 'text-white' : 'text-gray-900'} font-bold text-sm transition-colors`}>${booking.total_price?.toLocaleString()}</span>
+                                                    <span className={`${isDarkMode ? 'text-white' : 'text-gray-900'} font-semibold text-sm transition-colors`}>${booking.total_price?.toLocaleString()}</span>
 
                                                     {/* Cancel Button (Pending/Confirmed) */}
                                                     {(getEffectiveStatus(booking) === 'pending' || getEffectiveStatus(booking) === 'confirmed') && (

@@ -54,10 +54,10 @@ const ProcessCard = ({ step, index, totalSteps, scrollProgress }) => {
 
       <div className="w-full md:w-5/12 pl-4 md:pl-0">
         <div className="p-6 bg-surface border border-white/10 rounded-2xl hover:border-accent/50 transition-colors duration-300">
-          <span className="text-accent text-sm font-bold tracking-wider uppercase mb-2 block">
+          <span className="text-accent text-sm font-semibold tracking-wider uppercase mb-2 block">
             {step.date}
           </span>
-          <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">{step.title}</h3>
           <p className="text-white/60 leading-relaxed">
             {step.description}
           </p>
@@ -129,7 +129,7 @@ const Roadmap = () => {
       <div className="container relative z-10 px-4 md:px-6">
         <div className="text-center mb-12 md:mb-20">
           <span className="text-accent font-medium tracking-widest uppercase text-xs md:text-sm">{t('roadmap.our_method')}</span>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold text-white mt-4 mb-4 md:mb-6">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-semibold text-white mt-4 mb-4 md:mb-6">
             {t('roadmap.transformation_process')}
           </h2>
         </div>

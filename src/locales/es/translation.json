@@ -12,7 +12,10 @@
         "menu": "Menú",
         "faq": "Preguntas Frecuentes",
         "legal": "Legal",
-        "help": "Ayuda"
+        "help": "Ayuda",
+        "close": "Cerrar",
+        "preview": "Vista Previa",
+        "slogan": "Limpieza del Mañana, Hoy.™"
     },
     "services_page": {
         "title": "Detalle de Servicios",

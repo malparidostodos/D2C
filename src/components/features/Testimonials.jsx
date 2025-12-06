@@ -145,7 +145,7 @@ const Testimonials = () => {
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-[#0046b8] text-sm font-bold tracking-widest uppercase mb-4 block"
+                        className="text-[#0046b8] text-sm font-semibold tracking-widest uppercase mb-4 block"
                     >
                         Reseñas
                     </motion.span>
@@ -153,7 +153,7 @@ const Testimonials = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-6xl font-display font-bold text-[#0046b8] mb-6"
+                        className="text-4xl md:text-6xl font-display font-semibold text-[#0046b8] mb-6"
                     >
                         Lo que dicen nuestros <span className="text-[#0046b8]">Clientes</span>
                     </motion.h2>
@@ -197,7 +197,7 @@ const Testimonials = () => {
                             ].map((stat, index) => (
                                 <div key={index} className={`flex flex-col items-center text-center ${index !== 3 ? 'md:border-r md:border-white/20' : ''}`}>
                                     <div className="flex items-center gap-2 mb-4">
-                                        <span className="text-5xl md:text-6xl font-bold text-white">{stat.number}</span>
+                                        <span className="text-5xl md:text-6xl font-semibold text-white">{stat.number}</span>
                                         {stat.hasStar && <Star className="w-8 h-8 md:w-10 md:h-10 text-white fill-white" />}
                                     </div>
                                     <span className="text-white/90 font-medium uppercase tracking-wider text-sm md:text-base">{stat.label}</span>
@@ -234,7 +234,7 @@ const TestimonialCard = ({ testimonial }) => (
                 className="w-12 h-12 rounded-full border-2 border-[#0046b8]/20 object-cover"
             />
             <div>
-                <h4 className="text-[#0046b8] font-bold">
+                <h4 className="text-[#0046b8] font-semibold">
                     {testimonial.name.split(' ')[0].charAt(0).toUpperCase() + testimonial.name.split(' ')[0].slice(1).toLowerCase()}
                 </h4>
                 <p className="text-[#0046b8]/70 text-sm font-medium">{testimonial.role}</p>

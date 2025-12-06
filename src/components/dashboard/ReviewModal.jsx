@@ -56,7 +56,7 @@ const ReviewModal = ({ isOpen, onClose, booking, onSuccess, isDarkMode }) => {
             >
                 {/* Header */}
                 <div className={`px-6 py-4 border-b flex justify-between items-center ${isDarkMode ? 'border-white/10' : 'border-gray-100'}`}>
-                    <h3 className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                         {t('dashboard.write_review', 'Escribir Reseña')}
                     </h3>
                     <button
@@ -153,7 +153,7 @@ const ReviewModal = ({ isOpen, onClose, booking, onSuccess, isDarkMode }) => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all shadow-lg shadow-blue-500/25 ${loading
+                            className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all shadow-lg shadow-blue-500/25 ${loading
                                 ? 'bg-blue-600/50 cursor-not-allowed'
                                 : 'bg-blue-600 hover:bg-blue-700 hover:scale-[1.02]'
                                 }`}

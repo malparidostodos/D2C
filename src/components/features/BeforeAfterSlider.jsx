@@ -38,7 +38,7 @@ const BeforeAfterSlider = ({ beforeImage, afterImage, title, description }) => {
     return (
         <div className="w-full max-w-5xl mx-auto">
             <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">{title}</h2>
+                <h2 className="text-3xl md:text-5xl font-semibold text-white mb-6">{title}</h2>
                 <p className="text-gray-300 text-lg max-w-2xl mx-auto">{description}</p>
             </div>
 
@@ -57,7 +57,7 @@ const BeforeAfterSlider = ({ beforeImage, afterImage, title, description }) => {
                         draggable="false"
                     />
                 </div>
-                <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm font-bold border border-white/20 z-20">
+                <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm font-semibold border border-white/20 z-20">
                     AFTER
                 </div>
 
@@ -74,7 +74,7 @@ const BeforeAfterSlider = ({ beforeImage, afterImage, title, description }) => {
                             draggable="false"
                         />
                     </div>
-                    <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm font-bold border border-white/20 z-20">
+                    <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm font-semibold border border-white/20 z-20">
                         BEFORE
                     </div>
                 </div>

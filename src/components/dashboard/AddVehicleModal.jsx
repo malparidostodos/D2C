@@ -142,7 +142,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit, isDarkMode
                 className={`${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-white border-gray-200'} border rounded-3xl p-6 md:p-8 max-w-md w-full`}
             >
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <h2 className={`text-2xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                         {vehicleToEdit ? t('dashboard.edit_vehicle_title', 'Editar Vehículo') : t('dashboard.add_vehicle_modal.title')}
                     </h2>
                     <button
@@ -249,7 +249,7 @@ const AddVehicleModal = ({ isOpen, onClose, onSuccess, vehicleToEdit, isDarkMode
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`w-full font-bold py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed
+                        className={`w-full font-semibold py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed
                             ${isDarkMode
                                 ? 'bg-white text-black hover:bg-gray-100'
                                 : 'bg-black text-white hover:bg-gray-800'

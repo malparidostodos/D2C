@@ -86,7 +86,7 @@ const DirtyToCleanLogo = ({ auto = false, className = "" }) => {
 
     return (
         <div
-            className={`flex items-center font-bold relative cursor-pointer select-none ${className}`}
+            className={`flex items-center font-semibold relative cursor-pointer select-none ${className}`}
             onMouseEnter={() => !auto && setIsHovered(true)}
             onMouseLeave={() => !auto && setIsHovered(false)}
         >

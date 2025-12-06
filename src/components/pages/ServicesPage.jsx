@@ -86,7 +86,7 @@ const ServicesPage = () => {
             <div className="pt-32 pb-20 px-4 md:px-12 lg:px-24 max-w-[90rem] mx-auto">
                 {/* Breadcrumb / Title */}
                 <div className="text-center mb-16">
-                    <h1 className="text-5xl md:text-7xl font-bold mb-4">{t('services_page.title')}</h1>
+                    <h1 className="text-5xl md:text-7xl font-semibold mb-4">{t('services_page.title')}</h1>
 
                 </div>
 
@@ -103,7 +103,7 @@ const ServicesPage = () => {
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
                             <div className="absolute bottom-0 left-0 p-8 md:p-12">
-                                <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">{t('services_page.description_title')}</h2>
+                                <h2 className="text-3xl md:text-5xl font-semibold text-white mb-4">{t('services_page.description_title')}</h2>
                             </div>
                         </div>
 
@@ -126,7 +126,7 @@ const ServicesPage = () => {
 
                             {/* Features List */}
                             <div className="mt-12">
-                                <h3 className="text-2xl font-bold mb-8 text-gray-900">{t('services_page.features.certified_team')}</h3>
+                                <h3 className="text-2xl font-semibold mb-8 text-gray-900">{t('services_page.features.certified_team')}</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {[
                                         t('services_page.features.certified_team'),
@@ -149,7 +149,7 @@ const ServicesPage = () => {
                     <div className="space-y-8">
                         {/* All Services Widget */}
                         <div className="bg-white rounded-3xl p-8 border border-white/10 shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                            <h3 className="text-xl font-bold mb-6 text-[#0046b8]">{t('services_page.sidebar.all_services')}</h3>
+                            <h3 className="text-xl font-semibold mb-6 text-[#0046b8]">{t('services_page.sidebar.all_services')}</h3>
                             <ul className="space-y-3">
                                 {servicesList.map((service, index) => {
                                     const Icon = serviceIcons[index] || Car;
@@ -180,8 +180,8 @@ const ServicesPage = () => {
                                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 text-[#0046b8] shadow-lg">
                                     <Phone className="w-8 h-8" />
                                 </div>
-                                <span className="text-white/80 font-bold uppercase tracking-wider text-sm mb-2">{t('services_page.sidebar.call_us')}</span>
-                                <a href="tel:+573009443004" className="text-2xl font-bold text-white hover:text-white/90 transition-colors mb-6 block">+57 300 944 30 04</a>
+                                <span className="text-white/80 font-semibold uppercase tracking-wider text-sm mb-2">{t('services_page.sidebar.call_us')}</span>
+                                <a href="tel:+573009443004" className="text-2xl font-semibold text-white hover:text-white/90 transition-colors mb-6 block">+57 300 944 30 04</a>
 
                                 <a
                                     href={getLocalizedPath("/reserva")}
@@ -189,11 +189,11 @@ const ServicesPage = () => {
                                         e.preventDefault();
                                         navigateWithTransition(getLocalizedPath("/reserva"));
                                     }}
-                                    className="w-full bg-white text-[#0046b8] py-3 px-6 rounded-xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 mb-3"
+                                    className="w-full bg-white text-[#0046b8] py-3 px-6 rounded-xl font-semibold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 mb-3"
                                 >
                                     {t('services_page.sidebar.book_now')}
                                 </a>
-                                <a href="https://wa.me/573009443004" target="_blank" rel="noopener noreferrer" className="w-full bg-green-500 text-white py-3 px-6 rounded-xl font-bold hover:bg-green-600 transition-colors flex items-center justify-center gap-2">
+                                <a href="https://wa.me/573009443004" target="_blank" rel="noopener noreferrer" className="w-full bg-green-500 text-white py-3 px-6 rounded-xl font-semibold hover:bg-green-600 transition-colors flex items-center justify-center gap-2">
                                     <MessageCircle className="w-5 h-5" />
                                     {t('services_page.sidebar.whatsapp')}
                                 </a>
@@ -208,7 +208,7 @@ const ServicesPage = () => {
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
-                                <p className="font-bold text-lg text-white">Professional Care</p>
+                                <p className="font-semibold text-lg text-white">Professional Care</p>
                             </div>
                         </div>
                     </div>

@@ -554,7 +554,7 @@ const ProfilePage = () => {
                                         <button
                                             type="submit"
                                             disabled={isSubmittingPassword}
-                                            className="px-6 py-3 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             {isSubmittingPassword ? t('profile.updating') : t('profile.update_password')}
                                         </button>
@@ -570,7 +570,7 @@ const ProfilePage = () => {
                             transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
                             className="mt-12 pt-12 border-t border-gray-200 dark:border-white/10"
                         >
-                            <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-8`}>
+                            <h3 className={`text-2xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-8`}>
                                 {t('profile.settings')}
                             </h3>
 

@@ -106,14 +106,14 @@ const FlavorSlider = () => {
 
                                 {/* Recommended Badge */}
                                 {index === 0 && (
-                                    <div className="absolute top-6 left-6 bg-blue-900/80 text-blue-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
+                                    <div className="absolute top-6 left-6 bg-blue-900/80 text-blue-200 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
                                         {t('flavor_slider.recommended')}
                                     </div>
                                 )}
 
                                 {/* Content */}
                                 <div className="mt-8 z-10 flex flex-col h-full">
-                                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">{translatedService.name}</h1>
+                                    <h1 className="text-3xl md:text-4xl font-semibold text-white mb-4 leading-tight">{translatedService.name}</h1>
                                     <p className="text-gray-400 text-sm md:text-base mb-6 line-clamp-3">{translatedService.description}</p>
 
                                     <ul className="space-y-3 mb-auto">
@@ -129,7 +129,7 @@ const FlavorSlider = () => {
                                     <div className="flex items-end justify-between border-t border-white/10 pt-6 mt-4">
                                         <div>
                                             <p className="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider mb-1">{t('flavor_slider.from')}</p>
-                                            <p className="text-2xl md:text-3xl font-bold text-white">{flavor.price}</p>
+                                            <p className="text-2xl md:text-3xl font-semibold text-white">{flavor.price}</p>
                                         </div>
                                         <AnimatedButton
                                             href="/reserva"

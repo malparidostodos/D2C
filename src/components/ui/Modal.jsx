@@ -25,7 +25,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
                         >
                             {/* Header */}
                             <div className="flex items-center justify-between p-6 border-b border-white/5">
-                                <h3 className="text-xl font-display font-bold text-white">{title}</h3>
+                                <h3 className="text-xl font-display font-semibold text-white">{title}</h3>
                                 <button
                                     onClick={onClose}
                                     className="text-white/40 hover:text-white transition-colors"

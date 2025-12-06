@@ -40,7 +40,7 @@ const AccountCreatedModal = ({ isOpen, onClose, credentials }) => {
                             <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/20">
                                 <User className="w-8 h-8 text-blue-400" />
                             </div>
-                            <h2 className="text-2xl font-bold text-white mb-2">
+                            <h2 className="text-2xl font-semibold text-white mb-2">
                                 {t('booking.account_created_title')} 👤
                             </h2>
                             <p className="text-white/60 text-sm">

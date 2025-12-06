@@ -104,7 +104,7 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
                     }}
                     disabled={disabled}
                     className={`h-8 w-8 rounded-full flex items-center justify-center text-sm transition-colors ${isSelected(i)
-                        ? 'bg-blue-600 text-white font-bold'
+                        ? 'bg-blue-600 text-white font-semibold'
                         : disabled
                             ? (isDarkMode ? 'text-white/20 cursor-not-allowed' : 'text-gray-300 cursor-not-allowed')
                             : (isDarkMode ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100')
@@ -126,7 +126,7 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
                 <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); handlePrev(); }} className={`p-1 rounded-full transition-colors ${isDarkMode ? 'hover:bg-white/10 text-white' : 'hover:bg-gray-100 text-gray-700'}`}>
                     <ChevronLeft size={18} />
                 </button>
-                <span className={`font-bold capitalize text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                <span className={`font-semibold capitalize text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                     {currentMonths[currentDate.getMonth()]} {currentDate.getFullYear()}
                 </span>
                 <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleNext(); }} className={`p-1 rounded-full transition-colors ${isDarkMode ? 'hover:bg-white/10 text-white' : 'hover:bg-gray-100 text-gray-700'}`}>

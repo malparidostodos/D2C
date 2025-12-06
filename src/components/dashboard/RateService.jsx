@@ -142,7 +142,7 @@ const RateService = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center mb-8"
             >
-                <h1 className={`text-3xl font-display font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                <h1 className={`text-3xl font-display font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                     {t('dashboard.rate_service_page.title_part1')} <span className="text-accent">{t('dashboard.rate_service_page.title_part2')}</span>
                 </h1>
                 <p className={`${isDarkMode ? 'text-white/60' : 'text-gray-600'}`}>
@@ -162,7 +162,7 @@ const RateService = () => {
                         <Car className={isDarkMode ? 'text-white/60' : 'text-gray-500'} size={32} />
                     </div>
                     <div>
-                        <h3 className={`text-xl font-bold mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{booking.service?.name}</h3>
+                        <h3 className={`text-xl font-semibold mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{booking.service?.name}</h3>
                         <div className={`flex items-center gap-4 text-sm ${isDarkMode ? 'text-white/40' : 'text-gray-500'}`}>
                             <span className="flex items-center gap-1">
                                 <Calendar size={14} />

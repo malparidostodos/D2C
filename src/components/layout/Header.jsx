@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
-import { Home, ChevronDown, ArrowUpRight, User, ArrowRight } from 'lucide-react';
+import { Home, ChevronDown, ArrowUpRight, User, ArrowRight, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import '../JetonHeader.css'; // Import the strict CSS
 import { useMenu } from '../../hooks/useMenu.jsx';
 
@@ -61,7 +62,6 @@ const Header = ({ theme = 'default' }) => {
     const supportDropdown = [
         { name: t('header.faq'), path: '/faq', id: 'faq' },
         { name: t('header.legal'), path: '/privacy-policy', id: 'legal' },
-        { name: t('header.contact'), path: '/#contacto', id: '#contacto' },
     ];
 
     // Helper to handle transition navigation
@@ -97,578 +97,327 @@ const Header = ({ theme = 'default' }) => {
         return () => subscription.unsubscribe();
     }, []);
 
+    // State for interactive preview
+    const [activeCategory, setActiveCategory] = useState(null);
+
+    // derived from reference script.js
+    const menuVariants = {
+        hidden: {
+            clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
+            pointerEvents: "none"
+        },
+        visible: {
+            clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+            pointerEvents: "all",
+            transition: {
+                duration: 1,
+                ease: [0.33, 1, 0.68, 1] // Power2.out equivalent
+            }
+        },
+        exit: {
+            clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
+            pointerEvents: "none",
+            transition: {
+                duration: 1, // Match open duration for reverse feel
+                ease: [0.33, 1, 0.68, 1] // Power2.out (reversed visually by clip motion) or [0.32, 0, 0.67, 0] Power2.in. Using cubic-bezier for easeIn to match reverse.
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 60 },
+        visible: (i) => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: 0.05 + (i * 0.05), // faster stagger
+                duration: 0.75,
+                ease: [0.16, 1, 0.3, 1] // Power1.inOut / easeOutExpo
+            }
+        }),
+        exit: {
+            opacity: 0,
+            y: 60, // Return to initial position
+            transition: {
+                duration: 0.5,
+                ease: "easeIn"
+            }
+        }
+    };
+
     return (
         <>
-            {/* Shadow hint */}
-            <div
-                className={`fixed -bottom-24 left-1/2 -translate-x-1/2 w-[60vw] h-24 bg-white/20 blur-[80px] rounded-t-full pointer-events-none transition-opacity duration-700 ${hidden ? 'opacity-100' : 'opacity-0'}`}
-                style={{ zIndex: 40 }}
-            />
+            {/* Navbar (Logo + Menu Btn) - Fixed exactly like reference */}
+            <nav className={`fixed top-0 left-0 w-full p-8 z-[9990] flex justify-between items-center text-white mix-blend-difference transition-transform duration-500 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
+                {/* Logo */}
+                <a
+                    href={getLocalizedPath('/')}
+                    onClick={(e) => onTransitionLinkClick(e, '/')}
+                    className="text-xl font-medium tracking-tight cursor-pointer"
+                >
+                    Ta' To' Clean
+                </a>
 
-            {/* Top Navbar (Jeton Style) */}
-            <div className="_navbar">
-                <div className="nav-container">
-                    {/* Logo */}
-                    <a
-                        href={getLocalizedPath('/')}
-                        onClick={(e) => onTransitionLinkClick(e, '/')}
-                        className={`text-3xl font-display font-bold tracking-tighter !text-white`}
-                    >
-                        Ta' <span className="text-accent">To'</span> Clean
-                    </a>
+                {/* Right Side: Language + Menu */}
+                <div className="flex items-center gap-6" ref={langRef}>
+                    {/* Language Selector (Main) */}
+                    <div className="relative">
+                        <div
+                            className="cursor-pointer text-base font-medium opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1"
+                            onClick={() => setLangOpen(!langOpen)}
+                        >
+                            {currentLang}
+                            <ChevronDown size={14} className={`transition-transform duration-300 ${langOpen ? 'rotate-180' : ''}`} />
+                        </div>
 
-                    <div className="lang-cta-wrapper">
-                        {/* Language Selector (Updated Structure) */}
-                        {/* Language Selector (Interactive) */}
-                        <div ref={langRef} className="_dropdown _language-select hidden md:flex" aria-expanded={langOpen} role="button">
-                            <button
-                                className="_dropdown-button w-full flex items-center justify-center gap-2 !bg-white/5 !backdrop-blur-xl !border !border-white/10 !shadow-[0_4px_30px_rgba(0,0,0,0.1)] !text-white hover:!bg-white/10 hover:!border-white/20 hover:!shadow-[0_8px_32px_rgba(0,0,0,0.2)] transition-all duration-300 rounded-full px-4 py-2"
-                                onClick={() => setLangOpen(!langOpen)}
-                                data-button=""
-                                data-tone="orange"
-                                data-variant="outline"
-                                data-expanded={langOpen}
-                            >
-                                <div data-button-background=""></div>
-                                <span className="_icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
-                                        <path d="M12 22C17.5228 22 22 17.5229 22 12C22 6.47716 17.5228 2 12 2C6.47715 2 2 6.47716 2 12C2 17.5229 6.47715 22 12 22Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                        <path d="M3 9H21" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                        <path d="M3 15H21" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                        <path d="M12 2C14.5013 4.73836 15.9228 8.29204 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29204 9.49872 4.73836 12 2V2Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                    </svg>
-                                </span>
-                                <span>{currentLang}</span>
-                                <span className={`_icon chevron ${langOpen ? 'rotate-180' : ''}`} style={{ transition: 'transform 0.2s' }}>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fillRule="evenodd" clipRule="evenodd" d="M12 13.9393L6.53033 8.46967L5.46967 9.53033L10.409 14.4697C11.2877 15.3483 12.7123 15.3484 13.591 14.4697L18.5303 9.53033L17.4697 8.46967L12 13.9393Z" data-mode="fill" fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                            </button>
-
+                        <AnimatePresence>
                             {langOpen && (
-                                <div className="_language-dropdown-menu">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    transition={{ duration: 0.2, ease: "easeOut" }}
+                                    className="absolute top-full right-0 mt-4 bg-white/30 border border-white/40 backdrop-blur-xl rounded-2xl p-2 min-w-[150px] shadow-2xl overflow-hidden origin-top-right mix-blend-normal"
+                                >
                                     {languages.map((lang) => (
-                                        <div
+                                        <button
                                             key={lang.code}
-                                            className={`_lang-item ${currentLang === lang.code ? 'active' : ''}`}
-                                            onClick={() => handleLanguageChange(lang.code)}
+                                            onClick={() => handleLanguageChange(lang.code.toLowerCase())}
+                                            className={`w-full text-left px-4 py-3 text-sm font-semibold transition-all rounded-xl flex items-center justify-between group ${currentLang === lang.code
+                                                ? 'bg-white/40 text-white shadow-sm ring-1 ring-white/50'
+                                                : 'text-white hover:bg-white/20 hover:text-white'
+                                                }`}
                                         >
-                                            <span>{lang.label}</span>
-                                            {currentLang === lang.code && (
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                                </svg>
-                                            )}
+                                            {lang.label}
+                                            {currentLang === lang.code && <div className="w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]" />}
+                                        </button>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+
+                    {/* Menu Trigger */}
+                    <div
+                        className="cursor-pointer text-base tracking-wider font-medium"
+                        onClick={() => setMenuOpen(true)}
+                    >
+                        {t('header.menu')}
+                    </div>
+                </div>
+            </nav>
+
+            {/* FULL SCREEN OVERLAY - Matches reference structure */}
+            <AnimatePresence>
+                {menuOpen && (
+                    <motion.div
+                        variants={menuVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className="fixed top-0 left-0 w-full h-[75vh] bg-[#0046b8] text-white z-[10000] p-8 flex flex-col justify-between"
+                    >
+                        {/* Menu Nav (Header inside overlay) */}
+                        <div className="flex justify-between items-center mb-8 relative z-20">
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5, delay: 0.2 }}
+                                className="text-xl font-medium tracking-tight"
+                            >
+                                Ta' <span className="text-accent text-white">To'</span> Clean
+                            </motion.div>
+                            <div className="flex items-center gap-6">
+                                {/* Language Selector (Overlay) */}
+                                <div className="relative">
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.5, delay: 0.2 }}
+                                        className="cursor-pointer text-base font-medium flex items-center gap-1 opacity-80 hover:opacity-100"
+                                        onClick={() => setLangOpen(!langOpen)}
+                                    >
+                                        {currentLang}
+                                        <ChevronDown size={14} />
+                                    </motion.div>
+
+                                    <AnimatePresence>
+                                        {langOpen && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                transition={{ duration: 0.2, ease: "easeOut" }}
+                                                className="absolute top-full right-0 mt-4 bg-white/30 border border-white/40 backdrop-blur-xl rounded-2xl p-2 min-w-[150px] shadow-2xl z-50 origin-top-right"
+                                            >
+                                                {languages.map((lang) => (
+                                                    <button
+                                                        key={lang.code}
+                                                        onClick={(e) => { e.stopPropagation(); handleLanguageChange(lang.code.toLowerCase()); setLangOpen(false); }}
+                                                        className={`w-full text-left px-4 py-3 text-sm font-semibold transition-all rounded-xl flex items-center justify-between group ${currentLang === lang.code
+                                                            ? 'bg-white/40 text-white shadow-sm ring-1 ring-white/50'
+                                                            : 'text-white hover:bg-white/20 hover:text-white'
+                                                            }`}
+                                                    >
+                                                        {lang.label}
+                                                        {currentLang === lang.code && <div className="w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]" />}
+                                                    </button>
+                                                ))}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+
+                                <motion.button
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.2 }}
+                                    className="cursor-pointer text-base tracking-wider font-medium hover:opacity-70 transition-opacity"
+                                    onClick={handleMenuClose}
+                                >
+                                    {t('header.close')}
+                                </motion.button>
+                            </div>
+                        </div>
+
+                        {/* Menu Columns */}
+                        <div className="flex flex-1 flex-col md:flex-row gap-8 md:gap-0 h-full overflow-hidden">
+
+                            {/* Col 1: Video/Image */}
+                            <div className="hidden md:flex flex-1 p-4 md:p-0 flex-col justify-center">
+                                <div className="video w-full max-w-[600px] mx-auto md:mx-0">
+                                    {/* Preview Image */}
+                                    <motion.div
+                                        className="video-preview w-full bg-cover bg-center rounded-sm relative overflow-hidden bg-black/20"
+                                        style={{ backgroundImage: `url(${servicesDropdown.find(s => s.id === activeCategory)?.image || "/images/hero-bg.jpg"})` }}
+                                        initial={{ height: 0 }}
+                                        animate={{ height: "300px" }}
+                                        transition={{ duration: 1, ease: "easeOut" }}
+                                    />
+
+                                    {/* Details */}
+                                    <div className="video-details flex justify-between py-2 text-sm opacity-70 font-mono">
+                                        <p className="flex items-center gap-2">
+                                            <span className="w-2 h-2 bg-white rounded-full inline-block animate-pulse" />
+                                            {t('header.preview')}
+                                        </p>
+                                        <p>{activeCategory ? activeCategory.toUpperCase() : t('header.menu').toUpperCase()}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Col 2: Links */}
+                            <div className="flex-1 flex flex-col justify-center items-start pl-0 md:pl-20 overflow-hidden">
+                                {/* Menu Links Container: w-fit allows it to scale to the widest item */}
+                                <div className="flex flex-col w-fit min-w-[300px]">
+                                    {[
+                                        [{ name: t('header.home'), path: '/inicio', id: '#inicio' }],
+                                        servicesDropdown,
+                                        [{ name: t('header.legal'), path: '/privacy-policy', id: 'legal' }],
+                                        [{ name: t('header.faq'), path: '/faq', id: 'faq' }]
+                                    ].map((group, groupIndex) => (
+                                        <div key={groupIndex} className="flex flex-col gap-1 mb-8 last:mb-0">
+                                            {group.map((item, index) => {
+                                                const legalPaths = ['/privacy-policy', '/terms-conditions', '/cookie-policy', '/disclaimers'];
+                                                let isActive = (item.id === activeSection) || ((location.pathname === getLocalizedPath(item.path)) && !item.path.includes('#'));
+
+                                                if (item.id === 'legal') {
+                                                    isActive = legalPaths.some(path => location.pathname === getLocalizedPath(path));
+                                                }
+
+                                                return (
+                                                    <motion.div
+                                                        key={item.name}
+                                                        custom={groupIndex * 3 + index} // Adjusted stagger delay
+                                                        variants={itemVariants}
+                                                        className={`menu-link relative w-full flex items-center justify-between gap-12 group ${isActive ? 'pointer-events-none' : 'cursor-pointer'}`}
+                                                        onMouseEnter={() => setActiveCategory(item.id)}
+                                                        onMouseLeave={() => setActiveCategory(null)}
+                                                    >
+                                                        <a
+                                                            href={getLocalizedPath(item.path)}
+                                                            onClick={(e) => { handleMenuClose(); onTransitionLinkClick(e, item.path); }}
+                                                            className="text-3xl md:text-5xl font-medium leading-tight tracking-tight block w-fit whitespace-nowrap text-white transition-colors py-0.5"
+                                                        >
+                                                            {item.name}
+                                                        </a>
+                                                        {isActive && (
+                                                            <motion.div
+                                                                initial={{ scale: 0 }}
+                                                                animate={{ scale: 1 }}
+                                                                className="w-2 h-2 bg-white rounded-full"
+                                                            />
+                                                        )}
+                                                    </motion.div>
+                                                );
+                                            })}
                                         </div>
                                     ))}
-                                </div>
-                            )}
-                        </div>
 
-                        <div className="md:hidden flex items-center">
-                            {user ? (
-                                <a
-                                    href={getLocalizedPath("/dashboard")}
-                                    onClick={(e) => onTransitionLinkClick(e, "/dashboard")}
-                                    className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${effectiveTheme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
-                                >
-                                    <User size={16} />
-                                    <span className="font-medium text-xs">{t('dashboard.title')}</span>
-                                </a>
-                            ) : (
-                                <a
-                                    href={getLocalizedPath(showAuthButton ? "/login" : "/signup")}
-                                    onClick={(e) => onTransitionLinkClick(e, showAuthButton ? "/login" : "/signup")}
-                                    className={`_button !h-[48px] !px-4 !rounded-xl flex items-center gap-2 transition-all duration-300 ${effectiveTheme === 'white' ? '!bg-white !text-[#0046b8] hover:!bg-white/90' : '!bg-[#0046b8] !text-white hover:!bg-[#00358a]'}`}
-                                >
-                                    <span className="font-medium text-xs">{showAuthButton ? t('header.login') : t('header.signup')}</span>
-                                </a>
-                            )}
-                        </div>
-
-                        {/* CTAs */}
-                        <div className="ctas hidden md:flex">
-                            {user ? (
-                                <a
-                                    href={getLocalizedPath("/dashboard")}
-                                    onClick={(e) => onTransitionLinkClick(e, "/dashboard")}
-                                    className={`_button transition-all duration-300 flex items-center gap-2 ${effectiveTheme === 'white' ? '!bg-white !text-[#0046b8]' : '!bg-[#0046b8] !text-white'}`}
-                                    data-variant="ghost"
-                                >
-                                    <User size={18} />
-                                    <span className="staggered-wrapper">
-                                        {t('dashboard.title').split("").map((char, i) => (
-                                            <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
-                                                {char === " " ? "\u00A0" : char}
-                                            </span>
-                                        ))}
-                                    </span>
-                                </a>
-                            ) : (
-                                <>
-                                    <a
-                                        href={getLocalizedPath("/login")}
-                                        onClick={(e) => onTransitionLinkClick(e, "/login")}
-                                        className={`_button ${effectiveTheme === 'white' ? '!bg-transparent !text-white border border-white/40 hover:!bg-white/10' : ''}`} data-variant="ghost"
-                                    >
-                                        <span className="staggered-wrapper">
-                                            {t('header.login').split("").map((char, i) => (
-                                                <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
-                                                    {char === " " ? "\u00A0" : char}
-                                                </span>
-                                            ))}
-                                        </span>
-                                    </a>
-                                    <a
-                                        href={getLocalizedPath("/signup")}
-                                        onClick={(e) => onTransitionLinkClick(e, "/signup")}
-                                        className="_button !bg-white !text-[#0046b8] transition-all duration-300"
-                                        data-variant="ghost"
-                                    >
-                                        <span className="staggered-wrapper">
-                                            {t('header.signup').split("").map((char, i) => (
-                                                <span key={i} className="staggered-char" data-char={char} style={{ "--index": i }}>
-                                                    {char === " " ? "\u00A0" : char}
-                                                </span>
-                                            ))}
-                                        </span>
-                                    </a>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div >
-
-            {/* Main Menu Structure (Bottom Pill) */}
-            < div
-                className={`_menu !z-[10000]`
-                }
-                style={{ transform: hidden ? 'translateY(250%)' : 'translateY(0)', transition: 'transform 0.35s ease-in-out' }}
-            >
-                <div
-                    className="menu-bar"
-                    style={{
-                        backgroundColor: menuOpen ? '#2563eb' : '',
-                        transition: 'background-color 0.3s ease'
-                    }}
-                    onMouseEnter={() => { setHoverLock(true); setHidden(false); }}
-                    onMouseLeave={() => { setHoverLock(false); setHoveredService(null); setServicesOpen(false); setSupportOpen(false); }}
-                >
-                    {/* INICIO */}
-                    <button
-                        className={`hidden md:flex _menu-button ${activeSection === '#inicio' ? '-active -exact' : ''}`}
-                        onClick={(e) => handleNavClick(e, '#inicio', '/inicio')}
-                        onMouseEnter={() => setServicesOpen(false)}
-                    >
-                        <div className="background"></div>
-                        <Home size={20} strokeWidth={2} />
-                    </button>
-
-                    {/* SERVICIOS Dropdown Trigger (Desktop Only) */}
-                    <button
-                        className={`hidden md:flex _menu-button ${isServiceActive ? '-active -exact' : ''}`}
-                        aria-expanded={servicesOpen}
-                        data-services-open={servicesOpen ? 'true' : 'false'}
-                        onMouseEnter={() => { setServicesOpen(true); setSupportOpen(false); }}
-                    >
-                        <div className="background"></div>
-                        <span>{t('header.personal')}</span>
-                        <ChevronDown
-                            className="chevron-icon"
-                            size={14}
-                            strokeWidth={2.5}
-                            style={{
-                                marginLeft: 4,
-                                transform: servicesOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                                transition: 'transform 0.3s ease',
-                                display: 'inline-block'
-                            }}
-                        />
-                    </button>
-
-                    {/* The Drawer (Dropup) */}
-                    <div className="_menu-drawer">
-                        <div className="slot">
-                            <ul>
-                                {servicesDropdown.map((item) => (
-                                    <li
-                                        key={item.name}
-                                        onMouseEnter={() => setHoveredService(item.id)}
-                                    >
-                                        <a
-                                            href={getLocalizedPath(item.path)}
-                                            className="link"
-                                            onClick={(e) => onTransitionLinkClick(e, item.path)}
-                                        >
-                                            <div className="label">{item.name}</div>
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-
-                            {/* Preview Image */}
-                            <div className={`menu-preview ${hoveredService ? 'active' : ''}`}>
-                                {hoveredService === 'services' && (
-                                    <div className="w-full h-full relative">
-                                        <img
-                                            src={servicesDropdown.find(s => s.id === 'services')?.image}
-                                            alt={t('header.pricing')}
-                                            className="w-full h-full object-cover"
-                                            onError={(e) => {
-                                                e.target.style.display = 'none';
-                                                e.target.nextSibling.style.display = 'flex';
-                                            }}
-                                        />
-                                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center text-white font-bold text-lg" style={{ display: 'none' }}>
-                                            {t('header.pricing')}
-                                        </div>
-                                        {/* Fallback if image fails or while loading */}
-                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-lg" style={{ display: 'none' }}>
-                                            {t('header.pricing')}
-                                        </div>
-                                    </div>
-                                )}
-                                {hoveredService === 'roadmap' && (
-                                    <div className="w-full h-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-                                        {t('header.process')}
-                                    </div>
-                                )}
-                                {hoveredService === '#membresias' && (
-                                    <div className="w-full h-full bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center text-white font-bold text-lg">
-                                        {t('header.memberships')}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* HABLEMOS CTA (Desktop Only) */}
-                    <button
-                        className={`hidden md:flex _menu-button group ${activeSection === '#contacto' ? '-active -exact' : ''}`}
-                        onClick={(e) => handleNavClick(e, '#contacto', '/#contacto')}
-                        onMouseEnter={() => setServicesOpen(false)}
-                    >
-                        <div className="background"></div>
-                        <span>{t('header.lets_talk')}</span>
-                        <ArrowUpRight className="ml-1 w-3 h-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:scale-110" />
-                    </button>
-
-                    {/* AYUDA / SOPORTE Dropdown Trigger (Desktop Only) */}
-                    <button
-                        className={`hidden md:flex _menu-button ${activeSection === 'support' ? '-active -exact' : ''}`}
-                        aria-expanded={supportOpen}
-                        data-services-open={supportOpen ? 'true' : 'false'}
-                        onMouseEnter={() => { setSupportOpen(true); setServicesOpen(false); }}
-                    >
-                        <div className="background"></div>
-                        <span>{t('header.help', 'Ayuda')}</span>
-                        <ChevronDown
-                            className="chevron-icon"
-                            size={14}
-                            strokeWidth={2.5}
-                            style={{
-                                marginLeft: 4,
-                                transform: supportOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                                transition: 'transform 0.3s ease',
-                                display: 'inline-block'
-                            }}
-                        />
-                    </button>
-
-                    {/* Support Drawer (Dropup) */}
-                    <div className={`_menu-drawer ${supportOpen ? 'open' : ''}`}>
-                        <div className="slot">
-                            <ul>
-                                {supportDropdown.map((item) => (
-                                    <li
-                                        key={item.name}
-                                        onMouseEnter={() => setHoveredService(item.id)}
-                                    >
-                                        <a
-                                            href={getLocalizedPath(item.path)}
-                                            className="link"
-                                            onClick={(e) => onTransitionLinkClick(e, item.path)}
-                                        >
-                                            <div className="label">{item.name}</div>
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-
-                            {/* Preview Image / Content - Reusing style */}
-                            <div className={`menu-preview ${hoveredService ? 'active' : ''}`}>
-                                {hoveredService === 'faq' && (
-                                    <div className="w-full h-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white font-bold text-lg">
-                                        FAQ
-                                    </div>
-                                )}
-                                {hoveredService === 'legal' && (
-                                    <div className="w-full h-full bg-gradient-to-br from-gray-500 to-slate-700 flex items-center justify-center text-white font-bold text-lg">
-                                        Legal
-                                    </div>
-                                )}
-                                {hoveredService === 'contact' && (
-                                    <div className="w-full h-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white font-bold text-lg">
-                                        {t('header.contact')}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Mobile Toggle (Single Pill) */}
-                    <button
-                        className="md:hidden _menu-button flex items-center gap-2 px-6"
-                        onClick={() => menuOpen ? handleMenuClose() : setMenuOpen(true)}
-                    >
-                        <div className="background"></div>
-                        <span className="font-medium text-base">{t('header.menu')}</span>
-                        {/* Animated Two-Line Icon (=) */}
-                        <div className="relative w-6 h-6 flex items-center justify-center">
-                            <div className="absolute w-5 h-2 flex flex-col justify-between">
-                                <span
-                                    className={`block h-0.5 w-full bg-current rounded-full transition-all duration-300 origin-center ${menuOpen ? 'rotate-45 translate-y-[3.5px]' : 'rotate-0'
-                                        }`}
-                                />
-                                <span
-                                    className={`block h-0.5 w-full bg-current rounded-full transition-all duration-300 origin-center ${menuOpen ? '-rotate-45 -translate-y-[3.5px]' : 'rotate-0'
-                                        }`}
-                                />
-                            </div>
-                        </div>
-                    </button>
-
-                </div>
-            </div >
-
-            {/* Mobile menu overlay */}
-            {
-                menuOpen && (
-                    <div className="fixed inset-0 z-[9999] overflow-hidden pointer-events-auto">
-                        {/* Blue Background Layer - slides up from bottom */}
-                        <div
-                            className="absolute inset-0 bg-[#0046b8]"
-                            style={{
-                                transform: menuClosing ? 'translateY(-100%)' : (menuEntering ? 'translateY(100%)' : 'translateY(0)'),
-                                transition: 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)',
-                                willChange: 'transform'
-                            }}
-                        />
-
-                        {/* Content Layer - slides with background */}
-                        <div
-                            className="absolute inset-0 z-10 flex flex-col h-full"
-                            style={{
-                                transform: menuClosing ? 'translateY(-100%)' : (menuEntering ? 'translateY(100%)' : 'translateY(0)'),
-                                transition: 'transform 600ms cubic-bezier(0.4, 0, 0.2, 1)',
-                                willChange: 'transform'
-                            }}
-                        >
-                            {/* Top Bar - appears first (at top) */}
-                            <div
-                                className="relative z-50 flex items-center justify-center px-6 pt-8 pb-6 gap-4"
-                                style={{
-                                    opacity: menuEntering ? 0 : 1,
-                                    animation: menuClosing ? 'fadeOutDown 200ms ease-out 200ms forwards' : 'none',
-                                    transition: menuClosing ? 'none' : 'opacity 300ms ease-out 500ms'
-                                }}
-                            >
-                                {/* Language Selector in Menu (Full Dropdown) */}
-                                <div className="_dropdown _language-select flex" aria-expanded={langOpen} role="button">
-                                    <button
-                                        className="_dropdown-button flex items-center justify-center gap-2 !bg-white/10 !backdrop-blur-md !border !border-white/50 !text-white hover:!bg-white/30 transition-all duration-300 rounded-full px-4 py-2"
-                                        onClick={(e) => { e.stopPropagation(); setLangOpen(!langOpen); }}
-                                    >
-                                        <div data-button-background=""></div>
-                                        <span className="_icon">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
-                                                <path d="M12 22C17.5228 22 22 17.5229 22 12C22 6.47716 17.5228 2 12 2C6.47715 2 2 6.47716 2 12C2 17.5229 6.47715 22 12 22Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                                <path d="M3 9H21" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                                <path d="M3 15H21" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                                <path d="M12 2C14.5013 4.73836 15.9228 8.29204 16 12C15.9228 15.708 14.5013 19.2617 12 22C9.49872 19.2617 8.07725 15.708 8 12C8.07725 8.29204 9.49872 4.73836 12 2V2Z" data-mode="stroke" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                        <span>{currentLang}</span>
-                                        <span className={`_icon chevron ${langOpen ? 'rotate-180' : ''}`} style={{ transition: 'transform 0.2s' }}>
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M12 13.9393L6.53033 8.46967L5.46967 9.53033L10.409 14.4697C11.2877 15.3483 12.7123 15.3484 13.591 14.4697L18.5303 9.53033L17.4697 8.46967L12 13.9393Z" data-mode="fill" fill="currentColor"></path>
-                                            </svg>
-                                        </span>
-                                    </button>
-
-                                    {langOpen && (
-                                        <div className="_language-dropdown-menu !top-full !mt-2">
-                                            {languages.map((lang) => (
-                                                <div
-                                                    key={lang.code}
-                                                    className={`_lang-item ${currentLang === lang.code ? 'active' : ''}`}
-                                                    onClick={() => handleLanguageChange(lang.code)}
+                                    {/* Auth Container */}
+                                    <div className="mt-8 flex items-center gap-4">
+                                        {!user && (
+                                            <motion.div
+                                                custom={8}
+                                                variants={itemVariants}
+                                                className="btn relative border border-white/30 px-6 py-2 rounded-full overflow-hidden cursor-pointer w-max group hover:border-white transition-colors"
+                                            >
+                                                <Link
+                                                    to={getLocalizedPath('/login')}
+                                                    onClick={(e) => { handleMenuClose(); onTransitionLinkClick(e, '/login'); }}
+                                                    className="relative z-10 text-xs font-semibold uppercase tracking-widest group-hover:text-black transition-colors duration-300"
                                                 >
-                                                    <span>{lang.label}</span>
-                                                    {currentLang === lang.code && (
-                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                                            <polyline points="20 6 9 17 4 12"></polyline>
-                                                        </svg>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                                                    {t('header.login')}
+                                                </Link>
+                                                {/* Fill Effect */}
+                                                <div className="absolute top-0 left-0 w-0 h-full bg-white transition-all duration-300 group-hover:w-full z-0" />
+                                            </motion.div>
+                                        )}
 
-                                {/* Login/Dashboard Button (Mobile Menu) */}
-                                {!user ? (
-                                    <a
-                                        href={getLocalizedPath("/login")}
-                                        onClick={(e) => { handleMenuClose(); onTransitionLinkClick(e, "/login"); }}
-                                        className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm"
-                                    >
-                                        {t('header.login')}
-                                    </a>
-                                ) : (
-                                    <a
-                                        href={getLocalizedPath("/dashboard")}
-                                        onClick={(e) => { handleMenuClose(); onTransitionLinkClick(e, "/dashboard"); }}
-                                        className="_button !bg-white !text-[#0046b8] transition-all duration-300 !h-[48px] !px-6 !rounded-xl flex items-center justify-center font-medium text-sm gap-2"
-                                    >
-                                        <User size={16} />
-                                        {t('dashboard.title')}
-                                    </a>
-                                )}
-                            </div>
-
-                            {/* Scrollable List */}
-                            <div className="flex-1 overflow-y-auto px-4 pb-32 space-y-6">
-
-                                {/* Homepage Item */}
-                                <a
-                                    href={getLocalizedPath("/inicio")}
-                                    onClick={(e) => { handleNavClick(e, '#inicio', '/inicio'); handleMenuClose(); }}
-                                    className={`flex items-center justify-between p-4 rounded-2xl transition-colors group ${activeSection === '#inicio' ? 'bg-white/10' : 'hover:bg-white/5'
-                                        }`}
-                                    style={{
-                                        opacity: menuEntering ? 0 : 1,
-                                        animation: menuClosing ? 'fadeOutDown 200ms ease-out 150ms forwards' : 'none',
-                                        transition: menuClosing ? 'none' : 'opacity 300ms ease-out 540ms'
-                                    }}
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
-                                            <Home size={20} />
-                                        </div>
-                                        <span className="text-xl font-bold text-white">{t('header.home')}</span>
-                                    </div>
-                                    <div className={`w-2 h-2 rounded-full bg-white transition-opacity ${activeSection === '#inicio' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
-                                </a>
-
-                                {/* Personal Section */}
-                                <div style={{
-                                    opacity: menuEntering ? 0 : 1,
-                                    animation: menuClosing ? 'fadeOutDown 200ms ease-out 100ms forwards' : 'none',
-                                    transition: menuClosing ? 'none' : 'opacity 300ms ease-out 580ms'
-                                }}>
-                                    <h3 className="text-white/60 text-sm font-medium mb-4 px-2">{t('header.personal')}</h3>
-                                    <div className="space-y-2">
-                                        {/* Precios */}
-                                        <a
-                                            href={getLocalizedPath("/services")}
-                                            onClick={(e) => { handleNavClick(e, 'services', '/services'); handleMenuClose(); }}
-                                            className={`flex items-center gap-4 p-2 rounded-xl transition-colors ${activeSection === 'services' ? 'bg-white/10' : 'hover:bg-white/10'}`}
+                                        <motion.div
+                                            custom={9}
+                                            variants={itemVariants}
+                                            className="btn relative border border-white/30 px-6 py-2 rounded-full overflow-hidden cursor-pointer w-max group hover:border-white transition-colors"
                                         >
-                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white shadow-lg">
-                                                <span className="font-bold text-lg">$</span>
-                                            </div>
-                                            <span className="text-lg font-bold text-white">{t('header.pricing')}</span>
-                                        </a>
-
-                                        {/* Proceso */}
-                                        <a
-                                            href={getLocalizedPath("/roadmap")}
-                                            onClick={(e) => { handleNavClick(e, 'roadmap', '/roadmap'); handleMenuClose(); }}
-                                            className={`flex items-center gap-4 p-2 rounded-xl transition-colors ${activeSection === 'roadmap' ? 'bg-white/10' : 'hover:bg-white/10'}`}
-                                        >
-                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white shadow-lg">
-                                                <ArrowRight size={24} />
-                                            </div>
-                                            <span className="text-lg font-bold text-white">{t('header.process')}</span>
-                                        </a>
+                                            <a
+                                                href={(user ? getLocalizedPath("/dashboard") : getLocalizedPath("/signup"))}
+                                                onClick={(e) => { handleMenuClose(); onTransitionLinkClick(e, user ? "/dashboard" : "/signup"); }}
+                                                className="relative z-10 text-xs font-semibold uppercase tracking-widest group-hover:text-black transition-colors duration-300"
+                                            >
+                                                {user ? t('dashboard.title') : t('header.signup')}
+                                            </a>
+                                            {/* Fill Effect */}
+                                            <div className="absolute top-0 left-0 w-0 h-full bg-white transition-all duration-300 group-hover:w-full z-0" />
+                                        </motion.div>
                                     </div>
                                 </div>
-
-                                {/* Business Link (Membership) */}
-                                <a
-                                    href={getLocalizedPath("/membresias")}
-                                    onClick={(e) => { handleNavClick(e, '#membresias', '/membresias'); handleMenuClose(); }}
-                                    className={`flex items-center justify-between p-4 rounded-2xl transition-colors ${activeSection === '#membresias' ? 'bg-white/15' : 'hover:bg-white/10'
-                                        }`}
-                                    style={{
-                                        opacity: menuEntering ? 0 : 1,
-                                        animation: menuClosing ? 'fadeOutDown 200ms ease-out 50ms forwards' : 'none',
-                                        transition: menuClosing ? 'none' : 'opacity 300ms ease-out 620ms'
-                                    }}
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-8 h-8 rounded bg-white/20 flex items-center justify-center text-white font-bold">
-                                            M
-                                        </div>
-                                        <span className="text-lg font-bold text-white">{t('header.memberships')}</span>
-                                    </div>
-                                    <ArrowUpRight size={20} className="text-white" />
-                                </a>
-
-                                {/* Support Section */}
-                                <div style={{
-                                    opacity: menuEntering ? 0 : 1,
-                                    animation: menuClosing ? 'fadeOutDown 200ms ease-out forwards' : 'none',
-                                    transition: menuClosing ? 'none' : 'opacity 300ms ease-out 660ms'
-                                }}>
-                                    <h3 className="text-white/60 text-sm font-medium mb-4 px-2">{t('header.help', 'Ayuda')}</h3>
-                                    <div className="space-y-2">
-                                        {/* FAQ */}
-                                        <a
-                                            href={getLocalizedPath("/faq")}
-                                            onClick={(e) => { handleNavClick(e, 'faq', '/faq'); handleMenuClose(); }}
-                                            className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
-                                        >
-                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white shadow-lg">
-                                                <span className="font-bold text-lg">?</span>
-                                            </div>
-                                            <span className="text-lg font-bold text-white">FAQ</span>
-                                        </a>
-
-                                        {/* Legal */}
-                                        <a
-                                            href={getLocalizedPath("/privacy-policy")}
-                                            onClick={(e) => { handleNavClick(e, 'legal', '/privacy-policy'); handleMenuClose(); }}
-                                            className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
-                                        >
-                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-500 to-slate-500 flex items-center justify-center text-white shadow-lg">
-                                                <span className="font-bold text-lg">§</span>
-                                            </div>
-                                            <span className="text-lg font-bold text-white">Legal</span>
-                                        </a>
-
-                                        {/* Contact */}
-                                        <a
-                                            href={getLocalizedPath("/#contacto")}
-                                            onClick={(e) => { handleNavClick(e, '#contacto', '/#contacto'); handleMenuClose(); }}
-                                            className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
-                                        >
-                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white shadow-lg">
-                                                <User size={24} />
-                                            </div>
-                                            <span className="text-lg font-bold text-white">{t('header.lets_talk')}</span>
-                                        </a>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
-                    </div>
-                )
-            }
+
+                        {/* Menu Footer */}
+                        <div className="menu-footer flex flex-col mt-4">
+                            <motion.div
+                                className="menu-divider w-full h-[1px] bg-white/30 my-4"
+                                initial={{ width: 0 }}
+                                animate={{ width: "100%" }}
+                                transition={{ duration: 2, ease: "easeOut" }}
+                            />
+
+                            <div className="menu-footer-copy flex justify-between items-end text-sm uppercase tracking-wide opacity-60">
+                                <div className="slogan">
+                                    <p>{t('header.slogan')}</p>
+                                </div>
+                                <div className="socials flex gap-6">
+                                    <a href="#" className="hover:text-white transition-colors">Twitter</a>
+                                    <a href="#" className="hover:text-white transition-colors">Instagram</a>
+                                    <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 };

@@ -20,10 +20,10 @@ const ProcessTimeline = ({ steps }) => {
                             {/* Content Side */}
                             <div className="w-full md:w-1/2 p-4 md:p-8">
                                 <div className={`bg-white p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 ${isEven ? 'md:text-left' : 'md:text-right'} text-center group border border-white/10`}>
-                                    <div className={`inline-block px-3 py-1 rounded-full bg-blue-50 text-[#0046b8] text-xs font-bold uppercase tracking-wider mb-4`}>
+                                    <div className={`inline-block px-3 py-1 rounded-full bg-blue-50 text-[#0046b8] text-xs font-semibold uppercase tracking-wider mb-4`}>
                                         Paso {index + 1}
                                     </div>
-                                    <h3 className="text-2xl font-bold text-[#0046b8] mb-3">{step.title}</h3>
+                                    <h3 className="text-2xl font-semibold text-[#0046b8] mb-3">{step.title}</h3>
                                     <p className="text-[#0046b8]/80 font-light leading-relaxed group-hover:text-[#0046b8] transition-colors">{step.description}</p>
                                 </div>
                             </div>

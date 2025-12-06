@@ -24,7 +24,7 @@ const BenefitCard = ({ benefit }) => {
         </div>
 
         <div>
-          <h3 className="text-2xl font-bold text-white mb-3">{benefit.title}</h3>
+          <h3 className="text-2xl font-semibold text-white mb-3">{benefit.title}</h3>
           <p className="text-white/60 group-hover:text-white/90 transition-colors duration-300">
             {benefit.description}
           </p>
@@ -74,7 +74,7 @@ const Benefits = () => {
           style={{ opacity: titleOpacity, scale: titleScale, filter: titleFilter }}
           className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
         >
-          <h2 className="text-4xl md:text-8xl lg:text-9xl font-display font-bold text-[#0046b8] leading-tight tracking-tight text-center px-4 select-none">
+          <h2 className="text-4xl md:text-8xl lg:text-9xl font-display font-semibold text-[#0046b8] leading-tight tracking-tight text-center px-4 select-none">
             {t('benefits.why_choose_us')}
           </h2>
         </motion.div>
@@ -89,7 +89,7 @@ const Benefits = () => {
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
               <Sparkles size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-bold text-[#0046b8] tracking-tight select-none text-center">
+            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-semibold text-[#0046b8] tracking-tight select-none text-center">
               {t('benefits.items.premium_quality.title')}
             </h2>
           </motion.div>
@@ -102,7 +102,7 @@ const Benefits = () => {
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
               <Zap size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-bold text-[#0046b8] tracking-tight select-none text-center">
+            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-semibold text-[#0046b8] tracking-tight select-none text-center">
               {t('benefits.items.advanced_technology.title')}
             </h2>
           </motion.div>
@@ -115,7 +115,7 @@ const Benefits = () => {
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
               <Shield size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-bold text-[#0046b8] tracking-tight select-none text-center">
+            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-semibold text-[#0046b8] tracking-tight select-none text-center">
               {t('benefits.items.lasting_protection.title')}
             </h2>
           </motion.div>
@@ -128,7 +128,7 @@ const Benefits = () => {
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
               <Scan size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-bold text-[#0046b8] tracking-tight select-none text-center">
+            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-semibold text-[#0046b8] tracking-tight select-none text-center">
               {t('benefits.items.attention_to_detail.title')}
             </h2>
           </motion.div>
@@ -141,7 +141,7 @@ const Benefits = () => {
             <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-[#0046b8] flex items-center justify-center text-white shadow-lg shrink-0">
               <UserCheck size={40} className="md:w-12 md:h-12" />
             </div>
-            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-bold text-[#0046b8] tracking-tight select-none text-center">
+            <h2 className="text-4xl md:text-7xl md:whitespace-nowrap font-display font-semibold text-[#0046b8] tracking-tight select-none text-center">
               {t('benefits.items.personalized_service.title')}
             </h2>
           </motion.div>

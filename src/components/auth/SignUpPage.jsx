@@ -135,7 +135,7 @@ const SignUpPage = () => {
                             e.preventDefault()
                             navigateWithTransition(getLocalizedPath('/'))
                         }}
-                        className="text-3xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-opacity"
+                        className="text-3xl font-display font-semibold text-white tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
                     </a>
@@ -157,7 +157,7 @@ const SignUpPage = () => {
 
                     <div className="relative z-10">
                         <div className="text-center mb-8">
-                            <h1 className="text-3xl font-display font-bold text-white mb-2">{t('auth.create_account')}</h1>
+                            <h1 className="text-3xl font-display font-semibold text-white mb-2">{t('auth.create_account')}</h1>
                             <p className="text-white/60">{t('auth.signup_subtitle')}</p>
                         </div>
 
@@ -203,7 +203,7 @@ const SignUpPage = () => {
                             <div className="pt-4">
                                 <button
                                     type="submit"
-                                    className="w-full bg-white text-black font-bold py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+                                    className="w-full bg-white text-black font-semibold py-4 rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
                                 >
                                     {t('auth.register_button')}
                                 </button>
@@ -247,7 +247,7 @@ const SignUpPage = () => {
                     </p>
                     <button
                         onClick={() => navigateWithTransition(getLocalizedPath('/login'))}
-                        className="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-100 transition-colors mt-4"
+                        className="w-full bg-white text-black font-semibold py-3 rounded-xl hover:bg-gray-100 transition-colors mt-4"
                     >
                         {t('auth.go_to_login')}
                     </button>

@@ -41,7 +41,7 @@ const InteractiveGradient = ({
         ? location.pathname.slice(0, -1)
         : location.pathname;
 
-    const isHomePage = normalizedPath === "/" || normalizedPath === "/en" || normalizedPath === "/inicio";
+    const isHomePage = normalizedPath === "/" || normalizedPath === "/en" || normalizedPath === "/inicio" || normalizedPath === "/en/inicio";
     const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].some(path => location.pathname.includes(path));
     const shouldRender = isHomePage || isAuthPage;
 

@@ -145,7 +145,7 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
                                     <Icon size={20} className="text-white" />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-white font-bold">{vehicle.plate}</p>
+                                    <p className="text-white font-semibold">{vehicle.plate}</p>
                                     {vehicle.nickname && (
                                         <p className="text-white/60 text-xs">{vehicle.nickname}</p>
                                     )}

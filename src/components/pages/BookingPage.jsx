@@ -120,7 +120,7 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
                     onClick={() => !disabled && onSelect(new Date(currentDate.getFullYear(), currentDate.getMonth(), i).toISOString().split('T')[0])}
                     disabled={disabled}
                     className={`h-10 w-10 rounded-full flex items-center justify-center text-sm transition-colors ${isSelected(i)
-                        ? 'bg-white text-black font-bold'
+                        ? 'bg-white text-black font-semibold'
                         : disabled
                             ? fullyBooked && !isPast(i) ? 'text-red-500/40 cursor-not-allowed line-through' : 'text-white/20 cursor-not-allowed'
                             : 'text-white hover:bg-white/10'
@@ -142,7 +142,7 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
                 <button onClick={handlePrev} className="p-2 hover:bg-white/10 rounded-full text-white transition-colors">
                     <ChevronLeft size={20} />
                 </button>
-                <span className="text-white font-bold capitalize">
+                <span className="text-white font-semibold capitalize">
                     {currentMonths[currentDate.getMonth()]} {currentDate.getFullYear()}
                 </span>
                 <button onClick={handleNext} className="p-2 hover:bg-white/10 rounded-full text-white transition-colors">
@@ -817,7 +817,7 @@ const BookingPage = () => {
                     <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-8">
                         <CheckCircle size={48} className="text-green-500" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
+                    <h2 className="text-3xl md:text-4xl font-display font-semibold text-white mb-4">
                         {t('booking.confirmed_title')}
                     </h2>
                     <p className="text-white/60 mb-8 text-lg">
@@ -828,11 +828,11 @@ const BookingPage = () => {
                     <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8 text-left space-y-6">
                         <div className="flex justify-between items-center">
                             <span className="text-white/40 uppercase text-xs tracking-wider">{t('booking.steps.date')}</span>
-                            <span className="text-white font-bold text-xl capitalize">{formatDateLong(formData.date)}</span>
+                            <span className="text-white font-semibold text-xl capitalize">{formatDateLong(formData.date)}</span>
                         </div>
                         <div className="flex justify-between items-center">
                             <span className="text-white/40 uppercase text-xs tracking-wider">{t('booking.time_label')}</span>
-                            <span className="text-white font-bold text-xl">{formData.time}</span>
+                            <span className="text-white font-semibold text-xl">{formData.time}</span>
                         </div>
                         <div className="flex justify-between items-center">
                             <span className="text-white/40 uppercase text-xs tracking-wider">{t('booking.service')}</span>
@@ -884,7 +884,7 @@ const BookingPage = () => {
                 description={t('booking.seo_description')}
             />
             <h1 className="sr-only">{t('booking.seo_title')}</h1>
-            <a href={getLocalizedPath('/')} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath('/')) }} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
+            <a href={getLocalizedPath('/')} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath('/')) }} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-semibold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
                 Ta' <span className="text-accent">To'</span> Clean
             </a>
             <div className="max-w-6xl mx-auto">
@@ -979,7 +979,7 @@ const BookingPage = () => {
                 // Paso 0: Selector de vehículos (solo para usuarios autenticados)
                 return (
                     <div className="space-y-8">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
                             {userVehicles.length > 0 ? t('booking.select_vehicle') : t('booking.add_first_vehicle_title')}
                         </h2>
                         <p className="text-white/60 text-center -mt-4 mb-8">
@@ -1001,7 +1001,7 @@ const BookingPage = () => {
                                         <Plus size={32} className="text-white md:w-10 md:h-10" />
                                     </div>
                                     <div className="text-center">
-                                        <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
+                                        <h3 className="text-xl md:text-2xl font-semibold text-white mb-2">
                                             {t('booking.add_my_vehicle_button')}
                                         </h3>
                                         <p className="text-white/60 text-sm md:text-base">
@@ -1029,7 +1029,7 @@ const BookingPage = () => {
                                         >
                                             {vehicle.is_primary && (
                                                 <div className="absolute top-3 left-3">
-                                                    <span className="text-[10px] font-bold bg-blue-500/20 text-blue-500 px-2 py-1 rounded-full uppercase tracking-wider">
+                                                    <span className="text-[10px] font-semibold bg-blue-500/20 text-blue-500 px-2 py-1 rounded-full uppercase tracking-wider">
                                                         Principal
                                                     </span>
                                                 </div>
@@ -1046,7 +1046,7 @@ const BookingPage = () => {
                                             </div>
 
                                             <div className="text-center w-full">
-                                                <h3 className="text-2xl font-bold text-white tracking-tight mb-1">
+                                                <h3 className="text-2xl font-semibold text-white tracking-tight mb-1">
                                                     {vehicle.plate}
                                                 </h3>
                                                 {(vehicle.brand || vehicle.model) && (
@@ -1070,7 +1070,7 @@ const BookingPage = () => {
                                         <Plus size={32} className="text-white" />
                                     </div>
                                     <div className="text-center">
-                                        <h3 className="text-xl font-bold text-white mb-1">
+                                        <h3 className="text-xl font-semibold text-white mb-1">
                                             Añadir Vehículo Nuevo
                                         </h3>
                                         <p className="text-white/40 text-sm">
@@ -1085,7 +1085,7 @@ const BookingPage = () => {
             case 1:
                 return (
                     <div className="space-y-8">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
                             {t('booking.select_vehicle')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1104,7 +1104,7 @@ const BookingPage = () => {
                                         <img src={type.image} alt={type.name} className="w-40 h-28 object-contain" />
                                     </div>
                                     <div className="text-center">
-                                        <span className="text-xl font-bold block mb-2">{type.name}</span>
+                                        <span className="text-xl font-semibold block mb-2">{type.name}</span>
                                         <span className={`text-sm ${formData.vehicleType?.id === type.id ? 'text-black/60' : 'text-white/40'}`}>
                                             {type.description}
                                         </span>
@@ -1124,7 +1124,7 @@ const BookingPage = () => {
             case 2:
                 return (
                     <div className="space-y-8">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
                             {t('booking.select_service')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1139,7 +1139,7 @@ const BookingPage = () => {
                                     onClick={() => handleServiceSelect(service)}
                                 >
                                     <div className="flex justify-between items-start mb-4">
-                                        <h3 className="text-xl font-bold text-white">{service.name}</h3>
+                                        <h3 className="text-xl font-semibold text-white">{service.name}</h3>
                                     </div>
                                     <p className="text-white/60 text-sm mb-4">{service.description}</p>
                                     <ul className="space-y-2">
@@ -1169,7 +1169,7 @@ const BookingPage = () => {
             case 3:
                 return (
                     <div className="space-y-8 max-w-5xl mx-auto">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
                             {t('booking.your_details')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -1368,7 +1368,7 @@ const BookingPage = () => {
             case 4:
                 return (
                     <div className="space-y-8 max-w-4xl mx-auto">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
                             {t('booking.date_time')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
@@ -1408,7 +1408,7 @@ const BookingPage = () => {
                                 {formData.date && formData.time && (
                                     <div className="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
                                         <p className="text-white/60 text-sm mb-1">{t('booking.selection')}</p>
-                                        <p className="text-white font-bold text-lg capitalize">
+                                        <p className="text-white font-semibold text-lg capitalize">
                                             {formatDateLong(formData.date)} - {formData.time}
                                         </p>
                                     </div>
@@ -1429,7 +1429,7 @@ const BookingPage = () => {
             case 5:
                 return (
                     <div className="space-y-8 max-w-2xl mx-auto">
-                        <h2 className="text-3xl md:text-4xl font-display font-bold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
                             {t('booking.confirm_booking')}
                         </h2>
 
@@ -1441,7 +1441,7 @@ const BookingPage = () => {
                                     </div>
                                     <div>
                                         <p className="text-white/40 text-sm">{t('booking.vehicle')}</p>
-                                        <p className="text-white font-bold text-lg">{formData.vehicleType.name}</p>
+                                        <p className="text-white font-semibold text-lg">{formData.vehicleType.name}</p>
                                         <p className="text-white/60 text-sm">{formData.clientInfo.brand} {formData.clientInfo.model}</p>
                                         <p className="text-white/60 text-sm">{t('booking.plate')}: {formData.clientInfo.plate}</p>
                                     </div>
@@ -1474,7 +1474,7 @@ const BookingPage = () => {
                                     </div>
                                     <div>
                                         <p className="text-white/40 text-sm">{t('booking.service')}</p>
-                                        <p className="text-white font-bold text-lg">{formData.service.name}</p>
+                                        <p className="text-white font-semibold text-lg">{formData.service.name}</p>
                                         <p className="text-white/60 text-sm">{formData.service.description}</p>
                                     </div>
                                 </div>
@@ -1494,7 +1494,7 @@ const BookingPage = () => {
                                     </div>
                                     <div>
                                         <p className="text-white/40 text-sm">{t('booking.date_time')}</p>
-                                        <p className="text-white font-bold text-lg capitalize">{formatDateLong(formData.date)} - {formData.time}</p>
+                                        <p className="text-white font-semibold text-lg capitalize">{formatDateLong(formData.date)} - {formData.time}</p>
                                     </div>
                                 </div>
                                 <button
@@ -1513,7 +1513,7 @@ const BookingPage = () => {
                                     </div>
                                     <div>
                                         <p className="text-white/40 text-sm">{t('booking.your_details')}</p>
-                                        <p className="text-white font-bold text-lg">{formData.clientInfo.name}</p>
+                                        <p className="text-white font-semibold text-lg">{formData.clientInfo.name}</p>
                                         <p className="text-white/60 text-sm">{formData.clientInfo.email}</p>
                                         <p className="text-white/60 text-sm">{formData.clientInfo.phone}</p>
                                     </div>
@@ -1538,7 +1538,7 @@ const BookingPage = () => {
                                 </div>
                                 <div className="flex items-center justify-between pt-3 border-t border-white/10">
                                     <p className="text-white/60">{t('booking.total')}</p>
-                                    <p className="text-3xl font-bold text-white">
+                                    <p className="text-3xl font-semibold text-white">
                                         ${(formData.service.price * formData.vehicleType.priceMultiplier).toLocaleString()}
                                     </p>
                                 </div>

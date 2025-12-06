@@ -146,10 +146,10 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                     value={formData.nickname}
                                     onChange={handleInputChange}
                                     placeholder={t('dashboard.nickname_placeholder', 'APODO')}
-                                    className={`w-full text-center text-xl font-bold uppercase tracking-widest bg-transparent border-b-2 ${isDarkMode ? 'text-white border-white/20 focus:border-blue-500' : 'text-gray-900 border-gray-200 focus:border-blue-500'} focus:outline-none transition-colors pb-1`}
+                                    className={`w-full text-center text-xl font-semibold uppercase tracking-widest bg-transparent border-b-2 ${isDarkMode ? 'text-white border-white/20 focus:border-blue-500' : 'text-gray-900 border-gray-200 focus:border-blue-500'} focus:outline-none transition-colors pb-1`}
                                 />
                             ) : (
-                                <h3 className={`text-xl font-bold uppercase tracking-widest ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                <h3 className={`text-xl font-semibold uppercase tracking-widest ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                     {vehicle.nickname || t('dashboard.nickname_placeholder', 'APODO')}
                                 </h3>
                             )}
@@ -174,7 +174,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                         value={formData.plate}
                                         onChange={handleInputChange}
                                         placeholder={t('dashboard.plate_label', 'PLACA')}
-                                        className={`w-full text-center text-4xl font-display font-bold bg-transparent border-b-2 ${errors.plate
+                                        className={`w-full text-center text-4xl font-display font-semibold bg-transparent border-b-2 ${errors.plate
                                             ? 'border-red-500 text-red-500'
                                             : (isDarkMode ? 'text-white border-white/20 focus:border-blue-500' : 'text-gray-900 border-gray-200 focus:border-blue-500')
                                             } focus:outline-none transition-colors pb-1`}
@@ -184,7 +184,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                     )}
                                 </div>
                             ) : (
-                                <h2 className={`text-4xl font-display font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} tracking-tight`}>
+                                <h2 className={`text-4xl font-display font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} tracking-tight`}>
                                     {vehicle.plate}
                                 </h2>
                             )}
@@ -229,7 +229,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                         <div className="space-y-8 md:space-y-10">
                             {/* Last Service */}
                             <div>
-                                <h3 className={`text-xl md:text-2xl font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                <h3 className={`text-xl md:text-2xl font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                     {t('dashboard.last_service_title', 'Último Servicio Realizado')}
                                 </h3>
                                 {lastBooking ? (
@@ -237,7 +237,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                         <p className={`text-base md:text-lg ${isDarkMode ? 'text-white/80' : 'text-gray-600'} mb-2`}>
                                             {lastBooking.service?.name} ({new Date(lastBooking.booking_date).toLocaleDateString()})
                                         </p>
-                                        <button className={`flex items-center gap-1 text-sm font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} hover:underline`}>
+                                        <button className={`flex items-center gap-1 text-sm font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'} hover:underline`}>
                                             {t('dashboard.view_full_history', 'Ver historial completo')}
                                             <ChevronDown size={16} />
                                         </button>
@@ -251,7 +251,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
 
                             {/* Next Maintenance */}
                             <div>
-                                <h3 className={`text-lg font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                <h3 className={`text-lg font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                     {t('dashboard.next_maintenance_title', 'Próximo mantenimiento sugerido:')}
                                 </h3>
                                 {nextMaintenance ? (
@@ -278,7 +278,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                     <button
                                         onClick={handleCancel}
                                         disabled={isLoading}
-                                        className={`flex-1 py-3 md:py-4 rounded-2xl font-bold text-center transition-colors ${isDarkMode
+                                        className={`flex-1 py-3 md:py-4 rounded-2xl font-semibold text-center transition-colors ${isDarkMode
                                             ? 'bg-white/10 text-white hover:bg-white/20'
                                             : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                             }`}
@@ -288,7 +288,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                     <button
                                         onClick={handleSave}
                                         disabled={isLoading || !!errors.plate || !formData.plate}
-                                        className="flex-1 py-3 md:py-4 rounded-2xl font-bold text-center bg-green-600 text-white hover:bg-green-700 transition-colors shadow-lg shadow-green-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="flex-1 py-3 md:py-4 rounded-2xl font-semibold text-center bg-green-600 text-white hover:bg-green-700 transition-colors shadow-lg shadow-green-600/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {isLoading ? (
                                             <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
@@ -304,7 +304,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                 <>
                                     <button
                                         onClick={() => setIsEditing(true)}
-                                        className={`flex-1 py-3 md:py-4 rounded-2xl font-bold text-center transition-colors ${isDarkMode
+                                        className={`flex-1 py-3 md:py-4 rounded-2xl font-semibold text-center transition-colors ${isDarkMode
                                             ? 'bg-white/10 text-white hover:bg-white/20'
                                             : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                             }`}
@@ -313,7 +313,7 @@ const VehicleDetailsModal = ({ isOpen, onClose, vehicle, onUpdate, onDelete, onB
                                     </button>
                                     <button
                                         onClick={() => onBook(vehicle)}
-                                        className="flex-1 py-3 md:py-4 rounded-2xl font-bold text-center bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
+                                        className="flex-1 py-3 md:py-4 rounded-2xl font-semibold text-center bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
                                     >
                                         {t('dashboard.book_new_service', 'Reservar nuevo servicio')}
                                     </button>
