@@ -44,7 +44,14 @@ const LoginPage = () => {
         return `${prefix}${path}`
     }
 
-    // ... (useEffect) ...
+    // Check for remembered email on mount
+    useEffect(() => {
+        const rememberedEmail = localStorage.getItem('rememberedEmail')
+        if (rememberedEmail) {
+            setValue('email', rememberedEmail)
+            setValue('rememberMe', true)
+        }
+    }, [setValue])
 
     const onSubmit = async (data) => {
         const { email, password, rememberMe } = data
@@ -57,7 +64,7 @@ const LoginPage = () => {
         if (error) {
             setError('password', { type: 'manual', message: t('auth.errors.login_failed') })
         } else {
-            // Guardar o eliminar email según checkbox "Recordarme"
+            // Guardar o eliminar email según checkbox "Recordarme" (Keep for pre-filling if needed, though usually browser handles this)
             if (rememberMe) {
                 localStorage.setItem('rememberedEmail', email)
             } else {

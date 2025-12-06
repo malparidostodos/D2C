@@ -161,6 +161,8 @@
         "understood_go_to_account": "Understood"
     },
     "auth": {
+        "login_title": "Log In",
+        "signup_title": "Create Account",
         "mail": "example@mail.com",
         "welcome": "Welcome",
         "login_subtitle": "Log in to your account to manage your services",

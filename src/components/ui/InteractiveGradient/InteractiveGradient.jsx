@@ -5,12 +5,12 @@ import { vertexShader, fluidShader, displayShader } from "./shaders.js";
 import "./InteractiveGradient.css";
 import { useSmoothScroll } from "../SmoothScroll";
 
-// Auth Colors (Purple/Indigo/Pink/Blue theme)
+// Auth Colors (Premium Dark Theme)
 const authColors = {
-    color1: "#007BFF", // Indigo 100
-    color2: "#286ea7ff", // Indigo 900
-    color3: "#9dcffdff", // Indigo 600
-    color4: "#ffffffff", // Pink 500
+    color1: "#000000", // Deepest Black
+    color2: "#143464ff", // Dark Navy
+    color3: "#1e3a8a", // Navy
+    color4: "#7b90caff", // Dark Blue Accent
 };
 
 const InteractiveGradient = ({

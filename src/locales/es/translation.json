@@ -161,6 +161,8 @@
         "understood_go_to_account": "Entendido"
     },
     "auth": {
+        "login_title": "Iniciar Sesión",
+        "signup_title": "Crear Cuenta",
         "mail": "ejemplo@correo.com",
         "welcome": "Bienvenido",
         "login_subtitle": "Ingresa a tu cuenta para gestionar tus servicios",
