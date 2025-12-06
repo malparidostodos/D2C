@@ -58,8 +58,9 @@ const InteractiveGradient = ({
         isHomePageRef.current = shouldRender;
         // Reset scroll visibility check on location change
         if (shouldRender) {
-            // For auth pages, always visible. For home, check scroll.
-            setIsScrollVisible(isAuthPage ? true : window.scrollY <= window.innerHeight);
+            // Optimistically set visible to ensure entry animation. 
+            // The scroll event listener will correct this if we are actually scrolled down.
+            setIsScrollVisible(true);
         }
     }, [location, shouldRender, isAuthPage]);
 
@@ -71,6 +72,8 @@ const InteractiveGradient = ({
     };
 
     useEffect(() => {
+        if (!shouldRender) return;
+
         if (!canvasRef.current) return;
 
         while (canvasRef.current.firstChild) {
@@ -296,6 +299,7 @@ const InteractiveGradient = ({
             renderer.dispose();
         };
     }, [
+        shouldRender, // ADDED: Re-init when shouldRender changes
         colorIntensity,
         softness,
         currentColors // Re-init if colors change
@@ -350,7 +354,7 @@ const InteractiveGradient = ({
                 animationLoopRef.current();
             }
         }
-    }, [shouldRender, isScrollVisible]);
+    }, [shouldRender, isScrollVisible, location.pathname]);
 
     return (
         <div
