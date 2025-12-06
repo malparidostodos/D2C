@@ -126,7 +126,7 @@ const LoginPage = () => {
                             e.preventDefault()
                             navigateWithTransition(getLocalizedPath('/'))
                         }}
-                        className="text-3xl font-display font-bold text-black tracking-tighter hover:opacity-80 transition-opacity"
+                        className="text-3xl font-display font-bold text-white tracking-tighter hover:opacity-80 transition-opacity"
                     >
                         Ta' <span className="text-accent">To'</span> Clean
                     </a>

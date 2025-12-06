@@ -3,12 +3,14 @@ import Header from '../layout/Header';
 import Contact from './Contact';
 import Pricing from '../features/Pricing';
 import { useTranslation } from 'react-i18next';
+import SEO from '../ui/SEO';
 
 const MembershipsPage = () => {
     const { t } = useTranslation();
 
     return (
         <div className="min-h-screen bg-[#0046b8] text-white">
+            <SEO title={t('pricing.memberships')} description={t('pricing.subtitle')} />
             <Header theme="white" />
 
             {/* Hero Section */}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle, Plus, Copy, Eye, EyeOff } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
+import SEO from '../ui/SEO'
 import AccountCreatedModal from '../booking/AccountCreatedModal'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useMenu } from '../../hooks/useMenu'
@@ -803,10 +804,10 @@ const BookingPage = () => {
     if (isConfirmed) {
         return (
             <main className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 flex items-center justify-center">
-                <Helmet>
-                    <title>{t('booking.confirmed_title')} | Ta' To' Clean</title>
-                    <meta name="description" content={t('booking.confirmed_message')} />
-                </Helmet>
+                <SEO
+                    title={t('booking.confirmed_title')}
+                    description={t('booking.confirmed_message')}
+                />
                 <h1 className="sr-only">{t('booking.confirmed_title')}</h1>
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -878,10 +879,10 @@ const BookingPage = () => {
 
     return (
         <main className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 relative">
-            <Helmet>
-                <title>{t('booking.seo_title')}</title>
-                <meta name="description" content={t('booking.seo_description')} />
-            </Helmet>
+            <SEO
+                title={t('booking.seo_title')}
+                description={t('booking.seo_description')}
+            />
             <h1 className="sr-only">{t('booking.seo_title')}</h1>
             <a href={getLocalizedPath('/')} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath('/')) }} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-bold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
                 Ta' <span className="text-accent">To'</span> Clean

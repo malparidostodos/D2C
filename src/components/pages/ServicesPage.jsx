@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Contact from './Contact';
 import { useMenu } from '../../hooks/useMenu';
+import SEO from '../ui/SEO';
 
 const ServicesPage = () => {
     const { t } = useTranslation();
@@ -78,6 +79,7 @@ const ServicesPage = () => {
 
     return (
         <div className="min-h-screen bg-[#0046b8] text-white">
+            <SEO title={t('services_page.title')} description={t('services_page.description')} />
             <Header theme="white" />
 
             {/* Top Section */}

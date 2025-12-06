@@ -81,12 +81,12 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
 
             {/* Main Content Area - Card */}
             <div className="flex-grow px-2 sm:px-4 pb-12">
-                <div className="max-w-[98%] mx-auto bg-white rounded-[2.5rem] shadow-2xl min-h-[600px] overflow-hidden">
+                <div className="max-w-[98%] mx-auto bg-white rounded-[2.5rem] shadow-2xl min-h-[600px] mb-8">
                     <div className={sections && sections.length > 0 ? "lg:grid lg:grid-cols-12" : "lg:grid lg:grid-cols-12"}>
 
                         {/* Sidebar Navigation - Policy Links */}
                         <aside className="lg:col-span-3 bg-white border-b lg:border-b-0 lg:border-r border-gray-100 py-12 px-8 lg:rounded-l-[2.5rem]">
-                            <nav className="space-y-2 lg:sticky lg:top-8">
+                            <nav className="space-y-2 lg:sticky lg:top-32">
                                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-6 px-4">
                                     {t('legal.menu_title')}
                                 </h3>
@@ -117,7 +117,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
                         <div className={sections && sections.length > 0 ? "lg:col-span-9 lg:grid lg:grid-cols-12" : "lg:col-span-9"}>
 
                             {/* Content */}
-                            <main className={sections && sections.length > 0 ? "lg:col-span-9 p-8 sm:p-12 lg:p-16" : "p-8 sm:p-12 lg:p-20"}>
+                            <main className={sections && sections.length > 0 ? "lg:col-span-9 p-8 sm:p-12 lg:p-16" : "lg:col-span-9 p-8 sm:p-12 lg:p-20 lg:rounded-r-[2.5rem]"}>
                                 <div className="max-w-none text-gray-600 
                                     [&_h1]:text-5xl [&_h1]:font-bold [&_h1]:text-[#1A1D1F] [&_h1]:mb-8 [&_h1]:tracking-tight
                                     [&_h2]:text-4xl [&_h2]:font-semibold [&_h2]:text-[#1A1D1F] [&_h2]:mt-16 [&_h2]:mb-6 [&_h2]:tracking-tight
@@ -133,7 +133,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
                             {/* Section Navigation - Right Sidebar */}
                             {sections && sections.length > 0 && (
                                 <aside className="hidden lg:block lg:col-span-3 bg-gray-50 border-l border-gray-100 py-12 px-6 rounded-r-[2.5rem]">
-                                    <nav className="sticky top-8">
+                                    <nav className="sticky top-32">
                                         <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
                                             {t('legal.on_this_page')}
                                         </h4>

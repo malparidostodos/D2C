@@ -8,7 +8,11 @@
         "personal": "Servicios",
         "lets_talk": "Hablemos",
         "login": "Iniciar sesión",
-        "signup": "Registrarse"
+        "signup": "Registrarse",
+        "menu": "Menú",
+        "faq": "Preguntas Frecuentes",
+        "legal": "Legal",
+        "help": "Ayuda"
     },
     "services_page": {
         "title": "Detalle de Servicios",
@@ -1343,5 +1347,13 @@
                 "description": "Tiempo de curado bajo lámparas IR y revisión final antes de la entrega al cliente."
             }
         ]
+    },
+    "seo": {
+        "default_description": "Servicios de detailing automotriz premium. Limpieza profunda, corrección de pintura y protección cerámica.",
+        "default_keywords": "detailing, lavado de autos, limpieza automotriz, corrección de pintura, cerámica",
+        "home": {
+            "title": "Inicio",
+            "description": "Servicios de detailing automotriz premium. Transforma tu vehículo con nuestros tratamientos especializados."
+        }
     }
 }

@@ -12,6 +12,7 @@ export const MenuProvider = ({ children }) => {
     const [menuClosing, setMenuClosing] = useState(false);
     const [menuEntering, setMenuEntering] = useState(true);
     const [servicesOpen, setServicesOpen] = useState(false);
+    const [supportOpen, setSupportOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('#inicio');
     const [hoverLock, setHoverLock] = useState(false);
     const [hoveredService, setHoveredService] = useState(null);
@@ -129,6 +130,14 @@ export const MenuProvider = ({ children }) => {
     // -------------------------------------------------
     useEffect(() => {
         const handleScroll = (e) => {
+            // Only scroll-spy on home page
+            const currentPath = location.pathname;
+            const isHome = currentPath === '/' || currentPath === '/en' || currentPath === '/en/';
+
+            if (!isHome) {
+                return;
+            }
+
             const sections = [
                 '#inicio',
                 '#beneficios',
@@ -170,7 +179,38 @@ export const MenuProvider = ({ children }) => {
                 window.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [lenis]);
+    }, [lenis, location.pathname]);
+
+    // -------------------------------------------------
+    // Route-based Active State
+    // -------------------------------------------------
+    useEffect(() => {
+        const path = location.pathname;
+        const isHome = path === '/' || path === '/en' || path === '/en/';
+
+        if (!isHome) {
+            if (path.includes('/faq') || path.includes('/privacy-policy') || path.includes('/terms-conditions') || path.includes('/cookie-policy') || path.includes('/disclaimers')) {
+                setActiveSection('support');
+            } else if (path.includes('/services')) {
+                setActiveSection('services');
+            } else if (path.includes('/roadmap')) {
+                setActiveSection('roadmap');
+            } else if (path.includes('/membresias')) {
+                setActiveSection('#membresias'); // Matches Header logic
+            } else if (path.includes('/contacto')) {
+                setActiveSection('#contacto');   // Matches Header logic
+            } else {
+                setActiveSection('');
+            }
+        } else {
+            // Re-initialize to #inicio if just arrived at home and at top
+            // Scroll spy will take over if scrolled
+            const currentScrollY = lenis ? lenis.scroll : window.scrollY;
+            if (currentScrollY < 50) {
+                setActiveSection('#inicio');
+            }
+        }
+    }, [location.pathname, lenis]);
 
     // -------------------------------------------------
     // Click outside handler for language dropdown
@@ -201,6 +241,7 @@ export const MenuProvider = ({ children }) => {
         e.preventDefault();
         setMenuOpen(false);
         setServicesOpen(false);
+        setSupportOpen(false);
 
         const localizedPath = getLocalizedPath(path);
 
@@ -389,6 +430,8 @@ export const MenuProvider = ({ children }) => {
         menuEntering,
         servicesOpen,
         setServicesOpen,
+        supportOpen,
+        setSupportOpen,
         activeSection,
         hoverLock,
         setHoverLock,

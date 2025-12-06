@@ -48,9 +48,10 @@ import FPSCounter from './components/ui/FPSCounter'
 
 // Componente Home con todas las secciones
 const Home = () => {
+  const { t } = useTranslation()
   return (
     <div className="min-h-screen text-primary relative">
-      <SEO />
+      <SEO title={t('seo.home.title')} description={t('seo.home.description')} />
       <Header />
       <CustomScrollbar />
       <main>
@@ -129,7 +130,7 @@ const AppRoutes = ({ t }) => {
       <Route path="precios" element={<ScrollToSection sectionId="#precios" title={t('header.pricing')} />} />
       <Route path="roadmap" element={<ProcessPage />} />
       <Route path="membresias" element={<MembershipsPage />} />
-      <Route path="contacto" element={<ScrollToSection sectionId="#contacto" title={t('header.contact')} />} />
+
       <Route path="services" element={<ServicesPage />} />
       <Route path="reserva" element={<BookingPage />} />
 
@@ -164,6 +165,8 @@ const AppRoutes = ({ t }) => {
   )
 }
 
+import ScrollToTop from './components/ui/ScrollToTop'
+
 const App = () => {
   const { t } = useTranslation()
   return (
@@ -172,6 +175,7 @@ const App = () => {
       <FPSCounter />
       <div className="relative z-10">
         <BrowserRouter>
+          <ScrollToTop />
           <InteractiveGradient />
           <MenuProvider>
             <Routes>

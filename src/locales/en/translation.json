@@ -8,7 +8,11 @@
         "personal": "Services",
         "lets_talk": "Let's Talk",
         "login": "Log In",
-        "signup": "Sign Up"
+        "signup": "Sign Up",
+        "menu": "Menu",
+        "faq": "FAQ",
+        "legal": "Legal",
+        "help": "Help"
     },
     "services_page": {
         "title": "Services Detail",
@@ -1345,5 +1349,13 @@
                 "description": "Curing time under IR lamps and final review before delivery to the customer."
             }
         ]
+    },
+    "seo": {
+        "default_description": "Premium automotive detailing services. Deep cleaning, paint correction, and ceramic protection.",
+        "default_keywords": "detailing, car wash, automotive cleaning, paint correction, ceramic",
+        "home": {
+            "title": "Home",
+            "description": "Premium automotive detailing services. Transform your vehicle with our specialized treatments."
+        }
     }
 }

@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import SEO from '../ui/SEO'
+
 const Gallery = () => {
     const { t } = useTranslation()
     const [sliderValue, setSliderValue] = useState(50)
@@ -41,6 +43,7 @@ const Gallery = () => {
 
     return (
         <section className="py-24 px-4 md:px-8 bg-white relative overflow-hidden">
+            <SEO title={t('gallery.title', 'Galería')} description={t('gallery.description', 'Resultados reales de nuestros servicios')} />
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
                     <motion.span

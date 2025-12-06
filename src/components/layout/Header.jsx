@@ -9,7 +9,7 @@ import { useMenu } from '../../hooks/useMenu.jsx';
 const Header = ({ theme = 'default' }) => {
     const {
         hidden, setHidden, menuOpen, setMenuOpen, menuClosing, menuEntering,
-        servicesOpen, setServicesOpen, activeSection, setHoverLock,
+        servicesOpen, setServicesOpen, supportOpen, setSupportOpen, activeSection, setHoverLock,
         hoveredService, setHoveredService, langOpen, setLangOpen, langRef,
         handleNavClick, handleLanguageChange, handleMenuClose, getLocalizedPath,
         setIsMenuMounted, navigateWithTransition
@@ -55,7 +55,13 @@ const Header = ({ theme = 'default' }) => {
     const servicesDropdown = [
         { name: t('header.pricing'), path: '/services', id: 'services', image: `/images/services-preview-${currentLang.toLowerCase()}.png` },
         { name: t('header.process'), path: '/roadmap', id: 'roadmap' },
-        { name: t('header.memberships'), path: '/membresias', id: 'membresias' },
+        { name: t('header.memberships'), path: '/membresias', id: '#membresias' },
+    ];
+
+    const supportDropdown = [
+        { name: t('header.faq'), path: '/faq', id: 'faq' },
+        { name: t('header.legal'), path: '/privacy-policy', id: 'legal' },
+        { name: t('header.contact'), path: '/#contacto', id: '#contacto' },
     ];
 
     // Helper to handle transition navigation
@@ -106,9 +112,9 @@ const Header = ({ theme = 'default' }) => {
                     <a
                         href={getLocalizedPath('/')}
                         onClick={(e) => onTransitionLinkClick(e, '/')}
-                        className={`text-3xl font-display font-bold tracking-tighter ${effectiveTheme === 'white' ? '!text-white' : 'text-black'}`}
+                        className={`text-3xl font-display font-bold tracking-tighter !text-white`}
                     >
-                        Ta' <span className={effectiveTheme === 'white' ? '!text-white' : 'text-accent'}>To'</span> Clean
+                        Ta' <span className="text-accent">To'</span> Clean
                     </a>
 
                     <div className="lang-cta-wrapper">
@@ -248,7 +254,7 @@ const Header = ({ theme = 'default' }) => {
                         transition: 'background-color 0.3s ease'
                     }}
                     onMouseEnter={() => { setHoverLock(true); setHidden(false); }}
-                    onMouseLeave={() => { setHoverLock(false); setHoveredService(null); setServicesOpen(false); }}
+                    onMouseLeave={() => { setHoverLock(false); setHoveredService(null); setServicesOpen(false); setSupportOpen(false); }}
                 >
                     {/* INICIO */}
                     <button
@@ -265,7 +271,7 @@ const Header = ({ theme = 'default' }) => {
                         className={`hidden md:flex _menu-button ${isServiceActive ? '-active -exact' : ''}`}
                         aria-expanded={servicesOpen}
                         data-services-open={servicesOpen ? 'true' : 'false'}
-                        onMouseEnter={() => { setServicesOpen(true); }}
+                        onMouseEnter={() => { setServicesOpen(true); setSupportOpen(false); }}
                     >
                         <div className="background"></div>
                         <span>{t('header.personal')}</span>
@@ -341,7 +347,7 @@ const Header = ({ theme = 'default' }) => {
                     {/* HABLEMOS CTA (Desktop Only) */}
                     <button
                         className={`hidden md:flex _menu-button group ${activeSection === '#contacto' ? '-active -exact' : ''}`}
-                        onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
+                        onClick={(e) => handleNavClick(e, '#contacto', '/#contacto')}
                         onMouseEnter={() => setServicesOpen(false)}
                     >
                         <div className="background"></div>
@@ -349,16 +355,68 @@ const Header = ({ theme = 'default' }) => {
                         <ArrowUpRight className="ml-1 w-3 h-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:scale-110" />
                     </button>
 
-                    {/* CONTACTO (Desktop Only) */}
+                    {/* AYUDA / SOPORTE Dropdown Trigger (Desktop Only) */}
                     <button
-                        className={`hidden md:flex _menu-button group ${activeSection === '#contacto' ? '-active -exact' : ''}`}
-                        onClick={(e) => handleNavClick(e, '#contacto', '/contacto')}
-                        onMouseEnter={() => setServicesOpen(false)}
+                        className={`hidden md:flex _menu-button ${activeSection === 'support' ? '-active -exact' : ''}`}
+                        aria-expanded={supportOpen}
+                        data-services-open={supportOpen ? 'true' : 'false'}
+                        onMouseEnter={() => { setSupportOpen(true); setServicesOpen(false); }}
                     >
                         <div className="background"></div>
-                        <span>{t('header.contact')}</span>
-                        <ArrowUpRight className="ml-1 w-3 h-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:scale-110" />
+                        <span>{t('header.help', 'Ayuda')}</span>
+                        <ChevronDown
+                            className="chevron-icon"
+                            size={14}
+                            strokeWidth={2.5}
+                            style={{
+                                marginLeft: 4,
+                                transform: supportOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                                transition: 'transform 0.3s ease',
+                                display: 'inline-block'
+                            }}
+                        />
                     </button>
+
+                    {/* Support Drawer (Dropup) */}
+                    <div className={`_menu-drawer ${supportOpen ? 'open' : ''}`}>
+                        <div className="slot">
+                            <ul>
+                                {supportDropdown.map((item) => (
+                                    <li
+                                        key={item.name}
+                                        onMouseEnter={() => setHoveredService(item.id)}
+                                    >
+                                        <a
+                                            href={getLocalizedPath(item.path)}
+                                            className="link"
+                                            onClick={(e) => onTransitionLinkClick(e, item.path)}
+                                        >
+                                            <div className="label">{item.name}</div>
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            {/* Preview Image / Content - Reusing style */}
+                            <div className={`menu-preview ${hoveredService ? 'active' : ''}`}>
+                                {hoveredService === 'faq' && (
+                                    <div className="w-full h-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white font-bold text-lg">
+                                        FAQ
+                                    </div>
+                                )}
+                                {hoveredService === 'legal' && (
+                                    <div className="w-full h-full bg-gradient-to-br from-gray-500 to-slate-700 flex items-center justify-center text-white font-bold text-lg">
+                                        Legal
+                                    </div>
+                                )}
+                                {hoveredService === 'contact' && (
+                                    <div className="w-full h-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white font-bold text-lg">
+                                        {t('header.contact')}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
 
                     {/* Mobile Toggle (Single Pill) */}
                     <button
@@ -366,7 +424,7 @@ const Header = ({ theme = 'default' }) => {
                         onClick={() => menuOpen ? handleMenuClose() : setMenuOpen(true)}
                     >
                         <div className="background"></div>
-                        <span className="font-medium text-base">Menu</span>
+                        <span className="font-medium text-base">{t('header.menu')}</span>
                         {/* Animated Two-Line Icon (=) */}
                         <div className="relative w-6 h-6 flex items-center justify-center">
                             <div className="absolute w-5 h-2 flex flex-col justify-between">
@@ -560,17 +618,42 @@ const Header = ({ theme = 'default' }) => {
                                     <ArrowUpRight size={20} className="text-white" />
                                 </a>
 
-                                {/* Company Section */}
+                                {/* Support Section */}
                                 <div style={{
                                     opacity: menuEntering ? 0 : 1,
                                     animation: menuClosing ? 'fadeOutDown 200ms ease-out forwards' : 'none',
                                     transition: menuClosing ? 'none' : 'opacity 300ms ease-out 660ms'
                                 }}>
-                                    <h3 className="text-white/60 text-sm font-medium mb-4 px-2">{t('header.contact')}</h3>
+                                    <h3 className="text-white/60 text-sm font-medium mb-4 px-2">{t('header.help', 'Ayuda')}</h3>
                                     <div className="space-y-2">
+                                        {/* FAQ */}
                                         <a
-                                            href={getLocalizedPath("/contacto")}
-                                            onClick={(e) => { handleNavClick(e, '#contacto', '/contacto'); handleMenuClose(); }}
+                                            href={getLocalizedPath("/faq")}
+                                            onClick={(e) => { handleNavClick(e, 'faq', '/faq'); handleMenuClose(); }}
+                                            className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
+                                        >
+                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white shadow-lg">
+                                                <span className="font-bold text-lg">?</span>
+                                            </div>
+                                            <span className="text-lg font-bold text-white">FAQ</span>
+                                        </a>
+
+                                        {/* Legal */}
+                                        <a
+                                            href={getLocalizedPath("/privacy-policy")}
+                                            onClick={(e) => { handleNavClick(e, 'legal', '/privacy-policy'); handleMenuClose(); }}
+                                            className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
+                                        >
+                                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-500 to-slate-500 flex items-center justify-center text-white shadow-lg">
+                                                <span className="font-bold text-lg">§</span>
+                                            </div>
+                                            <span className="text-lg font-bold text-white">Legal</span>
+                                        </a>
+
+                                        {/* Contact */}
+                                        <a
+                                            href={getLocalizedPath("/#contacto")}
+                                            onClick={(e) => { handleNavClick(e, '#contacto', '/#contacto'); handleMenuClose(); }}
                                             className="flex items-center gap-4 p-2 rounded-xl hover:bg-white/10 transition-colors"
                                         >
                                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center text-white shadow-lg">

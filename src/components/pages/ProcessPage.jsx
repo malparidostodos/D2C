@@ -5,6 +5,7 @@ import Gallery from './Gallery';
 import ProcessTimeline from '../features/ProcessTimeline';
 import { useTranslation } from 'react-i18next';
 import { Settings, Quote, Check, Timer } from 'lucide-react';
+import SEO from '../ui/SEO';
 
 const ProcessPage = () => {
     const { t } = useTranslation();
@@ -13,6 +14,7 @@ const ProcessPage = () => {
 
     return (
         <div className="min-h-screen bg-[#0046b8] text-white">
+            <SEO title={t('process_page.title')} description={t('process_page.description')} />
             <Header theme="white" />
 
             {/* Hero Section - 2 Columns */}
@@ -101,7 +103,9 @@ const ProcessPage = () => {
             </div>
 
             {/* Footer */}
-            <Contact />
+            <div className="relative z-10">
+                <Contact />
+            </div>
         </div>
     );
 };

@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import * as THREE from "three";
 import { vertexShader, fluidShader, displayShader } from "./shaders.js";
 import "./InteractiveGradient.css";
+import { useSmoothScroll } from "../SmoothScroll";
 
 // Auth Colors (Purple/Indigo/Pink/Blue theme)
 const authColors = {
@@ -32,9 +33,15 @@ const InteractiveGradient = ({
     const animationLoopRef = useRef(null);
     const sceneDataRef = useRef(null);
     const location = useLocation();
+    const { lenis } = useSmoothScroll();
 
     // Check if we are on the home page or auth pages
-    const isHomePage = location.pathname === "/" || location.pathname === "/en" || location.pathname === "/inicio";
+    // Normalize path to handle potential trailing slashes (e.g., "/en/")
+    const normalizedPath = location.pathname.endsWith('/') && location.pathname.length > 1
+        ? location.pathname.slice(0, -1)
+        : location.pathname;
+
+    const isHomePage = normalizedPath === "/" || normalizedPath === "/en" || normalizedPath === "/inicio";
     const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].some(path => location.pathname.includes(path));
     const shouldRender = isHomePage || isAuthPage;
 
@@ -296,12 +303,15 @@ const InteractiveGradient = ({
 
     // Scroll handler to update visibility state and restart animation
     useEffect(() => {
-        const handleScroll = () => {
+        const handleScroll = (e) => {
+            // Support both lenis event object and native window fallback
+            const currentScrollY = e && typeof e.scroll === 'number' ? e.scroll : window.scrollY;
+
             if (isAuthPage) {
                 setIsScrollVisible(true);
                 return;
             }
-            const isVisible = window.scrollY <= window.innerHeight;
+            const isVisible = currentScrollY <= window.innerHeight;
             setIsScrollVisible(isVisible);
 
             // Restart animation if we just became visible and allowed to render
@@ -313,9 +323,25 @@ const InteractiveGradient = ({
         // Initial check
         handleScroll();
 
+        // Add a small delay check to handle ScrollToTop race condition
+        const checkTimer = setTimeout(() => {
+            handleScroll({ scroll: window.scrollY });
+        }, 100);
+
         window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+
+        if (lenis) {
+            lenis.on('scroll', handleScroll);
+        }
+
+        return () => {
+            clearTimeout(checkTimer);
+            window.removeEventListener('scroll', handleScroll);
+            if (lenis) {
+                lenis.off('scroll', handleScroll);
+            }
+        };
+    }, [lenis, isAuthPage, location.pathname]);
 
     // Ensure animation restarts if we navigate back
     useEffect(() => {
