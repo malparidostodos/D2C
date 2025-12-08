@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle, Plus, Copy, Eye, EyeOff } from 'lucide-react'
+import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle, Plus, Copy, Eye, EyeOff, Sun, Moon } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
 import SEO from '../ui/SEO'
 import AccountCreatedModal from '../booking/AccountCreatedModal'
@@ -16,6 +16,20 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { validatePlate, formatPlate } from '../../utils/vehicle'
 import { vehicleBrands } from '../../data/vehicleData'
+import VehicleSkeleton from '../ui/VehicleSkeleton'
+
+const checkLikelyLoggedIn = () => {
+    if (typeof window === 'undefined') return false
+    try {
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i)
+            if (key && key.endsWith('-auth-token')) return true
+        }
+    } catch (e) {
+        return false
+    }
+    return false
+}
 
 
 
@@ -120,11 +134,11 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
                     onClick={() => !disabled && onSelect(new Date(currentDate.getFullYear(), currentDate.getMonth(), i).toISOString().split('T')[0])}
                     disabled={disabled}
                     className={`h-10 w-10 rounded-full flex items-center justify-center text-sm transition-colors ${isSelected(i)
-                        ? 'bg-white text-black font-semibold'
+                        ? 'bg-black text-white dark:bg-white dark:text-black font-semibold'
                         : disabled
-                            ? fullyBooked && !isPast(i) ? 'text-red-500/40 cursor-not-allowed line-through' : 'text-white/20 cursor-not-allowed'
-                            : 'text-white hover:bg-white/10'
-                        } ${isToday(i) && !isSelected(i) ? 'border border-white/30' : ''}`}
+                            ? fullyBooked && !isPast(i) ? 'text-red-500/40 cursor-not-allowed line-through' : 'text-gray-300 dark:text-white/20 cursor-not-allowed'
+                            : 'text-gray-600 hover:bg-gray-200 dark:text-white dark:hover:bg-white/10'
+                        } ${isToday(i) && !isSelected(i) ? 'border border-gray-300 dark:border-white/30' : ''}`}
                 >
                     {i}
                 </button>
@@ -137,21 +151,21 @@ const CustomCalendar = ({ selectedDate, onSelect, availability = {}, onMonthChan
     const daysShort = Array.isArray(daysShortData) ? daysShortData : ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 
     return (
-        <div className="bg-[#111] p-6 rounded-3xl border border-white/10 w-full max-w-sm mx-auto">
+        <div className="bg-white dark:bg-[#111] p-6 rounded-3xl border border-gray-200 dark:border-white/10 w-full max-w-sm mx-auto shadow-lg dark:shadow-none">
             <div className="flex items-center justify-between mb-6">
-                <button onClick={handlePrev} className="p-2 hover:bg-white/10 rounded-full text-white transition-colors">
+                <button onClick={handlePrev} className="p-2 hover:bg-gray-100 dark:hover:bg-white/10 rounded-full text-gray-700 dark:text-white transition-colors">
                     <ChevronLeft size={20} />
                 </button>
-                <span className="text-white font-semibold capitalize">
+                <span className="text-gray-900 dark:text-white font-semibold capitalize">
                     {currentMonths[currentDate.getMonth()]} {currentDate.getFullYear()}
                 </span>
-                <button onClick={handleNext} className="p-2 hover:bg-white/10 rounded-full text-white transition-colors">
+                <button onClick={handleNext} className="p-2 hover:bg-gray-100 dark:hover:bg-white/10 rounded-full text-gray-700 dark:text-white transition-colors">
                     <ChevronRight size={20} />
                 </button>
             </div>
             <div className="grid grid-cols-7 gap-1 mb-2">
                 {daysShort.map(day => (
-                    <div key={day} className="h-10 w-10 flex items-center justify-center text-white/40 text-xs font-medium">
+                    <div key={day} className="h-10 w-10 flex items-center justify-center text-gray-400 dark:text-white/40 text-xs font-medium">
                         {day}
                     </div>
                 ))}
@@ -175,12 +189,35 @@ const BookingPage = () => {
     const { t, i18n } = useTranslation()
 
     // Estado para usuarios autenticados
+    // Check localStorage synchronously to avoid flash of content
+    const [likelyLoggedIn] = useState(() => checkLikelyLoggedIn())
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [userVehicles, setUserVehicles] = useState([])
     const [loadingVehicles, setLoadingVehicles] = useState(true)
     const [useExistingVehicle, setUseExistingVehicle] = useState(false) // Si selecciona vehículo existente
     const [newUserCredentials, setNewUserCredentials] = useState(null) // Credenciales de usuario nuevo creado automáticamente
     const [showAccountModal, setShowAccountModal] = useState(false)
+
+    // Theme State
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        // Default to LIGHT (false) if no setting found
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('dashboardTheme')
+            return saved !== null ? JSON.parse(saved) : false
+        }
+        return false
+    })
+
+    useEffect(() => {
+        localStorage.setItem('dashboardTheme', JSON.stringify(isDarkMode))
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    }, [isDarkMode])
+
+    const toggleTheme = () => setIsDarkMode(!isDarkMode)
 
     // Helper removed as it's provided by useMenu now
     // const getLocalizedPath = (path) => { ... }
@@ -208,7 +245,6 @@ const BookingPage = () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
     }, [])
-
     const bookingSchema = z.object({
         vehicleType: z.object({
             id: z.string(),
@@ -803,7 +839,7 @@ const BookingPage = () => {
 
     if (isConfirmed) {
         return (
-            <main className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 flex items-center justify-center">
+            <main className="min-h-screen bg-gray-50 dark:bg-[#050505] pt-32 pb-20 px-4 md:px-8 flex items-center justify-center transition-colors duration-300">
                 <SEO
                     title={t('booking.confirmed_title')}
                     description={t('booking.confirmed_message')}
@@ -812,31 +848,31 @@ const BookingPage = () => {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="max-w-3xl w-full bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 text-center"
+                    className="max-w-3xl w-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-3xl p-8 md:p-12 text-center shadow-xl dark:shadow-none"
                 >
                     <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-8">
                         <CheckCircle size={48} className="text-green-500" />
                     </div>
-                    <h2 className="text-3xl md:text-4xl font-display font-semibold text-white mb-4">
+                    <h2 className="text-3xl md:text-4xl font-display font-semibold text-gray-900 dark:text-white mb-4">
                         {t('booking.confirmed_title')}
                     </h2>
-                    <p className="text-white/60 mb-8 text-lg">
-                        {t('booking.confirmed_message')} <span className="text-white font-medium">{formData.clientInfo.email}</span>. {t('booking.confirmed_message_suffix')}
+                    <p className="text-gray-600 dark:text-white/60 mb-8 text-lg">
+                        {t('booking.confirmed_message')} <span className="text-black dark:text-white font-medium">{formData.clientInfo.email}</span>. {t('booking.confirmed_message_suffix')}
                     </p>
 
                     {/* Booking Details Card - Lighter background, subtle border */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8 text-left space-y-6">
+                    <div className="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-6 mb-8 text-left space-y-6">
                         <div className="flex justify-between items-center">
-                            <span className="text-white/40 uppercase text-xs tracking-wider">{t('booking.steps.date')}</span>
-                            <span className="text-white font-semibold text-xl capitalize">{formatDateLong(formData.date)}</span>
+                            <span className="text-gray-500 dark:text-white/40 uppercase text-xs tracking-wider">{t('booking.steps.date')}</span>
+                            <span className="text-gray-900 dark:text-white font-semibold text-xl capitalize">{formatDateLong(formData.date)}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                            <span className="text-white/40 uppercase text-xs tracking-wider">{t('booking.time_label')}</span>
-                            <span className="text-white font-semibold text-xl">{formData.time}</span>
+                            <span className="text-gray-500 dark:text-white/40 uppercase text-xs tracking-wider">{t('booking.time_label')}</span>
+                            <span className="text-gray-900 dark:text-white font-semibold text-xl">{formData.time}</span>
                         </div>
                         <div className="flex justify-between items-center">
-                            <span className="text-white/40 uppercase text-xs tracking-wider">{t('booking.service')}</span>
-                            <span className="text-white font-medium text-lg">{formData.service?.name}</span>
+                            <span className="text-gray-500 dark:text-white/40 uppercase text-xs tracking-wider">{t('booking.service')}</span>
+                            <span className="text-gray-900 dark:text-white font-medium text-lg">{formData.service?.name}</span>
                         </div>
                     </div>
 
@@ -849,7 +885,7 @@ const BookingPage = () => {
                     <div className="flex flex-col-reverse md:flex-row items-center justify-center gap-4 mt-8">
                         <button
                             onClick={() => navigateWithTransition(getLocalizedPath('/'))}
-                            className="px-8 py-4 rounded-full border border-white/20 text-white hover:bg-white/5 transition-colors font-medium w-full md:w-auto"
+                            className="px-8 py-4 rounded-full border border-gray-300 dark:border-white/20 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors font-medium w-full md:w-auto"
                         >
                             {t('booking.back_home')}
                         </button>
@@ -878,15 +914,24 @@ const BookingPage = () => {
     }
 
     return (
-        <main className="min-h-screen bg-[#050505] pt-32 pb-20 px-4 md:px-8 relative">
+        <main className="min-h-screen bg-gray-50 dark:bg-[#050505] pt-32 pb-20 px-4 md:px-8 relative transition-colors duration-300">
             <SEO
                 title={t('booking.seo_title')}
                 description={t('booking.seo_description')}
             />
             <h1 className="sr-only">{t('booking.seo_title')}</h1>
-            <a href={getLocalizedPath('/')} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath('/')) }} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-semibold text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
+            <a href={getLocalizedPath('/')} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath('/')) }} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-semibold text-black dark:text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
                 Ta' <span className="text-accent">To'</span> Clean
             </a>
+
+            {/* Theme Toggle Button */}
+            <button
+                onClick={toggleTheme}
+                className="absolute top-6 right-6 md:top-8 md:right-8 p-3 rounded-full bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/20 transition-all z-[100] cursor-pointer shadow-lg dark:shadow-none"
+                aria-label="Toggle theme"
+            >
+                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
             <div className="max-w-6xl mx-auto">
                 {/* Progress Bar - Solo mostrar si no es paso 0 */}
                 {step > 0 && (
@@ -914,10 +959,10 @@ const BookingPage = () => {
                                         onClick={() => isClickable && jumpToStep(actualStep)}
                                         disabled={!isClickable}
                                         className={`text-xs md:text-sm font-medium transition-colors ${isClickable
-                                            ? 'text-white cursor-pointer hover:text-accent'
+                                            ? 'text-gray-900 dark:text-white cursor-pointer hover:text-accent'
                                             : isActiveOrPast
-                                                ? 'text-white'
-                                                : 'text-white/20'
+                                                ? 'text-gray-900 dark:text-white'
+                                                : 'text-gray-400 dark:text-white/20'
                                             }`}
                                     >
                                         {label}
@@ -925,9 +970,9 @@ const BookingPage = () => {
                                 )
                             })}
                         </div>
-                        <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div className="h-1 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
                             <motion.div
-                                className="h-full bg-white"
+                                className="h-full bg-black dark:bg-white"
                                 initial={{ width: '0%' }}
                                 animate={{ width: `${(step / 5) * 100}%` }}
                                 transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -980,31 +1025,45 @@ const BookingPage = () => {
                 return (
                     <div className="space-y-8">
                         <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
-                            {userVehicles.length > 0 ? t('booking.select_vehicle') : t('booking.add_first_vehicle_title')}
+                            {loadingVehicles && likelyLoggedIn
+                                ? t('booking.select_vehicle')
+                                : userVehicles.length > 0
+                                    ? t('booking.select_vehicle')
+                                    : t('booking.add_first_vehicle_title')}
                         </h2>
-                        <p className="text-white/60 text-center -mt-4 mb-8">
-                            {userVehicles.length > 0
-                                ? t('booking.select_vehicle_subtitle')
-                                : t('booking.add_first_vehicle_subtitle')}
-                        </p>
 
-                        {userVehicles.length === 0 ? (
+                        {!loadingVehicles && (
+                            <p className="text-white/60 text-center -mt-4 mb-8">
+                                {userVehicles.length > 0
+                                    ? t('booking.select_vehicle_subtitle')
+                                    : t('booking.add_first_vehicle_subtitle')}
+                            </p>
+                        )}
+
+
+                        {loadingVehicles && likelyLoggedIn ? (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {[1, 2, 3].map((i) => (
+                                    <VehicleSkeleton key={i} />
+                                ))}
+                            </div>
+                        ) : userVehicles.length === 0 ? (
                             // Sin vehículos guardados - Mostrar solo botón grande para añadir
                             <div className="max-w-md mx-auto">
                                 <motion.button
                                     whileHover={{ scale: 1.03 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={handleAddNewVehicle}
-                                    className="w-full p-6 md:p-12 rounded-3xl border-2 border-dashed border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 text-white flex flex-col items-center justify-center gap-6 transition-all duration-300"
+                                    className="w-full p-6 md:p-12 rounded-3xl border-2 border-dashed border-gray-300 dark:border-white/30 hover:border-gray-500 dark:hover:border-white/60 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 text-gray-700 dark:text-white flex flex-col items-center justify-center gap-6 transition-all duration-300 shadow-sm dark:shadow-none"
                                 >
-                                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/10 flex items-center justify-center">
-                                        <Plus size={32} className="text-white md:w-10 md:h-10" />
+                                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center">
+                                        <Plus size={32} className="text-gray-900 dark:text-white md:w-10 md:h-10" />
                                     </div>
                                     <div className="text-center">
-                                        <h3 className="text-xl md:text-2xl font-semibold text-white mb-2">
+                                        <h3 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2">
                                             {t('booking.add_my_vehicle_button')}
                                         </h3>
-                                        <p className="text-white/60 text-sm md:text-base">
+                                        <p className="text-gray-500 dark:text-white/60 text-sm md:text-base">
                                             {t('booking.add_first_vehicle_button_subtitle')}
                                         </p>
                                     </div>
@@ -1025,18 +1084,18 @@ const BookingPage = () => {
                                             whileHover={{ scale: 1.03, y: -5 }}
                                             whileTap={{ scale: 0.98 }}
                                             onClick={() => handleExistingVehicleSelect(vehicle)}
-                                            className="relative overflow-hidden p-6 rounded-3xl border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white flex flex-col items-center gap-4 transition-all duration-300 group min-h-[240px]"
+                                            className="relative overflow-hidden p-6 rounded-3xl border-2 bg-white dark:bg-white/5 border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/30 text-gray-900 dark:text-white flex flex-col items-center gap-4 transition-all duration-300 group min-h-[240px] shadow-lg dark:shadow-none hover:shadow-xl"
                                         >
                                             {vehicle.is_primary && (
                                                 <div className="absolute top-3 left-3">
-                                                    <span className="text-[10px] font-semibold bg-blue-500/20 text-blue-500 px-2 py-1 rounded-full uppercase tracking-wider">
+                                                    <span className="text-[10px] font-semibold bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-500 px-2 py-1 rounded-full uppercase tracking-wider">
                                                         Principal
                                                     </span>
                                                 </div>
                                             )}
 
                                             {vehicle.nickname && (
-                                                <p className="text-white font-medium text-lg absolute top-3 right-3">
+                                                <p className="text-gray-900 dark:text-white font-medium text-lg absolute top-3 right-3">
                                                     {vehicle.nickname}
                                                 </p>
                                             )}
@@ -1046,11 +1105,11 @@ const BookingPage = () => {
                                             </div>
 
                                             <div className="text-center w-full">
-                                                <h3 className="text-2xl font-semibold text-white tracking-tight mb-1">
+                                                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white tracking-tight mb-1">
                                                     {vehicle.plate}
                                                 </h3>
                                                 {(vehicle.brand || vehicle.model) && (
-                                                    <p className="text-white/60 text-sm capitalize">
+                                                    <p className="text-gray-500 dark:text-white/60 text-sm capitalize">
                                                         {vehicle.brand} {vehicle.model}
                                                     </p>
                                                 )}
@@ -1064,16 +1123,16 @@ const BookingPage = () => {
                                     whileHover={{ scale: 1.03, y: -5 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={handleAddNewVehicle}
-                                    className="relative overflow-hidden p-6 rounded-3xl border-2 border-dashed border-white/30 hover:border-white/60 bg-white/5 hover:bg-white/10 text-white flex flex-col items-center justify-center gap-4 transition-all duration-300 min-h-[240px]"
+                                    className="relative overflow-hidden p-6 rounded-3xl border-2 border-dashed border-gray-300 dark:border-white/30 hover:border-gray-500 dark:hover:border-white/60 bg-white dark:bg-white/5 hover:bg-gray-50 dark:hover:bg-white/10 text-gray-700 dark:text-white flex flex-col items-center justify-center gap-4 transition-all duration-300 min-h-[240px] shadow-sm dark:shadow-none hover:shadow-md"
                                 >
-                                    <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
-                                        <Plus size={32} className="text-white" />
+                                    <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center">
+                                        <Plus size={32} className="text-gray-900 dark:text-white" />
                                     </div>
                                     <div className="text-center">
-                                        <h3 className="text-xl font-semibold text-white mb-1">
+                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                                             Añadir Vehículo Nuevo
                                         </h3>
-                                        <p className="text-white/40 text-sm">
+                                        <p className="text-gray-500 dark:text-white/40 text-sm">
                                             Registra un nuevo vehículo
                                         </p>
                                     </div>
@@ -1085,7 +1144,7 @@ const BookingPage = () => {
             case 1:
                 return (
                     <div className="space-y-8">
-                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-gray-900 dark:text-white text-center mb-8">
                             {t('booking.select_vehicle')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1095,9 +1154,9 @@ const BookingPage = () => {
                                     whileHover={{ scale: 1.03, y: -5 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleVehicleSelect(type)}
-                                    className={`relative overflow-hidden p-6 md:p-8 rounded-3xl border-2 flex flex-col items-center gap-6 transition-all duration-300 group ${formData.vehicleType?.id === type.id
-                                        ? 'bg-white text-black border-white shadow-[0_0_30px_rgba(255,255,255,0.3)]'
-                                        : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/30 text-white'
+                                    className={`relative overflow-hidden p-6 md:p-8 rounded-3xl border-2 flex flex-col items-center gap-6 transition-all duration-300 group shadow-lg dark:shadow-none ${formData.vehicleType?.id === type.id
+                                        ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white shadow-[0_0_30px_rgba(0,0,0,0.3)] dark:shadow-[0_0_30px_rgba(255,255,255,0.3)]'
+                                        : 'bg-white border-gray-100 hover:border-gray-300 dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10 dark:hover:border-white/30 text-gray-900 dark:text-white'
                                         }`}
                                 >
                                     <div className="p-4">
@@ -1105,14 +1164,14 @@ const BookingPage = () => {
                                     </div>
                                     <div className="text-center">
                                         <span className="text-xl font-semibold block mb-2">{type.name}</span>
-                                        <span className={`text-sm ${formData.vehicleType?.id === type.id ? 'text-black/60' : 'text-white/40'}`}>
+                                        <span className={`text-sm ${formData.vehicleType?.id === type.id ? 'text-white/80 dark:text-black/60' : 'text-gray-500 dark:text-white/40'}`}>
                                             {type.description}
                                         </span>
                                     </div>
 
                                     {formData.vehicleType?.id === type.id && (
                                         <div className="absolute top-4 right-4 text-accent">
-                                            <Check size={24} className="text-black" />
+                                            <Check size={24} className="text-white dark:text-black" />
                                         </div>
                                     )}
                                 </motion.button>
@@ -1124,7 +1183,7 @@ const BookingPage = () => {
             case 2:
                 return (
                     <div className="space-y-8">
-                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-gray-900 dark:text-white text-center mb-8">
                             {t('booking.select_service')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1132,19 +1191,19 @@ const BookingPage = () => {
                                 <motion.div
                                     key={service.id}
                                     whileHover={{ scale: 1.02 }}
-                                    className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${formData.service?.id === service.id
-                                        ? 'bg-white/10 border-white shadow-[0_0_20px_rgba(255,255,255,0.1)]'
-                                        : 'bg-white/5 border-white/10 hover:border-white/30'
+                                    className={`p-6 rounded-2xl border-2 cursor-pointer transition-all shadow-md dark:shadow-none ${formData.service?.id === service.id
+                                        ? 'bg-black/5 border-black dark:bg-white/10 dark:border-white shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)]'
+                                        : 'bg-white border-gray-200 hover:border-gray-400 dark:bg-white/5 dark:border-white/10 dark:hover:border-white/30'
                                         }`}
                                     onClick={() => handleServiceSelect(service)}
                                 >
                                     <div className="flex justify-between items-start mb-4">
-                                        <h3 className="text-xl font-semibold text-white">{service.name}</h3>
+                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{service.name}</h3>
                                     </div>
-                                    <p className="text-white/60 text-sm mb-4">{service.description}</p>
+                                    <p className="text-gray-600 dark:text-white/60 text-sm mb-4">{service.description}</p>
                                     <ul className="space-y-2">
                                         {service.features.map((feature, i) => (
-                                            <li key={i} className="flex items-center gap-2 text-white/50 text-xs">
+                                            <li key={i} className="flex items-center gap-2 text-gray-500 dark:text-white/50 text-xs">
                                                 <Check size={12} /> {feature}
                                             </li>
                                         ))}
@@ -1158,6 +1217,7 @@ const BookingPage = () => {
                                 <div className="flex justify-end pt-4">
                                     <AnimatedButton
                                         onClick={nextStep}
+                                        variant={isDarkMode ? 'primary' : 'black'}
                                     >
                                         {t('booking.next')}
                                     </AnimatedButton>
@@ -1169,34 +1229,34 @@ const BookingPage = () => {
             case 3:
                 return (
                     <div className="space-y-8 max-w-5xl mx-auto">
-                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-gray-900 dark:text-white text-center mb-8">
                             {t('booking.your_details')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {/* Left Column: Personal Info */}
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-white/60 text-sm mb-2">{t('booking.full_name')}</label>
+                                    <label className="block text-gray-700 dark:text-white/60 text-sm mb-2">{t('booking.full_name')}</label>
                                     <input
                                         type="text"
                                         {...control.register('clientInfo.name')}
-                                        className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.name ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
+                                        className={`w-full bg-gray-50 dark:bg-white/5 border rounded-xl p-4 text-gray-900 dark:text-white focus:outline-none transition-colors ${errors.clientInfo?.name ? 'border-red-500 focus:border-red-500' : 'border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/50'}`}
                                         placeholder="Juan Pérez"
                                     />
                                     {errors.clientInfo?.name && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.name.message}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-white/60 text-sm mb-2">{t('booking.email')}</label>
+                                    <label className="block text-gray-700 dark:text-white/60 text-sm mb-2">{t('booking.email')}</label>
                                     <input
                                         type="email"
                                         {...control.register('clientInfo.email')}
-                                        className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.email ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
+                                        className={`w-full bg-gray-50 dark:bg-white/5 border rounded-xl p-4 text-gray-900 dark:text-white focus:outline-none transition-colors ${errors.clientInfo?.email ? 'border-red-500 focus:border-red-500' : 'border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/50'}`}
                                         placeholder="juan@ejemplo.com"
                                         disabled={isAuthenticated}
                                     />
                                     {errors.clientInfo?.email && <p className="text-red-500 text-xs mt-1">{errors.clientInfo.email.message}</p>}
                                     {!isAuthenticated && !useExistingVehicle && (
-                                        <p className="text-white/40 text-xs mt-2 flex items-start gap-1.5">
+                                        <p className="text-gray-500 dark:text-white/40 text-xs mt-2 flex items-start gap-1.5">
                                             <svg className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                                             </svg>
@@ -1205,11 +1265,11 @@ const BookingPage = () => {
                                     )}
                                 </div>
                                 <div>
-                                    <label className="block text-white/60 text-sm mb-2">{t('booking.phone')}</label>
+                                    <label className="block text-gray-700 dark:text-white/60 text-sm mb-2">{t('booking.phone')}</label>
                                     <input
                                         type="tel"
                                         {...control.register('clientInfo.phone')}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
+                                        className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-gray-900 dark:text-white focus:outline-none focus:border-gray-400 dark:focus:border-white/50 transition-colors"
                                         placeholder="300 123 4567"
                                     />
                                 </div>
@@ -1219,7 +1279,7 @@ const BookingPage = () => {
                             <div className="space-y-4">
                                 {/* Brand Selection */}
                                 <div className="relative" ref={brandDropdownRef}>
-                                    <label className="block text-white/60 text-sm mb-2">{t('booking.brand')}</label>
+                                    <label className="block text-gray-700 dark:text-white/60 text-sm mb-2">{t('booking.brand')}</label>
                                     <div className={`relative ${showBrandList ? 'z-50' : ''}`}>
                                         <input
                                             type="text"
@@ -1233,7 +1293,7 @@ const BookingPage = () => {
                                                 setShowBrandList(true)
                                             }}
                                             onFocus={() => setShowBrandList(true)}
-                                            className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors ${errors.clientInfo?.brand ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-white/50'}`}
+                                            className={`w-full bg-gray-50 dark:bg-white/5 border rounded-xl p-4 text-gray-900 dark:text-white focus:outline-none transition-colors ${errors.clientInfo?.brand ? 'border-red-500 focus:border-red-500' : 'border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/50'}`}
                                             placeholder={
                                                 formData.vehicleType?.id === 'motorcycle' ? "Yamaha, Honda, Suzuki..." :
                                                     formData.vehicleType?.id === 'suv' ? "Toyota, Ford, Chevrolet..." :
@@ -1244,7 +1304,7 @@ const BookingPage = () => {
                                         {/* Dropdown - Opens Downwards */}
                                         {showBrandList && (
                                             <div
-                                                className="absolute left-0 right-0 mt-2 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-96 overflow-y-auto z-[100] custom-scrollbar overscroll-contain"
+                                                className="absolute left-0 right-0 mt-2 bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-96 overflow-y-auto z-[100] custom-scrollbar overscroll-contain"
                                                 onWheel={(e) => e.stopPropagation()}
                                                 onTouchStart={(e) => e.stopPropagation()}
                                                 onTouchMove={(e) => e.stopPropagation()}
@@ -1263,14 +1323,14 @@ const BookingPage = () => {
                                                                 setModelSearch('')
                                                                 setShowBrandList(false)
                                                             }}
-                                                            className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors border-b border-white/5 last:border-0 flex items-center justify-between group"
+                                                            className="w-full text-left px-4 py-3 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors border-b border-gray-100 dark:border-white/5 last:border-0 flex items-center justify-between group"
                                                         >
                                                             <span className="font-medium">{item.brand}</span>
-                                                            <ChevronRight size={16} className="text-white/20 group-hover:text-white/60 transition-colors" />
+                                                            <ChevronRight size={16} className="text-gray-400 dark:text-white/20 group-hover:text-gray-600 dark:group-hover:text-white/60 transition-colors" />
                                                         </button>
                                                     ))}
                                                 {getFilteredBrands().filter(b => b.brand.toLowerCase().includes(brandSearch.toLowerCase())).length === 0 && (
-                                                    <div className="px-4 py-3 text-white/40 text-sm text-center">
+                                                    <div className="px-4 py-3 text-gray-400 dark:text-white/40 text-sm text-center">
                                                         {t('booking.no_brands_found')}
                                                     </div>
                                                 )}
@@ -1282,7 +1342,7 @@ const BookingPage = () => {
 
                                 {/* Model Selection */}
                                 <div className="relative" ref={modelDropdownRef}>
-                                    <label className="block text-white/60 text-sm mb-2">{t('booking.model')}</label>
+                                    <label className="block text-gray-700 dark:text-white/60 text-sm mb-2">{t('booking.model')}</label>
                                     <div className={`relative ${showModelList ? 'z-50' : ''}`}>
                                         <input
                                             type="text"
@@ -1293,7 +1353,7 @@ const BookingPage = () => {
                                                 setShowModelList(true)
                                             }}
                                             onFocus={() => setShowModelList(true)}
-                                            className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/50 transition-colors"
+                                            className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-gray-900 dark:text-white focus:outline-none focus:border-gray-400 dark:focus:border-white/50 transition-colors"
                                             placeholder={
                                                 formData.vehicleType?.id === 'motorcycle' ? "MT-09, XTZ, GSX..." :
                                                     formData.vehicleType?.id === 'suv' ? "Fortuner, Explorer, Tahoe..." :
@@ -1305,7 +1365,7 @@ const BookingPage = () => {
                                         {/* Dropdown - Opens Upwards */}
                                         {showModelList && formData.clientInfo.brand && (
                                             <div
-                                                className="absolute left-0 right-0 bottom-full mb-2 bg-[#1a1a1a] border border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-96 overflow-y-auto z-[100] custom-scrollbar overscroll-contain"
+                                                className="absolute left-0 right-0 bottom-full mb-2 bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/10 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] max-h-96 overflow-y-auto z-[100] custom-scrollbar overscroll-contain"
                                                 onWheel={(e) => e.stopPropagation()}
                                                 onTouchStart={(e) => e.stopPropagation()}
                                                 onTouchMove={(e) => e.stopPropagation()}
@@ -1321,14 +1381,14 @@ const BookingPage = () => {
                                                                 setModelSearch(model)
                                                                 setShowModelList(false)
                                                             }}
-                                                            className="w-full text-left px-4 py-3 text-white hover:bg-white/10 transition-colors border-b border-white/5 last:border-0 flex items-center justify-between group"
+                                                            className="w-full text-left px-4 py-3 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors border-b border-gray-100 dark:border-white/5 last:border-0 flex items-center justify-between group"
                                                         >
                                                             <span className="font-medium">{model}</span>
-                                                            <ChevronRight size={16} className="text-white/20 group-hover:text-white/60 transition-colors" />
+                                                            <ChevronRight size={16} className="text-gray-400 dark:text-white/20 group-hover:text-gray-600 dark:group-hover:text-white/60 transition-colors" />
                                                         </button>
                                                     ))}
                                                 {getAvailableModels().length > 0 && getAvailableModels().filter(model => model.toLowerCase().includes(modelSearch.toLowerCase())).length === 0 && (
-                                                    <div className="px-4 py-3 text-white/40 text-sm text-center">
+                                                    <div className="px-4 py-3 text-gray-400 dark:text-white/40 text-sm text-center">
                                                         No models found
                                                     </div>
                                                 )}
@@ -1359,6 +1419,7 @@ const BookingPage = () => {
                         <div className="flex justify-end pt-4">
                             <AnimatedButton
                                 onClick={nextStep}
+                                variant={isDarkMode ? 'primary' : 'black'}
                             >
                                 {t('booking.next')}
                             </AnimatedButton>
@@ -1368,12 +1429,12 @@ const BookingPage = () => {
             case 4:
                 return (
                     <div className="space-y-8 max-w-4xl mx-auto">
-                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-gray-900 dark:text-white text-center mb-8">
                             {t('booking.date_time')}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                             <div>
-                                <label className="block text-white/60 text-sm mb-4">{t('booking.select_date')}</label>
+                                <label className="block text-gray-700 dark:text-white/60 text-sm mb-4">{t('booking.select_date')}</label>
                                 <CustomCalendar
                                     selectedDate={formData.date}
                                     onSelect={handleDateSelect}
@@ -1382,7 +1443,7 @@ const BookingPage = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-white/60 text-sm mb-4">{t('booking.select_time')}</label>
+                                <label className="block text-gray-700 dark:text-white/60 text-sm mb-4">{t('booking.select_time')}</label>
                                 <div className="grid grid-cols-3 gap-3">
                                     {timeSlots.map((time) => {
                                         const isTaken = isTimeSlotTaken(time)
@@ -1392,12 +1453,12 @@ const BookingPage = () => {
                                                 onClick={() => !isTaken && handleTimeSelect(time)}
                                                 disabled={isTaken || !formData.date}
                                                 className={`p-3 rounded-xl text-sm font-medium transition-all ${formData.time === time
-                                                    ? 'bg-white text-black scale-105 shadow-lg'
+                                                    ? 'bg-black text-white dark:bg-white dark:text-black scale-105 shadow-lg'
                                                     : isTaken
-                                                        ? 'bg-red-500/10 text-red-500/40 cursor-not-allowed line-through border border-red-500/20'
+                                                        ? 'bg-red-500/5 text-red-500/40 cursor-not-allowed line-through border border-red-500/10'
                                                         : !formData.date
-                                                            ? 'bg-white/5 text-white/20 cursor-not-allowed border border-white/5'
-                                                            : 'bg-white/5 text-white hover:bg-white/10 border border-white/5'
+                                                            ? 'bg-gray-100 text-gray-400 dark:bg-white/5 dark:text-white/20 cursor-not-allowed border border-gray-200 dark:border-white/5'
+                                                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:border-white/5'
                                                     }`}
                                             >
                                                 {time}
@@ -1406,9 +1467,9 @@ const BookingPage = () => {
                                     })}
                                 </div>
                                 {formData.date && formData.time && (
-                                    <div className="mt-8 p-4 bg-white/5 rounded-2xl border border-white/10">
-                                        <p className="text-white/60 text-sm mb-1">{t('booking.selection')}</p>
-                                        <p className="text-white font-semibold text-lg capitalize">
+                                    <div className="mt-8 p-4 bg-gray-50 dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/10">
+                                        <p className="text-gray-500 dark:text-white/60 text-sm mb-1">{t('booking.selection')}</p>
+                                        <p className="text-gray-900 dark:text-white font-semibold text-lg capitalize">
                                             {formatDateLong(formData.date)} - {formData.time}
                                         </p>
                                     </div>
@@ -1420,6 +1481,7 @@ const BookingPage = () => {
                                 onClick={nextStep}
                                 disabled={!formData.date || !formData.time}
                                 className={(!formData.date || !formData.time) ? 'opacity-50 cursor-not-allowed' : ''}
+                                variant={isDarkMode ? 'primary' : 'black'}
                             >
                                 {t('booking.view_summary')}
                             </AnimatedButton>
@@ -1429,21 +1491,21 @@ const BookingPage = () => {
             case 5:
                 return (
                     <div className="space-y-8 max-w-2xl mx-auto">
-                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-gray-900 dark:text-white text-center mb-8">
                             {t('booking.confirm_booking')}
                         </h2>
 
-                        <div className="bg-white/5 rounded-3xl p-6 md:p-8 border border-white/10 space-y-6">
+                        <div className="bg-white dark:bg-white/5 rounded-3xl p-6 md:p-8 border border-gray-200 dark:border-white/10 space-y-6 shadow-xl dark:shadow-none">
                             <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-white/10 gap-4 md:gap-0">
                                 <div className="flex items-center gap-4">
                                     <div className="p-3">
                                         <img src={formData.vehicleType.image} alt={formData.vehicleType.name} className="w-20 h-14 object-contain" />
                                     </div>
                                     <div>
-                                        <p className="text-white/40 text-sm">{t('booking.vehicle')}</p>
-                                        <p className="text-white font-semibold text-lg">{formData.vehicleType.name}</p>
-                                        <p className="text-white/60 text-sm">{formData.clientInfo.brand} {formData.clientInfo.model}</p>
-                                        <p className="text-white/60 text-sm">{t('booking.plate')}: {formData.clientInfo.plate}</p>
+                                        <p className="text-gray-500 dark:text-white/40 text-sm">{t('booking.vehicle')}</p>
+                                        <p className="text-gray-900 dark:text-white font-semibold text-lg">{formData.vehicleType.name}</p>
+                                        <p className="text-gray-600 dark:text-white/60 text-sm">{formData.clientInfo.brand} {formData.clientInfo.model}</p>
+                                        <p className="text-gray-600 dark:text-white/60 text-sm">{t('booking.plate')}: {formData.clientInfo.plate}</p>
                                     </div>
                                 </div>
                                 {/* Solo mostrar botones de editar si NO usó vehículo existente */}
@@ -1451,14 +1513,14 @@ const BookingPage = () => {
                                     <div className="flex flex-row md:flex-col gap-2 md:self-center self-end">
                                         <button
                                             onClick={() => jumpToStep(1)}
-                                            className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-white/10"
+                                            className="flex items-center gap-2 text-xs text-gray-500 dark:text-white/60 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-white/10"
                                         >
                                             <Edit2 size={12} />
                                             {t('booking.vehicle')}
                                         </button>
                                         <button
                                             onClick={() => jumpToStep(3)}
-                                            className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-white/10"
+                                            className="flex items-center gap-2 text-xs text-gray-500 dark:text-white/60 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-1 rounded-full hover:bg-gray-100 dark:hover:bg-white/10"
                                         >
                                             <Edit2 size={12} />
                                             {t('booking.plate')}
@@ -1469,18 +1531,18 @@ const BookingPage = () => {
 
                             <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-white/10 gap-4 md:gap-0">
                                 <div className="flex items-center gap-4">
-                                    <div className="p-3 bg-white/10 rounded-full">
-                                        <Check size={24} className="text-white" />
+                                    <div className="p-3 bg-gray-100 dark:bg-white/10 rounded-full">
+                                        <Check size={24} className="text-gray-900 dark:text-white" />
                                     </div>
                                     <div>
-                                        <p className="text-white/40 text-sm">{t('booking.service')}</p>
-                                        <p className="text-white font-semibold text-lg">{formData.service.name}</p>
-                                        <p className="text-white/60 text-sm">{formData.service.description}</p>
+                                        <p className="text-gray-500 dark:text-white/40 text-sm">{t('booking.service')}</p>
+                                        <p className="text-gray-900 dark:text-white font-semibold text-lg">{formData.service.name}</p>
+                                        <p className="text-gray-600 dark:text-white/60 text-sm">{formData.service.description}</p>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => jumpToStep(2)}
-                                    className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10 md:self-center self-end"
+                                    className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/60 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 md:self-center self-end"
                                 >
                                     <Edit2 size={14} />
                                     {t('booking.change')}
@@ -1489,17 +1551,17 @@ const BookingPage = () => {
 
                             <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-white/10 gap-4 md:gap-0">
                                 <div className="flex items-center gap-4">
-                                    <div className="p-3 bg-white/10 rounded-full">
-                                        <CalendarIcon size={24} className="text-white" />
+                                    <div className="p-3 bg-gray-100 dark:bg-white/10 rounded-full">
+                                        <CalendarIcon size={24} className="text-gray-900 dark:text-white" />
                                     </div>
                                     <div>
-                                        <p className="text-white/40 text-sm">{t('booking.date_time')}</p>
-                                        <p className="text-white font-semibold text-lg capitalize">{formatDateLong(formData.date)} - {formData.time}</p>
+                                        <p className="text-gray-500 dark:text-white/40 text-sm">{t('booking.date_time')}</p>
+                                        <p className="text-gray-900 dark:text-white font-semibold text-lg capitalize">{formatDateLong(formData.date)} - {formData.time}</p>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => jumpToStep(4)}
-                                    className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10 md:self-center self-end"
+                                    className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/60 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 md:self-center self-end"
                                 >
                                     <Edit2 size={14} />
                                     {t('booking.change')}
@@ -1508,19 +1570,19 @@ const BookingPage = () => {
 
                             <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-white/10 gap-4 md:gap-0">
                                 <div className="flex items-center gap-4">
-                                    <div className="p-3 bg-white/10 rounded-full">
-                                        <User size={24} className="text-white" />
+                                    <div className="p-3 bg-gray-100 dark:bg-white/10 rounded-full">
+                                        <User size={24} className="text-gray-900 dark:text-white" />
                                     </div>
                                     <div>
-                                        <p className="text-white/40 text-sm">{t('booking.your_details')}</p>
-                                        <p className="text-white font-semibold text-lg">{formData.clientInfo.name}</p>
-                                        <p className="text-white/60 text-sm">{formData.clientInfo.email}</p>
-                                        <p className="text-white/60 text-sm">{formData.clientInfo.phone}</p>
+                                        <p className="text-gray-500 dark:text-white/40 text-sm">{t('booking.your_details')}</p>
+                                        <p className="text-gray-900 dark:text-white font-semibold text-lg">{formData.clientInfo.name}</p>
+                                        <p className="text-gray-600 dark:text-white/60 text-sm">{formData.clientInfo.email}</p>
+                                        <p className="text-gray-600 dark:text-white/60 text-sm">{formData.clientInfo.phone}</p>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => jumpToStep(3)}
-                                    className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10 md:self-center self-end"
+                                    className="flex items-center gap-2 text-sm text-gray-500 dark:text-white/60 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 md:self-center self-end"
                                 >
                                     <Edit2 size={14} />
                                     {t('booking.change')}
@@ -1528,17 +1590,17 @@ const BookingPage = () => {
                             </div>
 
                             <div className="pt-4 space-y-3">
-                                <div className="flex items-center justify-between text-white/60 text-sm">
+                                <div className="flex items-center justify-between text-gray-500 dark:text-white/60 text-sm">
                                     <span>{t('booking.base_price')} ({formData.service.name})</span>
                                     <span>${formData.service.price.toLocaleString()}</span>
                                 </div>
-                                <div className="flex items-center justify-between text-white/60 text-sm">
+                                <div className="flex items-center justify-between text-gray-500 dark:text-white/60 text-sm">
                                     <span>{t('booking.multiplier')} ({formData.vehicleType.name})</span>
                                     <span>x{formData.vehicleType.priceMultiplier}</span>
                                 </div>
-                                <div className="flex items-center justify-between pt-3 border-t border-white/10">
-                                    <p className="text-white/60">{t('booking.total')}</p>
-                                    <p className="text-3xl font-semibold text-white">
+                                <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-white/10">
+                                    <p className="text-gray-600 dark:text-white/60">{t('booking.total')}</p>
+                                    <p className="text-3xl font-semibold text-gray-900 dark:text-white">
                                         ${(formData.service.price * formData.vehicleType.priceMultiplier).toLocaleString()}
                                     </p>
                                 </div>

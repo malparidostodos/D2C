@@ -51,6 +51,7 @@
 
 ::view-transition-group(root) {
   z-index: auto !important;
+  animation: none !important;
 }
 
 ::view-transition-image-pair(root) {
@@ -188,7 +189,7 @@ html::-webkit-scrollbar {
 .scrollbar-thumb {
   position: absolute;
   width: 100%;
-  background: #ffffff;
+  background: #FFFF00;
   border-radius: 10px;
   left: 0;
   top: 0;
@@ -206,10 +207,6 @@ html::-webkit-scrollbar {
     height: 150px;
   }
 }
-
-/* ========================================
-
-/* ========================================
 
 
 /* ========================================

@@ -52,9 +52,9 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
         return (
             <div>
                 <div className="flex justify-between items-center mb-2">
-                    <label className="block text-white/60 text-sm">
+                    <label className="block text-gray-700 dark:text-white/60 text-sm">
                         {t('vehicle_plate_selector.label')}
-                        <span className="text-xs ml-2 text-white/40">
+                        <span className="text-xs ml-2 text-gray-500 dark:text-white/40">
                             ({vehicleType?.id === 'motorcycle' ? 'AAA-00A / AAA-00' : 'AAA-000'})
                         </span>
                     </label>
@@ -74,9 +74,9 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     onBlur={onBlur}
-                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors uppercase ${error
+                    className={`w-full bg-gray-50 dark:bg-white/5 border rounded-xl p-4 text-gray-900 dark:text-white focus:outline-none transition-colors uppercase ${error
                         ? 'border-red-500 focus:border-red-500'
-                        : 'border-white/10 focus:border-white/50'
+                        : 'border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/50'
                         }`}
                     placeholder={vehicleType?.id === 'motorcycle' ? 'AAA-00A / AAA-00' : 'ABC-123'}
                 />
@@ -90,9 +90,9 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
     if (userVehicles.length === 0) {
         return (
             <div>
-                <label className="block text-white/60 text-sm mb-2">
+                <label className="block text-gray-700 dark:text-white/60 text-sm mb-2">
                     {t('vehicle_plate_selector.label')}
-                    <span className="text-xs ml-2 text-white/40">
+                    <span className="text-xs ml-2 text-gray-500 dark:text-white/40">
                         ({vehicleType?.id === 'motorcycle' ? 'AAA-00A / AAA-00' : 'AAA-000'})
                     </span>
                 </label>
@@ -102,13 +102,13 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     onBlur={onBlur}
-                    className={`w-full bg-white/5 border rounded-xl p-4 text-white focus:outline-none transition-colors uppercase ${error
+                    className={`w-full bg-gray-50 dark:bg-white/5 border rounded-xl p-4 text-gray-900 dark:text-white focus:outline-none transition-colors uppercase ${error
                         ? 'border-red-500 focus:border-red-500'
-                        : 'border-white/10 focus:border-white/50'
+                        : 'border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/50'
                         }`}
                     placeholder={vehicleType?.id === 'motorcycle' ? 'AAA-00A / AAA-00' : 'ABC-123'}
                 />
-                <p className="text-white/40 text-xs mt-2">{t('vehicle_plate_selector.add_hint')}</p>
+                <p className="text-gray-500 dark:text-white/40 text-xs mt-2">{t('vehicle_plate_selector.add_hint')}</p>
             </div>
         );
     }
@@ -116,11 +116,11 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
     return (
         <div>
             <div className="flex justify-between items-center mb-3">
-                <label className="block text-white/60 text-sm">{t('vehicle_plate_selector.select_vehicle')}</label>
+                <label className="block text-gray-700 dark:text-white/60 text-sm">{t('vehicle_plate_selector.select_vehicle')}</label>
                 <button
                     type="button"
                     onClick={() => setShowManualInput(true)}
-                    className="text-xs text-white/60 hover:text-white transition-colors flex items-center gap-1"
+                    className="text-xs text-gray-500 dark:text-white/60 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1"
                 >
                     <Plus size={12} />
                     {t('vehicle_plate_selector.other_vehicle')}
@@ -136,21 +136,21 @@ const VehiclePlateSelector = ({ value, onChange, onBlur, vehicleType, error }) =
                             type="button"
                             onClick={() => handleVehicleSelect(vehicle)}
                             className={`p-4 rounded-xl border-2 transition-all text-left ${isSelected
-                                ? 'bg-white/10 border-white shadow-lg'
-                                : 'bg-white/5 border-white/10 hover:border-white/30'
+                                ? 'bg-black text-white border-black dark:bg-white/10 dark:border-white shadow-lg'
+                                : 'bg-white border-gray-200 hover:border-black/10 dark:bg-white/5 dark:border-white/10 dark:hover:border-white/30'
                                 }`}
                         >
                             <div className="flex items-center gap-3">
-                                <div className={`p-2 rounded-full ${isSelected ? 'bg-white/20' : 'bg-white/10'}`}>
-                                    <Icon size={20} className="text-white" />
+                                <div className={`p-2 rounded-full ${isSelected ? 'bg-white/20' : 'bg-gray-100 dark:bg-white/10'}`}>
+                                    <Icon size={20} className={isSelected ? "text-white" : "text-gray-900 dark:text-white"} />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-white font-semibold">{vehicle.plate}</p>
+                                    <p className={`font-semibold ${isSelected ? 'text-white' : 'text-gray-900 dark:text-white'}`}>{vehicle.plate}</p>
                                     {vehicle.nickname && (
-                                        <p className="text-white/60 text-xs">{vehicle.nickname}</p>
+                                        <p className={`${isSelected ? 'text-white/60' : 'text-gray-500 dark:text-white/60'} text-xs`}>{vehicle.nickname}</p>
                                     )}
                                     {(vehicle.brand || vehicle.model) && (
-                                        <p className="text-white/40 text-xs">
+                                        <p className={`${isSelected ? 'text-white/40' : 'text-gray-400 dark:text-white/40'} text-xs`}>
                                             {vehicle.brand} {vehicle.model}
                                         </p>
                                     )}

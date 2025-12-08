@@ -49,7 +49,7 @@
         "title_part1": "Premium",
         "title_part2": "Automotive",
         "title_part3": "Care",
-        "subtitle": "We transform your vehicle with meticulous attention to detail and world-class products.",
+        "subtitle": "Restore your car's shine with our premium detailing services.",
         "cta_booking": "Book Appointment",
         "cta_services": "View Services"
     },
@@ -192,7 +192,9 @@
             "password_mismatch": "Passwords do not match",
             "login_failed": "Incorrect email or password",
             "password_length": "Password must be at least 6 characters",
-            "terms_required": "You must accept the terms and conditions"
+            "terms_required": "You must accept the terms and conditions",
+            "error_title": "Link Expired",
+            "invalid_link": "Email link is invalid or has expired"
         },
         "terms_agreement": "I confirm that I have read and agree to the",
         "terms_link": "Terms and Conditions",
@@ -214,6 +216,7 @@
         "redirecting_login_message": "Redirecting to login...",
         "password_length": "Password must be at least 6 characters",
         "passwords_mismatch": "Passwords don't match",
+        "request_new_link": "Request new link",
         "logout": "Log Out",
         "logout_success": "Successfully logged out",
         "logout_error": "Error logging out"

@@ -46,7 +46,7 @@ const CookieConsent = () => {
                     animate={{ y: 0, opacity: 1, scale: 1 }}
                     exit={{ y: 50, opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.4, ease: "easeOut" }}
-                    className={`fixed right-4 z-50 max-w-[400px] w-[calc(100%-2rem)] transition-all duration-300 ${isMenuMounted && hidden ? 'bottom-4' : (isMenuMounted ? 'bottom-24 md:bottom-4' : 'bottom-4')}`}
+                    className="fixed z-50 transition-all duration-300 left-4 right-4 bottom-4 md:left-auto md:right-4 md:bottom-4 md:w-[calc(100%-2rem)] md:max-w-[400px]"
                 >
                     <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-6 relative overflow-hidden">
                         {/* Decorative gradient blob */}

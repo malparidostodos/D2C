@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import CookieConsent from '../ui/CookieConsent';
 
-const LanguageWrapper = ({ language }) => {
+const LanguageWrapper = ({ language, children }) => {
     const { i18n } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
@@ -24,7 +24,7 @@ const LanguageWrapper = ({ language }) => {
 
     return (
         <>
-            {outlet}
+            {children || outlet}
             <CookieConsent />
         </>
     );

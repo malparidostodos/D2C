@@ -15,20 +15,6 @@
 <body>
     <div id="root"></div>
 
-    <!-- SVG Filters for Liquid Glass Effect -->
-    <svg style="position: absolute; width: 0; height: 0; pointer-events: none;">
-        <!-- Displacement filter for liquid glass distortion -->
-        <filter id="displacementFilter">
-            <feImage href="/liquid-glass-map.png" preserveAspectRatio="none" result="map" />
-            <feDisplacementMap in="SourceGraphic" in2="map" scale="200" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-        <!-- Alias for badges-container compatibility -->
-        <filter id="lg-dist">
-            <feImage href="/liquid-glass-map.png" preserveAspectRatio="none" result="map" />
-            <feDisplacementMap in="SourceGraphic" in2="map" scale="200" xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-    </svg>
-
     <script type="module" src="/src/main.jsx"></script>
 </body>
 

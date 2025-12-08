@@ -13,7 +13,7 @@ const Header = ({ theme = 'default' }) => {
         servicesOpen, setServicesOpen, supportOpen, setSupportOpen, activeSection, setHoverLock,
         hoveredService, setHoveredService, langOpen, setLangOpen, langRef,
         handleNavClick, handleLanguageChange, handleMenuClose, getLocalizedPath,
-        setIsMenuMounted, navigateWithTransition
+        setIsMenuMounted, navigateWithTransition, isHero
     } = useMenu();
 
     useEffect(() => {
@@ -148,22 +148,29 @@ const Header = ({ theme = 'default' }) => {
     return (
         <>
             {/* Navbar (Logo + Menu Btn) - Fixed exactly like reference */}
-            <nav className={`fixed top-0 left-0 w-full p-8 z-[9990] flex justify-between items-center text-white mix-blend-difference transition-transform duration-500 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
+            <nav className={`fixed top-0 left-0 w-full p-8 z-[9990] flex justify-between items-center text-[#FFFF00] mix-blend-difference transition-transform duration-500 select-none ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
+                {/* Logo - Always non-clickable in Navbar as requested */}
                 {/* Logo */}
-                <a
-                    href={getLocalizedPath('/')}
-                    onClick={(e) => onTransitionLinkClick(e, '/')}
-                    className="text-xl font-medium tracking-tight cursor-pointer"
-                >
-                    Ta' To' Clean
-                </a>
+                {isHomePage ? (
+                    <div className="text-xl font-medium tracking-tight cursor-default">
+                        Ta' To' Clean
+                    </div>
+                ) : (
+                    <a
+                        href={getLocalizedPath('/')}
+                        onClick={(e) => handleNavClick(e, '#inicio', '/')}
+                        className="text-xl font-medium tracking-tight cursor-pointer"
+                    >
+                        Ta' To' Clean
+                    </a>
+                )}
 
                 {/* Right Side: Language + Menu */}
-                <div className="flex items-center gap-6" ref={langRef}>
+                <div className="flex items-center gap-8" ref={langRef}>
                     {/* Language Selector (Main) */}
                     <div className="relative">
                         <div
-                            className="cursor-pointer text-base font-medium opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1"
+                            className="cursor-pointer text-base font-medium flex items-center gap-1"
                             onClick={() => setLangOpen(!langOpen)}
                         >
                             {currentLang}
@@ -177,19 +184,19 @@ const Header = ({ theme = 'default' }) => {
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                                     transition={{ duration: 0.2, ease: "easeOut" }}
-                                    className="absolute top-full right-0 mt-4 bg-white/30 border border-white/40 backdrop-blur-xl rounded-2xl p-2 min-w-[150px] shadow-2xl overflow-hidden origin-top-right mix-blend-normal"
+                                    className="absolute top-full right-0 mt-4 bg-[#FFFF00]/30 border border-[#FFFF00]/40 backdrop-blur-xl rounded-2xl p-2 min-w-[150px] shadow-2xl overflow-hidden origin-top-right mix-blend-normal"
                                 >
                                     {languages.map((lang) => (
                                         <button
                                             key={lang.code}
                                             onClick={() => handleLanguageChange(lang.code.toLowerCase())}
                                             className={`w-full text-left px-4 py-3 text-sm font-semibold transition-all rounded-xl flex items-center justify-between group ${currentLang === lang.code
-                                                ? 'bg-white/40 text-white shadow-sm ring-1 ring-white/50'
-                                                : 'text-white hover:bg-white/20 hover:text-white'
+                                                ? 'bg-[#FFFF00]/40 text-[#FFFF00] shadow-sm ring-1 ring-[#FFFF00]/50'
+                                                : 'text-[#FFFF00] hover:bg-[#FFFF00]/20 hover:text-[#FFFF00]'
                                                 }`}
                                         >
                                             {lang.label}
-                                            {currentLang === lang.code && <div className="w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]" />}
+                                            {currentLang === lang.code && <div className="w-1.5 h-1.5 bg-[#FFFF00] rounded-full shadow-[0_0_8px_rgba(255,255,0,0.8)]" />}
                                         </button>
                                     ))}
                                 </motion.div>
@@ -215,19 +222,32 @@ const Header = ({ theme = 'default' }) => {
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className="fixed top-0 left-0 w-full h-[75vh] bg-[#0046b8] text-white z-[10000] p-8 flex flex-col justify-between"
+                        className="fixed top-0 left-0 w-full h-[85vh] bg-[#0046b8] text-white z-[10000] p-8 flex flex-col justify-between select-none"
                     >
                         {/* Menu Nav (Header inside overlay) */}
-                        <div className="flex justify-between items-center mb-8 relative z-20">
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.5, delay: 0.2 }}
-                                className="text-xl font-medium tracking-tight"
-                            >
-                                Ta' <span className="text-accent text-white">To'</span> Clean
-                            </motion.div>
-                            <div className="flex items-center gap-6">
+                        <div className="flex justify-between items-center mb-4 md:mb-6 relative z-20 shrink-0">
+                            {isHero ? (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.2 }}
+                                    className="text-xl font-medium tracking-tight cursor-default"
+                                >
+                                    Ta' <span className="text-accent text-white">To'</span> Clean
+                                </motion.div>
+                            ) : (
+                                <motion.a
+                                    href={getLocalizedPath('/')}
+                                    onClick={(e) => handleNavClick(e, '#inicio', '/')}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.2 }}
+                                    className="text-xl font-medium tracking-tight cursor-pointer"
+                                >
+                                    Ta' <span className="text-accent text-white">To'</span> Clean
+                                </motion.a>
+                            )}
+                            <div className="flex items-center gap-8">
                                 {/* Language Selector (Overlay) */}
                                 <div className="relative">
                                     <motion.div
@@ -281,7 +301,7 @@ const Header = ({ theme = 'default' }) => {
                         </div>
 
                         {/* Menu Columns */}
-                        <div className="flex flex-1 flex-col md:flex-row gap-8 md:gap-0 h-full overflow-hidden">
+                        <div className="flex flex-1 flex-col md:flex-row gap-6 md:gap-8 overflow-y-auto md:overflow-hidden pb-4">
 
                             {/* Col 1: Video/Image */}
                             <div className="hidden md:flex flex-1 p-4 md:p-0 flex-col justify-center">
@@ -307,16 +327,16 @@ const Header = ({ theme = 'default' }) => {
                             </div>
 
                             {/* Col 2: Links */}
-                            <div className="flex-1 flex flex-col justify-center items-start pl-0 md:pl-20 overflow-hidden">
+                            <div className="flex-1 flex flex-col justify-center items-start pl-0 md:pl-12 lg:pl-20 overflow-visible">
                                 {/* Menu Links Container: w-fit allows it to scale to the widest item */}
-                                <div className="flex flex-col w-fit min-w-[300px]">
+                                <div className="flex flex-col w-full md:w-fit md:min-w-[300px]">
                                     {[
                                         [{ name: t('header.home'), path: '/inicio', id: '#inicio' }],
                                         servicesDropdown,
                                         [{ name: t('header.legal'), path: '/privacy-policy', id: 'legal' }],
                                         [{ name: t('header.faq'), path: '/faq', id: 'faq' }]
                                     ].map((group, groupIndex) => (
-                                        <div key={groupIndex} className="flex flex-col gap-1 mb-8 last:mb-0">
+                                        <div key={groupIndex} className="flex flex-col gap-1 mb-3 md:mb-6 last:mb-0">
                                             {group.map((item, index) => {
                                                 const legalPaths = ['/privacy-policy', '/terms-conditions', '/cookie-policy', '/disclaimers'];
                                                 let isActive = (item.id === activeSection) || ((location.pathname === getLocalizedPath(item.path)) && !item.path.includes('#'));
@@ -337,7 +357,7 @@ const Header = ({ theme = 'default' }) => {
                                                         <a
                                                             href={getLocalizedPath(item.path)}
                                                             onClick={(e) => { handleMenuClose(); onTransitionLinkClick(e, item.path); }}
-                                                            className="text-3xl md:text-5xl font-medium leading-tight tracking-tight block w-fit whitespace-nowrap text-white transition-colors py-0.5"
+                                                            className="text-2xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-tight block w-fit text-white transition-colors py-1"
                                                         >
                                                             {item.name}
                                                         </a>
@@ -355,39 +375,43 @@ const Header = ({ theme = 'default' }) => {
                                     ))}
 
                                     {/* Auth Container */}
-                                    <div className="mt-8 flex items-center gap-4">
+                                    <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
                                         {!user && (
                                             <motion.div
                                                 custom={8}
                                                 variants={itemVariants}
-                                                className="btn relative border border-white/30 px-6 py-2 rounded-full overflow-hidden cursor-pointer w-max group hover:border-white transition-colors"
+                                                className="w-full sm:w-max"
                                             >
                                                 <Link
                                                     to={getLocalizedPath('/login')}
                                                     onClick={(e) => { handleMenuClose(); onTransitionLinkClick(e, '/login'); }}
-                                                    className="relative z-10 text-xs font-semibold uppercase tracking-widest group-hover:text-black transition-colors duration-300"
+                                                    className="btn relative border border-white/30 px-6 py-2.5 rounded-full overflow-hidden cursor-pointer group hover:border-white transition-colors flex items-center justify-center"
                                                 >
-                                                    {t('header.login')}
+                                                    <span className="relative z-10 text-xs font-semibold uppercase tracking-wider group-hover:text-black transition-colors duration-300">
+                                                        {t('header.login')}
+                                                    </span>
+                                                    {/* Fill Effect */}
+                                                    <div className="absolute top-0 left-0 w-0 h-full bg-white transition-all duration-300 group-hover:w-full z-0" />
                                                 </Link>
-                                                {/* Fill Effect */}
-                                                <div className="absolute top-0 left-0 w-0 h-full bg-white transition-all duration-300 group-hover:w-full z-0" />
                                             </motion.div>
                                         )}
 
                                         <motion.div
                                             custom={9}
                                             variants={itemVariants}
-                                            className="btn relative border border-white/30 px-6 py-2 rounded-full overflow-hidden cursor-pointer w-max group hover:border-white transition-colors"
+                                            className="w-full sm:w-max"
                                         >
                                             <a
                                                 href={(user ? getLocalizedPath("/dashboard") : getLocalizedPath("/signup"))}
                                                 onClick={(e) => { handleMenuClose(); onTransitionLinkClick(e, user ? "/dashboard" : "/signup"); }}
-                                                className="relative z-10 text-xs font-semibold uppercase tracking-widest group-hover:text-black transition-colors duration-300"
+                                                className="btn relative border border-white/30 px-6 py-2.5 rounded-full overflow-hidden cursor-pointer group hover:border-white transition-colors flex items-center justify-center"
                                             >
-                                                {user ? t('dashboard.title') : t('header.signup')}
+                                                <span className="relative z-10 text-xs font-semibold uppercase tracking-wider group-hover:text-black transition-colors duration-300">
+                                                    {user ? t('dashboard.title') : t('header.signup')}
+                                                </span>
+                                                {/* Fill Effect */}
+                                                <div className="absolute top-0 left-0 w-0 h-full bg-white transition-all duration-300 group-hover:w-full z-0" />
                                             </a>
-                                            {/* Fill Effect */}
-                                            <div className="absolute top-0 left-0 w-0 h-full bg-white transition-all duration-300 group-hover:w-full z-0" />
                                         </motion.div>
                                     </div>
                                 </div>
@@ -395,7 +419,7 @@ const Header = ({ theme = 'default' }) => {
                         </div>
 
                         {/* Menu Footer */}
-                        <div className="menu-footer flex flex-col mt-4">
+                        <div className="menu-footer flex flex-col mt-4 shrink-0">
                             <motion.div
                                 className="menu-divider w-full h-[1px] bg-white/30 my-4"
                                 initial={{ width: 0 }}
@@ -415,9 +439,9 @@ const Header = ({ theme = 'default' }) => {
                             </div>
                         </div>
 
-                    </motion.div>
+                    </motion.div >
                 )}
-            </AnimatePresence>
+            </AnimatePresence >
         </>
     );
 };

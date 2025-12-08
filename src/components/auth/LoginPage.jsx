@@ -124,21 +124,19 @@ const LoginPage = () => {
     return (
         <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
             <SEO title={t('auth.login_title', 'Iniciar Sesión')} />
-            {/* Navbar Structure for Logo */}
-            <div className="_navbar">
-                <div className="nav-container flex justify-between items-center">
-                    <a
-                        href={getLocalizedPath('/')}
-                        onClick={(e) => {
-                            e.preventDefault()
-                            navigateWithTransition(getLocalizedPath('/'))
-                        }}
-                        className="text-3xl font-display font-semibold text-white tracking-tighter hover:opacity-80 transition-opacity"
-                    >
-                        Ta' <span className="text-accent">To'</span> Clean
-                    </a>
-                    <LanguageSelector />
-                </div>
+            {/* Navbar Structure */}
+            <div className="absolute top-0 left-0 w-full p-8 z-50 flex justify-between items-center select-none">
+                <a
+                    href={getLocalizedPath('/')}
+                    onClick={(e) => {
+                        e.preventDefault()
+                        navigateWithTransition(getLocalizedPath('/'))
+                    }}
+                    className="text-xl font-medium tracking-tight text-white cursor-pointer"
+                >
+                    Ta' To' Clean
+                </a>
+                <LanguageSelector />
             </div>
 
             <motion.div

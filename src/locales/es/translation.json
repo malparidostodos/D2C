@@ -49,7 +49,7 @@
         "title_part1": "Cuidado",
         "title_part2": "Automotriz",
         "title_part3": "Premium",
-        "subtitle": "Transformamos tu vehículo con atención meticulosa al detalle y productos de clase mundial.",
+        "subtitle": "Recupera el brillo de tu vehículo como el primer día.",
         "cta_booking": "Agendar",
         "cta_services": "Ver Servicios"
     },
@@ -192,7 +192,9 @@
             "password_mismatch": "Las contraseñas no coinciden",
             "login_failed": "Email o contraseña incorrectos",
             "password_length": "La contraseña debe tener al menos 6 caracteres",
-            "terms_required": "Debes aceptar los términos y condiciones"
+            "terms_required": "Debes aceptar los términos y condiciones",
+            "error_title": "Enlace Expirado",
+            "invalid_link": "Enlace inválido o expirado"
         },
         "terms_agreement": "Confirmo que he leído y acepto los",
         "terms_link": "Términos y Condiciones",
@@ -213,6 +215,7 @@
         "redirecting_login": "Redirigiendo al inicio de sesión...",
         "password_length": "La contraseña debe tener al menos 6 caracteres",
         "passwords_mismatch": "Las contraseñas no coinciden",
+        "request_new_link": "Solicitar nuevo enlace",
         "logout": "Cerrar Sesión",
         "logout_success": "Sesión cerrada exitosamente",
         "logout_error": "Error al cerrar sesión"

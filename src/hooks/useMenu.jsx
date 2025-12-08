@@ -18,11 +18,15 @@ export const MenuProvider = ({ children }) => {
     const [hoveredService, setHoveredService] = useState(null);
     const [langOpen, setLangOpen] = useState(false);
     const [isMenuMounted, setIsMenuMounted] = useState(false);
+    const [isHero, setIsHero] = useState(false);
 
     const { t, i18n } = useTranslation();
     const lastScrollY = useRef(0);
     const scrollingUp = useRef(false);
     const scrollTimeout = useRef(null);
+    const stopScrollTimeout = useRef(null);
+    const inactiveTimeout = useRef(null);
+    const isHoveringTop = useRef(false);
     const langRef = useRef(null);
     const location = useLocation();
     const navigate = useNavigate();
@@ -32,40 +36,68 @@ export const MenuProvider = ({ children }) => {
     // Mouse‑move & scroll visibility handling
     // -------------------------------------------------
     useEffect(() => {
+        // Initial check for Hero state
+        const isHome = location.pathname === '/' || location.pathname === '/es' || location.pathname === '/en';
+        setIsHero(isHome && window.scrollY < window.innerHeight);
+
         const handleMouseMove = (e) => {
+            // Check if Home Page AND within Hero section (prevent hiding)
+            const isHome = location.pathname === '/' || location.pathname === '/es' || location.pathname === '/en';
+            if (isHome && window.scrollY < window.innerHeight - 100) {
+                setHidden(false);
+                return;
+            }
+
             // Always show on mobile
             if (window.innerWidth < 768) {
                 setHidden(false);
                 return;
             }
 
-            const currentScrollY = lenis ? lenis.scroll : window.scrollY;
-            const isAtTop = currentScrollY < 50;
-            if (isAtTop) {
+            // Check if inside top zone (200px)
+            if (e.clientY < 200) {
+                // Entered zone
+                if (inactiveTimeout.current) {
+                    clearTimeout(inactiveTimeout.current);
+                }
                 setHidden(false);
-                return;
+                isHoveringTop.current = true;
+            } else {
+                // Outside zone
+                // If we just left the zone (isHoveringTop is true), start the timer
+                if (isHoveringTop.current) {
+                    isHoveringTop.current = false;
+
+                    if (inactiveTimeout.current) {
+                        clearTimeout(inactiveTimeout.current);
+                    }
+
+                    // Hide after 3 seconds of inactivity (leaving the zone)
+                    inactiveTimeout.current = setTimeout(() => {
+                        const isHomeNow = location.pathname === '/' || location.pathname === '/es' || location.pathname === '/en';
+                        // Double check scroll position before hiding
+                        if (isHomeNow && window.scrollY < window.innerHeight - 100) return;
+
+                        if (!menuOpen && !hoverLock && !scrollingUp.current) {
+                            setHidden(true);
+                        }
+                    }, 3000);
+                }
             }
 
-            if (scrollingUp.current) {
-                return;
-            }
-
-            const bottomThreshold = 150;
-            const isNearBottom = window.innerHeight - e.clientY < bottomThreshold;
-
-            const screenWidth = window.innerWidth;
-            const centerStart = screenWidth * 0.3;
-            const centerEnd = screenWidth * 0.7;
-            const isInCenter = e.clientX > centerStart && e.clientX < centerEnd;
-
-            if ((isNearBottom && isInCenter) || hoverLock || menuOpen) {
+            // Keep visible if menu is open or hover is locked
+            if (menuOpen || hoverLock) {
+                if (inactiveTimeout.current) clearTimeout(inactiveTimeout.current);
                 setHidden(false);
-            } else if (!hoverLock && !menuOpen) {
-                setHidden(true);
             }
         };
 
         const handleScrollVisibility = (e) => {
+            // Close language dropdown when scrolling
+            if (langOpen) {
+                setLangOpen(false);
+            }
+
             // Always show on mobile
             if (window.innerWidth < 768) {
                 setHidden(false);
@@ -74,7 +106,28 @@ export const MenuProvider = ({ children }) => {
 
             // Support both lenis event object and native window fallback
             const currentScrollY = e && typeof e.scroll === 'number' ? e.scroll : window.scrollY;
+
+            // Allow navbar to stay visible in Home Hero section
+            // Allow navbar to stay visible in Home Hero section
+            const isHome = location.pathname === '/' || location.pathname === '/es' || location.pathname === '/en';
+            setIsHero(isHome && currentScrollY < window.innerHeight);
+
+            if (isHome && currentScrollY < window.innerHeight - 100) {
+                setHidden(false);
+                return;
+            }
+
             const isAtTop = currentScrollY < 50;
+
+            // Define "Show on Stop" timeout logic
+            if (stopScrollTimeout.current) {
+                clearTimeout(stopScrollTimeout.current);
+            }
+
+            // If user stops scrolling for 150ms, show navbar
+            stopScrollTimeout.current = setTimeout(() => {
+                setHidden(false);
+            }, 150);
 
             if (isAtTop) {
                 setHidden(false);
@@ -96,8 +149,8 @@ export const MenuProvider = ({ children }) => {
                     scrollingUp.current = false;
                 }, 300);
             } else if (!hoverLock && !menuOpen) {
+                // Hide while scrolling down
                 setHidden(true);
-
                 scrollingUp.current = false;
             }
 
@@ -122,8 +175,14 @@ export const MenuProvider = ({ children }) => {
             if (scrollTimeout.current) {
                 clearTimeout(scrollTimeout.current);
             }
+            if (stopScrollTimeout.current) {
+                clearTimeout(stopScrollTimeout.current);
+            }
+            if (inactiveTimeout.current) {
+                clearTimeout(inactiveTimeout.current);
+            }
         };
-    }, [hoverLock, menuOpen, lenis]);
+    }, [hoverLock, menuOpen, langOpen, lenis]);
 
     // -------------------------------------------------
     // Scroll‑spy
@@ -338,10 +397,10 @@ export const MenuProvider = ({ children }) => {
             document.documentElement.animate(
                 [
                     {
-                        clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)",
+                        clipPath: "inset(100% 0 0 0)",
                     },
                     {
-                        clipPath: "polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%)",
+                        clipPath: "inset(0 0 0 0)",
                     },
                 ],
                 {
@@ -440,6 +499,7 @@ export const MenuProvider = ({ children }) => {
         langRef,
         isMenuMounted,
         setIsMenuMounted,
+        isHero,
         handleNavClick,
         handleLanguageChange,
         handleMenuClose,

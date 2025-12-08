@@ -81,31 +81,46 @@ const InteractiveGradient = ({
         }
 
         const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        // OPTIMIZATION: Disable antialias (not needed for fluids), high-performance mode, medium precision
+        const renderer = new THREE.WebGLRenderer({
+            antialias: false,
+            alpha: true,
+            powerPreference: "high-performance",
+            precision: "mediump",
+            depth: false,
+            stencil: false
+        });
         rendererRef.current = renderer;
 
         renderer.setSize(window.innerWidth, window.innerHeight);
+        // Force pixel ratio to 1 for performance (retina screens kill texturing performance)
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         canvasRef.current.appendChild(renderer.domElement);
 
+        // OPTIMIZATION: Run simulation at lower resolution
+        const simScale = 0.5;
+        const simWidth = Math.floor(window.innerWidth * simScale);
+        const simHeight = Math.floor(window.innerHeight * simScale);
+
         const fluidTarget1 = new THREE.WebGLRenderTarget(
-            window.innerWidth,
-            window.innerHeight,
+            simWidth,
+            simHeight,
             {
                 minFilter: THREE.LinearFilter,
                 magFilter: THREE.LinearFilter,
                 format: THREE.RGBAFormat,
-                type: THREE.FloatType,
+                type: THREE.HalfFloatType, // Optimization: Use HalfFloat if supported
             }
         );
 
         const fluidTarget2 = new THREE.WebGLRenderTarget(
-            window.innerWidth,
-            window.innerHeight,
+            simWidth,
+            simHeight,
             {
                 minFilter: THREE.LinearFilter,
                 magFilter: THREE.LinearFilter,
                 format: THREE.RGBAFormat,
-                type: THREE.FloatType,
+                type: THREE.HalfFloatType,
             }
         );
 
