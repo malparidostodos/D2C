@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../layout/Header';
-import Contact from './Contact';
+import FooterZone from '../layout/FooterZone';
 import Gallery from './Gallery';
 import ProcessTimeline from '../features/ProcessTimeline';
 import { useTranslation } from 'react-i18next';
@@ -104,7 +104,7 @@ const ProcessPage = () => {
 
             {/* Footer */}
             <div className="relative z-10">
-                <Contact />
+                <FooterZone />
             </div>
         </div>
     );

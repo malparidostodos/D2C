@@ -15,7 +15,24 @@
         "help": "Ayuda",
         "close": "Cerrar",
         "preview": "Vista Previa",
-        "slogan": "Limpieza del Mañana, Hoy.™"
+        "slogan": "Limpieza del Mañana, Hoy.™",
+        "services": "Servicios"
+    },
+    "button": {
+        "book_now": "Reservar Ahora",
+        "whatsapp": "WhatsApp"
+    },
+    "final_cta": {
+        "title_line1": "¿Listo para renovar",
+        "title_line2": "tu vehículo?",
+        "subtitle": "Solo toma unos segundos agendar tu cita."
+    },
+    "footer": {
+        "start_now": "Empieza ahora",
+        "explore": "Explorar",
+        "company": "Empresa",
+        "legal": "Legal",
+        "help": "Ayuda"
     },
     "services_page": {
         "title": "Detalle de Servicios",

@@ -4,7 +4,7 @@ import FlavorSection from '../features/FlavorSection';
 import { Phone, Check, ChevronRight, Car, Video, Armchair, Disc, Paintbrush, Wrench, Quote, MessageCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Contact from './Contact';
+import FooterZone from '../layout/FooterZone';
 import { useMenu } from '../../hooks/useMenu';
 import SEO from '../ui/SEO';
 
@@ -222,7 +222,7 @@ const ServicesPage = () => {
 
             {/* Contact Section */}
             <div className="relative z-10">
-                <Contact />
+                <FooterZone />
             </div>
         </div>
     );

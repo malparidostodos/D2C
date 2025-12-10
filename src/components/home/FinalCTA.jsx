@@ -3,34 +3,41 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Calendar, MessageCircle } from 'lucide-react'
 import { useMenu } from '../../hooks/useMenu'
+import { useTranslation } from 'react-i18next'
 
 const FinalCTA = () => {
     const { getLocalizedPath, navigateWithTransition } = useMenu()
+    const { t } = useTranslation()
 
     return (
-        <section className="bg-white py-20 px-4 relative overflow-hidden">
-            {/* Decorative Background Patterns */}
-            <div className="absolute inset-0">
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-50 to-transparent opacity-50" />
-                <div className="absolute -bottom-1/2 -right-1/4 w-[800px] h-[800px] bg-blue-100 rounded-full blur-[100px]" />
-            </div>
-
-            <div className="max-w-5xl mx-auto text-center relative z-10">
+        <section className="bg-white min-h-screen flex items-center justify-center px-4 relative overflow-hidden select-none">
+            <div className="w-full max-w-[90rem] mx-auto text-center relative z-10">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-4xl md:text-6xl font-bold text-[#0046b8] mb-8 font-display"
+                    className="text-6xl md:text-8xl lg:text-9xl font-semibold text-[#0046b8] mb-6 font-display tracking-tighter leading-none max-w-7xl mx-auto"
                 >
-                    ¿Listo para renovar tu vehículo?
+                    <span className="block">{t('final_cta.title_line1')}</span>
+                    <span className="block">{t('final_cta.title_line2')}</span>
                 </motion.h2>
+
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.05 }}
+                    className="text-xl md:text-2xl font-normal text-[#0046b8]/60 mb-12 max-w-2xl mx-auto"
+                >
+                    {t('final_cta.subtitle')}
+                </motion.p>
 
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-6"
+                    className="flex flex-col sm:flex-row items-center justify-center gap-4"
                 >
                     <Link
                         to={getLocalizedPath("/reserva")}
@@ -38,20 +45,20 @@ const FinalCTA = () => {
                             e.preventDefault()
                             navigateWithTransition(getLocalizedPath("/reserva"))
                         }}
-                        className="group relative inline-flex items-center justify-center px-8 py-4 bg-[#0046b8] text-white rounded-full font-bold text-lg hover:bg-blue-700 transition-all duration-300 shadow-xl shadow-blue-900/10 hover:scale-105"
+                        className="group relative inline-flex items-center justify-center px-8 py-3 bg-transparent border border-[#0046b8]/30 text-[#0046b8] rounded-2xl font-semibold text-lg hover:border-[#0046b8] hover:bg-blue-50/50 transition-all duration-300 min-w-[200px]"
                     >
                         <Calendar className="mr-2 w-5 h-5" />
-                        Agendar Ahora
+                        {t('button.book_now')}
                     </Link>
 
                     <a
                         href="https://wa.me/1234567890" // TODO: Add real number
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-[#0046b8]/20 text-[#0046b8] rounded-full font-bold text-lg hover:bg-blue-50 transition-all duration-300"
+                        className="inline-flex items-center justify-center px-8 py-3 bg-transparent border border-[#0046b8]/30 text-[#0046b8] rounded-2xl font-semibold text-lg hover:border-[#0046b8] hover:bg-blue-50/50 transition-all duration-300 min-w-[200px]"
                     >
                         <MessageCircle className="mr-2 w-5 h-5" />
-                        WhatsApp Directo
+                        {t('button.whatsapp')}
                     </a>
                 </motion.div>
             </div>

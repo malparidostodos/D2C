@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 const SEO = ({ title, description, keywords, image, url }) => {
     const { t } = useTranslation();
 
-    const siteTitle = "Ta' To' Clean - Detailing Premium";
+    const siteTitle = "NUVEN - Detailing Premium";
     const metaTitle = title ? `${title} | ${siteTitle}` : siteTitle;
     const metaDescription = description || t('seo.default_description', "Servicios de detailing automotriz premium. Limpieza profunda, corrección de pintura y protección cerámica.");
     const metaKeywords = keywords || t('seo.default_keywords', "detailing, lavado de autos, limpieza automotriz, corrección de pintura, cerámica");

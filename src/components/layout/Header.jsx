@@ -14,7 +14,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
         servicesOpen, setServicesOpen, supportOpen, setSupportOpen, activeSection, setHoverLock,
         hoveredService, setHoveredService, langOpen, setLangOpen, langRef,
         handleNavClick, handleLanguageChange, handleMenuClose, getLocalizedPath,
-        setIsMenuMounted, navigateWithTransition, isHero
+        setIsMenuMounted, navigateWithTransition, isHero, isFooterVisible
     } = useMenu();
 
     useEffect(() => {
@@ -155,8 +155,10 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
     // Mobile: Respect 'hidden' (from useMenu scroll logic)
     // Desktop: If alwaysVisible is true, force translate-y-0 using CSS media query override
     // Also force visibility if we are in the Hero section
-    const visibilityClass = (hidden && !isHero) ? '-translate-y-full' : 'translate-y-0';
-    const desktopOverrideClass = alwaysVisible ? 'md:translate-y-0' : '';
+    // FORCE HIDE if isFooterVisible is true (overrides everything)
+    const shouldHide = isFooterVisible || (hidden && !isHero);
+    const visibilityClass = shouldHide ? '-translate-y-full' : 'translate-y-0';
+    const desktopOverrideClass = (alwaysVisible && !isFooterVisible) ? 'md:translate-y-0' : '';
 
     // Simplified Theme Logic:
     // Auth Pages -> Always White
@@ -170,9 +172,9 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
             <nav className={`fixed top-0 left-0 w-full p-8 z-[9990] flex justify-between items-center ${useSolidWhite ? 'text-white mix-blend-normal' : 'text-[#FFFF00] mix-blend-difference'} transition-transform duration-500 select-none ${visibilityClass} ${desktopOverrideClass}`}>
                 {/* Logo - Always non-clickable in Navbar as requested */}
                 {/* Logo */}
-                {isHomePage ? (
+                {isHero ? (
                     <div className="text-xl font-medium tracking-tight cursor-default">
-                        Ta' To' Clean
+                        NUVEN
                     </div>
                 ) : (
                     <a
@@ -180,7 +182,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                         onClick={(e) => handleNavClick(e, '#inicio', '/')}
                         className="text-xl font-medium tracking-tight cursor-pointer"
                     >
-                        Ta' To' Clean
+                        NUVEN
                     </a>
                 )}
 
@@ -263,7 +265,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                     transition={{ duration: 0.5, delay: 0.2 }}
                                     className="text-xl font-medium tracking-tight cursor-default"
                                 >
-                                    Ta' <span className="text-accent text-white">To'</span> Clean
+                                    NUVEN
                                 </motion.div>
                             ) : (
                                 <motion.a
@@ -274,7 +276,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                     transition={{ duration: 0.5, delay: 0.2 }}
                                     className="text-xl font-medium tracking-tight cursor-pointer"
                                 >
-                                    Ta' <span className="text-accent text-white">To'</span> Clean
+                                    NUVEN
                                 </motion.a>
                             )}
                             <div className="flex items-center gap-8">

@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useMenu } from '../../hooks/useMenu'
 
 // Layout & UI
 import Header from '../layout/Header'
 import CustomScrollbar from '../ui/CustomScrollbar'
 import SEO from '../ui/SEO'
+import FooterZone from '../layout/FooterZone'
 
 // Existing Sections
 import Hero from '../features/Hero'
@@ -17,10 +21,7 @@ import FeaturedServices from '../home/FeaturedServices'
 import HowItWorks from '../home/HowItWorks'
 import EmotionalSection from '../home/EmotionalSection'
 import RecentResults from '../home/RecentResults'
-import FinalCTA from '../home/FinalCTA'
-
-// Footer (Contact acts as footer)
-import Contact from './Contact'
+// FinalCTA and Footer removed as they are in FooterZone
 
 const Home = () => {
     const { t } = useTranslation()
@@ -56,11 +57,8 @@ const Home = () => {
                 {/* 8. Testimonios */}
                 <Testimonials />
 
-                {/* 9. CTA Final [NEW] */}
-                <FinalCTA />
-
-                {/* 10. Footer (Contact) */}
-                <Contact />
+                {/* 9. Footer Zone */}
+                <FooterZone />
             </main>
         </div>
     )

@@ -15,7 +15,24 @@
         "help": "Help",
         "close": "Close",
         "preview": "Preview",
-        "slogan": "Tomorrow's Cleanliness, Today.™"
+        "slogan": "Tomorrow's Cleanliness, Today.™",
+        "services": "Services"
+    },
+    "button": {
+        "book_now": "Book Now",
+        "whatsapp": "WhatsApp"
+    },
+    "final_cta": {
+        "title_line1": "Ready to renew",
+        "title_line2": "your vehicle?",
+        "subtitle": "It only takes a few seconds to book your appointment."
+    },
+    "footer": {
+        "start_now": "Get Started",
+        "explore": "Explore",
+        "company": "Company",
+        "legal": "Legal",
+        "help": "Help"
     },
     "services_page": {
         "title": "Services Detail",

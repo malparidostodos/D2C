@@ -19,6 +19,7 @@ export const MenuProvider = ({ children }) => {
     const [langOpen, setLangOpen] = useState(false);
     const [isMenuMounted, setIsMenuMounted] = useState(false);
     const [isHero, setIsHero] = useState(false);
+    const [isFooterVisible, setIsFooterVisible] = useState(false);
 
     const { t, i18n } = useTranslation();
     const lastScrollY = useRef(0);
@@ -118,7 +119,9 @@ export const MenuProvider = ({ children }) => {
 
             // If user stops scrolling for 150ms, show navbar
             stopScrollTimeout.current = setTimeout(() => {
-                setHidden(false);
+                if (!isFooterVisible) {
+                    setHidden(false);
+                }
             }, 150);
 
             if (isAtTop) {
@@ -526,7 +529,9 @@ export const MenuProvider = ({ children }) => {
         handleLanguageChange,
         handleMenuClose,
         getLocalizedPath,
-        navigateWithTransition
+        navigateWithTransition,
+        isFooterVisible,
+        setIsFooterVisible
     };
 
     return (
