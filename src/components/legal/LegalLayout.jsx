@@ -16,10 +16,10 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
     // Removed getLocalizedPath helper as it's now from useMenu
 
     const links = [
-        { path: '/privacy-policy', label: 'legal.privacy_policy' },
-        { path: '/terms-conditions', label: 'legal.terms_conditions' },
-        { path: '/cookie-policy', label: 'legal.cookie_policy' },
-        { path: '/disclaimers', label: 'legal.disclaimers.title' },
+        { path: i18n.language === 'en' ? '/privacy-policy' : '/politica-de-privacidad', label: 'legal.privacy_policy' },
+        { path: i18n.language === 'en' ? '/terms-conditions' : '/terminos-y-condiciones', label: 'legal.terms_conditions' },
+        { path: i18n.language === 'en' ? '/cookie-policy' : '/politica-de-cookies', label: 'legal.cookie_policy' },
+        { path: i18n.language === 'en' ? '/disclaimers' : '/descargos', label: 'legal.disclaimers.title' },
     ];
 
     // Track active section on scroll
@@ -68,7 +68,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
             {/* Hero Section */}
             <div className="pt-96 pb-20 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-[95%] mx-auto flex flex-col md:flex-row justify-between items-end gap-8 text-white">
-                    <h1 className="text-6xl sm:text-7xl md:text-8xl font-semibold tracking-tighter max-w-5xl">
+                    <h1 className="text-4xl sm:text-6xl md:text-8xl font-semibold tracking-tighter max-w-5xl break-words">
                         {title}
                     </h1>
                     {subtitle && (
@@ -81,7 +81,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
 
             {/* Main Content Area - Card */}
             <div className="flex-grow px-2 sm:px-4 pb-12">
-                <div className="max-w-[98%] mx-auto bg-white rounded-[2.5rem] shadow-2xl min-h-[600px] mb-8">
+                <div className="max-w-[98%] mx-auto bg-white rounded-[2.5rem] shadow-2xl min-h-[600px] mb-8 overflow-hidden">
                     <div className={sections && sections.length > 0 ? "lg:grid lg:grid-cols-12" : "lg:grid lg:grid-cols-12"}>
 
                         {/* Sidebar Navigation - Policy Links */}
