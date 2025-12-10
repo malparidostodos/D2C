@@ -91,7 +91,7 @@ const SignUpPage = () => {
                     {...register(fieldName)}
                     className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 ${isPassword ? 'pr-12' : 'pr-10'} text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors[fieldName]
                         ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
-                        : 'border-white/10 focus:border-white/30 focus:bg-white/10'
+                        : 'border-white/5 focus:border-white/20 focus:bg-[#161616]'
                         }`}
                     placeholder={placeholder}
                 />
@@ -139,8 +139,8 @@ const SignUpPage = () => {
                 {/* Glass Card */}
                 <div className="backdrop-blur-xl bg-black/40 border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
                     {/* ... (blobs) ... */}
-                    <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none" />
-                    <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none" />
+                    <div className="absolute -top-20 -right-20 w-60 h-60 bg-white/5 rounded-full blur-[80px] pointer-events-none" />
+                    <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-white/5 rounded-full blur-[80px] pointer-events-none" />
 
                     <div className="relative z-10">
                         <div className="text-center mb-8">
@@ -161,17 +161,17 @@ const SignUpPage = () => {
                                             type="checkbox"
                                             id="terms"
                                             {...register('termsAccepted')}
-                                            className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-white/20 bg-white/5 transition-all checked:border-blue-500 checked:bg-blue-500 hover:border-white/40"
+                                            className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-white/20 bg-white/5 transition-all checked:border-white checked:bg-white hover:border-white/40"
                                         />
-                                        <Check className="pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 transition-opacity peer-checked:opacity-100" strokeWidth={3} />
+                                        <Check className="pointer-events-none absolute left-1/2 top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 text-black opacity-0 transition-opacity peer-checked:opacity-100" strokeWidth={3} />
                                     </div>
                                     <label htmlFor="terms" className="text-sm text-white/60 cursor-pointer select-none leading-tight">
                                         {t('auth.terms_agreement')}{' '}
-                                        <Link to={getLocalizedPath('/terms-conditions')} className="text-white hover:text-[var(--color-blue-light)] transition-colors hover:underline" target="_blank">
+                                        <Link to={getLocalizedPath('/terms-conditions')} className="text-white hover:text-gray-300 transition-colors hover:underline" target="_blank">
                                             {t('auth.terms_link')}
                                         </Link>
                                         {' '}{t('auth.and')}{' '}
-                                        <Link to={getLocalizedPath('/privacy-policy')} className="text-white hover:text-[var(--color-blue-light)] transition-colors hover:underline" target="_blank">
+                                        <Link to={getLocalizedPath('/privacy-policy')} className="text-white hover:text-gray-300 transition-colors hover:underline" target="_blank">
                                             {t('auth.privacy_link')}
                                         </Link>
                                     </label>

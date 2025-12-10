@@ -69,8 +69,8 @@ const ForgotPasswordPage = () => {
                 {/* Glass Card */}
                 <div className="backdrop-blur-xl bg-black/40 border border-white/10 rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
                     {/* ... (blobs) ... */}
-                    <div className="absolute -top-20 -right-20 w-60 h-60 bg-blue-500/20 rounded-full blur-[80px] pointer-events-none" />
-                    <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-600/20 rounded-full blur-[80px] pointer-events-none" />
+                    <div className="absolute -top-20 -right-20 w-60 h-60 bg-white/5 rounded-full blur-[80px] pointer-events-none" />
+                    <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-white/5 rounded-full blur-[80px] pointer-events-none" />
 
                     <div className="relative z-10">
                         <div className="text-center mb-8">
@@ -130,7 +130,7 @@ const ForgotPasswordPage = () => {
                                         {...register('email')}
                                         className={`w-full bg-white/5 border rounded-xl py-3.5 pl-12 pr-4 text-white placeholder-white/30 focus:outline-none transition-all duration-300 ${errors.email
                                             ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
-                                            : 'border-white/10 focus:border-white/30 focus:bg-white/10'
+                                            : 'border-white/5 focus:border-white/20 focus:bg-[#161616]'
                                             }`}
                                         placeholder="ejemplo@correo.com"
                                     />

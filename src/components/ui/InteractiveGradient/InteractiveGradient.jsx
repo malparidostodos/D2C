@@ -7,10 +7,10 @@ import { useSmoothScroll } from "../SmoothScroll";
 
 // Auth Colors (Premium Dark Theme)
 const authColors = {
-    color1: "#000000",
-    color2: "#143464ff",
-    color3: "#1e3a8a",
-    color4: "#7b90caff",
+    color1: "#0a0a0a",  // Negro carbón profundo (la base de las sombras)
+    color2: "#141414",  // Un gris casi negro para suavizar el fondo
+    color3: "#000000ff",  // Gris oscuro medio para las zonas donde "golpea" la luz sutilmente
+    color4: "#4f4f4f",  // Gris medio para los pliegues o bordes más definidos de la textura
 };
 
 const InteractiveGradient = ({
