@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Header from '../layout/Header';
-import Contact from '../pages/Contact';
+import FooterZone from '../layout/FooterZone';
 import SEO from '../ui/SEO';
 
 import { useMenu } from '../../hooks/useMenu';
@@ -160,7 +160,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
                 </div>
             </div>
 
-            <Contact />
+            <FooterZone />
         </div>
     );
 };

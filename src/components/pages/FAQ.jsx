@@ -23,7 +23,7 @@ import {
     ChevronUp
 } from 'lucide-react';
 import Header from '../layout/Header';
-import Contact from '../pages/Contact';
+import FooterZone from '../layout/FooterZone';
 import SEO from '../ui/SEO';
 
 const FAQ = () => {
@@ -220,7 +220,7 @@ const FAQ = () => {
                 </div>
             </main>
 
-            <Contact />
+            <FooterZone />
         </div>
     );
 };

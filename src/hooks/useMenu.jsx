@@ -177,7 +177,7 @@ export const MenuProvider = ({ children }) => {
                 clearTimeout(inactiveTimeout.current);
             }
         };
-    }, [hoverLock, menuOpen, langOpen, lenis]);
+    }, [hoverLock, menuOpen, langOpen, lenis, location.pathname]);
 
     // -------------------------------------------------
     // Scroll‑spy
