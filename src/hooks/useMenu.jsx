@@ -416,16 +416,46 @@ export const MenuProvider = ({ children }) => {
             return;
         }
 
+        // Route Mappings
+        const esToEn = {
+            '/servicios': '/services',
+            '/proceso': '/roadmap',
+            '/membresias': '/memberships',
+            '/reserva': '/booking',
+            '/politica-de-privacidad': '/privacy-policy',
+            '/terminos-y-condiciones': '/terms-conditions',
+            '/politica-de-cookies': '/cookie-policy',
+            '/descargos': '/disclaimers'
+        };
+
+        const enToEs = {
+            '/services': '/servicios',
+            '/roadmap': '/proceso',
+            '/memberships': '/membresias',
+            '/booking': '/reserva',
+            '/privacy-policy': '/politica-de-privacidad',
+            '/terms-conditions': '/terminos-y-condiciones',
+            '/cookie-policy': '/politica-de-cookies',
+            '/disclaimers': '/descargos'
+        };
+
         let newPath = currentPath;
 
         if (targetLang === 'en') {
+            // Switching to English
+            // If current path is Spanish (no /en prefix), check mapping
             if (!currentPath.startsWith('/en')) {
-                newPath = `/en${currentPath === '/' ? '' : currentPath}`;
+                // Remove trailing slash for matching if needed, though location.pathname usually strict
+                const mappedPath = esToEn[currentPath] || currentPath;
+                newPath = `/en${mappedPath === '/' ? '' : mappedPath}`;
             }
         } else {
-            // Switch to ES (remove /en)
+            // Switching to Spanish
+            // If current path is English (starts with /en), strip it and check mapping
             if (currentPath.startsWith('/en')) {
-                newPath = currentPath.replace(/^\/en/, '') || '/';
+                const pathWithoutPrefix = currentPath.replace(/^\/en/, '') || '/';
+                const mappedPath = enToEs[pathWithoutPrefix] || pathWithoutPrefix;
+                newPath = mappedPath;
             }
         }
 

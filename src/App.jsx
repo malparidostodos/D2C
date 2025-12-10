@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Toaster } from 'sonner'
-import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom'
 import Header from './components/layout/Header'
 import Hero from './components/features/Hero'
 import Benefits from './components/features/Benefits'
@@ -100,19 +100,41 @@ const RedirectToHome = () => {
 
 import PublicRoute from './components/auth/PublicRoute'
 
-const AppRoutes = ({ t }) => {
+const AppRoutes = ({ t, lang = 'es' }) => {
   return (
     <>
       <Route index element={<Home />} />
       <Route path="inicio" element={<ScrollToSection sectionId="#inicio" title={t('header.home')} />} />
       <Route path="beneficios" element={<ScrollToSection sectionId="#beneficios" title={t('benefits.title')} />} />
       <Route path="precios" element={<ScrollToSection sectionId="#precios" title={t('header.pricing')} />} />
-      <Route path="roadmap" element={<ProcessPage />} />
-      <Route path="membresias" element={<MembershipsPage />} />
 
-      <Route path="services" element={<ServicesPage />} />
-      <Route path="reserva" element={<BookingPage />} />
+      {lang === 'en' ? (
+        <>
+          <Route path="roadmap" element={<ProcessPage />} />
+          <Route path="memberships" element={<MembershipsPage />} />
+          <Route path="services" element={<ServicesPage />} />
+          <Route path="booking" element={<BookingPage />} />
 
+          {/* Redirects for Spanish slugs on English router */}
+          <Route path="proceso" element={<Navigate to="/proceso" replace />} />
+          <Route path="membresias" element={<Navigate to="/membresias" replace />} />
+          <Route path="servicios" element={<Navigate to="/servicios" replace />} />
+          <Route path="reserva" element={<Navigate to="/reserva" replace />} />
+        </>
+      ) : (
+        <>
+          <Route path="proceso" element={<ProcessPage />} />
+          <Route path="membresias" element={<MembershipsPage />} />
+          <Route path="servicios" element={<ServicesPage />} />
+          <Route path="reserva" element={<BookingPage />} />
+
+          {/* Redirects for English slugs on Spanish router */}
+          <Route path="roadmap" element={<Navigate to="/en/roadmap" replace />} />
+          <Route path="memberships" element={<Navigate to="/en/memberships" replace />} />
+          <Route path="services" element={<Navigate to="/en/services" replace />} />
+          <Route path="booking" element={<Navigate to="/en/booking" replace />} />
+        </>
+      )}
 
       {/* Public Only Routes (Redirect to Dashboard if logged in) */}
       <Route element={<PublicRoute />}>
@@ -132,12 +154,37 @@ const AppRoutes = ({ t }) => {
         <Route path="reviews" element={<UserReviews />} />
       </Route>
 
-      {/* Legal Routes */}
-      <Route path="cookie-policy" element={<CookiePolicy />} />
-      <Route path="privacy-policy" element={<PrivacyPolicy />} />
-      <Route path="terms-conditions" element={<TermsConditions />} />
-      <Route path="disclaimers" element={<Disclaimers />} />
+      {/* Legal Routes - Common FAQ */}
       <Route path="faq" element={<FAQ />} />
+
+      {/* Language Specific Legal Routes */}
+      {lang === 'en' ? (
+        <>
+          <Route path="privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="terms-conditions" element={<TermsConditions />} />
+          <Route path="cookie-policy" element={<CookiePolicy />} />
+          <Route path="disclaimers" element={<Disclaimers />} />
+
+          {/* Reverse Redirects for ES Legal Slugs */}
+          <Route path="politica-de-privacidad" element={<Navigate to="/politica-de-privacidad" replace />} />
+          <Route path="terminos-y-condiciones" element={<Navigate to="/terminos-y-condiciones" replace />} />
+          <Route path="politica-de-cookies" element={<Navigate to="/politica-de-cookies" replace />} />
+          <Route path="descargos" element={<Navigate to="/descargos" replace />} />
+        </>
+      ) : (
+        <>
+          <Route path="politica-de-privacidad" element={<PrivacyPolicy />} />
+          <Route path="terminos-y-condiciones" element={<TermsConditions />} />
+          <Route path="politica-de-cookies" element={<CookiePolicy />} />
+          <Route path="descargos" element={<Disclaimers />} />
+
+          {/* Redirects for EN Legal Slugs */}
+          <Route path="privacy-policy" element={<Navigate to="/en/privacy-policy" replace />} />
+          <Route path="terms-conditions" element={<Navigate to="/en/terms-conditions" replace />} />
+          <Route path="cookie-policy" element={<Navigate to="/en/cookie-policy" replace />} />
+          <Route path="disclaimers" element={<Navigate to="/en/disclaimers" replace />} />
+        </>
+      )}
 
       <Route path="*" element={<RedirectToHome />} />
     </>
@@ -160,12 +207,12 @@ const App = () => {
             <Routes>
               {/* English Routes */}
               <Route path="/en" element={<LanguageWrapper language="en" />}>
-                {AppRoutes({ t })}
+                {AppRoutes({ t, lang: 'en' })}
               </Route>
 
               {/* Default (Spanish) Routes */}
               <Route path="/" element={<LanguageWrapper language="es" />}>
-                {AppRoutes({ t })}
+                {AppRoutes({ t, lang: 'es' })}
               </Route>
             </Routes>
           </MenuProvider>

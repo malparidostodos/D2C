@@ -25,6 +25,8 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
     const [user, setUser] = useState(null);
     const { t, i18n } = useTranslation();
     const location = useLocation();
+    const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].some(path => location.pathname.includes(path));
+    const isBookingPage = location.pathname.includes('/booking') || location.pathname.includes('/reserva');
     const currentLang = i18n.language?.startsWith('en') ? 'EN' : 'ES';
 
     const isHomePage = location.pathname === '/' || location.pathname === '/en' || location.pathname === '/en/';
@@ -55,14 +57,14 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
     ];
 
     const servicesDropdown = [
-        { name: t('header.pricing'), path: '/services', id: 'services', image: `/images/services-preview-${currentLang.toLowerCase()}.png` },
-        { name: t('header.process'), path: '/roadmap', id: 'roadmap' },
-        { name: t('header.memberships'), path: '/membresias', id: '#membresias' },
+        { name: t('header.pricing'), path: currentLang === 'EN' ? '/services' : '/servicios', id: 'services', image: `/images/services-preview-${currentLang.toLowerCase()}.png` },
+        { name: t('header.process'), path: currentLang === 'EN' ? '/roadmap' : '/proceso', id: 'roadmap' },
+        { name: t('header.memberships'), path: currentLang === 'EN' ? '/memberships' : '/membresias', id: '#membresias' },
     ];
 
     const supportDropdown = [
         { name: t('header.faq'), path: '/faq', id: 'faq' },
-        { name: t('header.legal'), path: '/privacy-policy', id: 'legal' },
+        { name: t('header.legal'), path: currentLang === 'EN' ? '/privacy-policy' : '/politica-de-privacidad', id: 'legal' },
     ];
 
     // Helper to handle transition navigation
@@ -152,13 +154,20 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
     // Determine visibility class
     // Mobile: Respect 'hidden' (from useMenu scroll logic)
     // Desktop: If alwaysVisible is true, force translate-y-0 using CSS media query override
-    const visibilityClass = hidden ? '-translate-y-full' : 'translate-y-0';
+    // Also force visibility if we are in the Hero section
+    const visibilityClass = (hidden && !isHero) ? '-translate-y-full' : 'translate-y-0';
     const desktopOverrideClass = alwaysVisible ? 'md:translate-y-0' : '';
+
+    // Simplified Theme Logic:
+    // Auth Pages -> Always White
+    // Booking Page -> White only in Dark Mode
+    // Default (Home/Others) -> Yellow/Blue (Mix Blend)
+    const useSolidWhite = isAuthPage || (isBookingPage && isDarkMode);
 
     return (
         <>
             {/* Navbar (Logo + Menu Btn) - Fixed exactly like reference */}
-            <nav className={`fixed top-0 left-0 w-full p-8 z-[9990] flex justify-between items-center text-[#FFFF00] mix-blend-difference transition-transform duration-500 select-none ${visibilityClass} ${desktopOverrideClass}`}>
+            <nav className={`fixed top-0 left-0 w-full p-8 z-[9990] flex justify-between items-center ${useSolidWhite ? 'text-white mix-blend-normal' : 'text-[#FFFF00] mix-blend-difference'} transition-transform duration-500 select-none ${visibilityClass} ${desktopOverrideClass}`}>
                 {/* Logo - Always non-clickable in Navbar as requested */}
                 {/* Logo */}
                 {isHomePage ? (
@@ -228,7 +237,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                     {/* Menu Trigger */}
                     <div
                         className="cursor-pointer text-base tracking-wider font-medium w-12 text-right"
-                        onClick={() => setMenuOpen(true)}
+                        onClick={() => { setMenuOpen(true); setLangOpen(false); }}
                     >
                         {t('header.menu')}
                     </div>
@@ -277,9 +286,10 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                         transition={{ duration: 0.5, delay: 0.2 }}
                                         className="cursor-pointer text-base font-medium flex items-center gap-1 opacity-80 hover:opacity-100"
                                         onClick={() => setLangOpen(!langOpen)}
+                                        onMouseDown={(e) => e.stopPropagation()}
                                     >
                                         {currentLang}
-                                        <ChevronDown size={14} />
+                                        <ChevronDown size={14} className={`transition-transform duration-300 ${langOpen ? 'rotate-180' : ''}`} />
                                     </motion.div>
 
                                     <AnimatePresence>
@@ -359,11 +369,18 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                     ].map((group, groupIndex) => (
                                         <div key={groupIndex} className="flex flex-col gap-1 mb-3 md:mb-6 last:mb-0">
                                             {group.map((item, index) => {
-                                                const legalPaths = ['/privacy-policy', '/terms-conditions', '/cookie-policy', '/disclaimers'];
+                                                const legalPaths = [
+                                                    '/privacy-policy', '/politica-de-privacidad',
+                                                    '/terms-conditions', '/terminos-y-condiciones',
+                                                    '/cookie-policy', '/politica-de-cookies',
+                                                    '/disclaimers', '/descargos'
+                                                ];
                                                 let isActive = (item.id === activeSection) || ((location.pathname === getLocalizedPath(item.path)) && !item.path.includes('#'));
 
                                                 if (item.id === 'legal') {
-                                                    isActive = legalPaths.some(path => location.pathname === getLocalizedPath(path));
+                                                    // Check against all localized legal paths
+                                                    const currentPath = location.pathname.replace(/^\/en/, '') || '/';
+                                                    isActive = legalPaths.some(path => location.pathname === getLocalizedPath(path) || path === currentPath);
                                                 }
 
                                                 return (
