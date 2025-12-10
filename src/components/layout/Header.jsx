@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
-import { Home, ChevronDown, ArrowUpRight, User, ArrowRight, X } from 'lucide-react';
+import { Home, ChevronDown, ArrowUpRight, User, ArrowRight, X, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../JetonHeader.css'; // Import the strict CSS
 import { useMenu } from '../../hooks/useMenu.jsx';
+import { useTheme } from '../../hooks/useTheme';
 
-const Header = ({ theme = 'default' }) => {
+const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = false }) => {
     const {
         hidden, setHidden, menuOpen, setMenuOpen, menuClosing, menuEntering,
         servicesOpen, setServicesOpen, supportOpen, setSupportOpen, activeSection, setHoverLock,
@@ -145,10 +146,19 @@ const Header = ({ theme = 'default' }) => {
         }
     };
 
+    // Theme Management
+    const { isDarkMode, toggleTheme } = useTheme();
+
+    // Determine visibility class
+    // Mobile: Respect 'hidden' (from useMenu scroll logic)
+    // Desktop: If alwaysVisible is true, force translate-y-0 using CSS media query override
+    const visibilityClass = hidden ? '-translate-y-full' : 'translate-y-0';
+    const desktopOverrideClass = alwaysVisible ? 'md:translate-y-0' : '';
+
     return (
         <>
             {/* Navbar (Logo + Menu Btn) - Fixed exactly like reference */}
-            <nav className={`fixed top-0 left-0 w-full p-8 z-[9990] flex justify-between items-center text-[#FFFF00] mix-blend-difference transition-transform duration-500 select-none ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
+            <nav className={`fixed top-0 left-0 w-full p-8 z-[9990] flex justify-between items-center text-[#FFFF00] mix-blend-difference transition-transform duration-500 select-none ${visibilityClass} ${desktopOverrideClass}`}>
                 {/* Logo - Always non-clickable in Navbar as requested */}
                 {/* Logo */}
                 {isHomePage ? (
@@ -167,6 +177,17 @@ const Header = ({ theme = 'default' }) => {
 
                 {/* Right Side: Language + Menu */}
                 <div className="flex items-center gap-8" ref={langRef}>
+                    {/* Theme Toggle */}
+                    {showThemeToggle && (
+                        <button
+                            onClick={toggleTheme}
+                            className="cursor-pointer text-base font-medium flex items-center justify-center w-8 h-8 rounded-full hover:bg-[#FFFF00]/10 transition-colors"
+                            title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                        >
+                            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                        </button>
+                    )}
+
                     {/* Language Selector (Main) */}
                     <div className="relative">
                         <div
@@ -184,7 +205,7 @@ const Header = ({ theme = 'default' }) => {
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
                                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                                     transition={{ duration: 0.2, ease: "easeOut" }}
-                                    className="absolute top-full right-0 mt-4 bg-[#FFFF00]/30 border border-[#FFFF00]/40 backdrop-blur-xl rounded-2xl p-2 min-w-[150px] shadow-2xl overflow-hidden origin-top-right mix-blend-normal"
+                                    className="absolute top-full right-0 mt-4 bg-[#FFFF00]/30 border border-[#FFFF00]/40 backdrop-blur-xl rounded-2xl p-2 min-w-[150px] shadow-2xl overflow-hidden origin-top-right mix-blend-normal text-[#FFFF00]"
                                 >
                                     {languages.map((lang) => (
                                         <button
@@ -206,7 +227,7 @@ const Header = ({ theme = 'default' }) => {
 
                     {/* Menu Trigger */}
                     <div
-                        className="cursor-pointer text-base tracking-wider font-medium"
+                        className="cursor-pointer text-base tracking-wider font-medium w-12 text-right"
                         onClick={() => setMenuOpen(true)}
                     >
                         {t('header.menu')}
@@ -292,7 +313,7 @@ const Header = ({ theme = 'default' }) => {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ duration: 0.5, delay: 0.2 }}
-                                    className="cursor-pointer text-base tracking-wider font-medium hover:opacity-70 transition-opacity"
+                                    className="cursor-pointer text-base tracking-wider font-medium hover:opacity-70 transition-opacity w-12 text-right"
                                     onClick={handleMenuClose}
                                 >
                                     {t('header.close')}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import Header from '../layout/Header'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Car, Truck, Bike, Calendar as CalendarIcon, User, Check, ChevronLeft, ChevronRight, Clock, Mail, CreditCard, Edit2, ChevronDown, ChevronUp, CheckCircle, Plus, Copy, Eye, EyeOff, Sun, Moon } from 'lucide-react'
 import AnimatedButton from '../ui/AnimatedButton'
@@ -6,6 +7,7 @@ import SEO from '../ui/SEO'
 import AccountCreatedModal from '../booking/AccountCreatedModal'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useMenu } from '../../hooks/useMenu'
+import { useTheme } from '../../hooks/useTheme'
 import { supabase } from '../../lib/supabase'
 import VehiclePlateSelector from '../ui/VehiclePlateSelector'
 import { useTranslation } from 'react-i18next'
@@ -198,26 +200,9 @@ const BookingPage = () => {
     const [newUserCredentials, setNewUserCredentials] = useState(null) // Credenciales de usuario nuevo creado automáticamente
     const [showAccountModal, setShowAccountModal] = useState(false)
 
-    // Theme State
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        // Default to LIGHT (false) if no setting found
-        if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('dashboardTheme')
-            return saved !== null ? JSON.parse(saved) : false
-        }
-        return false
-    })
+    // Theme State handled by global Header/useTheme now
+    const { isDarkMode } = useTheme()
 
-    useEffect(() => {
-        localStorage.setItem('dashboardTheme', JSON.stringify(isDarkMode))
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-    }, [isDarkMode])
-
-    const toggleTheme = () => setIsDarkMode(!isDarkMode)
 
     // Helper removed as it's provided by useMenu now
     // const getLocalizedPath = (path) => { ... }
@@ -914,25 +899,14 @@ const BookingPage = () => {
     }
 
     return (
-        <main className="min-h-screen bg-gray-50 dark:bg-[#050505] pt-32 pb-20 px-4 md:px-8 relative transition-colors duration-300">
+        <main className="min-h-screen bg-gray-50 dark:bg-[#050505] pt-28 md:pt-20 pb-20 px-4 md:px-8 relative transition-colors duration-300">
             <SEO
                 title={t('booking.seo_title')}
                 description={t('booking.seo_description')}
             />
             <h1 className="sr-only">{t('booking.seo_title')}</h1>
-            <a href={getLocalizedPath('/')} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath('/')) }} className="absolute top-6 left-6 md:top-8 md:left-8 text-2xl font-display font-semibold text-black dark:text-white tracking-tighter z-50 hover:opacity-80 transition-opacity">
-                Ta' <span className="text-accent">To'</span> Clean
-            </a>
-
-            {/* Theme Toggle Button */}
-            <button
-                onClick={toggleTheme}
-                className="absolute top-6 right-6 md:top-8 md:right-8 p-3 rounded-full bg-white dark:bg-white/10 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/20 transition-all z-[100] cursor-pointer shadow-lg dark:shadow-none"
-                aria-label="Toggle theme"
-            >
-                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-            <div className="max-w-6xl mx-auto">
+            <Header showThemeToggle={true} alwaysVisible={true} />
+            <div className="max-w-6xl mx-auto pt-4">
                 {/* Progress Bar - Solo mostrar si no es paso 0 */}
                 {step > 0 && (
                     <div className="mb-12">
@@ -1007,7 +981,7 @@ const BookingPage = () => {
                     <div className="fixed bottom-8 left-8 z-50">
                         <button
                             onClick={prevStep}
-                            className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black hover:bg-[#0046b8] hover:text-white transition-colors backdrop-blur-sm font-medium"
+                            className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black hover:bg-[#0046b8] hover:text-white transition-colors backdrop-blur-sm font-medium shadow-lg border border-gray-200 dark:border-white/10"
                         >
                             <ChevronLeft size={20} />
                             {t('booking.back')}
@@ -1023,8 +997,8 @@ const BookingPage = () => {
             case 0:
                 // Paso 0: Selector de vehículos (solo para usuarios autenticados)
                 return (
-                    <div className="space-y-8">
-                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-8">
+                    <div className="mt-4 md:-mt-12">
+                        <h2 className="text-3xl md:text-4xl font-display font-semibold text-white text-center mb-4">
                             {loadingVehicles && likelyLoggedIn
                                 ? t('booking.select_vehicle')
                                 : userVehicles.length > 0
@@ -1032,17 +1006,11 @@ const BookingPage = () => {
                                     : t('booking.add_first_vehicle_title')}
                         </h2>
 
-                        {!loadingVehicles && (
-                            <p className="text-white/60 text-center -mt-4 mb-8">
-                                {userVehicles.length > 0
-                                    ? t('booking.select_vehicle_subtitle')
-                                    : t('booking.add_first_vehicle_subtitle')}
-                            </p>
-                        )}
+
 
 
                         {loadingVehicles && likelyLoggedIn ? (
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                 {[1, 2, 3].map((i) => (
                                     <VehicleSkeleton key={i} />
                                 ))}
@@ -1071,7 +1039,7 @@ const BookingPage = () => {
                             </div>
                         ) : (
                             // Con vehículos guardados - Mostrar grid
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                                 {/* Vehículos existentes */}
                                 {userVehicles.map((vehicle) => {
                                     const vehicleImage = vehicle.vehicle_type === 'car' ? '/images/vehiculos/sedan.png'
@@ -1435,12 +1403,14 @@ const BookingPage = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                             <div>
                                 <label className="block text-gray-700 dark:text-white/60 text-sm mb-4">{t('booking.select_date')}</label>
-                                <CustomCalendar
-                                    selectedDate={formData.date}
-                                    onSelect={handleDateSelect}
-                                    availability={availability}
-                                    onMonthChange={handleMonthChange}
-                                />
+                                <div className="[&>div]:ml-0 [&>div]:mr-auto">
+                                    <CustomCalendar
+                                        selectedDate={formData.date}
+                                        onSelect={handleDateSelect}
+                                        availability={availability}
+                                        onMonthChange={handleMonthChange}
+                                    />
+                                </div>
                             </div>
                             <div>
                                 <label className="block text-gray-700 dark:text-white/60 text-sm mb-4">{t('booking.select_time')}</label>
@@ -1458,7 +1428,7 @@ const BookingPage = () => {
                                                         ? 'bg-red-500/5 text-red-500/40 cursor-not-allowed line-through border border-red-500/10'
                                                         : !formData.date
                                                             ? 'bg-gray-100 text-gray-400 dark:bg-white/5 dark:text-white/20 cursor-not-allowed border border-gray-200 dark:border-white/5'
-                                                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:border-white/5'
+                                                            : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:border-white/5'
                                                     }`}
                                             >
                                                 {time}
@@ -1481,7 +1451,7 @@ const BookingPage = () => {
                                 onClick={nextStep}
                                 disabled={!formData.date || !formData.time}
                                 className={(!formData.date || !formData.time) ? 'opacity-50 cursor-not-allowed' : ''}
-                                variant={isDarkMode ? 'primary' : 'black'}
+                                variant={isDarkMode ? 'white' : 'black'}
                             >
                                 {t('booking.view_summary')}
                             </AnimatedButton>

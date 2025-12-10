@@ -97,9 +97,7 @@ const Testimonials = () => {
         }
     }, [])
 
-    if (!loading && testimonials.length === 0) {
-        return null
-    }
+
 
     // Infinite Scroll Logic with Drag
     const baseVelocity = -1 // Increased speed (was -0.5)
@@ -138,14 +136,18 @@ const Testimonials = () => {
         x.set(newX)
     })
 
+    if (!loading && testimonials.length === 0) {
+        return null
+    }
+
     return (
-        <section className="pt-24 pb-40 bg-white relative overflow-hidden">
+        <section className="pt-24 pb-40 bg-[#0046b8] relative overflow-hidden">
             <div className="relative z-10">
                 <div className="text-center mb-16 px-4">
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-[#0046b8] text-sm font-semibold tracking-widest uppercase mb-4 block"
+                        className="text-blue-200 text-sm font-semibold tracking-widest uppercase mb-4 block"
                     >
                         Reseñas
                     </motion.span>
@@ -153,16 +155,16 @@ const Testimonials = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-6xl font-display font-semibold text-[#0046b8] mb-6"
+                        className="text-4xl md:text-6xl font-display font-semibold text-white mb-6"
                     >
-                        Lo que dicen nuestros <span className="text-[#0046b8]">Clientes</span>
+                        Lo que dicen nuestros <span className="text-blue-300">Clientes</span>
                     </motion.h2>
                 </div>
 
                 {/* Carousel Container */}
                 <div className="relative w-full overflow-hidden mb-24" ref={containerRef}>
-                    <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+                    <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#0046b8] to-transparent z-10 pointer-events-none" />
+                    <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#0046b8] to-transparent z-10 pointer-events-none" />
 
                     <motion.div
                         className="flex gap-8 px-4 py-12 cursor-grab active:cursor-grabbing"
@@ -187,7 +189,7 @@ const Testimonials = () => {
 
                 {/* Stats Section */}
                 <div className="max-w-7xl mx-auto px-4 md:px-8">
-                    <div className="bg-[#0046b8] rounded-3xl p-12 shadow-2xl relative overflow-hidden">
+                    <div className="bg-white rounded-3xl p-12 shadow-2xl relative overflow-hidden">
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
                             {[
                                 { number: stats.hours, label: "Horas de Trabajo" },
@@ -195,12 +197,12 @@ const Testimonials = () => {
                                 { number: stats.fiveStar, label: "Reseñas 5 Estrellas" },
                                 { number: stats.rating, label: "Calificación Promedio", hasStar: true }
                             ].map((stat, index) => (
-                                <div key={index} className={`flex flex-col items-center text-center ${index !== 3 ? 'md:border-r md:border-white/20' : ''}`}>
+                                <div key={index} className={`flex flex-col items-center text-center ${index !== 3 ? 'md:border-r md:border-blue-100' : ''}`}>
                                     <div className="flex items-center gap-2 mb-4">
-                                        <span className="text-5xl md:text-6xl font-semibold text-white">{stat.number}</span>
-                                        {stat.hasStar && <Star className="w-8 h-8 md:w-10 md:h-10 text-white fill-white" />}
+                                        <span className="text-5xl md:text-6xl font-semibold text-[#0046b8]">{stat.number}</span>
+                                        {stat.hasStar && <Star className="w-8 h-8 md:w-10 md:h-10 text-yellow-500 fill-yellow-500" />}
                                     </div>
-                                    <span className="text-white/90 font-medium uppercase tracking-wider text-sm md:text-base">{stat.label}</span>
+                                    <span className="text-[#0046b8]/70 font-bold uppercase tracking-wider text-sm md:text-base">{stat.label}</span>
                                 </div>
                             ))}
                         </div>
@@ -212,18 +214,18 @@ const Testimonials = () => {
 }
 
 const TestimonialCard = ({ testimonial }) => (
-    <div className="w-[350px] md:w-[400px] flex-shrink-0 bg-white border border-blue-100 rounded-3xl p-8 hover:shadow-xl transition-all duration-300 relative group shadow-lg">
-        <div className="absolute top-8 right-8 text-[#0046b8]/20 group-hover:text-[#0046b8]/40 transition-colors">
+    <div className="w-[350px] md:w-[400px] flex-shrink-0 bg-white/10 backdrop-blur-md border border-white/10 rounded-3xl p-8 hover:bg-white/15 transition-all duration-300 relative group shadow-lg">
+        <div className="absolute top-8 right-8 text-white/20 group-hover:text-white/40 transition-colors">
             <Quote size={40} />
         </div>
 
         <div className="flex gap-1 mb-6">
             {[...Array(testimonial.rating || 5)].map((_, i) => (
-                <Star key={i} size={16} className="text-yellow-500 fill-yellow-500" />
+                <Star key={i} size={16} className="text-yellow-400 fill-yellow-400" />
             ))}
         </div>
 
-        <p className="text-[#0046b8] mb-8 leading-relaxed min-h-[80px] break-words line-clamp-6 font-medium">
+        <p className="text-white mb-8 leading-relaxed min-h-[80px] break-words line-clamp-6 font-medium">
             {testimonial.content}
         </p>
 
@@ -231,13 +233,13 @@ const TestimonialCard = ({ testimonial }) => (
             <img
                 src={testimonial.avatar_url || testimonial.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.name)}&background=random`}
                 alt={testimonial.name}
-                className="w-12 h-12 rounded-full border-2 border-[#0046b8]/20 object-cover"
+                className="w-12 h-12 rounded-full border-2 border-white/20 object-cover"
             />
             <div>
-                <h4 className="text-[#0046b8] font-semibold">
+                <h4 className="text-white font-semibold">
                     {testimonial.name.split(' ')[0].charAt(0).toUpperCase() + testimonial.name.split(' ')[0].slice(1).toLowerCase()}
                 </h4>
-                <p className="text-[#0046b8]/70 text-sm font-medium">{testimonial.role}</p>
+                <p className="text-blue-100/70 text-sm font-medium">{testimonial.role}</p>
             </div>
         </div>
     </div>

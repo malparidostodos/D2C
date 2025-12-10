@@ -84,13 +84,43 @@ const Benefits = () => {
             {t('benefits.why_choose_us')}
           </motion.h2>
 
-          {/* Flying Images (No Fade) */}
+          {/* Flying Images (No Fade) - Optimized with will-change and eager loading */}
           <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-            <motion.img src="/images/benefits/premiumquality.png" style={{ x: img1X, y: img1Y, rotate: img1Rot, opacity: img1Op }} className="absolute w-64 h-48 md:w-80 md:h-60 object-cover rounded-2xl shadow-xl" />
-            <motion.img src="/images/benefits/ah.jpeg" style={{ x: img2X, y: img2Y, rotate: img2Rot, opacity: img2Op }} className="absolute w-60 h-44 md:w-80 md:h-56 object-cover rounded-2xl shadow-xl" />
-            <motion.img src="/images/benefits/clean.png" style={{ x: img3X, y: img3Y, rotate: img3Rot, opacity: img3Op }} className="absolute w-64 h-48 md:w-80 md:h-60 object-cover rounded-2xl shadow-xl" />
-            <motion.img src="/images/benefits/clean2.png" style={{ x: img4X, y: img4Y, rotate: img4Rot, opacity: img4Op }} className="absolute w-64 h-48 md:w-96 md:h-72 object-cover rounded-2xl shadow-xl" />
-            <motion.img src="/images/benefits/jabon.png" style={{ x: img5X, y: img5Y, rotate: img5Rot, scale: img5Scale, opacity: img5Op }} className="absolute w-80 h-56 md:w-[450px] md:h-80 object-cover rounded-2xl shadow-2xl z-20" />
+            <motion.img
+              src="/images/benefits/premiumquality.png"
+              style={{ x: img1X, y: img1Y, rotate: img1Rot, willChange: "transform" }}
+              loading="eager"
+              decoding="async"
+              className="absolute w-64 h-48 md:w-80 md:h-60 object-cover rounded-2xl shadow-xl backface-hidden"
+            />
+            <motion.img
+              src="/images/benefits/ah.jpeg"
+              style={{ x: img2X, y: img2Y, rotate: img2Rot, willChange: "transform" }}
+              loading="eager"
+              decoding="async"
+              className="absolute w-60 h-44 md:w-80 md:h-56 object-cover rounded-2xl shadow-xl backface-hidden"
+            />
+            <motion.img
+              src="/images/benefits/clean.png"
+              style={{ x: img3X, y: img3Y, rotate: img3Rot, willChange: "transform" }}
+              loading="eager"
+              decoding="async"
+              className="absolute w-64 h-48 md:w-80 md:h-60 object-cover rounded-2xl shadow-xl backface-hidden"
+            />
+            <motion.img
+              src="/images/benefits/clean2.png"
+              style={{ x: img4X, y: img4Y, rotate: img4Rot, willChange: "transform" }}
+              loading="eager"
+              decoding="async"
+              className="absolute w-64 h-48 md:w-96 md:h-72 object-cover rounded-2xl shadow-xl backface-hidden"
+            />
+            <motion.img
+              src="/images/benefits/jabon.png"
+              style={{ x: img5X, y: img5Y, rotate: img5Rot, scale: img5Scale, willChange: "transform" }}
+              loading="eager"
+              decoding="async"
+              className="absolute w-80 h-56 md:w-[450px] md:h-80 object-cover rounded-2xl shadow-2xl z-20 backface-hidden"
+            />
           </div>
         </motion.div>
 

@@ -48,11 +48,7 @@ export const MenuProvider = ({ children }) => {
                 return;
             }
 
-            // Always show on mobile
-            if (window.innerWidth < 768) {
-                setHidden(false);
-                return;
-            }
+
 
             // Check if inside top zone (200px)
             if (e.clientY < 200) {
@@ -98,11 +94,7 @@ export const MenuProvider = ({ children }) => {
                 setLangOpen(false);
             }
 
-            // Always show on mobile
-            if (window.innerWidth < 768) {
-                setHidden(false);
-                return;
-            }
+
 
             // Support both lenis event object and native window fallback
             const currentScrollY = e && typeof e.scroll === 'number' ? e.scroll : window.scrollY;

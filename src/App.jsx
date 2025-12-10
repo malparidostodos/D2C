@@ -45,28 +45,7 @@ import FAQ from './components/pages/FAQ'
 import SEO from './components/ui/SEO'
 import InteractiveGradient from './components/ui/InteractiveGradient/InteractiveGradient'
 import FPSCounter from './components/ui/FPSCounter'
-
-// Componente Home con todas las secciones
-const Home = () => {
-  const { t } = useTranslation()
-  return (
-    <div className="min-h-screen text-primary relative">
-      <SEO title={t('seo.home.title')} description={t('seo.home.description')} />
-      <Header />
-      <CustomScrollbar />
-      <main>
-        <Hero />
-        <Benefits />
-        <Collaboration />
-
-        <Collaboration />
-
-        <Testimonials />
-        <Contact />
-      </main>
-    </div>
-  )
-}
+import Home from './components/pages/Home'
 
 // Componente que maneja el scroll a secciones
 const ScrollToSection = ({ sectionId, title, description }) => {

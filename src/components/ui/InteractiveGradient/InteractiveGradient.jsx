@@ -7,10 +7,10 @@ import { useSmoothScroll } from "../SmoothScroll";
 
 // Auth Colors (Premium Dark Theme)
 const authColors = {
-    color1: "#000000", // Deepest Black
-    color2: "#143464ff", // Dark Navy
-    color3: "#1e3a8a", // Navy
-    color4: "#7b90caff", // Dark Blue Accent
+    color1: "#000000",
+    color2: "#143464ff",
+    color3: "#1e3a8a",
+    color4: "#7b90caff",
 };
 
 const InteractiveGradient = ({

@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import LanguageSelector from '../ui/LanguageSelector'
 import { useTranslation } from 'react-i18next'
+import Header from '../layout/Header'
 
 import SEO from '../ui/SEO'
 
@@ -57,19 +58,7 @@ const ForgotPasswordPage = () => {
         <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden pt-20 pb-10 px-4">
             <SEO title={t('auth.forgot_password_title', 'Recuperar Contraseña')} />
             {/* Navbar Structure */}
-            <div className="absolute top-0 left-0 w-full p-8 z-50 flex justify-between items-center select-none">
-                <a
-                    href={getLocalizedPath('/')}
-                    onClick={(e) => {
-                        e.preventDefault()
-                        navigateWithTransition(getLocalizedPath('/'))
-                    }}
-                    className="text-xl font-medium tracking-tight text-white cursor-pointer"
-                >
-                    Ta' To' Clean
-                </a>
-                <LanguageSelector />
-            </div>
+            <Header alwaysVisible={true} />
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

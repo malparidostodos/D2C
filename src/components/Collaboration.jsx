@@ -29,50 +29,50 @@ const Collaboration = () => {
   }
 
   return (
-    <section id="colaboracion" className="min-h-screen flex items-center py-16 md:py-24 bg-[#0046b8] relative z-20 -mt-[100vh]">
+    <section id="colaboracion" className="min-h-screen flex items-center py-16 md:py-24 bg-white relative z-0 mt-0">
       <div className="container px-5">
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-light mb-6 md:mb-8 select-none text-white">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-light mb-6 md:mb-8 select-none text-[#0046b8]">
               {t('collaboration.title_part1')}{' '}
-              <span className="relative inline-block">
+              <span className="relative inline-block font-semibold">
                 {t('collaboration.title_part2')}
                 <svg className="absolute -bottom-2 left-0 w-full h-3" viewBox="0 0 200 20" preserveAspectRatio="none">
-                  <path d="M0,10 Q50,0 100,10 T200,10" stroke="currentColor" strokeWidth="2" fill="none" className="text-white/30" />
+                  <path d="M0,10 Q50,0 100,10 T200,10" stroke="currentColor" strokeWidth="2" fill="none" className="text-[#0046b8]/30" />
                 </svg>
               </span>
             </h2>
 
             <ul className="space-y-6 mb-8">
               <li className="flex items-start gap-4">
-                <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 mt-1 text-white">
+                <div className="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-1 text-[#0046b8]">
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
                     <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
                 <div>
-                  <h6 className="font-semibold mb-1 select-none text-white">{t('collaboration.items.premium_products.title')}</h6>
-                  <p className="text-white/70 text-sm select-none">{t('collaboration.items.premium_products.description')}</p>
+                  <h6 className="font-semibold mb-1 select-none text-[#0046b8]">{t('collaboration.items.premium_products.title')}</h6>
+                  <p className="text-gray-600 text-sm select-none">{t('collaboration.items.premium_products.description')}</p>
                 </div>
               </li>
               <li className="flex items-start gap-4">
-                <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 mt-1 text-white">
+                <div className="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-1 text-[#0046b8]">
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
                     <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
                 <div>
-                  <h6 className="font-semibold mb-1 select-none text-white">{t('collaboration.items.professional_equipment.title')}</h6>
+                  <h6 className="font-semibold mb-1 select-none text-[#0046b8]">{t('collaboration.items.professional_equipment.title')}</h6>
                 </div>
               </li>
               <li className="flex items-start gap-4">
-                <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 mt-1 text-white">
+                <div className="w-6 h-6 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-1 text-[#0046b8]">
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
                     <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
                 <div>
-                  <h6 className="font-semibold mb-1 select-none text-white">{t('collaboration.items.international_certifications.title')}</h6>
+                  <h6 className="font-semibold mb-1 select-none text-[#0046b8]">{t('collaboration.items.international_certifications.title')}</h6>
                 </div>
               </li>
             </ul>
@@ -80,18 +80,19 @@ const Collaboration = () => {
             <AnimatedButton
               href="/contacto"
               onClick={(e) => scrollToSection(e, '#contacto', '/contacto')}
+              className="bg-[#0046b8] text-white hover:bg-blue-700"
             >
               {t('collaboration.cta')}
             </AnimatedButton>
           </div>
 
-          <div className="relative text-white mt-12 md:mt-0">
+          <div className="relative text-[#0046b8] mt-12 md:mt-0">
             <div className="relative w-full aspect-square max-w-[300px] md:max-w-md mx-auto scale-90 md:scale-100">
-              <div className="absolute inset-0 border border-white/10 rounded-full"></div>
-              <div className="absolute inset-8 border border-white/10 rounded-full"></div>
-              <div className="absolute inset-16 border border-white/10 rounded-full"></div>
+              <div className="absolute inset-0 border border-blue-100 rounded-full"></div>
+              <div className="absolute inset-8 border border-blue-100 rounded-full"></div>
+              <div className="absolute inset-16 border border-blue-100 rounded-full"></div>
 
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-white/5 rounded-2xl flex items-center justify-center">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-blue-50 rounded-2xl flex items-center justify-center">
                 <span className="text-4xl">⭐</span>
               </div>
 
@@ -104,7 +105,7 @@ const Collaboration = () => {
                 return (
                   <div
                     key={idx}
-                    className="absolute top-1/2 left-1/2 w-12 h-12 bg-white/10 border border-white/10 rounded-xl flex items-center justify-center text-xl font-semibold shadow-sm select-none text-white"
+                    className="absolute top-1/2 left-1/2 w-12 h-12 bg-white border border-blue-100 rounded-xl flex items-center justify-center text-xl font-semibold shadow-sm select-none text-[#0046b8]"
                     style={{
                       transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
                     }}
