@@ -19,7 +19,7 @@
         "services": "Servicios"
     },
     "button": {
-        "book_now": "Reservar Ahora",
+        "book_now": "Reservar",
         "whatsapp": "WhatsApp"
     },
     "final_cta": {
@@ -266,7 +266,7 @@
         "new_booking": "Nueva Reserva",
         "no_bookings": "No tienes reservas",
         "make_booking": "Hacer una Reserva",
-        "book_now": "Reservar Ahora",
+        "book_now": "Reservar",
         "profile": "Perfil",
         "cancel_booking": "Cancelar",
         "cancel_confirm_title": "Cancelar Reserva",

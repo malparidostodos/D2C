@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { useMenu } from '../../hooks/useMenu'
 import { useSmoothScroll } from '../ui/SmoothScroll'
+import Logo from '../ui/Logo'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -38,7 +39,7 @@ const Footer = () => {
         })
 
         // Text Chars initial
-        const chars = headerHtml.querySelectorAll(".char")
+        const chars = headerHtml.querySelectorAll("svg")
         gsap.set(chars, { yPercent: 300 })
 
         // Scroll Top Button initial
@@ -105,6 +106,7 @@ const Footer = () => {
                         <div className={headerClass}>{t('footer.explore')}</div>
                         <a href={getLocalizedPath(i18n.language === 'en' ? "/services" : "/servicios")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/services" : "/servicios")); }} className={footerLinkClass}>{t('header.services')}</a>
                         <a href={getLocalizedPath(i18n.language === 'en' ? "/roadmap" : "/proceso")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/roadmap" : "/proceso")); }} className={footerLinkClass}>{t('header.process')}</a>
+                        <a href={getLocalizedPath(i18n.language === 'en' ? "/memberships" : "/membresias")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/memberships" : "/membresias")); }} className={footerLinkClass}>{t('header.memberships')}</a>
                     </div>
 
                     {/* Column 3: Empresa */}
@@ -174,16 +176,8 @@ const Footer = () => {
                 </div>
 
                 {/* Big Header Text (Centered Background) */}
-                <div ref={headerHtmlRef} className="absolute top-[60%] left-0 w-full z-0 pointer-events-none -translate-y-1/2 text-center">
-                    <h1 className="text-[30vw] leading-[0.8] font-semibold tracking-tighter text-[#0046b8] m-0 p-0 font-display">
-                        <div className="whitespace-nowrap">
-                            {"Nuven".split("").map((char, i) => (
-                                <span key={i} className="char inline-block relative transform-gpu">
-                                    {char === " " ? "\u00A0" : char}
-                                </span>
-                            ))}
-                        </div>
-                    </h1>
+                <div ref={headerHtmlRef} className="absolute top-[60%] left-0 w-full z-0 pointer-events-none -translate-y-1/2 flex justify-center px-4">
+                    <Logo className="w-full max-w-[90%] h-auto text-[#0046b8] opacity-100 gap-4 md:gap-8" />
                 </div>
 
                 {/* Footer Bottom Bar (Language & Copyright) */}
