@@ -28,7 +28,7 @@ const Home = () => {
 
     return (
         <div className="min-h-screen text-primary relative">
-            <SEO title={t('seo.home.title')} description={t('seo.home.description')} />
+            <SEO description={t('seo.home.description')} />
             <Header />
             <CustomScrollbar />
 

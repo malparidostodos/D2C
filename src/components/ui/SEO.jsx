@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 const SEO = ({ title, description, keywords, image, url }) => {
     const { t } = useTranslation();
 
-    const siteTitle = "NUVEN - Detailing Premium";
+    const siteTitle = t('seo.site_title', "Nuven - Detailing Premium");
     const metaTitle = title ? `${title} | ${siteTitle}` : siteTitle;
     const metaDescription = description || t('seo.default_description', "Servicios de detailing automotriz premium. Limpieza profunda, corrección de pintura y protección cerámica.");
     const metaKeywords = keywords || t('seo.default_keywords', "detailing, lavado de autos, limpieza automotriz, corrección de pintura, cerámica");
-    const metaImage = image || "https://tatoclean.com/og-image.jpg"; // Replace with actual default OG image URL
+    const metaImage = image || "https://nuven.com/og-image.jpg"; // Replace with actual default OG image URL
     const metaUrl = url || window.location.href;
 
     return (

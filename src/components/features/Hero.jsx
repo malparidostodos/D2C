@@ -49,7 +49,7 @@ const Hero = () => {
               textShadow: '0 0 40px rgba(0, 0, 0, 0.1)'
             }}
           >
-            {t('hero.title_part1')} <br /> {t('hero.title_part2')} <br /> {t('hero.title_part3')}
+            {t('hero.title_part1')} <br /> {t('hero.title_part2')}
           </motion.h1>
         </div>
 

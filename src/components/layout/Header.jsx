@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
-import { Home, ChevronDown, ArrowUpRight, User, ArrowRight, X, Sun, Moon } from 'lucide-react';
+import { Home, ChevronDown, ArrowUpRight, User, ArrowRight, X, Sun, Moon, Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../JetonHeader.css'; // Import the strict CSS
 import { useMenu } from '../../hooks/useMenu.jsx';
 import { useTheme } from '../../hooks/useTheme';
+import Logo from '../ui/Logo';
+import LogoSemiBold from '../ui/LogoSemiBold';
 
 const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = false }) => {
     const {
@@ -169,12 +171,12 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
     return (
         <>
             {/* Navbar (Logo + Menu Btn) - Fixed exactly like reference */}
-            <nav className={`fixed top-0 left-0 w-full p-8 z-[9990] flex justify-between items-center ${useSolidWhite ? 'text-white mix-blend-normal' : 'text-[#FFFF00] mix-blend-difference'} transition-transform duration-500 select-none ${visibilityClass} ${desktopOverrideClass}`}>
+            <nav className={`fixed top-0 left-0 w-full p-8 md:px-12 z-[9990] flex justify-between items-center ${useSolidWhite ? 'text-white mix-blend-normal' : 'text-[#FFFF00] mix-blend-difference'} transition-transform duration-500 select-none ${visibilityClass} ${desktopOverrideClass}`}>
                 {/* Logo - Always non-clickable in Navbar as requested */}
                 {/* Logo */}
                 {isHero ? (
                     <div className="text-xl font-medium tracking-tight cursor-default">
-                        NUVEN
+                        <LogoSemiBold className="h-6 w-auto" />
                     </div>
                 ) : (
                     <a
@@ -182,12 +184,12 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                         onClick={(e) => handleNavClick(e, '#inicio', '/')}
                         className="text-xl font-medium tracking-tight cursor-pointer"
                     >
-                        NUVEN
+                        <LogoSemiBold className="h-6 w-auto" />
                     </a>
                 )}
 
                 {/* Right Side: Language + Menu */}
-                <div className="flex items-center gap-8" ref={langRef}>
+                <div className="flex items-center gap-2 md:gap-8" ref={langRef}>
                     {/* Theme Toggle */}
                     {showThemeToggle && (
                         <button
@@ -202,11 +204,12 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                     {/* Language Selector (Main) */}
                     <div className="relative">
                         <div
-                            className="cursor-pointer text-base font-medium flex items-center gap-1"
+                            className="cursor-pointer text-xs md:text-sm font-medium uppercase tracking-wider flex items-center gap-1 md:gap-2 border border-current rounded-xl md:rounded-2xl px-3 md:px-5 h-8 md:h-10 hover:opacity-70 transition-opacity"
                             onClick={() => setLangOpen(!langOpen)}
                         >
+                            <Globe size={14} className="md:w-4 md:h-4 w-3.5 h-3.5" strokeWidth={2} />
                             {currentLang}
-                            <ChevronDown size={14} className={`transition-transform duration-300 ${langOpen ? 'rotate-180' : ''}`} />
+                            <ChevronDown size={14} className={`transition-transform duration-300 md:w-3.5 md:h-3.5 w-3 h-3 ${langOpen ? 'rotate-180' : ''}`} />
                         </div>
 
                         <AnimatePresence>
@@ -238,7 +241,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
 
                     {/* Menu Trigger */}
                     <div
-                        className="cursor-pointer text-base tracking-wider font-medium w-12 text-right"
+                        className="cursor-pointer text-xs md:text-sm font-medium tracking-wider flex items-center justify-center px-4 md:px-0 w-20 md:w-24 h-8 md:h-10 border border-current rounded-xl md:rounded-2xl hover:bg-white/10 transition-colors"
                         onClick={() => { setMenuOpen(true); setLangOpen(false); }}
                     >
                         {t('header.menu')}
@@ -254,7 +257,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className="fixed top-0 left-0 w-full h-[85vh] bg-[#0046b8] text-white z-[10000] p-8 flex flex-col justify-between select-none"
+                        className="fixed top-0 left-0 w-full h-[85vh] bg-[#0046b8] text-white z-[10000] p-8 md:px-12 flex flex-col justify-between select-none"
                     >
                         {/* Menu Nav (Header inside overlay) */}
                         <div className="flex justify-between items-center mb-4 md:mb-6 relative z-20 shrink-0">
@@ -265,7 +268,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                     transition={{ duration: 0.5, delay: 0.2 }}
                                     className="text-xl font-medium tracking-tight cursor-default"
                                 >
-                                    NUVEN
+                                    <LogoSemiBold className="h-6 w-auto" />
                                 </motion.div>
                             ) : (
                                 <motion.a
@@ -276,22 +279,23 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                     transition={{ duration: 0.5, delay: 0.2 }}
                                     className="text-xl font-medium tracking-tight cursor-pointer"
                                 >
-                                    NUVEN
+                                    <LogoSemiBold className="h-6 w-auto" />
                                 </motion.a>
                             )}
-                            <div className="flex items-center gap-8">
+                            <div className="flex items-center gap-2 md:gap-8">
                                 {/* Language Selector (Overlay) */}
                                 <div className="relative">
                                     <motion.div
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ duration: 0.5, delay: 0.2 }}
-                                        className="cursor-pointer text-base font-medium flex items-center gap-1 opacity-80 hover:opacity-100"
+                                        className="cursor-pointer text-xs md:text-sm font-medium uppercase tracking-wider flex items-center gap-1 md:gap-2 border border-current rounded-xl md:rounded-2xl px-3 md:px-5 h-8 md:h-10 hover:opacity-70 transition-opacity"
                                         onClick={() => setLangOpen(!langOpen)}
                                         onMouseDown={(e) => e.stopPropagation()}
                                     >
+                                        <Globe size={14} className="md:w-4 md:h-4 w-3.5 h-3.5" strokeWidth={2} />
                                         {currentLang}
-                                        <ChevronDown size={14} className={`transition-transform duration-300 ${langOpen ? 'rotate-180' : ''}`} />
+                                        <ChevronDown size={14} className={`transition-transform duration-300 md:w-3.5 md:h-3.5 w-3 h-3 ${langOpen ? 'rotate-180' : ''}`} />
                                     </motion.div>
 
                                     <AnimatePresence>
@@ -325,7 +329,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ duration: 0.5, delay: 0.2 }}
-                                    className="cursor-pointer text-base tracking-wider font-medium hover:opacity-70 transition-opacity w-12 text-right"
+                                    className="cursor-pointer text-xs md:text-sm font-medium tracking-wider flex items-center justify-center px-4 md:px-0 w-20 md:w-24 h-8 md:h-10 border border-current rounded-xl md:rounded-2xl hover:bg-white/10 transition-colors"
                                     onClick={handleMenuClose}
                                 >
                                     {t('header.close')}

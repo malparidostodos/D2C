@@ -16,7 +16,7 @@ const FinalCTA = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-6xl md:text-8xl lg:text-9xl font-semibold text-[#0046b8] mb-6 font-display tracking-tighter leading-none max-w-7xl mx-auto"
+                    className="text-6xl md:text-8xl lg:text-9xl font-medium text-[#0046b8] mb-6 font-display tracking-tighter leading-none max-w-7xl mx-auto"
                 >
                     <span className="block">{t('final_cta.title_line1')}</span>
                     <span className="block">{t('final_cta.title_line2')}</span>

@@ -386,7 +386,7 @@ const UserDashboard = () => {
 
     return (
         <div className="min-h-screen">
-            <SEO title={t('dashboard.seo_title', 'Mi Dashboard | TaToClean')} />
+            <SEO title={t('dashboard.seo_title', 'Mi Dashboard | Nuven')} />
 
             {/* Welcome Header */}
             <motion.div

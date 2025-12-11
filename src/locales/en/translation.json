@@ -16,7 +16,8 @@
         "close": "Close",
         "preview": "Preview",
         "slogan": "Tomorrow's Cleanliness, Today.™",
-        "services": "Services"
+        "services": "Services",
+        "default_keywords": "detailing, car wash, automotive cleaning, paint correction, ceramic"
     },
     "button": {
         "book_now": "Book Now",
@@ -63,15 +64,14 @@
     },
     "hero": {
         "quality_guaranteed": "Quality Guaranteed",
-        "title_part1": "Premium",
-        "title_part2": "Automotive",
-        "title_part3": "Care",
+        "title_part1": "Everything",
+        "title_part2": "your car needs",
         "subtitle": "Restore your car's shine with our premium detailing services.",
         "cta_booking": "Book Appointment",
         "cta_services": "View Services"
     },
     "booking": {
-        "seo_title": "Book Appointment | Ta' To' Clean",
+        "seo_title": "Book Appointment | Nuven",
         "seo_description": "Schedule your appointment for premium wash, detailing, or ceramic coating. Transform your vehicle today.",
         "invalid_plate": "Invalid plate",
         "vehicle_types": {
@@ -239,7 +239,7 @@
         "logout_error": "Error logging out"
     },
     "dashboard": {
-        "seo_title": "My Dashboard | TaToClean",
+        "seo_title": "My Dashboard | Nuven",
         "title": "My Account",
         "welcome": "Welcome",
         "subtitle": "Manage your vehicles and bookings here",
@@ -340,7 +340,7 @@
         "unlink_bookings_error": "Error unlinking bookings",
         "reviews": "My Reviews",
         "rate_service_page": {
-            "seo_title": "Rate Service | TaToClean",
+            "seo_title": "Rate Service | Nuven",
             "title_part1": "How was your",
             "title_part2": "Service?",
             "subtitle": "Your opinion helps us improve and always offer you the best.",
@@ -363,7 +363,7 @@
             "owner_of": "Owner of"
         },
         "user_reviews_page": {
-            "seo_title": "My Reviews | TaToClean",
+            "seo_title": "My Reviews | Nuven",
             "title": "My Reviews",
             "subtitle": "History of your ratings and comments",
             "no_reviews": "You haven't written any reviews yet.",
@@ -570,8 +570,8 @@
                 "faq": "FAQ"
             },
             "bottom": {
-                "copyright": "©2025 Ta' To' Clean",
-                "labs": "R&D: labs.tatotoclean.com",
+                "copyright": "©2025 Nuven",
+                "labs": "R&D: labs.nuven.com",
                 "made_by": "Tell us your story with",
                 "aria_label_scroll": "Scroll to top"
             },
@@ -1376,6 +1376,7 @@
         ]
     },
     "seo": {
+        "site_title": "Nuven - Detailing Premium",
         "default_description": "Premium automotive detailing services. Deep cleaning, paint correction, and ceramic protection.",
         "default_keywords": "detailing, car wash, automotive cleaning, paint correction, ceramic",
         "home": {

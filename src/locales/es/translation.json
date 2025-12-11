@@ -63,15 +63,14 @@
     },
     "hero": {
         "quality_guaranteed": "Calidad Garantizada",
-        "title_part1": "Cuidado",
-        "title_part2": "Automotriz",
-        "title_part3": "Premium",
+        "title_part1": "Todo lo que",
+        "title_part2": "tu auto necesita",
         "subtitle": "Recupera el brillo de tu vehículo como el primer día.",
         "cta_booking": "Agendar",
         "cta_services": "Ver Servicios"
     },
     "booking": {
-        "seo_title": "Reservar | Ta' To' Clean",
+        "seo_title": "Reservar | Nuven",
         "seo_description": "Agenda tu cita para lavado premium, detailing o recubrimiento cerámico. Transforma tu vehículo hoy.",
         "invalid_plate": "Placa inválida",
         "vehicle_types": {
@@ -238,7 +237,7 @@
         "logout_error": "Error al cerrar sesión"
     },
     "dashboard": {
-        "seo_title": "Mi Dashboard | TaToClean",
+        "seo_title": "Mi Dashboard | Nuven",
         "title": "Mi Cuenta",
         "welcome": "Bienvenido",
         "subtitle": "Gestiona tus vehículos y reservas desde aquí",
@@ -344,7 +343,7 @@
         "public": "Pública",
         "private": "Privada",
         "rate_service_page": {
-            "seo_title": "Calificar Servicio | TaToClean",
+            "seo_title": "Calificar Servicio | Nuven",
             "title_part1": "¿Cómo estuvo tu",
             "title_part2": "Servicio?",
             "subtitle": "Tu opinión nos ayuda a mejorar y ofrecerte siempre lo mejor.",
@@ -367,7 +366,7 @@
             "owner_of": "Dueño de"
         },
         "user_reviews_page": {
-            "seo_title": "Mis Reseñas | TaToClean",
+            "seo_title": "Mis Reseñas | Nuven",
             "title": "Mis Reseñas",
             "subtitle": "Historial de tus calificaciones y comentarios",
             "no_reviews": "No has escrito ninguna reseña todavía.",
@@ -574,8 +573,8 @@
                 "faq": "Preguntas Frecuentes"
             },
             "bottom": {
-                "copyright": "©2025 Ta' To' Clean",
-                "labs": "R&D: labs.tatotoclean.com",
+                "copyright": "©2025 Nuven",
+                "labs": "R&D: labs.nuven.com",
                 "made_by": "Cuéntanos tu historia con",
                 "aria_label_scroll": "Volver arriba"
             },
@@ -1374,6 +1373,7 @@
         ]
     },
     "seo": {
+        "site_title": "Nuven - Detallado Premium",
         "default_description": "Servicios de detailing automotriz premium. Limpieza profunda, corrección de pintura y protección cerámica.",
         "default_keywords": "detailing, lavado de autos, limpieza automotriz, corrección de pintura, cerámica",
         "home": {

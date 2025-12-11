@@ -175,9 +175,9 @@ const Footer = () => {
 
                 {/* Big Header Text (Centered Background) */}
                 <div ref={headerHtmlRef} className="absolute top-[60%] left-0 w-full z-0 pointer-events-none -translate-y-1/2 text-center">
-                    <h1 className="text-[30vw] leading-[0.8] font-semibold uppercase tracking-tighter text-[#0046b8] m-0 p-0 font-display">
+                    <h1 className="text-[30vw] leading-[0.8] font-semibold tracking-tighter text-[#0046b8] m-0 p-0 font-display">
                         <div className="whitespace-nowrap">
-                            {"NUVEN".split("").map((char, i) => (
+                            {"Nuven".split("").map((char, i) => (
                                 <span key={i} className="char inline-block relative transform-gpu">
                                     {char === " " ? "\u00A0" : char}
                                 </span>
