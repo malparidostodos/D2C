@@ -40,7 +40,11 @@ const Footer = () => {
 
         // Text Chars initial
         const chars = headerHtml.querySelectorAll("svg")
-        gsap.set(chars, { yPercent: 300 })
+        const isMobile = window.innerWidth < 768
+        gsap.set(chars, {
+            yPercent: isMobile ? 400 : 300,
+            autoAlpha: 0
+        })
 
         // Scroll Top Button initial
         if (scrollTopRef.current) {
@@ -51,7 +55,7 @@ const Footer = () => {
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: container,
-                start: "top 90%",
+                start: isMobile ? "top 75%" : "top 90%",
                 end: "bottom bottom",
                 scrub: 1
             }
@@ -60,7 +64,8 @@ const Footer = () => {
         // On scroll, only animate the text characters
         tl.to(chars, {
             yPercent: 0,
-            stagger: 0.1,
+            autoAlpha: 1,
+            stagger: isMobile ? 0.3 : 0.1,
             duration: 1.5,
             ease: "power1.out"
         })
@@ -83,36 +88,28 @@ const Footer = () => {
     const headerClass = "mb-4 opacity-40 text-xs md:text-sm tracking-wider"
 
     return (
-        <footer ref={containerRef} className="relative w-full h-[130vh] overflow-hidden bg-white text-[#0046b8] font-sans select-none">
+        <footer ref={containerRef} className="relative w-full h-auto md:h-[130vh] overflow-hidden bg-white text-[#0046b8] font-sans select-none">
 
             {/* Main Content Wrapper */}
-            <div ref={heroRef} className="absolute w-full h-full z-10 will-change-transform bg-white flex flex-col justify-between pt-12 pb-6 px-8 md:px-12">
+            <div ref={heroRef} className="relative md:absolute w-full h-auto md:h-full z-10 will-change-transform bg-white flex flex-col justify-between pt-12 pb-6 px-8 md:px-12">
 
                 {/* Top Grid: Links */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-4 z-30 w-full relative mb-12">
+                {/* Top Grid: Links */}
+                <div className="flex flex-col md:grid md:grid-cols-5 gap-0 md:gap-4 z-30 w-full relative mb-12">
 
-                    {/* ... Columns ... (implicitly preserved, I'll just target the wrapper div opening if possible, but replace_file_content needs context. I will select the surrounding area carefully) */}
-
-                    {/* Column 1: Reserva */}
-                    <div className="flex flex-col gap-2">
-                        <div className={headerClass}>{t('footer.start_now')}</div>
+                    <FooterColumn title={t('footer.start_now')} className="border-t border-[#0046b8]/10 md:border-none">
                         <a href={getLocalizedPath("/login")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath("/login")); }} className={footerLinkClass}>{t('header.login')}</a>
                         <a href={getLocalizedPath("/signup")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath("/signup")); }} className={footerLinkClass}>{t('header.signup')}</a>
                         <a href={getLocalizedPath(i18n.language === 'en' ? "/booking" : "/reserva")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/booking" : "/reserva")); }} className={footerLinkClass}>{t('button.book_now')}</a>
-                    </div>
+                    </FooterColumn>
 
-                    {/* Column 2: Explorar */}
-                    <div className="flex flex-col gap-2">
-                        <div className={headerClass}>{t('footer.explore')}</div>
+                    <FooterColumn title={t('footer.explore')} className="border-t border-[#0046b8]/10 md:border-none">
                         <a href={getLocalizedPath(i18n.language === 'en' ? "/services" : "/servicios")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/services" : "/servicios")); }} className={footerLinkClass}>{t('header.services')}</a>
                         <a href={getLocalizedPath(i18n.language === 'en' ? "/roadmap" : "/proceso")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/roadmap" : "/proceso")); }} className={footerLinkClass}>{t('header.process')}</a>
                         <a href={getLocalizedPath(i18n.language === 'en' ? "/memberships" : "/membresias")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/memberships" : "/membresias")); }} className={footerLinkClass}>{t('header.memberships')}</a>
-                    </div>
+                    </FooterColumn>
 
-                    {/* Column 3: Empresa */}
-                    <div className="flex flex-col gap-2">
-                        <div className={headerClass}>{t('footer.company')}</div>
-
+                    <FooterColumn title={t('footer.company')} className="border-t border-[#0046b8]/10 md:border-none">
                         <div className="text-sm select-text">
                             <div>{t('contact_section.address.line1')}</div>
                             <div>{t('contact_section.address.line2')}</div>
@@ -120,26 +117,24 @@ const Footer = () => {
                         </div>
                         <a href="mailto:business@nuven.com" className={`${footerLinkClass} mt-2`}>business@nuven.com</a>
                         <a href="mailto:contacto@nuven.com" className={footerLinkClass}>contacto@nuven.com</a>
-                    </div>
+                    </FooterColumn>
 
-                    {/* Column 4: Legal */}
-                    <div className="flex flex-col gap-2">
-                        <div className={headerClass}>{t('footer.legal')}</div>
+                    <FooterColumn title={t('footer.legal')} className="border-t border-[#0046b8]/10 md:border-none">
                         <a href={getLocalizedPath(i18n.language === 'en' ? "/privacy-policy" : "/politica-de-privacidad")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/privacy-policy" : "/politica-de-privacidad")); }} className={footerLinkClass}>{t('legal.privacy_policy')}</a>
                         <a href={getLocalizedPath(i18n.language === 'en' ? "/terms-conditions" : "/terminos-y-condiciones")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/terms-conditions" : "/terminos-y-condiciones")); }} className={footerLinkClass}>{t('legal.terms_conditions')}</a>
                         <a href={getLocalizedPath(i18n.language === 'en' ? "/cookie-policy" : "/politica-de-cookies")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/cookie-policy" : "/politica-de-cookies")); }} className={footerLinkClass}>{t('legal.cookie_policy')}</a>
                         <a href={getLocalizedPath(i18n.language === 'en' ? "/disclaimers" : "/descargos")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/disclaimers" : "/descargos")); }} className={footerLinkClass}>{t('legal.disclaimers.title')}</a>
-                    </div>
+                    </FooterColumn>
 
-                    {/* Column 5: Ayuda */}
-                    <div className="flex flex-col gap-2">
-                        <div className={headerClass}>{t('footer.help')}</div>
+                    <FooterColumn title={t('footer.help')} className="border-t border-b border-[#0046b8]/10 md:border-none">
                         <a href={getLocalizedPath("/faq")} onClick={(e) => { e.preventDefault(); navigateWithTransition(getLocalizedPath("/faq")); }} className={footerLinkClass}>{t('contact_section.footer.help.faq')}</a>
-                    </div>
+                    </FooterColumn>
                 </div>
 
-                {/* Middle Row: Socials & Badges (Placeholder) */}
-                <div className="flex justify-between items-center w-full z-30 mb-20 border-t border-[#0046b8]/10 pt-8 relative">
+                <div className="flex justify-between items-center w-full z-30 mb-8 md:mb-20 md:border-t md:border-solid border-none border-[#0046b8]/10 pt-8 relative">
+                    {/* Mobile-only full-width divider */}
+                    <div className="absolute top-0 -left-8 w-[calc(100%+4rem)] h-[1px] bg-[#0046b8]/10 md:hidden" />
+
                     <div className="flex gap-4">
                         {/* Placeholder for App Badges if needed, currently empty or reused content */}
                         <div className="flex gap-2">
@@ -176,8 +171,8 @@ const Footer = () => {
                 </div>
 
                 {/* Big Header Text (Centered Background) */}
-                <div ref={headerHtmlRef} className="absolute top-[60%] left-0 w-full z-0 pointer-events-none -translate-y-1/2 flex justify-center px-4">
-                    <Logo className="w-full max-w-[90%] h-auto text-[#0046b8] opacity-100 gap-4 md:gap-8" />
+                <div ref={headerHtmlRef} className="relative md:absolute md:top-[60%] md:left-0 w-full z-0 pointer-events-none md:-translate-y-1/2 flex justify-center px-2 md:px-4 mt-24 mb-28 md:my-0">
+                    <Logo className="w-full max-w-full md:max-w-[90%] h-auto text-[#0046b8] opacity-100 gap-1 md:gap-8" />
                 </div>
 
                 {/* Footer Bottom Bar (Language & Copyright) */}
@@ -215,6 +210,29 @@ const Footer = () => {
 
             </div>
         </footer>
+    )
+}
+
+const FooterColumn = ({ title, children, className }) => {
+    const [isOpen, setIsOpen] = React.useState(false)
+
+    return (
+        <div className={`flex flex-col ${className}`}>
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className={`w-full flex items-center justify-between py-4 text-base md:text-sm tracking-wider transition-opacity text-left md:normal-case ${isOpen ? 'opacity-40' : 'opacity-100'} md:opacity-40 md:hover:opacity-40 md:cursor-auto md:pointer-events-none md:block md:py-0 md:mb-4`}
+            >
+                {title}
+                {/* Plus Icon - visible only on mobile */}
+                <span className="md:hidden relative w-3 h-3 flex items-center justify-center">
+                    <span className="absolute w-full h-[1px] bg-current transition-transform duration-300 ease-out" />
+                    <span className={`absolute w-full h-[1px] bg-current transition-transform duration-300 ease-out ${isOpen ? 'rotate-0' : '-rotate-90'}`} />
+                </span>
+            </button>
+            <div className={`flex flex-col gap-2 px-3 md:px-0 overflow-hidden transition-all duration-300 ease-in-out md:h-auto md:opacity-100 md:visible md:max-h-none md:overflow-visible ${isOpen ? 'max-h-[500px] opacity-100 mb-6' : 'max-h-0 opacity-0 md:mb-0'}`}>
+                {children}
+            </div>
+        </div>
     )
 }
 
