@@ -87,7 +87,7 @@ const Hero = () => {
           className="relative z-20 w-full max-w-[1100px] sm:max-w-[1300px] md:max-w-[1200px] lg:max-w-[1400px] mx-auto md:mr-[12%] md:ml-auto -mt-[20vh] sm:-mt-[25vh] md:-mt-[32vh]"
         >
           <img
-            src="/images/porsche.png"
+            src="/images/porscheW.png"
             alt="Porsche 911 GT3 RS"
             className="hero-car-image w-full h-auto object-contain"
             style={{
@@ -131,7 +131,7 @@ const Hero = () => {
                 e.preventDefault()
                 navigateWithTransition(getLocalizedPath(i18n.language?.startsWith('en') ? "/booking" : "/reserva"))
               }}
-              variant="white"
+              variant="glassmorphism"
               className="min-w-[140px] justify-center"
             >
               {t('hero.cta_booking')}
@@ -142,7 +142,7 @@ const Hero = () => {
                 e.preventDefault()
                 navigateWithTransition(getLocalizedPath(i18n.language?.startsWith('en') ? "/services" : "/servicios"))
               }}
-              variant="white"
+              variant="glassmorphism"
               className="min-w-[140px] justify-center"
             >
               {t('hero.cta_services')}

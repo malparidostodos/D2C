@@ -35,7 +35,7 @@ const BeforeAfterCard = ({ before, after, label, delay }) => {
     )
 }
 
-const RecentResults = () => {
+const RecentResults = ({ embedded = false }) => {
     const results = [
         {
             before: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=1000&auto=format&fit=crop",
@@ -53,6 +53,21 @@ const RecentResults = () => {
             label: "Detailing de Rines"
         }
     ]
+
+    // If embedded, just return the grid without section wrapper
+    if (embedded) {
+        return (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {results.map((item, index) => (
+                    <BeforeAfterCard
+                        key={index}
+                        {...item}
+                        delay={index * 0.1}
+                    />
+                ))}
+            </div>
+        )
+    }
 
     return (
         <section className="bg-[#0046b8] py-24 px-4 sm:px-6 lg:px-8">

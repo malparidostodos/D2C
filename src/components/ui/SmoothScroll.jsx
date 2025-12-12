@@ -36,11 +36,23 @@ const SmoothScroll = ({ children }) => {
             history.scrollRestoration = 'manual'
         }
 
+        // Listen for scroll toggle events from modals
+        const handleScrollToggle = (event) => {
+            if (event.detail.enabled) {
+                lenisInstance.start()
+            } else {
+                lenisInstance.stop()
+            }
+        }
+
+        window.addEventListener('toggleScroll', handleScrollToggle)
+
         return () => {
             lenisInstance.destroy()
             if (reqIdRef.current) {
                 cancelAnimationFrame(reqIdRef.current)
             }
+            window.removeEventListener('toggleScroll', handleScrollToggle)
             // Optional: Restore to auto if needed on unmount, but manual is usually fine for SPA
             if ('scrollRestoration' in history) {
                 history.scrollRestoration = 'auto'

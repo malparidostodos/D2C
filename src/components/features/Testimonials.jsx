@@ -141,70 +141,73 @@ const Testimonials = () => {
     }
 
     return (
-        <section className="pt-24 pb-40 bg-[#0046b8] relative overflow-hidden">
-            <div className="relative z-10">
-                <div className="text-center mb-16 px-4">
-                    <motion.span
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        className="text-blue-200 text-sm font-semibold tracking-widest uppercase mb-4 block"
-                    >
-                        Reseñas
-                    </motion.span>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-6xl font-display font-semibold text-white mb-6"
-                    >
-                        Lo que dicen nuestros <span className="text-blue-300">Clientes</span>
-                    </motion.h2>
-                </div>
+        <section className="bg-white pt-24 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            <div className="w-full px-0 md:px-0 lg:px-0 relative z-10">
+                {/* Blue Card Container */}
+                <div className="bg-[#0046b8] rounded-3xl p-8 md:p-12 lg:p-16 relative overflow-hidden">
+                    <div className="text-center mb-16 px-4">
+                        <motion.span
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            className="text-white/60 text-sm font-semibold tracking-widest uppercase mb-4 block"
+                        >
+                            Reseñas
+                        </motion.span>
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="text-4xl md:text-6xl font-semibold text-white mb-6"
+                        >
+                            Lo que dicen nuestros <span className="text-white/80">Clientes</span>
+                        </motion.h2>
+                    </div>
 
-                {/* Carousel Container */}
-                <div className="relative w-full overflow-hidden mb-24" ref={containerRef}>
-                    <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#0046b8] to-transparent z-10 pointer-events-none" />
-                    <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#0046b8] to-transparent z-10 pointer-events-none" />
+                    {/* Carousel Container */}
+                    <div className="relative w-full overflow-hidden mb-24" ref={containerRef}>
+                        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#0046b8] to-transparent z-10 pointer-events-none" />
+                        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#0046b8] to-transparent z-10 pointer-events-none" />
 
-                    <motion.div
-                        className="flex gap-8 px-4 py-12 cursor-grab active:cursor-grabbing"
-                        style={{ x, width: "max-content" }}
-                        drag="x"
-                        dragConstraints={{ left: -contentWidth, right: 0 }}
-                        onDragEnd={(e, { offset, velocity }) => {
-                            if (offset.x > 0) {
-                                directionFactor.current = -1
-                            } else {
+                        <motion.div
+                            className="flex gap-8 px-4 py-12 cursor-grab active:cursor-grabbing"
+                            style={{ x, width: "max-content" }}
+                            drag="x"
+                            dragConstraints={{ left: -contentWidth, right: 0 }}
+                            onDragEnd={(e, { offset, velocity }) => {
+                                if (offset.x > 0) {
+                                    directionFactor.current = -1
+                                } else {
+                                    directionFactor.current = 1
+                                }
                                 directionFactor.current = 1
-                            }
-                            directionFactor.current = 1
-                        }}
-                    >
-                        {/* Render items multiple times to ensure seamless loop coverage */}
-                        {[...testimonials, ...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => (
-                            <TestimonialCard key={`${testimonial.id}-${index}`} testimonial={testimonial} />
-                        ))}
-                    </motion.div>
-                </div>
-
-                {/* Stats Section */}
-                <div className="max-w-7xl mx-auto px-4 md:px-8">
-                    <div className="bg-white rounded-3xl p-12 shadow-2xl relative overflow-hidden">
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
-                            {[
-                                { number: stats.hours, label: "Horas de Trabajo" },
-                                { number: stats.vehicles, label: "Vehículos Detallados" },
-                                { number: stats.fiveStar, label: "Reseñas 5 Estrellas" },
-                                { number: stats.rating, label: "Calificación Promedio", hasStar: true }
-                            ].map((stat, index) => (
-                                <div key={index} className={`flex flex-col items-center text-center ${index !== 3 ? 'md:border-r md:border-blue-100' : ''}`}>
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <span className="text-5xl md:text-6xl font-semibold text-[#0046b8]">{stat.number}</span>
-                                        {stat.hasStar && <Star className="w-8 h-8 md:w-10 md:h-10 text-yellow-500 fill-yellow-500" />}
-                                    </div>
-                                    <span className="text-[#0046b8]/70 font-bold uppercase tracking-wider text-sm md:text-base">{stat.label}</span>
-                                </div>
+                            }}
+                        >
+                            {/* Render items multiple times to ensure seamless loop coverage */}
+                            {[...testimonials, ...testimonials, ...testimonials, ...testimonials].map((testimonial, index) => (
+                                <TestimonialCard key={`${testimonial.id}-${index}`} testimonial={testimonial} />
                             ))}
+                        </motion.div>
+                    </div>
+
+                    {/* Stats Section */}
+                    <div className="max-w-7xl mx-auto px-4 md:px-8">
+                        <div className="bg-white rounded-3xl p-12 shadow-2xl relative overflow-hidden">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                                {[
+                                    { number: stats.hours, label: "Horas de Trabajo" },
+                                    { number: stats.vehicles, label: "Vehículos Detallados" },
+                                    { number: stats.fiveStar, label: "Reseñas 5 Estrellas" },
+                                    { number: stats.rating, label: "Calificación Promedio", hasStar: true }
+                                ].map((stat, index) => (
+                                    <div key={index} className={`flex flex-col items-center text-center ${index !== 3 ? 'md:border-r md:border-blue-100' : ''}`}>
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <span className="text-5xl md:text-6xl font-semibold text-[#0046b8]">{stat.number}</span>
+                                            {stat.hasStar && <Star className="w-8 h-8 md:w-10 md:h-10 text-yellow-500 fill-yellow-500" />}
+                                        </div>
+                                        <span className="text-[#0046b8]/70 font-bold uppercase tracking-wider text-sm md:text-base">{stat.label}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

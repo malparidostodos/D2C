@@ -73,11 +73,11 @@
         "positions": {
             "top": "0%",
             "left": {
-                "left": "2%",
+                "left": "-50%",
                 "top": "28%"
             },
             "right": {
-                "right": "2%",
+                "right": "7%",
                 "top": "28%"
             },
             "bottom": "49.2%"
@@ -85,6 +85,22 @@
         "subtitle": "Get that showroom shine back, without the hassle.",
         "cta_booking": "Book",
         "cta_services": "View Services"
+    },
+    "featured_services": {
+        "title": "Our Featured Services",
+        "outro": "Every service is designed to bring back that showroom shine. We do real detailing, not just washing.",
+        "premium_wash": {
+            "title": "Premium Wash",
+            "description": "Deep and detailed cleaning to restore your vehicle's shine."
+        },
+        "interior_detailing": {
+            "title": "Interior Detailing",
+            "description": "Complete renovation of upholstery, plastics and every corner of the cabin."
+        },
+        "polish_correction": {
+            "title": "Polish & Correction",
+            "description": "Removal of imperfections and ceramic protection for a mirror finish."
+        }
     },
     "booking": {
         "seo_title": "Book Appointment | Nuven",
@@ -766,7 +782,8 @@
         "required": "Required",
         "invalid_email": "Invalid email",
         "language": "Language",
-        "theme": "Theme"
+        "theme": "Theme",
+        "learn_more": "Learn more"
     },
     "pricing": {
         "exclusive_plans": "Exclusive Plans",

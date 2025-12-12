@@ -17,11 +17,9 @@ import Collaboration from '../Collaboration'
 import Testimonials from '../features/Testimonials'
 
 // New Sections
+import PortfolioGallery from '../home/PortfolioGallery'
 import FeaturedServices from '../home/FeaturedServices'
 import HowItWorks from '../home/HowItWorks'
-import EmotionalSection from '../home/EmotionalSection'
-import RecentResults from '../home/RecentResults'
-// FinalCTA and Footer removed as they are in FooterZone
 
 const Home = () => {
     const { t } = useTranslation()
@@ -36,28 +34,25 @@ const Home = () => {
                 {/* 1. Hero Impactante */}
                 <Hero />
 
-                {/* 2. Servicios Destacados (Preview) [NEW] */}
+                {/* 2. Galería de Trabajos Realizados */}
+                <PortfolioGallery />
+
+                {/* 3. Servicios Destacados (Preview) */}
                 <FeaturedServices />
 
-                {/* 3. Por qué elegirnos (Benefits) */}
+                {/* 4. Por qué elegirnos (Benefits) */}
                 <Benefits />
 
-                {/* 4. Cómo funciona (3 pasos) [NEW] */}
+                {/* 5. Cómo funciona (incluye: Emotional Section + Recent Results) */}
                 <HowItWorks />
 
-                {/* 5. Sección Emocional [NEW] */}
-                <EmotionalSection />
-
-                {/* 6. Resultados Recientes [NEW] */}
-                <RecentResults />
-
-                {/* 7. Marcas (Collaboration) */}
+                {/* 6. Marcas (Collaboration) */}
                 <Collaboration />
 
-                {/* 8. Testimonios */}
+                {/* 7. Testimonios */}
                 <Testimonials />
 
-                {/* 9. Footer Zone */}
+                {/* 8. Footer Zone */}
                 <FooterZone />
             </main>
         </div>

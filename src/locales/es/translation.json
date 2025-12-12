@@ -85,6 +85,22 @@
         "cta_booking": "Agendar",
         "cta_services": "Ver Servicios"
     },
+    "featured_services": {
+        "title": "Nuestros Servicios Destacados",
+        "outro": "Cada servicio está diseñado pa' devolverle a tu nave ese brillo de agencia. Hacemos detailing de verdad, no solo lavado.",
+        "premium_wash": {
+            "title": "Lavado Premium",
+            "description": "Limpieza profunda y detallada pa' devolverle el brillo a tu vehículo."
+        },
+        "interior_detailing": {
+            "title": "Detailing Interior",
+            "description": "Renovación completa de tapicería, plásticos y cada rincón de la cabina."
+        },
+        "polish_correction": {
+            "title": "Pulido & Corrección",
+            "description": "Eliminación de imperfecciones y protección cerámica pa' un acabado espejo."
+        }
+    },
     "booking": {
         "seo_title": "Reservar | Nuven",
         "seo_description": "Agenda tu cita pa' lavado premium, detailing o recubrimiento cerámico. Transforma tu vehículo hoy.",
@@ -762,7 +778,8 @@
         "required": "Requerido",
         "invalid_email": "Correo inválido",
         "language": "Idioma",
-        "theme": "Tema"
+        "theme": "Tema",
+        "learn_more": "Ver más"
     },
     "pricing": {
         "exclusive_plans": "Planes Exclusivos",
