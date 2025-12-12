@@ -81,7 +81,7 @@ const LegalLayout = ({ children, title, subtitle, sections }) => {
 
             {/* Main Content Area - Card */}
             <div className="flex-grow px-2 sm:px-4 pb-12">
-                <div className="max-w-[98%] mx-auto bg-white rounded-[2.5rem] shadow-2xl min-h-[600px] mb-8 overflow-hidden">
+                <div className="max-w-[98%] mx-auto bg-white rounded-[2.5rem] shadow-2xl min-h-[600px] mb-8 overflow-hidden lg:overflow-visible">
                     <div className={sections && sections.length > 0 ? "lg:grid lg:grid-cols-12" : "lg:grid lg:grid-cols-12"}>
 
                         {/* Sidebar Navigation - Policy Links */}

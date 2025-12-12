@@ -23,9 +23,9 @@
         "whatsapp": "WhatsApp"
     },
     "final_cta": {
-        "title_line1": "¿Listo para renovar",
-        "title_line2": "tu vehículo?",
-        "subtitle": "Solo toma unos segundos agendar tu cita."
+        "title_line1": "¿Listo pa' estrenar",
+        "title_line2": "nave otra vez?",
+        "subtitle": "Es un momentico y ya agendas tu cita."
     },
     "footer": {
         "start_now": "Empieza ahora",
@@ -39,8 +39,8 @@
         "breadcrumb_home": "Inicio",
         "breadcrumb_current": "Detalle de Servicios",
         "description_title": "Excelencia en cada detalle",
-        "description": "Utilizamos técnicas avanzadas y productos de nanotecnología para devolverle a tu auto el brillo de concesionario, protegiéndolo contra los elementos.",
-        "quote": "Nuestros servicios están diseñados para adaptarse a las necesidades específicas de tu vehículo, ya sea una renovación rápida o un detallado profundo completo. Nos enfocamos en la precisión y la calidad para asegurar que cada superficie se vea y se sienta perfecta.",
+        "description": "Le metemos tecnología de punta y productos tesos pa' que tu nave quede brillando como de concesionario, protegiéndola de todo.",
+        "quote": "Nuestros servicios se adaptan a lo que tu nave pida, sea una lavadita rápida o un detailing con todos los juguetes. Nos enfocamos en que cada rincón quede caraMelo.",
         "features": {
             "certified_team": "Personal altamente capacitado",
             "premium_products": "Productos Premium",
@@ -64,8 +64,24 @@
     "hero": {
         "quality_guaranteed": "Calidad Garantizada",
         "title_part1": "Todo lo que",
-        "title_part2": "tu auto necesita",
-        "subtitle": "Recupera el brillo de tu vehículo como el primer día.",
+        "title_part2": "tu nave pide a gritos",
+        "text_top": "Todo lo que",
+        "text_left": "tu",
+        "text_right": "nave",
+        "text_bottom": "pide a gritos",
+        "positions": {
+            "top": "0%",
+            "left": {
+                "left": "11%",
+                "top": "28%"
+            },
+            "right": {
+                "right": "5%",
+                "top": "28%"
+            },
+            "bottom": "49.2%"
+        },
+        "subtitle": "Sácale ese brillo de agencia otra vez, sin tanta vuelta.",
         "cta_booking": "Agendar",
         "cta_services": "Ver Servicios"
     },
@@ -134,12 +150,12 @@
             "date": "Fecha",
             "confirm": "Confirmar"
         },
-        "select_vehicle": "Selecciona tu Vehículo",
-        "add_first_vehicle_title": "Añade tu Primer Vehículo",
-        "select_vehicle_subtitle": "Elige uno de tus vehículos guardados o añade uno nuevo",
-        "add_first_vehicle_subtitle": "Registra tu vehículo para agilizar tus próximas reservas",
-        "add_my_vehicle_button": "Añadir Mi Vehículo",
-        "add_first_vehicle_button_subtitle": "Comienza registrando tu primer vehículo",
+        "select_vehicle": "Selecciona tu Nave",
+        "add_first_vehicle_title": "Añade tu Primera Nave",
+        "select_vehicle_subtitle": "Elige una de tus naves guardadas o registra una nueva",
+        "add_first_vehicle_subtitle": "Registra tu nave pa' agilizar tus próximas reservas",
+        "add_my_vehicle_button": "Añadir Mi Nave",
+        "add_first_vehicle_button_subtitle": "Empieza registrando tu primera nave",
         "select_service": "Selecciona un Servicio",
         "your_details": "Tus Detalles",
         "brand": "Marca",
@@ -240,7 +256,7 @@
         "seo_title": "Mi Dashboard | Nuven",
         "title": "Mi Cuenta",
         "welcome": "Bienvenido",
-        "subtitle": "Gestiona tus vehículos y reservas desde aquí",
+        "subtitle": "Gestiona tus naves y reservas desde aquí",
         "total_vehicles": "Total Vehículos",
         "active_bookings": "Reservas Activas",
         "next_appointment": "Próxima Cita",
@@ -487,8 +503,8 @@
     },
     "benefits": {
         "why_choose_us": "¿Por qué elegirnos?",
-        "title": "Excelencia en cada detalle",
-        "subtitle": "No somos un lavadero de autos convencional. Somos un estudio de detailing dedicado a la perfección y la preservación automotriz.",
+        "title": "Calidad y pura pasión",
+        "subtitle": "Esto no es un lavadero cualquiera. Somos un estudio de detailing pa' los que cuidan su nave de verdad.",
         "items": {
             "premium_quality": {
                 "title": "Calidad Premium",
@@ -575,7 +591,7 @@
             "bottom": {
                 "copyright": "©2025 Nuven",
                 "labs": "R&D: labs.nuven.com",
-                "made_by": "Cuéntanos tu historia con",
+                "made_by": "Echanos tu cuento con",
                 "aria_label_scroll": "Volver arriba"
             },
             "disclaimers_link": "Descargos"

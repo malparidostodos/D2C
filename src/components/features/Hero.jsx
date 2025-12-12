@@ -1,16 +1,17 @@
 import React, { useRef } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import AnimatedButton from '../ui/AnimatedButton'
 import { useTranslation } from 'react-i18next'
 import { useMenu } from '../../hooks/useMenu'
-
-
 
 const Hero = () => {
   const containerRef = useRef(null)
   const { t, i18n } = useTranslation()
   const { navigateWithTransition } = useMenu()
+  const { scrollY } = useScroll()
+
+  // Optimized: Only animate car, not text
+  const yCar = useTransform(scrollY, [0, 400], [0, 80])
 
   const getLocalizedPath = (path) => {
     const prefix = i18n.language === 'en' ? '/en' : ''
@@ -18,57 +19,111 @@ const Hero = () => {
   }
 
   return (
-    <section ref={containerRef} id="inicio" className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+    <section ref={containerRef} id="inicio" className="relative h-screen w-full overflow-hidden flex flex-col items-center justify-center">
 
-      {/* Logo - Top Left */}
+      {/* Background Content - Centered */}
+      <div className="relative z-10 w-full max-w-[1800px] px-4 flex flex-col items-center justify-center h-full">
 
-
-
-      {/* Content */}
-      <div className="w-full relative z-20 flex flex-col lg:flex-row items-start lg:items-end justify-between h-full pt-[100px] pb-[40px] lg:pt-[120px] lg:pb-[135px] px-6 md:px-[60px] gap-8 lg:gap-0">
-
-        {/* Left Side: Title */}
-        <div className="w-full lg:w-1/2 flex flex-col items-start text-left">
-          <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-4 lg:mb-6"
+        {/* Main Text Layer - Behind Car - Static for performance */}
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center z-0 pointer-events-none select-none"
+          style={{ willChange: 'transform' }}
+        >
+          {/* Top Text - Translated */}
+          <motion.h1
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 80 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="font-bold text-[16vw] sm:text-[11vw] md:text-[12vw] lg:text-[10vw] xl:text-[9vw] text-transparent text-stroke tracking-tight absolute top-[14%] md:top-[0%] z-0 px-4 text-center w-full"
           >
-            <span className="inline-block py-1 px-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.1)] text-[10px] lg:text-xs font-medium tracking-widest uppercase text-white">
-              {t('hero.quality_guaranteed')}
+            {t('hero.text_top')}
+          </motion.h1>
+
+          {/* Mobile: Center layout, Desktop: Left position */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="absolute z-0 w-full left-0 top-[32.5%] md:left-[11%] md:w-auto md:top-[28%]"
+          >
+            <span className="font-bold text-[16vw] sm:text-[12vw] md:text-[14vw] lg:text-[12vw] xl:text-[11vw] text-transparent text-stroke tracking-tighter leading-none block text-center md:text-left px-4 md:px-0">
+              {t('hero.text_left')} <span className="md:hidden">{t('hero.text_right')}</span>
             </span>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-display font-semibold text-white tracking-tight leading-[1.1]"
+          {/* Desktop only: Right text */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="hidden md:block absolute z-0"
             style={{
-              textShadow: '0 0 40px rgba(0, 0, 0, 0.1)'
+              right: t('hero.positions.right.right'),
+              top: t('hero.positions.right.top')
             }}
           >
-            {t('hero.title_part1')} <br /> {t('hero.title_part2')}
+            <span className="font-semibold text-[16vw] sm:text-[18vw] md:text-[14vw] lg:text-[12vw] xl:text-[11vw] text-transparent text-stroke tracking-tighter leading-none">
+              {t('hero.text_right')}
+            </span>
+          </motion.div>
+
+          {/* Bottom Text - Translated with dynamic position */}
+          <motion.h1
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: -80 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="font-bold text-[14vw] sm:text-[11vw] md:text-[12vw] lg:text-[10vw] xl:text-[9vw] text-transparent text-stroke tracking-tight absolute bottom-[39%] md:top-[49.2%] md:bottom-auto z-0 px-4 text-center w-full"
+          >
+            {t('hero.text_bottom')}
           </motion.h1>
         </div>
 
-        {/* Right Side: Description & Buttons */}
-        <div className="w-full lg:w-1/2 flex flex-col items-start text-left mb-2 lg:mb-0 pl-0 lg:pl-20 xl:pl-40 pb-0 lg:pb-10">
+        {/* Car Image - Centered & Overlapping - Responsive sizing */}
+        <motion.div
+          initial={{ x: 100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+          style={{ y: yCar, willChange: 'transform' }}
+          className="relative z-20 w-full max-w-[1100px] sm:max-w-[1300px] md:max-w-[1200px] lg:max-w-[1400px] mx-auto md:mr-[12%] md:ml-auto -mt-[20vh] sm:-mt-[25vh] md:-mt-[32vh]"
+        >
+          <img
+            src="/images/porsche.png"
+            alt="Porsche 911 GT3 RS"
+            className="w-full h-auto object-contain"
+            style={{
+              filter: 'drop-shadow(0 0px 15px #0046b8) drop-shadow(0 0px 15px #0046b8) drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3))'
+            }}
+          />
+          <style jsx>{`
+            @media (min-width: 768px) {
+              img {
+                filter: drop-shadow(0 0px 30px #0046b8) drop-shadow(0 0px 30px #0046b8) drop-shadow(0 20px 60px rgba(0, 0, 0, 0.4)) !important;
+              }
+            }
+          `}</style>
+        </motion.div>
+
+        {/* Footer Controls - Bottom Center */}
+        <div className="absolute bottom-10 md:bottom-12 left-0 w-full flex flex-col items-center z-30 gap-6">
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="max-w-xl text-lg md:text-2xl text-white font-medium mb-6 lg:mb-8 leading-tight"
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="text-white/90 text-center max-w-lg px-6 text-sm md:text-base font-medium leading-relaxed"
           >
-            {t('hero.subtitle')}
+            {t('hero.subtitle').split(',').map((part, index) => (
+              <React.Fragment key={index}>
+                {part}{index === 0 && ','}
+                {index === 0 && <br />}
+              </React.Fragment>
+            ))}
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-row gap-4 items-center w-full sm:w-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
+            className="flex gap-4"
           >
             <AnimatedButton
               href={getLocalizedPath(i18n.language?.startsWith('en') ? "/booking" : "/reserva")}
@@ -76,28 +131,26 @@ const Hero = () => {
                 e.preventDefault()
                 navigateWithTransition(getLocalizedPath(i18n.language?.startsWith('en') ? "/booking" : "/reserva"))
               }}
-              variant="blur"
-              className="flex-1 sm:flex-none sm:w-auto justify-center !px-4 sm:!px-8"
+              variant="white"
+              className="min-w-[140px] justify-center"
             >
               {t('hero.cta_booking')}
             </AnimatedButton>
-
             <AnimatedButton
               href={getLocalizedPath(i18n.language?.startsWith('en') ? "/services" : "/servicios")}
               onClick={(e) => {
                 e.preventDefault()
                 navigateWithTransition(getLocalizedPath(i18n.language?.startsWith('en') ? "/services" : "/servicios"))
               }}
-              variant="blur"
-              className="flex-1 sm:flex-none sm:w-auto justify-center !px-4 sm:!px-8"
+              variant="white"
+              className="min-w-[140px] justify-center"
             >
               {t('hero.cta_services')}
             </AnimatedButton>
           </motion.div>
         </div>
+
       </div>
-
-
     </section >
   )
 }

@@ -59,7 +59,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
     ];
 
     const servicesDropdown = [
-        { name: t('header.pricing'), path: currentLang === 'EN' ? '/services' : '/servicios', id: 'services', image: `/images/services-preview-${currentLang.toLowerCase()}.png` },
+        { name: t('header.services'), path: currentLang === 'EN' ? '/services' : '/servicios', id: 'services', image: `/images/services-preview-${currentLang.toLowerCase()}.png` },
         { name: t('header.process'), path: currentLang === 'EN' ? '/roadmap' : '/proceso', id: 'roadmap' },
         { name: t('header.memberships'), path: currentLang === 'EN' ? '/memberships' : '/membresias', id: '#membresias' },
     ];

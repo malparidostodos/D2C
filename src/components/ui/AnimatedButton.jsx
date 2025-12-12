@@ -15,7 +15,7 @@ const AnimatedButton = ({
 
     const variants = {
         primary: "bg-white text-black hover:bg-[#0046b8] hover:text-white",
-        white: "bg-white text-black hover:bg-[#0046b8] hover:text-white",
+        white: "bg-white text-[#0046b8] hover:bg-[#0046b8] hover:text-white",
         black: "bg-black text-white hover:bg-[#0046b8] hover:text-white",
         outline: "bg-transparent border border-white/20 text-white hover:bg-white/10 hover:border-white/40",
         "outline-dark": "bg-transparent border border-gray-900/20 text-gray-900 hover:bg-gray-900/5 hover:border-gray-900/40",

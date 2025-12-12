@@ -24,9 +24,9 @@
         "whatsapp": "WhatsApp"
     },
     "final_cta": {
-        "title_line1": "Ready to renew",
-        "title_line2": "your vehicle?",
-        "subtitle": "It only takes a few seconds to book your appointment."
+        "title_line1": "Ready to refresh",
+        "title_line2": "your ride?",
+        "subtitle": "Takes just a sec to book your spot."
     },
     "footer": {
         "start_now": "Get Started",
@@ -40,8 +40,8 @@
         "breadcrumb_home": "Home",
         "breadcrumb_current": "Services Detail",
         "description_title": "Excellence in Every Detail",
-        "description": "We use advanced techniques and nanotechnology products to restore your car's showroom shine, protecting it against the elements.",
-        "quote": "Our services are tailored to fit your vehicle's specific needs, whether it's a quick refresh or a full deep detail. We focus on precision and quality to make sure every surface looks and feels perfect.",
+        "description": "We use top-tier tech and products to get your ride showroom ready, protecting it from whatever nature throws at it.",
+        "quote": "Our services fit whatever your ride needs, from a quick refresh to a deep detail. We make sure every inch looks and feels perfect.",
         "features": {
             "certified_team": "Highly Trained Personnel",
             "premium_products": "Premium Products",
@@ -65,9 +65,25 @@
     "hero": {
         "quality_guaranteed": "Quality Guaranteed",
         "title_part1": "Everything",
-        "title_part2": "your car needs",
-        "subtitle": "Restore your car's shine with our premium detailing services.",
-        "cta_booking": "Book Appointment",
+        "title_part2": "your ride needs",
+        "text_top": "Everything",
+        "text_left": "your",
+        "text_right": "ride",
+        "text_bottom": "needs",
+        "positions": {
+            "top": "0%",
+            "left": {
+                "left": "2%",
+                "top": "28%"
+            },
+            "right": {
+                "right": "2%",
+                "top": "28%"
+            },
+            "bottom": "49.2%"
+        },
+        "subtitle": "Get that showroom shine back, without the hassle.",
+        "cta_booking": "Book",
         "cta_services": "View Services"
     },
     "booking": {
@@ -485,7 +501,7 @@
     "benefits": {
         "why_choose_us": "Why choose us?",
         "title": "Excellence in every detail",
-        "subtitle": "We are not a conventional car wash. We are a detailing studio dedicated to perfection and automotive preservation.",
+        "subtitle": "We ain't just a car wash. We're a detailing studio obsessed with keeping your whip perfect.",
         "items": {
             "premium_quality": {
                 "title": "Premium Quality",
@@ -581,7 +597,7 @@
     "flavor_slider": {
         "recommended": "Recommended",
         "from": "From",
-        "book": "Book",
+        "book": "Book it",
         "services": {
             "exterior_detailing": {
                 "name": "Exterior Detailing",
