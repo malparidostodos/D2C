@@ -176,7 +176,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                 {/* Logo */}
                 {isHero ? (
                     <div className="text-xl font-medium tracking-tight cursor-default">
-                        <LogoSemiBold className="h-6 w-auto" />
+                        <LogoSemiBold className="h-8 w-auto" />
                     </div>
                 ) : (
                     <a
@@ -184,7 +184,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                         onClick={(e) => handleNavClick(e, '#inicio', '/')}
                         className="text-xl font-medium tracking-tight cursor-pointer"
                     >
-                        <LogoSemiBold className="h-6 w-auto" />
+                        <LogoSemiBold className="h-8 w-auto" />
                     </a>
                 )}
 
@@ -204,12 +204,12 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                     {/* Language Selector (Main) */}
                     <div className="relative">
                         <div
-                            className="cursor-pointer text-xs md:text-sm font-medium uppercase tracking-wider flex items-center gap-1 md:gap-2 border border-current rounded-xl md:rounded-2xl px-3 md:px-5 h-8 md:h-10 hover:opacity-70 transition-opacity"
+                            className="cursor-pointer text-sm md:text-base font-medium uppercase tracking-wider flex items-center gap-1 md:gap-2 border border-current rounded-xl md:rounded-2xl px-4 md:px-6 h-10 md:h-12 hover:opacity-70 transition-opacity"
                             onClick={() => setLangOpen(!langOpen)}
                         >
-                            <Globe size={14} className="md:w-4 md:h-4 w-3.5 h-3.5" strokeWidth={2} />
+                            <Globe size={16} className="md:w-5 md:h-5 w-4 h-4" strokeWidth={2} />
                             {currentLang}
-                            <ChevronDown size={14} className={`transition-transform duration-300 md:w-3.5 md:h-3.5 w-3 h-3 ${langOpen ? 'rotate-180' : ''}`} />
+                            <ChevronDown size={16} className={`transition-transform duration-300 md:w-4 md:h-4 w-3.5 h-3.5 ${langOpen ? 'rotate-180' : ''}`} />
                         </div>
 
                         <AnimatePresence>
@@ -241,7 +241,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
 
                     {/* Menu Trigger */}
                     <div
-                        className="cursor-pointer text-xs md:text-sm font-medium tracking-wider flex items-center justify-center px-4 md:px-0 w-20 md:w-24 h-8 md:h-10 border border-current rounded-xl md:rounded-2xl hover:bg-white/10 transition-colors"
+                        className="cursor-pointer text-sm md:text-base font-medium tracking-wider flex items-center justify-center px-5 md:px-0 w-24 md:w-28 h-10 md:h-12 border border-current rounded-xl md:rounded-2xl hover:bg-white/10 transition-colors"
                         onClick={() => { setMenuOpen(true); setLangOpen(false); }}
                     >
                         {t('header.menu')}
@@ -268,7 +268,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                     transition={{ duration: 0.5, delay: 0.2 }}
                                     className="text-xl font-medium tracking-tight cursor-default"
                                 >
-                                    <LogoSemiBold className="h-6 w-auto" />
+                                    <LogoSemiBold className="h-8 w-auto" />
                                 </motion.div>
                             ) : (
                                 <motion.a
@@ -279,7 +279,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                     transition={{ duration: 0.5, delay: 0.2 }}
                                     className="text-xl font-medium tracking-tight cursor-pointer"
                                 >
-                                    <LogoSemiBold className="h-6 w-auto" />
+                                    <LogoSemiBold className="h-8 w-auto" />
                                 </motion.a>
                             )}
                             <div className="flex items-center gap-2 md:gap-8">
@@ -289,13 +289,13 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ duration: 0.5, delay: 0.2 }}
-                                        className="cursor-pointer text-xs md:text-sm font-medium uppercase tracking-wider flex items-center gap-1 md:gap-2 border border-current rounded-xl md:rounded-2xl px-3 md:px-5 h-8 md:h-10 hover:opacity-70 transition-opacity"
+                                        className="cursor-pointer text-sm md:text-base font-medium uppercase tracking-wider flex items-center gap-1 md:gap-2 border border-current rounded-xl md:rounded-2xl px-4 md:px-6 h-10 md:h-12 hover:opacity-70 transition-opacity"
                                         onClick={() => setLangOpen(!langOpen)}
                                         onMouseDown={(e) => e.stopPropagation()}
                                     >
-                                        <Globe size={14} className="md:w-4 md:h-4 w-3.5 h-3.5" strokeWidth={2} />
+                                        <Globe size={16} className="md:w-5 md:h-5 w-4 h-4" strokeWidth={2} />
                                         {currentLang}
-                                        <ChevronDown size={14} className={`transition-transform duration-300 md:w-3.5 md:h-3.5 w-3 h-3 ${langOpen ? 'rotate-180' : ''}`} />
+                                        <ChevronDown size={16} className={`transition-transform duration-300 md:w-4 md:h-4 w-3.5 h-3.5 ${langOpen ? 'rotate-180' : ''}`} />
                                     </motion.div>
 
                                     <AnimatePresence>
@@ -329,7 +329,7 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ duration: 0.5, delay: 0.2 }}
-                                    className="cursor-pointer text-xs md:text-sm font-medium tracking-wider flex items-center justify-center px-4 md:px-0 w-20 md:w-24 h-8 md:h-10 border border-current rounded-xl md:rounded-2xl hover:bg-white/10 transition-colors"
+                                    className="cursor-pointer text-sm md:text-base font-medium tracking-wider flex items-center justify-center px-5 md:px-0 w-24 md:w-28 h-10 md:h-12 border border-current rounded-xl md:rounded-2xl hover:bg-white/10 transition-colors"
                                     onClick={handleMenuClose}
                                 >
                                     {t('header.close')}

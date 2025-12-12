@@ -87,7 +87,7 @@
     },
     "booking": {
         "seo_title": "Reservar | Nuven",
-        "seo_description": "Agenda tu cita para lavado premium, detailing o recubrimiento cerámico. Transforma tu vehículo hoy.",
+        "seo_description": "Agenda tu cita pa' lavado premium, detailing o recubrimiento cerámico. Transforma tu vehículo hoy.",
         "invalid_plate": "Placa inválida",
         "vehicle_types": {
             "car": {
@@ -188,7 +188,7 @@
         "create_error": "Error al crear la reserva. Por favor intenta de nuevo.",
         "email_link_notice": "Con este correo puedes acceder a tu cuenta y gestionar tus reservas.",
         "account_created_title": "¡Cuenta Creada Automáticamente!",
-        "account_created_message": "Hemos generado una cuenta para que gestiones tus reservas. Guarda estas credenciales temporales.",
+        "account_created_message": "Hemos generado una cuenta pa' que gestiones tus reservas. Guarda estas credenciales temporales.",
         "credentials_email": "Correo",
         "credentials_password": "Contraseña",
         "credentials_save_reminder": "🔒 Contraseña temporal. Cámbiala al iniciar sesión.",
@@ -200,7 +200,7 @@
         "signup_title": "Crear Cuenta",
         "mail": "ejemplo@correo.com",
         "welcome": "Bienvenido",
-        "login_subtitle": "Ingresa a tu cuenta para gestionar tus servicios",
+        "login_subtitle": "Ingresa a tu cuenta pa' gestionar tus servicios",
         "email": "Correo",
         "password": "Contraseña",
         "confirm_password": "Confirmar Contraseña",
@@ -210,7 +210,7 @@
         "no_account": "¿No tienes una cuenta?",
         "register_here": "Regístrate aquí",
         "create_account": "Crear Cuenta",
-        "signup_subtitle": "Únete a nosotros para una experiencia premium",
+        "signup_subtitle": "Únete a nosotros pa' una experiencia premium",
         "full_name": "Nombre Completo",
         "register_button": "Registrarse",
         "already_have_account": "¿Ya tienes una cuenta?",
@@ -233,9 +233,9 @@
         "privacy_link": "Política de Privacidad",
         "and": "y",
         "forgot_password_title": "Recuperar Contraseña",
-        "forgot_password_subtitle": "Ingresa tu email para recibir un enlace de recuperación",
+        "forgot_password_subtitle": "Ingresa tu email pa' recibir un enlace de recuperación",
         "email_sent_title": "¡Correo enviado!",
-        "email_sent_message": "Revisa tu bandeja de entrada para reestablecer tu contraseña.",
+        "email_sent_message": "Revisa tu bandeja de entrada pa' reestablecer tu contraseña.",
         "send_link_button": "Enviar Enlace",
         "remembered_password": "¿Recordaste tu contraseña?",
         "error_sending_email": "Hubo un error al enviar el correo. Por favor intenta de nuevo.",
@@ -274,7 +274,7 @@
         "my_vehicles": "Mis Vehículos",
         "add_vehicle": "Agregar Vehículo",
         "no_vehicles": "No tienes vehículos registrados",
-        "add_vehicle_hint": "Agrega un vehículo para ver el historial de reservas",
+        "add_vehicle_hint": "Agrega un vehículo pa' ver el historial de reservas",
         "delete_error": "Error al eliminar vehículo",
         "delete_failed_count": "No se pudo eliminar. Verifique si tiene reservas activas.",
         "delete_success": "Vehículo eliminado correctamente",
@@ -299,7 +299,7 @@
         "no_service_history": "No hay servicios registrados",
         "next_maintenance_title": "Próximo mantenimiento sugerido:",
         "maintenance_objective": "Objetivo",
-        "no_maintenance_scheduled": "Programar primer servicio para ver sugerencias",
+        "no_maintenance_scheduled": "Programar primer servicio pa' ver sugerencias",
         "edit_vehicle_button": "Editar Vehículo",
         "save_changes": "Guardar Cambios",
         "book_new_service": "Reservar nuevo servicio",
@@ -467,7 +467,7 @@
         "full_name": "Nombre Completo",
         "full_name_placeholder": "Tu nombre",
         "email_address": "Correo Electrónico",
-        "email_note": "El correo electrónico se utiliza para iniciar sesión y recibir notificaciones.",
+        "email_note": "El correo electrónico se utiliza pa' iniciar sesión y recibir notificaciones.",
         "change_password": "Cambiar Contraseña",
         "new_password": "Nueva Contraseña",
         "update_name": "Actualizar Nombre",
@@ -477,7 +477,7 @@
         "settings": "Configuración",
         "cookies": "Preferencias de Cookies",
         "marketing_cookies": "Cookies de Marketing",
-        "marketing_cookies_desc": "Permitir cookies para mejorar la experiencia y mostrar contenido relevante.",
+        "marketing_cookies_desc": "Permitir cookies pa' mejorar la experiencia y mostrar contenido relevante.",
         "save_preferences": "Guardar Preferencias",
         "preferences_saved": "Preferencias guardadas",
         "danger_zone": "Zona de Peligro",
@@ -497,9 +497,9 @@
         "phone_number": "Número de Teléfono",
         "phone_placeholder": "300 123 4567",
         "phone_updated": "Teléfono actualizado correctamente",
-        "phone_note": "Usado para contactarte sobre tus reservas.",
-        "edit_locked": "Edición bloqueada para administradores",
-        "action_locked": "Acción no permitida para administradores"
+        "phone_note": "Usado pa' contactarte sobre tus reservas.",
+        "edit_locked": "Edición bloqueada pa' administradores",
+        "action_locked": "Acción no permitida pa' administradores"
     },
     "benefits": {
         "why_choose_us": "¿Por qué elegirnos?",
@@ -516,7 +516,7 @@
             },
             "advanced_technology": {
                 "title": "Tecnología Avanzada",
-                "description": "Equipamiento de última generación para un acabado sin swirls ni hologramas."
+                "description": "Equipamiento de última generación pa' un acabado sin swirls ni hologramas."
             },
             "attention_to_detail": {
                 "title": "Atención al Detalle",
@@ -539,7 +539,7 @@
         "items": {
             "premium_products": {
                 "title": "Productos Premium",
-                "description": "Trabajamos exclusivamente con las mejores marcas internacionales de productos para detailing."
+                "description": "Trabajamos exclusivamente con las mejores marcas internacionales de productos pa' detailing."
             },
             "professional_equipment": {
                 "title": "Equipamiento Profesional"
@@ -604,7 +604,7 @@
         "services": {
             "exterior_detailing": {
                 "name": "Detailing Exterior",
-                "description": "Restauración y protección de la pintura para un brillo inigualable.",
+                "description": "Restauración y protección de la pintura pa' un brillo inigualable.",
                 "features": [
                     "Lavado detallado",
                     "Descontaminación",
@@ -634,7 +634,7 @@
             },
             "paint_correction": {
                 "name": "Corrección de Pintura",
-                "description": "Eliminación de swirls y arañazos para un acabado espejo.",
+                "description": "Eliminación de swirls y arañazos pa' un acabado espejo.",
                 "features": [
                     "Pulido multi-etapa",
                     "Eliminación de rayas",
@@ -644,7 +644,7 @@
             },
             "wheel_tire_detailing": {
                 "name": "Rines y Llantas",
-                "description": "Limpieza y protección para tus ruedas.",
+                "description": "Limpieza y protección pa' tus ruedas.",
                 "features": [
                     "Limpieza profunda de rines",
                     "Descontaminación férrica",
@@ -654,7 +654,7 @@
             },
             "premium_car_wash": {
                 "name": "Lavado Premium",
-                "description": "Lavado suave y detallado para mantener tu vehículo impecable.",
+                "description": "Lavado suave y detallado pa' mantener tu vehículo impecable.",
                 "features": [
                     "Lavado a mano",
                     "Secado con aire",
@@ -697,22 +697,22 @@
         "steps": {
             "initial_evaluation": {
                 "title": "Evaluación Inicial",
-                "description": "Inspección detallada del vehículo para identificar imperfecciones y determinar el mejor tratamiento.",
+                "description": "Inspección detallada del vehículo pa' identificar imperfecciones y determinar el mejor tratamiento.",
                 "step_label": "Paso 1"
             },
             "decontamination": {
                 "title": "Descontaminación",
-                "description": "Limpieza profunda química y mecánica para eliminar contaminantes adheridos a la pintura.",
+                "description": "Limpieza profunda química y mecánica pa' eliminar contaminantes adheridos a la pintura.",
                 "step_label": "Paso 2"
             },
             "paint_correction": {
                 "title": "Corrección de Pintura",
-                "description": "Proceso de pulido en múltiples etapas para eliminar rayas, marcas de agua y restaurar el brillo.",
+                "description": "Proceso de pulido en múltiples etapas pa' eliminar rayas, marcas de agua y restaurar el brillo.",
                 "step_label": "Paso 3"
             },
             "ceramic_protection": {
                 "title": "Protección Cerámica",
-                "description": "Aplicación de recubrimiento cerámico para proteger la pintura y facilitar la limpieza futura.",
+                "description": "Aplicación de recubrimiento cerámico pa' proteger la pintura y facilitar la limpieza futura.",
                 "step_label": "Paso 4"
             },
             "curing_delivery": {
@@ -725,8 +725,8 @@
     "vehicle_plate_selector": {
         "label": "Placa del Vehículo",
         "use_saved": "Usar vehículo guardado",
-        "invalid_format": "Formato de placa inválido para este vehículo",
-        "add_hint": "💡 Agrega tus vehículos en el dashboard para seleccionarlos rápidamente",
+        "invalid_format": "Formato de placa inválido pa' este vehículo",
+        "add_hint": "💡 Agrega tus vehículos en el dashboard pa' seleccionarlos rápidamente",
         "select_vehicle": "Selecciona tu Vehículo",
         "other_vehicle": "Otro vehículo"
     },
@@ -767,20 +767,20 @@
     "pricing": {
         "exclusive_plans": "Planes Exclusivos",
         "memberships": "Membresías",
-        "subtitle": "Elige el plan perfecto para tu vehículo",
+        "subtitle": "Elige el plan perfecto pa' tu vehículo",
         "most_popular": "Más Popular",
         "choose_plan": "Elegir Plan",
         "gallery": {
             "subtitle": "Resultados Reales",
             "title_before": "Antes y",
             "title_after": "Después",
-            "description": "Desliza para ver la transformación. Nuestros tratamientos devuelven la vida a tu vehículo.",
+            "description": "Desliza pa' ver la transformación. Nuestros tratamientos devuelven la vida a tu vehículo.",
             "label_after": "DESPUÉS"
         },
         "plans": {
             "basic": {
                 "name": "Básico",
-                "description": "Mantenimiento esencial para tu vehículo",
+                "description": "Mantenimiento esencial pa' tu vehículo",
                 "features": [
                     "Lavado exterior detallado",
                     "Limpieza de llantas y rines",
@@ -821,22 +821,22 @@
         "cookie_policy": "Política de Cookies",
         "disclaimers": {
             "title": "Descargos de Responsabilidad",
-            "subtitle": "Por favor, revise nuestros descargos de responsabilidad, para entender completamente cómo manejamos sus interacciones con este sitio web.",
+            "subtitle": "Por favor, revise nuestros descargos de responsabilidad, pa' entender completamente cómo manejamos sus interacciones con este sitio web.",
             "service_title": "Descargo de Responsabilidad sobre Resultados del Servicio",
             "service_text": "Los resultados del detailing varían dependiendo de: Condición previa del vehículo. Deterioro de la superficie. Condiciones ambientales. No se garantiza una corrección del 100% de los defectos.",
             "vehicle_title": "Condición del Vehículo",
-            "vehicle_text": "Aunque tomamos todas las precauciones para garantizar la seguridad de tu vehículo mientras está bajo nuestro cuidado, no somos responsables de pérdidas o daños debidos a robo, incendio o desastres naturales más allá de nuestro control. No somos responsables de daños preexistentes.",
+            "vehicle_text": "Aunque tomamos todas las precauciones pa' garantizar la seguridad de tu vehículo mientras está bajo nuestro cuidado, no somos responsables de pérdidas o daños debidos a robo, incendio o desastres naturales más allá de nuestro control. No somos responsables de daños preexistentes.",
             "links_title": "Descargo de Responsabilidad de Enlaces Externos",
             "links_text": "El sitio puede contener enlaces a otros sitios web o contenido que pertenece o se origina de terceros. Dichos enlaces externos no son investigados, monitoreados o verificados por nosotros en cuanto a precisión, adecuación, validez, confiabilidad, disponibilidad o completitud.",
             "advice_title": "Asesoramiento Profesional",
-            "advice_text": "La información en nuestro sitio web es solo para fines informáticos generales. No debe considerarse como asesoramiento profesional. Siempre busca el consejo de un profesional calificado con cualquier pregunta que puedas tener.",
+            "advice_text": "La información en nuestro sitio web es solo pa' fines informáticos generales. No debe considerarse como asesoramiento profesional. Siempre busca el consejo de un profesional calificado con cualquier pregunta que puedas tener.",
             "personal_items_title": "Objetos Personales",
             "personal_items_text": "No nos hacemos responsables por la pérdida de objetos personales dejados en el vehículo. Por favor retire sus pertenencias antes del servicio."
         },
         "cookie": {
-            "subtitle": "Nuestro sitio web utiliza cookies para distinguirle de otros usuarios de nuestro sitio web.",
+            "subtitle": "Nuestro sitio web utiliza cookies pa' distinguirle de otros usuarios de nuestro sitio web.",
             "intro_title": "1. Introducción",
-            "intro_text": "Bienvenido a la Política de Cookies de Ta' To' Clean. Esta política explica cómo nuestro sitio web utiliza cookies y tecnologías similares para garantizar el correcto funcionamiento, mejorar la experiencia del usuario y respaldar nuestros procesos de servicio, incluida la gestión de reservas, la interacción con los clientes y el análisis. Esta Política de Cookies debe leerse junto con nuestra Política de Privacidad y Términos y Condiciones.",
+            "intro_text": "Bienvenido a la Política de Cookies de Ta' To' Clean. Esta política explica cómo nuestro sitio web utiliza cookies y tecnologías similares pa' garantizar el correcto funcionamiento, mejorar la experiencia del usuario y respaldar nuestros procesos de servicio, incluida la gestión de reservas, la interacción con los clientes y el análisis. Esta Política de Cookies debe leerse junto con nuestra Política de Privacidad y Términos y Condiciones.",
             "important_title": "2. Información Importante",
             "important_purpose_subtitle": "2.1 Propósito de esta Política de Cookies",
             "important_purpose_text": "Esta Política de Cookies explica: Qué son las cookies. Qué tipos de cookies utilizamos. Por qué las utilizamos. Cómo los usuarios pueden administrar, deshabilitar o eliminar cookies. Qué terceros pueden establecer cookies a través de nuestro sitio web.",
@@ -846,13 +846,13 @@
             "what_are_text": "Las cookies son pequeños archivos de texto almacenados en tu dispositivo cuando visitas nuestro sitio web. Nos permiten reconocer tu navegador, recordar preferencias, respaldar procesos técnicos como reservas de citas y mejorar el rendimiento. Las cookies pueden ser: Cookies de sesión: eliminadas una vez que se cierra el navegador. Cookies persistentes: permanecen en tu dispositivo por un período definido. De primera parte: establecidas por Ta' To' Clean. De terceros: establecidas por proveedores de servicios externos.",
             "types_title": "4. Tipos de Cookies que Usamos",
             "types_necessary_subtitle": "4.1 Cookies Estrictamente Necesarias",
-            "types_necessary_text": "Estas cookies son esenciales para el funcionamiento del sitio web y para habilitar servicios como: Completar reservas de citas. Almacenamiento temporal de información de reserva (nombre, correo electrónico, teléfono, fecha preferida y placa del vehículo). Seguridad del sitio web y prevención de fraude. Funcionalidad técnica. Estas cookies no se pueden deshabilitar.",
+            "types_necessary_text": "Estas cookies son esenciales pa' el funcionamiento del sitio web y pa' habilitar servicios como: Completar reservas de citas. Almacenamiento temporal de información de reserva (nombre, correo electrónico, teléfono, fecha preferida y placa del vehículo). Seguridad del sitio web y prevención de fraude. Funcionalidad técnica. Estas cookies no se pueden deshabilitar.",
             "types_functional_subtitle": "4.2 Cookies Funcionales / de Preferencias",
-            "types_functional_text": "Se utilizan para mejorar la experiencia del usuario al recordar: Configuración de idioma. Preferencias básicas de página. Retención opcional de datos del formulario.",
+            "types_functional_text": "Se utilizan pa' mejorar la experiencia del usuario al recordar: Configuración de idioma. Preferencias básicas de página. Retención opcional de datos del formulario.",
             "types_analytical_subtitle": "4.3 Cookies Analíticas y de Rendimiento",
-            "types_analytical_text": "Se utilizan para evaluar: Cómo los usuarios interactúan con el proceso de reserva. Secciones más visitadas del sitio web. Rendimiento del sitio web, tasas de rebote y errores. Los análisis de terceros pueden incluir: Google Analytics, Meta Pixel, Herramientas de monitoreo del proveedor de alojamiento. Estas requieren consentimiento del usuario.",
+            "types_analytical_text": "Se utilizan pa' evaluar: Cómo los usuarios interactúan con el proceso de reserva. Secciones más visitadas del sitio web. Rendimiento del sitio web, tasas de rebote y errores. Los análisis de terceros pueden incluir: Google Analytics, Meta Pixel, Herramientas de monitoreo del proveedor de alojamiento. Estas requieren consentimiento del usuario.",
             "types_marketing_subtitle": "4.4 Cookies de Marketing y Seguimiento (si aplica)",
-            "types_marketing_text": "Se utilizan para: Medir la efectividad de la publicidad. Realizar campañas de remarketing. Construir perfiles de intereses anónimos. Estas requieren consentimiento explícito.",
+            "types_marketing_text": "Se utilizan pa': Medir la efectividad de la publicidad. Realizar campañas de remarketing. Construir perfiles de intereses anónimos. Estas requieren consentimiento explícito.",
             "info_collected_title": "5. Información Recopilada a través de Cookies",
             "info_collected_text": "Dependiendo del tipo de cookie, pueden recopilar: Dirección IP, Características del dispositivo, Tipo de navegador, Identificadores de sesión, Pasos del proceso de reserva, Interacciones de clics del usuario, Fecha y hora de las visitas. Las cookies no almacenan datos personales sin procesar (nombre, correo electrónico, teléfono o placa de matrícula), pero pueden interactuar con sistemas donde dichos datos se envían de forma segura.",
             "managing_title": "6. Gestión de Cookies",
@@ -875,24 +875,24 @@
             "minors_title": "9. Menores de Edad",
             "updates_title": "10. Actualizaciones de esta Política",
             "contact_title": "11. Información de Contacto",
-            "subtitle": "Por favor, revise nuestra política de privacidad, para entender completamente cómo manejamos sus interacciones con este sitio web.",
+            "subtitle": "Por favor, revise nuestra política de privacidad, pa' entender completamente cómo manejamos sus interacciones con este sitio web.",
             "intro_text": "Ta' To' Clean está comprometido a salvaguardar tus datos personales. Esta Política de Privacidad describe cómo recopilamos, usamos, almacenamos y protegemos tu información cuando accedes a nuestro sitio web, programas servicios o interactúas con nosotros. Esta política cumple con la ley colombiana de protección de datos (Ley 1581 de 2012, Decreto 1377 de 2013).",
-            "collection_text": "Recopilamos información que nos proporcionas directamente cuando: Creas una cuenta. Reservas un servicio. Te comunicas con nosotros para soporte. Nota: Se crea automáticamente una cuenta de usuario para gestionar su historial de servicios y reservas al realizar su primera reserva.",
-            "collection_personal_text": "Nombre completo, Correo electrónico, Número de teléfono, Dirección (cuando se requiera para servicios a domicilio).",
+            "collection_text": "Recopilamos información que nos proporcionas directamente cuando: Creas una cuenta. Reservas un servicio. Te comunicas con nosotros pa' soporte. Nota: Se crea automáticamente una cuenta de usuario pa' gestionar su historial de servicios y reservas al realizar su primera reserva.",
+            "collection_personal_text": "Nombre completo, Correo electrónico, Número de teléfono, Dirección (cuando se requiera pa' servicios a domicilio).",
             "collection_vehicle_text": "Placa del vehículo, Marca y modelo (opcional), Apodo asignado por el usuario.",
             "collection_technical_text": "Dirección IP, Tipo de navegador, Datos de cookies (consulta nuestra Política de Cookies).",
-            "use_text": "Utilizamos tu información para: Procesar reservas y gestionar citas. Comunicarnos contigo sobre tus servicios. Mejorar nuestros servicios y experiencia de usuario. Enviar actualizaciones promocionales (con tu consentimiento). Cumplir con obligaciones legales.",
-            "storage_text": "Tus datos se almacenan en Supabase (proveedor de base de datos seguro) con servidores ubicados en la nube. Retenemos tus datos mientras mantengas una cuenta activa o según sea necesario para proporcionar servicios. Puedes solicitar la eliminación de datos en cualquier momento.",
-            "sharing_text": "No vendemos, intercambiamos ni transferimos tu información personal a terceros, excepto: Proveedores de servicios (por ejemplo, Supabase para almacenamiento). Cuando lo requiera la ley. Con tu consentimiento explícito.",
-            "rights_text": "Tienes derecho a: Acceder a tus datos personales. Corregir información inexacta. Solicitar la eliminación de tus datos. Revocar el consentimiento para el procesamiento de datos. Puedes gestionar tu información a través del panel de tu cuenta.",
-            "cookies_text": "Consulta nuestra Política de Cookies para obtener información detallada sobre cómo utilizamos cookies y tecnologías similares.",
-            "security_text": "Implementamos medidas técnicas y organizativas para proteger tus datos contra acceso no autorizado, pérdida o daño. Sin embargo, ningún sistema es 100% seguro.",
+            "use_text": "Utilizamos tu información pa': Procesar reservas y gestionar citas. Comunicarnos contigo sobre tus servicios. Mejorar nuestros servicios y experiencia de usuario. Enviar actualizaciones promocionales (con tu consentimiento). Cumplir con obligaciones legales.",
+            "storage_text": "Tus datos se almacenan en Supabase (proveedor de base de datos seguro) con servidores ubicados en la nube. Retenemos tus datos mientras mantengas una cuenta activa o según sea necesario pa' proporcionar servicios. Puedes solicitar la eliminación de datos en cualquier momento.",
+            "sharing_text": "No vendemos, intercambiamos ni transferimos tu información personal a terceros, excepto: Proveedores de servicios (por ejemplo, Supabase pa' almacenamiento). Cuando lo requiera la ley. Con tu consentimiento explícito.",
+            "rights_text": "Tienes derecho a: Acceder a tus datos personales. Corregir información inexacta. Solicitar la eliminación de tus datos. Revocar el consentimiento pa' el procesamiento de datos. Puedes gestionar tu información a través del panel de tu cuenta.",
+            "cookies_text": "Consulta nuestra Política de Cookies pa' obtener información detallada sobre cómo utilizamos cookies y tecnologías similares.",
+            "security_text": "Implementamos medidas técnicas y organizativas pa' proteger tus datos contra acceso no autorizado, pérdida o daño. Sin embargo, ningún sistema es 100% seguro.",
             "minors_text": "Nuestros servicios no están dirigidos a menores de 18 años. No recopilamos knowingly información de menores.",
             "updates_text": "Podemos actualizar esta Política de Privacidad ocasionalmente. Te notificaremos sobre cambios significativos por correo electrónico o mediante un aviso en nuestro sitio web.",
-            "contact_text": "Para preguntas sobre privacidad o solicitudes de datos, contáctanos en: Correo electrónico: privacy@tatotoclean.com"
+            "contact_text": "Pa' preguntas sobre privacidad o solicitudes de datos, contáctanos en: Correo electrónico: privacy@tatotoclean.com"
         },
         "terms": {
-            "subtitle": "Por favor revise nuestros términos y condiciones para comprender completamente cómo manejamos tus interacciones con este sitio web.",
+            "subtitle": "Por favor revise nuestros términos y condiciones pa' comprender completamente cómo manejamos tus interacciones con este sitio web.",
             "intro_title": "1. Introducción",
             "intro_text": "Estos Términos y Condiciones gobiernan el uso del sitio web de Ta' To' Clean, la plataforma de reservas y los servicios. Al utilizar nuestro sitio web, aceptas estos Términos.",
             "services_title": "2. Servicios Proporcionados",
@@ -916,7 +916,7 @@
         }
     },
     "cookie_consent": {
-        "message": "Utilizamos cookies para mejorar tu experiencia y analizar nuestro tráfico. Al continuar navegando, aceptas nuestra política de cookies.",
+        "message": "Utilizamos cookies pa' mejorar tu experiencia y analizar nuestro tráfico. Al continuar navegando, aceptas nuestra política de cookies.",
         "accept": "Aceptar",
         "decline": "Rechazar",
         "manage": "Gestionar",
@@ -944,7 +944,7 @@
         "search_placeholder": "Buscar respuestas...",
         "view_articles": "Ver artículos",
         "in_category": "En:",
-        "search_results": "Resultados de búsqueda para",
+        "search_results": "Resultados de búsqueda pa'",
         "no_results_title": "No se encontraron resultados",
         "no_results_desc": "Intenta ajustar tus términos de búsqueda",
         "questions": {
@@ -954,8 +954,8 @@
                     "answer": "Ve a la página de reservas haciendo clic en \"Reservar\" o \"Agendar Cita\".\nSelecciona tu vehículo (existente o añade uno nuevo).\nElige el servicio que deseas.\nCompleta tus datos de contacto.\nSelecciona la fecha y hora disponible.\nConfirma tu reserva."
                 },
                 {
-                    "question": "¿Necesito tener una cuenta para reservar?",
-                    "answer": "No es obligatorio. Si reservas sin cuenta, se creará automáticamente una cuenta para ti usando tu email y la placa de tu vehículo como contraseña. Te recomendamos cambiar la contraseña después de iniciar sesión."
+                    "question": "¿Necesito tener una cuenta pa' reservar?",
+                    "answer": "No es obligatorio. Si reservas sin cuenta, se creará automáticamente una cuenta pa' ti usando tu email y la placa de tu vehículo como contraseña. Te recomendamos cambiar la contraseña después de iniciar sesión."
                 },
                 {
                     "question": "¿Qué tipos de servicios ofrecen?",
@@ -971,7 +971,7 @@
                 },
                 {
                     "question": "¿Puedo cancelar mi reserva?",
-                    "answer": "Sí. Puedes cancelar tu reserva desde tu dashboard hasta 24 horas antes del horario programado para un reembolso completo."
+                    "answer": "Sí. Puedes cancelar tu reserva desde tu dashboard hasta 24 horas antes del horario programado pa' un reembolso completo."
                 },
                 {
                     "question": "¿Cuánto tardan en confirmar mi reserva?",
@@ -993,7 +993,7 @@
                 },
                 {
                     "question": "¿Olvidé mi contraseña, qué hago?",
-                    "answer": "Ve a la página de inicio de sesión.\nHaz clic en \"¿Olvidaste tu contraseña?\".\nIngresa tu email.\nRecibirás un enlace para restablecer tu contraseña."
+                    "answer": "Ve a la página de inicio de sesión.\nHaz clic en \"¿Olvidaste tu contraseña?\".\nIngresa tu email.\nRecibirás un enlace pa' restablecer tu contraseña."
                 },
                 {
                     "question": "¿Cómo cambio mi contraseña?",
@@ -1023,7 +1023,7 @@
                 },
                 {
                     "question": "¿Puedo editar la información de mi vehículo?",
-                    "answer": "Sí. Haz clic en la tarjeta del vehículo en tu dashboard para abrir los detalles, luego haz clic en el botón \"Editar\" para modificar la información."
+                    "answer": "Sí. Haz clic en la tarjeta del vehículo en tu dashboard pa' abrir los detalles, luego haz clic en el botón \"Editar\" pa' modificar la información."
                 },
                 {
                     "question": "¿Puedo eliminar un vehículo?",
@@ -1047,7 +1047,7 @@
                 },
                 {
                     "question": "¿Puedo ver el historial de servicios de cada vehículo?",
-                    "answer": "Sí. Al hacer clic en un vehículo se abre un modal con:\nDetalles del vehículo.\nÚltimo servicio realizado.\nPróximo mantenimiento sugerido.\nHistorial completo de servicios para ese vehículo."
+                    "answer": "Sí. Al hacer clic en un vehículo se abre un modal con:\nDetalles del vehículo.\nÚltimo servicio realizado.\nPróximo mantenimiento sugerido.\nHistorial completo de servicios pa' ese vehículo."
                 }
             ],
             "payments": [
@@ -1057,7 +1057,7 @@
                 },
                 {
                     "question": "¿Cómo se calculan los precios?",
-                    "answer": "El precio final es:\nPrecio del servicio × Multiplicador del tipo de vehículo.\nEjemplos:\nLavado Premium ($120,000) para automóvil = $120,000.\nLavado Premium ($120,000) para SUV = $144,000 (×1.2).\nLavado Premium ($120,000) para moto = $96,000 (×0.8)."
+                    "answer": "El precio final es:\nPrecio del servicio × Multiplicador del tipo de vehículo.\nEjemplos:\nLavado Premium ($120,000) pa' automóvil = $120,000.\nLavado Premium ($120,000) pa' SUV = $144,000 (×1.2).\nLavado Premium ($120,000) pa' moto = $96,000 (×0.8)."
                 },
                 {
                     "question": "¿Los precios incluyen impuestos?",
@@ -1065,7 +1065,7 @@
                 },
                 {
                     "question": "¿Hay descuentos por múltiples servicios?",
-                    "answer": "Actualmente no hay descuentos automáticos, pero puedes contactar con el equipo para paquetes personalizados."
+                    "answer": "Actualmente no hay descuentos automáticos, pero puedes contactar con el equipo pa' paquetes personalizados."
                 },
                 {
                     "question": "¿Puedo ver mi gasto total?",
@@ -1091,11 +1091,11 @@
                 },
                 {
                     "question": "¿Cómo veo el historial completo?",
-                    "answer": "Por defecto se muestran las últimas 5 reservas. Haz clic en \"Ver todo el historial\" para expandir la lista completa."
+                    "answer": "Por defecto se muestran las últimas 5 reservas. Haz clic en \"Ver todo el historial\" pa' expandir la lista completa."
                 },
                 {
                     "question": "¿Puedo reservar directamente desde un vehículo?",
-                    "answer": "Sí. En el modal de detalles del vehículo, haz clic en \"Reservar nuevo servicio\" para ir directamente a la página de reservas con ese vehículo pre-seleccionado."
+                    "answer": "Sí. En el modal de detalles del vehículo, haz clic en \"Reservar nuevo servicio\" pa' ir directamente a la página de reservas con ese vehículo pre-seleccionado."
                 }
             ],
             "reviews": [
@@ -1113,7 +1113,7 @@
                 },
                 {
                     "question": "¿Dónde veo todas mis reseñas?",
-                    "answer": "En el sidebar del dashboard, haz clic en \"Mis Reseñas\" para ver todas las calificaciones que has hecho."
+                    "answer": "En el sidebar del dashboard, haz clic en \"Mis Reseñas\" pa' ver todas las calificaciones que has hecho."
                 },
                 {
                     "question": "¿Puedo volver a calificar el mismo servicio?",
@@ -1157,7 +1157,7 @@
             "privacy": [
                 {
                     "question": "¿Qué datos personales recopilan?",
-                    "answer": "Recopilamos:\nInformación personal: Nombre, email, teléfono.\nInformación del vehículo: Placa, marca, modelo.\nInformación técnica: Dirección IP, tipo de navegador.\nVer la Política de Privacidad completa para más detalles."
+                    "answer": "Recopilamos:\nInformación personal: Nombre, email, teléfono.\nInformación del vehículo: Placa, marca, modelo.\nInformación técnica: Dirección IP, tipo de navegador.\nVer la Política de Privacidad completa pa' más detalles."
                 },
                 {
                     "question": "¿Cómo protegen mis datos?",
@@ -1169,19 +1169,19 @@
                 },
                 {
                     "question": "¿Usan cookies?",
-                    "answer": "Sí. Usamos cookies para:\nFuncionamiento esencial del sitio.\nRecordar preferencias (idioma, tema).\nAnálisis de rendimiento.\nVer la Política de Cookies completa."
+                    "answer": "Sí. Usamos cookies pa':\nFuncionamiento esencial del sitio.\nRecordar preferencias (idioma, tema).\nAnálisis de rendimiento.\nVer la Política de Cookies completa."
                 },
                 {
                     "question": "¿Puedo gestionar las cookies?",
                     "answer": "Sí, puedes aceptar o rechazar cookies no esenciales desde el banner de cookies. Las cookies estrictamente necesarias no se pueden deshabilitar."
                 },
                 {
-                    "question": "¿Mis datos son visibles para otros usuarios?",
-                    "answer": "No. Tus datos personales solo son visibles para ti y los administradores del sitio."
+                    "question": "¿Mis datos son visibles pa' otros usuarios?",
+                    "answer": "No. Tus datos personales solo son visibles pa' ti y los administradores del sitio."
                 },
                 {
                     "question": "¿Venden mi información a terceros?",
-                    "answer": "No. No vendemos, intercambiamos ni transferimos tu información personal a terceros, excepto proveedores de servicios necesarios (como Supabase para almacenamiento) o cuando lo requiera la ley."
+                    "answer": "No. No vendemos, intercambiamos ni transferimos tu información personal a terceros, excepto proveedores de servicios necesarios (como Supabase pa' almacenamiento) o cuando lo requiera la ley."
                 }
             ],
             "admin": [
@@ -1225,7 +1225,7 @@
                 },
                 {
                     "question": "¿Se guarda mi preferencia de idioma?",
-                    "answer": "Sí, se guarda en el almacenamiento local del navegador. Además, la URL cambia para reflejar el idioma (e.g., /en/inicio para inglés)."
+                    "answer": "Sí, se guarda en el almacenamiento local del navegador. Además, la URL cambia pa' reflejar el idioma (e.g., /en/inicio pa' inglés)."
                 },
                 {
                     "question": "¿Todas las páginas están traducidas?",
@@ -1233,7 +1233,7 @@
                 },
                 {
                     "question": "¿Puedo cambiar entre tema claro y oscuro?",
-                    "answer": "Sí. Desde el dashboard, haz clic en el botón de toggle del tema en el sidebar para cambiar entre modo claro y oscuro."
+                    "answer": "Sí. Desde el dashboard, haz clic en el botón de toggle del tema en el sidebar pa' cambiar entre modo claro y oscuro."
                 },
                 {
                     "question": "¿El tema se sincroniza entre dispositivos?",
@@ -1259,10 +1259,10 @@
                 },
                 {
                     "question": "¿Hay un horario de atención?",
-                    "answer": "Los horarios de reserva disponibles son de 8:00 AM a 5:00 PM. Para consultas de soporte, responderemos en horario laboral."
+                    "answer": "Los horarios de reserva disponibles son de 8:00 AM a 5:00 PM. Pa' consultas de soporte, responderemos en horario laboral."
                 },
                 {
-                    "question": "¿Hay WhatsApp para contacto?",
+                    "question": "¿Hay WhatsApp pa' contacto?",
                     "answer": "Esto no está especificado en el sistema actual, pero puedes verificar en la sección de contacto o el footer del sitio."
                 }
             ],
@@ -1273,7 +1273,7 @@
                 },
                 {
                     "question": "¿Es responsive el sitio?",
-                    "answer": "Sí, el sitio está completamente optimizado para móviles, tablets y escritorio."
+                    "answer": "Sí, el sitio está completamente optimizado pa' móviles, tablets y escritorio."
                 },
                 {
                     "question": "¿Puedo acceder desde mi teléfono?",
@@ -1281,7 +1281,7 @@
                 },
                 {
                     "question": "¿Hay una aplicación móvil?",
-                    "answer": "Actualmente no, pero el sitio web está optimizado para móviles y proporciona una experiencia similar a una app."
+                    "answer": "Actualmente no, pero el sitio web está optimizado pa' móviles y proporciona una experiencia similar a una app."
                 },
                 {
                     "question": "¿Cómo reporto un bug?",
@@ -1293,11 +1293,11 @@
                 },
                 {
                     "question": "¿Ofrecen servicio a domicilio?",
-                    "answer": "Esto no está claramente especificado en el sistema. Contacta con el equipo para confirmar si hay disponibilidad de servicio a domicilio."
+                    "answer": "Esto no está claramente especificado en el sistema. Contacta con el equipo pa' confirmar si hay disponibilidad de servicio a domicilio."
                 },
                 {
                     "question": "¿Cuánto tiempo toma cada servicio?",
-                    "answer": "El tiempo estimado para cada servicio no está especificado en el sistema actual. Se recomienda preguntar al momento de reservar."
+                    "answer": "El tiempo estimado pa' cada servicio no está especificado en el sistema actual. Se recomienda preguntar al momento de reservar."
                 },
                 {
                     "question": "¿Qué pasa si llego tarde a mi cita?",
@@ -1318,16 +1318,16 @@
                     "answer": "Significa que ya existe un vehículo con esa placa:\nEn tu lista de vehículos (si estás autenticado).\nO registrado por otro usuario."
                 },
                 {
-                    "question": "¿Puedo usar la misma placa para múltiples cuentas?",
+                    "question": "¿Puedo usar la misma placa pa' múltiples cuentas?",
                     "answer": "No. Cada placa solo puede estar registrada una vez en el sistema globalmente."
                 },
                 {
                     "question": "¿Qué es el \"automatic account creation\"?",
-                    "answer": "Cuando haces una reserva sin estar registrado, el sistema automáticamente crea una cuenta usando:\nTu email como usuario.\nLa placa del vehículo como contraseña temporal.\nRecibes estas credenciales por email para que puedas acceder a tu dashboard después."
+                    "answer": "Cuando haces una reserva sin estar registrado, el sistema automáticamente crea una cuenta usando:\nTu email como usuario.\nLa placa del vehículo como contraseña temporal.\nRecibes estas credenciales por email pa' que puedas acceder a tu dashboard después."
                 },
                 {
                     "question": "¿Cómo funciona la sincronización de datos?",
-                    "answer": "El sistema usa:\nRealtime de Supabase para actualizaciones en vivo.\nReact Query para caché optimizado de datos.\nEdge Functions para envío de emails."
+                    "answer": "El sistema usa:\nRealtime de Supabase pa' actualizaciones en vivo.\nReact Query pa' caché optimizado de datos.\nEdge Functions pa' envío de emails."
                 },
                 {
                     "question": "¿Qué pasa con mis reservas si elimino mi vehículo?",
@@ -1336,16 +1336,16 @@
             ],
             "tips": [
                 {
-                    "question": "Recomendaciones para usuarios nuevos",
+                    "question": "Recomendaciones pa' usuarios nuevos",
                     "answer": "Crea una cuenta antes de hacer tu primera reserva.\nAñade todos tus vehículos al dashboard.\nRevisa bien el calendario de disponibilidad.\nGuarda tus credenciales en un lugar seguro.\nCambia la contraseña temporal lo antes posible."
                 },
                 {
-                    "question": "Para una mejor experiencia de reserva",
-                    "answer": "Reserva con al menos 24 horas de anticipación.\nCompleta todos los campos opcionales (marca, modelo) para mejor servicio.\nActiva notificaciones de email.\nRevisa tu email de confirmación.\nCalifica el servicio después de completado."
+                    "question": "Pa' una mejor experiencia de reserva",
+                    "answer": "Reserva con al menos 24 horas de anticipación.\nCompleta todos los campos opcionales (marca, modelo) pa' mejor servicio.\nActiva notificaciones de email.\nRevisa tu email de confirmación.\nCalifica el servicio después de completado."
                 },
                 {
                     "question": "Gestión de vehículos",
-                    "answer": "Usa apodos descriptivos para tus vehículos.\nMantén actualizada la información de marca y modelo.\nMarca tu vehículo principal para acceso rápido.\nRevisa el historial regularmente."
+                    "answer": "Usa apodos descriptivos pa' tus vehículos.\nMantén actualizada la información de marca y modelo.\nMarca tu vehículo principal pa' acceso rápido.\nRevisa el historial regularmente."
                 },
                 {
                     "question": "Seguridad de la cuenta",
@@ -1359,7 +1359,7 @@
         "description": "Transformamos tu vehículo con una metodología precisa y detallada, garantizando resultados de showroom.",
         "results": {
             "title": "Resultados Reales",
-            "description": "Desliza para ver la transformación. Nuestros tratamientos devuelven la vida a tu vehículo."
+            "description": "Desliza pa' ver la transformación. Nuestros tratamientos devuelven la vida a tu vehículo."
         },
         "method": {
             "title": "Proceso de Transformación",
@@ -1368,19 +1368,19 @@
         "steps": [
             {
                 "title": "Evaluación Inicial",
-                "description": "Inspección detallada del vehículo para identificar imperfecciones y determinar el mejor tratamiento."
+                "description": "Inspección detallada del vehículo pa' identificar imperfecciones y determinar el mejor tratamiento."
             },
             {
                 "title": "Descontaminación",
-                "description": "Limpieza profunda química y mecánica para eliminar contaminantes adheridos a la pintura."
+                "description": "Limpieza profunda química y mecánica pa' eliminar contaminantes adheridos a la pintura."
             },
             {
                 "title": "Corrección de Pintura",
-                "description": "Proceso de pulido en múltiples etapas para eliminar rayas, marcas de agua y restaurar el brillo."
+                "description": "Proceso de pulido en múltiples etapas pa' eliminar rayas, marcas de agua y restaurar el brillo."
             },
             {
                 "title": "Protección Cerámica",
-                "description": "Aplicación de recubrimiento cerámico para proteger la pintura y facilitar la limpieza futura."
+                "description": "Aplicación de recubrimiento cerámico pa' proteger la pintura y facilitar la limpieza futura."
             },
             {
                 "title": "Curado y Entrega",

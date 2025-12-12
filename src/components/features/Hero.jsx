@@ -89,14 +89,14 @@ const Hero = () => {
           <img
             src="/images/porsche.png"
             alt="Porsche 911 GT3 RS"
-            className="w-full h-auto object-contain"
+            className="hero-car-image w-full h-auto object-contain"
             style={{
               filter: 'drop-shadow(0 0px 15px #0046b8) drop-shadow(0 0px 15px #0046b8) drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3))'
             }}
           />
           <style jsx>{`
             @media (min-width: 768px) {
-              img {
+              .hero-car-image {
                 filter: drop-shadow(0 0px 30px #0046b8) drop-shadow(0 0px 30px #0046b8) drop-shadow(0 20px 60px rgba(0, 0, 0, 0.4)) !important;
               }
             }
