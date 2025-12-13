@@ -138,7 +138,7 @@ const Footer = () => {
                     </FooterColumn>
                 </div>
 
-                <div className="flex justify-between items-center w-full z-30 mb-8 md:mb-20 md:border-t md:border-solid border-none border-[#0046b8]/10 pt-8 relative">
+                <div className="flex justify-between items-center w-full z-30 mt-auto md:mt-[4vh] mb-8 md:mb-20 md:border-t md:border-solid border-none border-[#0046b8]/10 pt-8 relative">
                     {/* Mobile-only full-width divider */}
                     <div className="absolute top-0 -left-8 w-[calc(100%+4rem)] h-[1px] bg-[#0046b8]/10 md:hidden" />
 

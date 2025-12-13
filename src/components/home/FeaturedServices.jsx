@@ -33,8 +33,10 @@ const FeaturedServices = () => {
     return (
         <section className="bg-white py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
             <div className="w-full px-0 md:px-0 lg:px-0 relative z-10">
-                {/* Blue Card Container */}
-                <div className="bg-[#0046b8] rounded-3xl p-8 md:p-12 lg:p-16">
+                {/* Blue Card Container with subtle gradient */}
+                <div className="bg-[#0046b8] rounded-3xl p-8 md:p-12 lg:p-16 relative overflow-hidden">
+                    {/* Subtle vertical gradient overlay for depth */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/5 pointer-events-none" />
                     <div className="text-center mb-16">
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
