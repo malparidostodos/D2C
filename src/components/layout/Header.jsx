@@ -59,14 +59,14 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
     ];
 
     const servicesDropdown = [
-        { name: t('header.services'), path: currentLang === 'EN' ? '/services' : '/servicios', id: 'services', image: `/images/services-preview-${currentLang.toLowerCase()}.png` },
-        { name: t('header.process'), path: currentLang === 'EN' ? '/roadmap' : '/proceso', id: 'roadmap' },
-        { name: t('header.memberships'), path: currentLang === 'EN' ? '/memberships' : '/membresias', id: '#membresias' },
+        { name: t('header.services'), path: i18n.language === 'en' ? '/services' : '/servicios', id: 'services', image: `/images/services-preview-${currentLang.toLowerCase()}.png` },
+        { name: t('header.process'), path: i18n.language === 'en' ? '/roadmap' : '/proceso', id: 'roadmap' },
+        { name: t('header.memberships'), path: i18n.language === 'en' ? '/memberships' : '/membresias', id: '#membresias' },
     ];
 
     const supportDropdown = [
         { name: t('header.faq'), path: '/faq', id: 'faq' },
-        { name: t('header.legal'), path: currentLang === 'EN' ? '/privacy-policy' : '/politica-de-privacidad', id: 'legal' },
+        { name: t('header.legal'), path: i18n.language === 'en' ? '/privacy-policy' : '/politica-de-privacidad', id: 'legal' },
     ];
 
     // Helper to handle transition navigation
@@ -384,9 +384,11 @@ const Header = ({ theme = 'default', showThemeToggle = false, alwaysVisible = fa
                                                 let isActive = (item.id === activeSection) || ((location.pathname === getLocalizedPath(item.path)) && !item.path.includes('#'));
 
                                                 if (item.id === 'legal') {
-                                                    // Check against all localized legal paths
-                                                    const currentPath = location.pathname.replace(/^\/en/, '') || '/';
-                                                    isActive = legalPaths.some(path => location.pathname === getLocalizedPath(path) || path === currentPath);
+                                                    // Check if current path matches any legal path (with or without /en prefix)
+                                                    const currentPathWithoutPrefix = location.pathname.replace(/^\/en/, '') || '/';
+                                                    isActive = legalPaths.some(path =>
+                                                        location.pathname.endsWith(path) || currentPathWithoutPrefix === path
+                                                    );
                                                 }
 
                                                 return (

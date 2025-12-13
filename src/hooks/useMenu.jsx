@@ -464,18 +464,59 @@ export const MenuProvider = ({ children }) => {
 
         console.log('New path will be:', newPath);
 
-        // Explicitly change language in i18n
+        // Use View Transition API if available
+        if (!document.startViewTransition || newPath === currentPath) {
+            // Fallback: change language and reload
+            i18n.changeLanguage(targetLang);
+            if (newPath !== currentPath) {
+                window.location.href = newPath;
+            } else {
+                window.location.reload();
+            }
+            setLangOpen(false);
+            return;
+        }
+
+        // Explicitly change language in i18n first
         i18n.changeLanguage(targetLang);
 
-        // Force hard navigation to ensure language switch applies correctly
-        if (newPath !== currentPath) {
-            console.log('Navigating to:', newPath);
-            window.location.href = newPath;
-        } else {
-            // If path is same but language changed (rare but possible), force reload
-            console.log('Reloading page');
-            window.location.reload();
-        }
+        // Use View Transition with curtain effect
+        const transition = document.startViewTransition(() => {
+            flushSync(() => {
+                window.history.pushState(null, '', newPath);
+                // Trigger a popstate event to update React Router
+                window.dispatchEvent(new PopStateEvent('popstate'));
+            });
+        });
+
+        transition.ready.then(() => {
+            // "Curtain Effect" Animation
+            document.documentElement.animate(
+                [
+                    { opacity: 1, transform: "translateY(0)" },
+                    { opacity: 1, transform: "translateY(-35%)", filter: "brightness(0.4)" }
+                ],
+                {
+                    duration: 800,
+                    easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+                    fill: "forwards",
+                    pseudoElement: "::view-transition-old(root)"
+                }
+            );
+
+            document.documentElement.animate(
+                [
+                    { clipPath: "inset(100% 0 0 0)" },
+                    { clipPath: "inset(0 0 0 0)" }
+                ],
+                {
+                    duration: 800,
+                    easing: "cubic-bezier(0.87, 0, 0.13, 1)",
+                    fill: "forwards",
+                    pseudoElement: "::view-transition-new(root)"
+                }
+            );
+        });
 
         setLangOpen(false);
     };

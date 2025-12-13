@@ -54,6 +54,22 @@ const ScrollToSection = ({ sectionId, title, description }) => {
   const { lenis } = useSmoothScroll()
   const { i18n } = useTranslation()
 
+  // Force Spanish language for default routes (without /en prefix)
+  useEffect(() => {
+    const path = location.pathname
+    if (path.startsWith('/en')) {
+      // English route detected
+      if (i18n.language !== 'en') {
+        i18n.changeLanguage('en')
+      }
+    } else {
+      // Default or /es route - use Spanish
+      if (i18n.language !== 'es') {
+        i18n.changeLanguage('es')
+      }
+    }
+  }, [location.pathname, i18n])
+
   useEffect(() => {
     const scrollToTarget = () => {
       if (!lenis) return

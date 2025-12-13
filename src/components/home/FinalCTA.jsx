@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 const FinalCTA = () => {
     const { getLocalizedPath, navigateWithTransition } = useMenu()
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
 
     return (
         <section className="bg-white min-h-screen flex items-center justify-center px-4 relative overflow-hidden select-none">
@@ -40,10 +40,10 @@ const FinalCTA = () => {
                     className="flex flex-col sm:flex-row items-center justify-center gap-4"
                 >
                     <Link
-                        to={getLocalizedPath("/reserva")}
+                        to={getLocalizedPath(i18n.language === 'en' ? "/booking" : "/reserva")}
                         onClick={(e) => {
                             e.preventDefault()
-                            navigateWithTransition(getLocalizedPath("/reserva"))
+                            navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/booking" : "/reserva"))
                         }}
                         className="group relative inline-flex items-center justify-center px-8 py-3 bg-transparent border border-[#0046b8]/30 text-[#0046b8] rounded-2xl font-semibold text-lg hover:border-[#0046b8] hover:bg-blue-50/50 transition-all duration-300 min-w-[200px]"
                     >

@@ -20,7 +20,7 @@
         "default_keywords": "detailing, car wash, automotive cleaning, paint correction, ceramic"
     },
     "button": {
-        "book_now": "Book Now",
+        "book_now": "Book",
         "whatsapp": "WhatsApp"
     },
     "final_cta": {
@@ -88,18 +88,24 @@
     },
     "featured_services": {
         "title": "Our Featured Services",
-        "outro": "Every service is designed to bring back that showroom shine. We do real detailing, not just washing.",
+        "outro": "Each service is designed to bring back that showroom shine to your vehicle. We do real detailing, not just washing.",
+        "trust_badges": {
+            "premium_products": "Premium products",
+            "certified_technicians": "Certified technicians",
+            "satisfaction_guarantee": "Satisfaction guarantee"
+        },
+        "cta": "Explore service",
         "premium_wash": {
             "title": "Premium Wash",
             "description": "Deep and detailed cleaning to restore your vehicle's shine."
         },
         "interior_detailing": {
             "title": "Interior Detailing",
-            "description": "Complete renovation of upholstery, plastics and every corner of the cabin."
+            "description": "Complete upholstery, plastics, and cabin renewal."
         },
         "polish_correction": {
             "title": "Polish & Correction",
-            "description": "Removal of imperfections and ceramic protection for a mirror finish."
+            "description": "Flaw removal and ceramic protection for a mirror finish."
         }
     },
     "booking": {
@@ -215,7 +221,7 @@
     "auth": {
         "login_title": "Log In",
         "signup_title": "Create Account",
-        "mail": "example@mail.com",
+        "mail": "example@email.com",
         "welcome": "Welcome",
         "login_subtitle": "Log in to your account to manage your services",
         "email": "Email",
@@ -300,7 +306,7 @@
         "new_booking": "New Booking",
         "no_bookings": "You have no bookings",
         "make_booking": "Make a Booking",
-        "book_now": "Book now",
+        "book_now": "Book",
         "profile": "Profile",
         "cancel_booking": "Cancel",
         "cancel_confirm_title": "Cancel Booking",
@@ -577,6 +583,176 @@
             }
         },
         "cta": "View certifications"
+    },
+    "recent_results": {
+        "title": "Real Results",
+        "before": "Before",
+        "after": "After",
+        "results": {
+            "interior_renovation": {
+                "label": "Interior Renovation",
+                "benefits": [
+                    "Deep upholstery cleaning",
+                    "Finish restoration"
+                ],
+                "details": [
+                    "Deep upholstery cleaning",
+                    "4 hours of work",
+                    "UV protection applied"
+                ]
+            },
+            "paint_correction": {
+                "label": "Paint Correction",
+                "benefits": [
+                    "Micro-scratch removal",
+                    "Shine restoration"
+                ],
+                "details": [
+                    "Paint correction",
+                    "6 hours of work",
+                    "Ceramic sealing"
+                ]
+            },
+            "wheel_detailing": {
+                "label": "Wheel Detailing",
+                "benefits": [
+                    "Polishing and decontamination",
+                    "Mirror finish"
+                ],
+                "details": [
+                    "Polishing and decontamination",
+                    "3 hours of work",
+                    "Mirror finish"
+                ]
+            }
+        },
+        "cta_view_more": "View more real results",
+        "cta_want_result": "I want this result for my car"
+    },
+    "how_it_works": {
+        "title": "How it works",
+        "subtitle": "Simple, fast, and professional.",
+        "steps": {
+            "step1": {
+                "title": "Book your service",
+                "description": "Choose date, time, and package in seconds."
+            },
+            "step2": {
+                "title": "We pick up your vehicle",
+                "description": "Safe pickup wherever you are."
+            },
+            "step3": {
+                "title": "Get it back like new",
+                "description": "Clean, protected, and professionally finished."
+            }
+        },
+        "visual_bullets": {
+            "premium_products": "Premium products",
+            "real_protection": "Real protection",
+            "visible_results": "Visible results"
+        },
+        "bottom_title": "Ready to see your ride shine?",
+        "cta_view_services": "View our services",
+        "cta_book_now": "Book"
+    },
+    "testimonials": {
+        "section_label": "Testimonials",
+        "title_part1": "What our",
+        "title_part2": "Clients say",
+        "error_title": "Couldn't load reviews",
+        "error_message": "Please try reloading the page",
+        "retry_button": "Retry",
+        "empty_title": "Coming soon",
+        "empty_message": "We're collecting our first client reviews",
+        "stats": {
+            "rating": "Rating",
+            "reviews": "Reviews",
+            "happy_clients": "Happy clients"
+        }
+    },
+    "portfolio": {
+        "title": "Our Work",
+        "view_full": "View full",
+        "full_gallery_title": "All Our Work",
+        "services_performed": "Services Performed:",
+        "close": "Close",
+        "items": {
+            "complete_detailing": {
+                "title": "Premium Complete Detailing",
+                "description": "Multi-stage paint correction with 9H ceramic coating",
+                "services": [
+                    "Detailed wash",
+                    "Paint correction",
+                    "Ceramic coating",
+                    "Interior hydration"
+                ]
+            },
+            "interior_restoration": {
+                "title": "Interior Restoration",
+                "description": "Deep cleaning and leather upholstery restoration",
+                "services": [
+                    "Upholstery cleaning",
+                    "Leather treatment",
+                    "Deep steam",
+                    "Disinfection"
+                ]
+            },
+            "paint_correction": {
+                "title": "Paint Correction",
+                "description": "Professional polishing to remove swirls and scratches",
+                "services": [
+                    "Multi-stage polishing",
+                    "Swirl removal",
+                    "Paint sealing"
+                ]
+            },
+            "exterior_detailing": {
+                "title": "Exterior Detailing",
+                "description": "Complete paint treatment with ceramic protection",
+                "services": [
+                    "Decontamination",
+                    "Clay bar",
+                    "Polishing",
+                    "Premium wax"
+                ]
+            },
+            "engine_cleaning": {
+                "title": "Engine Cleaning",
+                "description": "Safe and detailed engine compartment cleaning",
+                "services": [
+                    "Degreasing",
+                    "Plastic protection",
+                    "Satin finish"
+                ]
+            },
+            "wheels_tires": {
+                "title": "Wheels & Tires",
+                "description": "Deep cleaning and ceramic sealing of wheels",
+                "services": [
+                    "Iron decontamination",
+                    "Wheel polishing",
+                    "Ceramic coating"
+                ]
+            },
+            "suv_detailing": {
+                "title": "Premium SUV Detailing",
+                "description": "Complete interior and exterior service",
+                "services": [
+                    "Full wash",
+                    "Interior detailing",
+                    "Ceramic protection"
+                ]
+            },
+            "headlight_correction": {
+                "title": "Headlight Correction",
+                "description": "Restoration and sealing of cloudy headlights",
+                "services": [
+                    "Headlight polishing",
+                    "UV sealing",
+                    "Restoration"
+                ]
+            }
+        }
     },
     "contact_section": {
         "address": {

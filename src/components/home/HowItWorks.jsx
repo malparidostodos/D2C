@@ -2,27 +2,29 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, Truck, Star, Check, Shield, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useMenu } from '../../hooks/useMenu'
 import RecentResults from './RecentResults'
 
 const HowItWorks = () => {
+    const { t, i18n } = useTranslation()
     const { getLocalizedPath, navigateWithTransition } = useMenu()
 
     const steps = [
         {
             icon: Calendar,
-            title: "Agenda tu servicio",
-            description: "Elige fecha, hora y paquete en segundos."
+            title: t('how_it_works.steps.step1.title'),
+            description: t('how_it_works.steps.step1.description')
         },
         {
             icon: Truck,
-            title: "Llevamos tu vehículo",
-            description: "Recogida segura donde estés."
+            title: t('how_it_works.steps.step2.title'),
+            description: t('how_it_works.steps.step2.description')
         },
         {
             icon: Star,
-            title: "Lo recibes como nuevo",
-            description: "Limpio, protegido y con acabado profesional."
+            title: t('how_it_works.steps.step3.title'),
+            description: t('how_it_works.steps.step3.description')
         }
     ]
 
@@ -41,10 +43,10 @@ const HowItWorks = () => {
                             viewport={{ once: true }}
                             className="text-4xl md:text-5xl font-semibold text-white mb-4"
                         >
-                            Cómo funciona
+                            {t('how_it_works.title')}
                         </motion.h2>
                         <p className="text-white/80 text-lg max-w-2xl mx-auto">
-                            Simple, rápido y profesional.
+                            {t('how_it_works.subtitle')}
                         </p>
                     </div>
 
@@ -89,7 +91,7 @@ const HowItWorks = () => {
                             viewport={{ once: true }}
                             className="text-4xl md:text-6xl font-semibold text-white mb-6 leading-tight"
                         >
-                            El nivel de detalle que<br />tu carro merece
+                            {t('how_it_works.bottom_title')}
                         </motion.h2>
 
                         {/* Visual Bullets */}
@@ -101,9 +103,9 @@ const HowItWorks = () => {
                             className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-10"
                         >
                             {[
-                                { icon: Check, text: "Productos premium" },
-                                { icon: Shield, text: "Protección real" },
-                                { icon: Sparkles, text: "Resultados visibles" }
+                                { icon: Check, text: t('how_it_works.visual_bullets.premium_products') },
+                                { icon: Shield, text: t('how_it_works.visual_bullets.real_protection') },
+                                { icon: Sparkles, text: t('how_it_works.visual_bullets.visible_results') }
                             ].map((item, index) => (
                                 <div key={index} className="flex items-center justify-center gap-3 text-white/90">
                                     <item.icon className="w-5 h-5 text-white flex-shrink-0" />
@@ -121,24 +123,24 @@ const HowItWorks = () => {
                             className="flex flex-col sm:flex-row items-center justify-center gap-4"
                         >
                             <Link
-                                to={getLocalizedPath("/servicios")}
+                                to={getLocalizedPath(i18n.language === 'en' ? "/services" : "/servicios")}
                                 onClick={(e) => {
                                     e.preventDefault()
-                                    navigateWithTransition(getLocalizedPath("/servicios"))
+                                    navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/services" : "/servicios"))
                                 }}
                                 className="inline-flex items-center justify-center px-8 py-3 bg-white text-[#0046b8] rounded-full font-semibold text-lg hover:bg-white/90 transition-all duration-300 shadow-lg"
                             >
-                                Ver nuestros servicios
+                                {t('how_it_works.cta_view_services')}
                             </Link>
                             <Link
-                                to={getLocalizedPath("/reservar")}
+                                to={getLocalizedPath(i18n.language === 'en' ? "/booking" : "/reserva")}
                                 onClick={(e) => {
                                     e.preventDefault()
-                                    navigateWithTransition(getLocalizedPath("/reservar"))
+                                    navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/booking" : "/reserva"))
                                 }}
                                 className="inline-flex items-center justify-center px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-full font-semibold text-lg hover:bg-white/20 transition-all duration-300"
                             >
-                                Agendar ahora
+                                {t('how_it_works.cta_book_now')}
                             </Link>
                         </motion.div>
                     </div>
@@ -151,7 +153,7 @@ const HowItWorks = () => {
                             viewport={{ once: true }}
                             className="text-4xl md:text-5xl font-semibold text-white mb-12 text-center"
                         >
-                            Resultados Recientes
+                            {t('recent_results.title')}
                         </motion.h2>
 
                         <RecentResults embedded={true} />

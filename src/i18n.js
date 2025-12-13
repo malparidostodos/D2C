@@ -26,9 +26,11 @@ i18n
             escapeValue: false, // React already safes from xss
         },
         detection: {
-            order: ['path', 'navigator'],
+            order: ['path', 'localStorage', 'navigator'],
             lookupFromPathIndex: 0,
-            checkWhitelist: true,
+            caches: ['localStorage'],
+            // Custom path detection to handle default Spanish route
+            lookupFromSubdomainIndex: 0,
         },
     });
 

@@ -78,52 +78,51 @@ const PortfolioGallery = () => {
     const portfolioImages = [
         {
             image: "/images/portfolio/work-1.jpeg",
-            title: "Detailing Completo Premium",
-            description: "Corrección de pintura multi-etapa con recubrimiento cerámico 9H",
-            services: ["Lavado detallado", "Corrección de pintura", "Ceramic coating", "Hidratación interior"]
+            title: t('portfolio.items.complete_detailing.title'),
+            description: t('portfolio.items.complete_detailing.description'),
+            services: t('portfolio.items.complete_detailing.services', { returnObjects: true })
         },
         {
             image: "/images/portfolio/work-2.png",
-            title: "Restauración Interior",
-            description: "Limpieza profunda y restauración de tapicería en cuero",
-            services: ["Limpieza de tapicería", "Tratamiento de cuero", "Vapor profundo", "Desinfección"]
+            title: t('portfolio.items.interior_restoration.title'),
+            description: t('portfolio.items.interior_restoration.description'),
+            services: t('portfolio.items.interior_restoration.services', { returnObjects: true })
         },
         {
             image: "/images/portfolio/work-3.png",
-            title: "Paint Correction",
-            description: "Eliminación de swirls y arañazos con pulido profesional",
-            services: ["Pulido multi-etapa", "Eliminación de swirls", "Sellado de pintura"]
+            title: t('portfolio.items.paint_correction.title'),
+            description: t('portfolio.items.paint_correction.description'),
+            services: t('portfolio.items.paint_correction.services', { returnObjects: true })
         },
         {
             image: "/images/portfolio/work-4.png",
-            title: "Detailing Exterior",
-            description: "Tratamiento completo de pintura con protección cerámica",
-            services: ["Descontaminación", "Clay bar", "Pulido", "Wax premium"]
+            title: t('portfolio.items.exterior_detailing.title'),
+            description: t('portfolio.items.exterior_detailing.description'),
+            services: t('portfolio.items.exterior_detailing.services', { returnObjects: true })
         },
         {
             image: "/images/portfolio/work-5.png",
-            title: "Limpieza de Motor",
-            description: "Limpieza segura y detallada del compartimiento del motor",
-            services: ["Desengrasado", "Protección plásticos", "Acabado satinado"]
+            title: t('portfolio.items.engine_cleaning.title'),
+            description: t('portfolio.items.engine_cleaning.description'),
+            services: t('portfolio.items.engine_cleaning.services', { returnObjects: true })
         },
-        // Imágenes adicionales para el grid
         {
             image: "/images/portfolio/work-6.jpg",
-            title: "Rines y Llantas",
-            description: "Limpieza profunda y sellado cerámico de rines",
-            services: ["Descontaminación férrica", "Pulido de rines", "Ceramic coating"]
+            title: t('portfolio.items.wheels_tires.title'),
+            description: t('portfolio.items.wheels_tires.description'),
+            services: t('portfolio.items.wheels_tires.services', { returnObjects: true })
         },
         {
             image: "/images/portfolio/work-7.jpg",
-            title: "Detailing Premium SUV",
-            description: "Servicio completo interior y exterior",
-            services: ["Lavado completo", "Interior detailing", "Protección cerámica"]
+            title: t('portfolio.items.suv_detailing.title'),
+            description: t('portfolio.items.suv_detailing.description'),
+            services: t('portfolio.items.suv_detailing.services', { returnObjects: true })
         },
         {
             image: "/images/portfolio/work-8.jpg",
-            title: "Corrección de Faros",
-            description: "Restauración y sellado de faros opacos",
-            services: ["Pulido de faros", "Sellado UV", "Restauración"]
+            title: t('portfolio.items.headlight_correction.title'),
+            description: t('portfolio.items.headlight_correction.description'),
+            services: t('portfolio.items.headlight_correction.services', { returnObjects: true })
         }
     ]
 
@@ -266,7 +265,7 @@ const PortfolioGallery = () => {
                 {/* Title */}
                 <div className="text-center px-8 mb-8 md:mb-12">
                     <h2 className="text-5xl md:text-7xl font-semibold text-[#0046b8] mb-4">
-                        Nuestros Trabajos
+                        {t('portfolio.title')}
                     </h2>
                     <div className="h-1 w-24 bg-[#0046b8] mx-auto rounded-full" />
                 </div>
@@ -297,7 +296,7 @@ const PortfolioGallery = () => {
                             className="hidden md:flex flex-col justify-center cursor-pointer group flex-1 pl-8 lg:pl-12 xl:pl-16"
                         >
                             <p className="text-2xl lg:text-3xl xl:text-4xl font-medium text-[#0046b8] mb-3 transition-all group-hover:scale-105">
-                                Ver completo →
+                                {t('portfolio.view_full')} →
                             </p>
                             <div className="w-full max-w-xs h-0.5 bg-gray-200 rounded-full overflow-hidden">
                                 <div
@@ -315,7 +314,7 @@ const PortfolioGallery = () => {
                             className="cursor-pointer group"
                         >
                             <p className="text-xl font-medium text-[#0046b8] mb-2 transition-all group-hover:scale-105 text-center">
-                                Ver completo →
+                                {t('portfolio.view_full')} →
                             </p>
                             <div className="w-full h-0.5 bg-gray-200 rounded-full overflow-hidden">
                                 <div
@@ -349,7 +348,7 @@ const PortfolioGallery = () => {
 
                             {/* Title */}
                             <h3 className="text-4xl md:text-5xl font-semibold text-white text-center mb-12 pt-8">
-                                Todos Nuestros Trabajos
+                                {t('portfolio.full_gallery_title')}
                             </h3>
 
                             {/* Grid of Images */}
@@ -428,7 +427,7 @@ const PortfolioGallery = () => {
 
                                 <div className="border-t border-gray-200 pt-6">
                                     <h4 className="text-lg font-semibold text-gray-900 mb-4">
-                                        Servicios Realizados:
+                                        {t('portfolio.services_performed')}
                                     </h4>
                                     <ul className="space-y-3">
                                         {selectedImage.services.map((service, idx) => (
@@ -444,7 +443,7 @@ const PortfolioGallery = () => {
                                     onClick={() => setSelectedImage(null)}
                                     className="mt-8 w-full bg-[#0046b8] text-white py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors"
                                 >
-                                    Cerrar
+                                    {t('portfolio.close')}
                                 </button>
                             </motion.div>
                         </div>

@@ -88,6 +88,12 @@
     "featured_services": {
         "title": "Nuestros Servicios Destacados",
         "outro": "Cada servicio está diseñado pa' devolverle a tu nave ese brillo de agencia. Hacemos detailing de verdad, no solo lavado.",
+        "trust_badges": {
+            "premium_products": "Productos premium",
+            "certified_technicians": "Técnicos certificados",
+            "satisfaction_guarantee": "Garantía de satisfacción"
+        },
+        "cta": "Explorar servicio",
         "premium_wash": {
             "title": "Lavado Premium",
             "description": "Limpieza profunda y detallada pa' devolverle el brillo a tu vehículo."
@@ -580,6 +586,176 @@
             }
         },
         "cta": "Ver certificaciones"
+    },
+    "recent_results": {
+        "title": "Resultados Reales",
+        "before": "Antes",
+        "after": "Después",
+        "results": {
+            "interior_renovation": {
+                "label": "Renovación Interior",
+                "benefits": [
+                    "Limpieza profunda de tapicería",
+                    "Restauración de acabados"
+                ],
+                "details": [
+                    "Limpieza profunda de tapicería",
+                    "4 horas de trabajo",
+                    "Protección UV aplicada"
+                ]
+            },
+            "paint_correction": {
+                "label": "Corrección de Pintura",
+                "benefits": [
+                    "Eliminación de micro-rayones",
+                    "Restauración de brillo"
+                ],
+                "details": [
+                    "Corrección de pintura",
+                    "6 horas de trabajo",
+                    "Sellado cerámico"
+                ]
+            },
+            "wheel_detailing": {
+                "label": "Detailing de Rines",
+                "benefits": [
+                    "Pulido y descontaminación",
+                    "Acabado espejo"
+                ],
+                "details": [
+                    "Pulido y descontaminación",
+                    "3 horas de trabajo",
+                    "Acabado espejo"
+                ]
+            }
+        },
+        "cta_view_more": "Ver más resultados reales",
+        "cta_want_result": "Quiero este resultado en mi carro"
+    },
+    "how_it_works": {
+        "title": "Cómo funciona",
+        "subtitle": "Simple, rápido y profesional.",
+        "steps": {
+            "step1": {
+                "title": "Agenda tu servicio",
+                "description": "Elige fecha, hora y paquete en segundos."
+            },
+            "step2": {
+                "title": "Llevamos tu vehículo",
+                "description": "Recogida segura donde estés."
+            },
+            "step3": {
+                "title": "Lo recibes como nuevo",
+                "description": "Limpio, protegido y con acabado profesional."
+            }
+        },
+        "visual_bullets": {
+            "premium_products": "Productos premium",
+            "real_protection": "Protección real",
+            "visible_results": "Resultados visibles"
+        },
+        "bottom_title": "¿Listo pa' ver tu nave brillar?",
+        "cta_view_services": "Ver nuestros servicios",
+        "cta_book_now": "Agendar ahora"
+    },
+    "testimonials": {
+        "section_label": "Testimonios",
+        "title_part1": "Lo que dicen nuestros",
+        "title_part2": "Clientes",
+        "error_title": "No pudimos cargar las reseñas",
+        "error_message": "Por favor, intenta recargar la página",
+        "retry_button": "Reintentar",
+        "empty_title": "Próximamente",
+        "empty_message": "Estamos recopilando las primeras reseñas de nuestros clientes",
+        "stats": {
+            "rating": "Calificación",
+            "reviews": "Reseñas",
+            "happy_clients": "Clientes satisfechos"
+        }
+    },
+    "portfolio": {
+        "title": "Nuestros Trabajos",
+        "view_full": "Ver completo",
+        "full_gallery_title": "Todos Nuestros Trabajos",
+        "services_performed": "Servicios Realizados:",
+        "close": "Cerrar",
+        "items": {
+            "complete_detailing": {
+                "title": "Detailing Completo Premium",
+                "description": "Corrección de pintura multi-etapa con recubrimiento cerámico 9H",
+                "services": [
+                    "Lavado detallado",
+                    "Corrección de pintura",
+                    "Ceramic coating",
+                    "Hidratación interior"
+                ]
+            },
+            "interior_restoration": {
+                "title": "Restauración Interior",
+                "description": "Limpieza profunda y restauración de tapicería en cuero",
+                "services": [
+                    "Limpieza de tapicería",
+                    "Tratamiento de cuero",
+                    "Vapor profundo",
+                    "Desinfección"
+                ]
+            },
+            "paint_correction": {
+                "title": "Paint Correction",
+                "description": "Eliminación de swirls y arañazos con pulido profesional",
+                "services": [
+                    "Pulido multi-etapa",
+                    "Eliminación de swirls",
+                    "Sellado de pintura"
+                ]
+            },
+            "exterior_detailing": {
+                "title": "Detailing Exterior",
+                "description": "Tratamiento completo de pintura con protección cerámica",
+                "services": [
+                    "Descontaminación",
+                    "Clay bar",
+                    "Pulido",
+                    "Wax premium"
+                ]
+            },
+            "engine_cleaning": {
+                "title": "Limpieza de Motor",
+                "description": "Limpieza segura y detallada del compartimiento del motor",
+                "services": [
+                    "Desengrasado",
+                    "Protección plásticos",
+                    "Acabado satinado"
+                ]
+            },
+            "wheels_tires": {
+                "title": "Rines y Llantas",
+                "description": "Limpieza profunda y sellado cerámico de rines",
+                "services": [
+                    "Descontaminación férrica",
+                    "Pulido de rines",
+                    "Ceramic coating"
+                ]
+            },
+            "suv_detailing": {
+                "title": "Detailing Premium SUV",
+                "description": "Servicio completo interior y exterior",
+                "services": [
+                    "Lavado completo",
+                    "Interior detailing",
+                    "Protección cerámica"
+                ]
+            },
+            "headlight_correction": {
+                "title": "Corrección de Faros",
+                "description": "Restauración y sellado de faros opacos",
+                "services": [
+                    "Pulido de faros",
+                    "Sellado UV",
+                    "Restauración"
+                ]
+            }
+        }
     },
     "contact_section": {
         "address": {

@@ -6,27 +6,27 @@ import { Link } from 'react-router-dom'
 import { useMenu } from '../../hooks/useMenu'
 
 const FeaturedServices = () => {
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
     const { getLocalizedPath, navigateWithTransition } = useMenu()
 
     const services = [
         {
             icon: Sparkles,
-            title: "Lavado Premium",
-            description: "Limpieza profunda y detallada para devolverle el brillo a tu vehículo.",
-            link: "/services"
+            title: t('featured_services.premium_wash.title'),
+            description: t('featured_services.premium_wash.description'),
+            link: getLocalizedPath(i18n.language === 'en' ? "/services" : "/servicios")
         },
         {
             icon: Car,
-            title: "Detailing Interior",
-            description: "Renovación completa de tapicería, plásticos y cada rincón de la cabina.",
-            link: "/services"
+            title: t('featured_services.interior_detailing.title'),
+            description: t('featured_services.interior_detailing.description'),
+            link: getLocalizedPath(i18n.language === 'en' ? "/services" : "/servicios")
         },
         {
             icon: Shield,
-            title: "Pulido & Corrección",
-            description: "Eliminación de imperfecciones y protección cerámica para un acabado espejo.",
-            link: "/services"
+            title: t('featured_services.polish_correction.title'),
+            description: t('featured_services.polish_correction.description'),
+            link: getLocalizedPath(i18n.language === 'en' ? "/services" : "/servicios")
         }
     ]
 
@@ -44,7 +44,7 @@ const FeaturedServices = () => {
                             viewport={{ once: true }}
                             className="text-4xl md:text-5xl font-semibold text-white mb-4"
                         >
-                            Nuestros Servicios Destacados
+                            {t('featured_services.title')}
                         </motion.h2>
 
                         {/* Trust badges */}
@@ -56,9 +56,9 @@ const FeaturedServices = () => {
                             className="flex flex-wrap items-center justify-center gap-6 mb-6"
                         >
                             {[
-                                { icon: Check, text: "Productos premium" },
-                                { icon: Award, text: "Técnicos certificados" },
-                                { icon: Zap, text: "Garantía de satisfacción" }
+                                { icon: Check, text: t('featured_services.trust_badges.premium_products') },
+                                { icon: Award, text: t('featured_services.trust_badges.certified_technicians') },
+                                { icon: Zap, text: t('featured_services.trust_badges.satisfaction_guarantee') }
                             ].map((badge, idx) => (
                                 <div key={idx} className="flex items-center gap-2 text-white/90 text-sm">
                                     <badge.icon className="w-4 h-4 text-white" />
@@ -95,14 +95,14 @@ const FeaturedServices = () => {
                                     {service.description}
                                 </p>
                                 <Link
-                                    to={getLocalizedPath(service.link)}
+                                    to={service.link}
                                     onClick={(e) => {
                                         e.preventDefault()
-                                        navigateWithTransition(getLocalizedPath(service.link))
+                                        navigateWithTransition(service.link)
                                     }}
                                     className="inline-flex items-center text-white hover:text-white/80 font-medium transition-colors group-hover:gap-3"
                                 >
-                                    Explorar servicio <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                                    {t('featured_services.cta')} <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
                                 </Link>
                             </motion.div>
                         ))}

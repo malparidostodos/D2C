@@ -2,9 +2,11 @@ import React, { useState, useRef } from 'react'
 import { motion, useMotionValue, useTransform } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { useMenu } from '../../hooks/useMenu'
 
 // Interactive Before/After Card with Drag Slider
-const BeforeAfterCard = ({ before, after, label, delay, details, benefits }) => {
+const BeforeAfterCard = ({ before, after, label, delay, details, benefits, t }) => {
     const [isHovered, setIsHovered] = useState(false)
     const containerRef = useRef(null)
     const initialPosRef = useRef(50)
@@ -46,7 +48,7 @@ const BeforeAfterCard = ({ before, after, label, delay, details, benefits }) => 
                 <img src={before} alt="Antes" className="w-full h-full object-cover" />
                 <div className="absolute top-4 left-4 bg-red-500/80 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
                     <span className="w-2 h-2 bg-red-300 rounded-full" />
-                    Antes (estado original)
+                    {t('recent_results.before')}
                 </div>
             </div>
 
@@ -58,7 +60,7 @@ const BeforeAfterCard = ({ before, after, label, delay, details, benefits }) => 
                 <img src={after} alt="Después" className="w-full h-full object-cover" />
                 <div className="absolute top-4 right-4 bg-green-500/80 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
                     <span className="w-2 h-2 bg-green-300 rounded-full" />
-                    Después (resultado final)
+                    {t('recent_results.after')}
                 </div>
             </motion.div>
 
@@ -120,27 +122,30 @@ const BeforeAfterCard = ({ before, after, label, delay, details, benefits }) => 
 }
 
 const RecentResults = ({ embedded = false }) => {
+    const { t, i18n } = useTranslation()
+    const { getLocalizedPath, navigateWithTransition } = useMenu()
+
     const results = [
         {
             before: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=1000&auto=format&fit=crop",
             after: "https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=1000&auto=format&fit=crop",
-            label: "Renovación Interior",
-            benefits: ["Limpieza profunda de tapicería", "Restauración de acabados"],
-            details: ["Limpieza profunda de tapicería", "4 horas de trabajo", "Protección UV aplicada"]
+            label: t('recent_results.results.interior_renovation.label'),
+            benefits: t('recent_results.results.interior_renovation.benefits', { returnObjects: true }),
+            details: t('recent_results.results.interior_renovation.details', { returnObjects: true })
         },
         {
             before: "https://images.unsplash.com/photo-1595786195726-25925e064972?q=80&w=1000&auto=format&fit=crop",
             after: "https://images.unsplash.com/photo-1595786195709-32fb33c7f957?q=80&w=1000&auto=format&fit=crop",
-            label: "Corrección de Pintura",
-            benefits: ["Eliminación de micro-rayones", "Restauración de brillo"],
-            details: ["Corrección de pintura", "6 horas de trabajo", "Sellado cerámico"]
+            label: t('recent_results.results.paint_correction.label'),
+            benefits: t('recent_results.results.paint_correction.benefits', { returnObjects: true }),
+            details: t('recent_results.results.paint_correction.details', { returnObjects: true })
         },
         {
             before: "https://images.unsplash.com/photo-1625043484555-5f33465133b7?q=80&w=1000&auto=format&fit=crop",
             after: "https://images.unsplash.com/photo-1550983756-34351c221297?q=80&w=1000&auto=format&fit=crop",
-            label: "Detailing de Rines",
-            benefits: ["Pulido y descontaminación", "Acabado espejo"],
-            details: ["Pulido y descontaminación", "3 horas de trabajo", "Acabado espejo"]
+            label: t('recent_results.results.wheel_detailing.label'),
+            benefits: t('recent_results.results.wheel_detailing.benefits', { returnObjects: true }),
+            details: t('recent_results.results.wheel_detailing.details', { returnObjects: true })
         }
     ]
 
@@ -153,6 +158,7 @@ const RecentResults = ({ embedded = false }) => {
                         key={index}
                         {...item}
                         delay={index * 0.1}
+                        t={t}
                     />
                 ))}
             </div>
@@ -168,7 +174,7 @@ const RecentResults = ({ embedded = false }) => {
                     viewport={{ once: true }}
                     className="text-4xl md:text-5xl font-bold text-white mb-12 text-center font-display"
                 >
-                    Resultados Recientes
+                    {t('recent_results.title')}
                 </motion.h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -177,6 +183,7 @@ const RecentResults = ({ embedded = false }) => {
                             key={index}
                             {...item}
                             delay={index * 0.1}
+                            t={t}
                         />
                     ))}
                 </div>
@@ -190,16 +197,24 @@ const RecentResults = ({ embedded = false }) => {
                     className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-16"
                 >
                     <Link
-                        to="/galeria"
+                        to={getLocalizedPath(i18n.language === 'en' ? "/gallery" : "/galeria")}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/gallery" : "/galeria"))
+                        }}
                         className="inline-flex items-center justify-center px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-full font-semibold text-lg hover:bg-white/20 transition-all duration-300"
                     >
-                        Ver más resultados reales
+                        {t('recent_results.cta_view_more')}
                     </Link>
                     <Link
-                        to="/reservar"
+                        to={getLocalizedPath(i18n.language === 'en' ? "/booking" : "/reserva")}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            navigateWithTransition(getLocalizedPath(i18n.language === 'en' ? "/booking" : "/reserva"))
+                        }}
                         className="inline-flex items-center justify-center px-8 py-3 bg-white text-[#0046b8] rounded-full font-semibold text-lg hover:bg-white/90 transition-all duration-300 shadow-lg"
                     >
-                        Quiero este resultado en mi carro
+                        {t('recent_results.cta_want_result')}
                     </Link>
                 </motion.div>
             </div>

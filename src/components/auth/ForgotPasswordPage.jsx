@@ -132,7 +132,7 @@ const ForgotPasswordPage = () => {
                                             ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
                                             : 'border-white/5 focus:border-white/20 focus:bg-[#161616]'
                                             }`}
-                                        placeholder="ejemplo@correo.com"
+                                        placeholder={t('auth.mail')}
                                     />
                                     {errors.email && (
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 pointer-events-none">

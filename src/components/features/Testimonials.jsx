@@ -2,8 +2,10 @@ import React, { useEffect, useState, useRef } from 'react'
 import { motion, useMotionValue, useAnimationFrame, useScroll, useVelocity, useSpring, useTransform, useInView } from 'framer-motion'
 import { Star, Quote, Clock, Car, Award, TrendingUp } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
+import { useTranslation } from 'react-i18next'
 
 const Testimonials = () => {
+    const { t } = useTranslation()
     const [testimonials, setTestimonials] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -194,13 +196,13 @@ const Testimonials = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
                             </div>
-                            <h3 className="text-2xl font-semibold text-white mb-3">No pudimos cargar las reseñas</h3>
-                            <p className="text-white/60 mb-8">Por favor, intenta recargar la página</p>
+                            <h3 className="text-2xl font-semibold text-white mb-3">{t('testimonials.error_title')}</h3>
+                            <p className="text-white/60 mb-8">{t('testimonials.error_message')}</p>
                             <button
                                 onClick={() => window.location.reload()}
                                 className="px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-full font-medium transition-colors"
                             >
-                                Reintentar
+                                {t('testimonials.retry_button')}
                             </button>
                         </div>
                     </div>
@@ -232,7 +234,7 @@ const Testimonials = () => {
                             transition={{ delay: 0.1 }}
                             className="text-4xl md:text-6xl font-semibold text-white mb-6"
                         >
-                            Lo que dicen nuestros <span className="text-white/80">Clientes</span>
+                            {t('testimonials.title_part1')} <span className="text-white/80">{t('testimonials.title_part2')}</span>
                         </motion.h2>
                     </div>
 
@@ -242,8 +244,8 @@ const Testimonials = () => {
                             /* Empty state placeholder */
                             <div className="text-center py-20 relative z-10">
                                 <Star className="w-16 h-16 text-white/40 mx-auto mb-6" />
-                                <h3 className="text-2xl font-semibold text-white mb-3">Próximamente</h3>
-                                <p className="text-white/60">Estamos recopilando las primeras reseñas de nuestros clientes</p>
+                                <h3 className="text-2xl font-semibold text-white mb-3">{t('testimonials.empty_title')}</h3>
+                                <p className="text-white/60">{t('testimonials.empty_message')}</p>
                             </div>
                         ) : (
                             <>
