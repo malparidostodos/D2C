@@ -552,19 +552,34 @@
     "collaboration": {
         "title_part1": "Trabajamos con las mejores",
         "title_part2": "marcas",
+        "anchor_phrase": "Usamos los mismos productos que los talleres de alta gama",
+        "certified_badge": "Certified Premium Partner",
+        "brands": {
+            "meguiars": "Protección y brillo duradero",
+            "3m": "Sistemas de pulido profesional",
+            "chemical_guys": "Detailing de nivel competencia",
+            "turtle_wax": "Protección cerámica avanzada",
+            "mothers": "Acabados de concurso",
+            "gtechniq": "Selladores de grado nano",
+            "carpro": "Corrección de pintura premium",
+            "griots": "Herramientas profesionales"
+        },
         "items": {
             "premium_products": {
                 "title": "Productos Premium",
-                "description": "Trabajamos exclusivamente con las mejores marcas internacionales de productos pa' detailing."
+                "description": "Trabajamos exclusivamente con las mejores marcas internacionales de productos pa' detailing.",
+                "subtitle": "Marcas usadas en detailing de nivel internacional"
             },
             "professional_equipment": {
-                "title": "Equipamiento Profesional"
+                "title": "Equipamiento Profesional",
+                "subtitle": "Herramientas de grado profesional certificadas"
             },
             "international_certifications": {
-                "title": "Certificaciones Internacionales"
+                "title": "Certificaciones Internacionales",
+                "subtitle": "Estándares globales de calidad verificados"
             }
         },
-        "cta": "Agendar"
+        "cta": "Ver certificaciones"
     },
     "contact_section": {
         "address": {

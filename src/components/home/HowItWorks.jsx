@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, Truck, Star } from 'lucide-react'
+import { Calendar, Truck, Star, Check, Shield, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useMenu } from '../../hooks/useMenu'
 import RecentResults from './RecentResults'
@@ -12,17 +12,17 @@ const HowItWorks = () => {
         {
             icon: Calendar,
             title: "Agenda tu servicio",
-            description: "Elige el paquete y el horario que mejor se adapte a ti."
+            description: "Elige fecha, hora y paquete en segundos."
         },
         {
             icon: Truck,
             title: "Llevamos tu vehículo",
-            description: "Nos encargamos de transportarlo o vamos a donde estés."
+            description: "Recogida segura donde estés."
         },
         {
             icon: Star,
             title: "Lo recibes como nuevo",
-            description: "Disfruta de resultados impecables y garantizados."
+            description: "Limpio, protegido y con acabado profesional."
         }
     ]
 
@@ -49,8 +49,17 @@ const HowItWorks = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative mb-24">
-                        {/* Connecting Line (Desktop) */}
-                        <div className="hidden md:block absolute top-[60px] left-[16%] right-[16%] h-[2px] bg-gradient-to-r from-white/0 via-white/50 to-white/0 z-0" />
+                        {/* Animated Connecting Line (Desktop) */}
+                        <div className="hidden md:block absolute top-[60px] left-[16%] right-[16%] h-[2px] bg-gradient-to-r from-white/0 via-white/20 to-white/0 z-0">
+                            <motion.div
+                                className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/60 to-white/0"
+                                initial={{ scaleX: 0 }}
+                                whileInView={{ scaleX: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 1.5, ease: "easeOut" }}
+                                style={{ transformOrigin: "left" }}
+                            />
+                        </div>
 
                         {steps.map((step, index) => (
                             <motion.div
@@ -59,20 +68,20 @@ const HowItWorks = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: index * 0.2 }}
-                                className="relative z-10 flex flex-col items-center text-center"
+                                className="relative z-10 flex flex-col items-center text-center group"
                             >
-                                <div className="w-32 h-32 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center mb-8 shadow-xl shadow-blue-900/20 border border-white/20">
-                                    <step.icon className="w-12 h-12 text-white" />
+                                <div className="w-32 h-32 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center mb-8 shadow-xl shadow-blue-900/20 border border-white/20 group-hover:scale-110 group-hover:bg-white/15 transition-all duration-300">
+                                    <step.icon className="w-12 h-12 text-white group-hover:rotate-12 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] transition-all duration-300" />
                                 </div>
-                                <h3 className="text-2xl font-semibold text-white mb-4">{step.title}</h3>
-                                <p className="text-white/80 leading-relaxed max-w-xs">
+                                <h3 className="text-2xl font-semibold text-white mb-4 group-hover:text-white/90 transition-colors">{step.title}</h3>
+                                <p className="text-white/80 group-hover:text-white/90 leading-relaxed max-w-xs transition-colors">
                                     {step.description}
                                 </p>
                             </motion.div>
                         ))}
                     </div>
 
-                    {/* Detail Level Section */}
+                    {/* Detail Level Section with Visual Bullets */}
                     <div className="text-center mb-24 py-16">
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
@@ -83,25 +92,33 @@ const HowItWorks = () => {
                             El nivel de detalle que<br />tu carro merece
                         </motion.h2>
 
-                        <motion.p
+                        {/* Visual Bullets */}
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.1 }}
-                            className="text-white/80 text-lg max-w-3xl mx-auto mb-8"
+                            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-10"
                         >
-                            En <span className="font-semibold">Ta' To' Clean</span> tratamos cada vehículo como si fuera nuestro.
-                            <br />
-                            Nos enfocamos en el detalle, la precisión y el uso de productos premium que garantizan
-                            resultados visibles desde el primer vistazo. Tu carro no solo queda limpio: queda
-                            protegido, renovado y cuidado con dedicación profesional.
-                        </motion.p>
+                            {[
+                                { icon: Check, text: "Productos premium" },
+                                { icon: Shield, text: "Protección real" },
+                                { icon: Sparkles, text: "Resultados visibles" }
+                            ].map((item, index) => (
+                                <div key={index} className="flex items-center justify-center gap-3 text-white/90">
+                                    <item.icon className="w-5 h-5 text-white flex-shrink-0" />
+                                    <span className="font-medium">{item.text}</span>
+                                </div>
+                            ))}
+                        </motion.div>
 
+                        {/* Dual CTAs */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.2 }}
+                            className="flex flex-col sm:flex-row items-center justify-center gap-4"
                         >
                             <Link
                                 to={getLocalizedPath("/servicios")}
@@ -109,9 +126,19 @@ const HowItWorks = () => {
                                     e.preventDefault()
                                     navigateWithTransition(getLocalizedPath("/servicios"))
                                 }}
+                                className="inline-flex items-center justify-center px-8 py-3 bg-white text-[#0046b8] rounded-full font-semibold text-lg hover:bg-white/90 transition-all duration-300 shadow-lg"
+                            >
+                                Ver nuestros servicios
+                            </Link>
+                            <Link
+                                to={getLocalizedPath("/reservar")}
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    navigateWithTransition(getLocalizedPath("/reservar"))
+                                }}
                                 className="inline-flex items-center justify-center px-8 py-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white rounded-full font-semibold text-lg hover:bg-white/20 transition-all duration-300"
                             >
-                                ✨ PASIÓN POR EL DETALLE
+                                Agendar ahora
                             </Link>
                         </motion.div>
                     </div>
